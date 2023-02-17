@@ -1,0 +1,78 @@
+// out: false
+@font-face {
+    font-family: 'ReadexPro-Bold';
+    src: url('../fonts/ReadexPro-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'ReadexPro-Medium';
+    src: url('../fonts/ReadexPro-Medium.ttf');
+}
+
+@font-face {
+    font-family: 'ReadexPro-Regular';
+    src: url('../fonts/ReadexPro-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'ReadexPro-Light';
+    src: url('../fonts/ReadexPro-Light.ttf');
+}
+
+@by_bg: #EFF6FF;
+@by_black: #0F172A;
+@by_gray: #78716C;
+@by_hovered_btn: #BDDAFF;
+@by_icon: #94A3B8;
+@by_lightgray: #DBEAFE;
+@by_primary: #2563EB;
+@by_tooltip_bg: #1E293B;
+@by_white: #FFFFFF;
+@by_border: #BBCCF3;
+@by_hover: #E8F2FF;
+@by_comments_bg: #E8F2FF;
+@by_nav_text: #B4C5FF;
+@by_mobile_nav: #FCFCFF;
+@by_mobilebg: #001D32;
+@by_mobile_title: #001D32;
+@by_mobile_link: #A8C8FF;
+@by_dropdown: #E2E2EC;
+@by_neutral_gray: #E2E2EC;
+@by_option: #757680;
+@by_checkbox_border: #757680;
+@by_content_color: #757680;
+@by_login: #8FBAFF;
+@by_text: #6C7177;
+@by_off_gray: #B5C4E4;
+@by_light: #A1A1AA;
+@by_error: #DA4D4D;
+@by_invite: #7D949D;
+@by_select: #38BDF8;
+@by_input_border: #D5E3FF;
+@by_toolbar: #ECF1FF;
+@by_translucent_bg: rgba(30,41,59,.3);
+@by_box_shadow: 0px 2px 3px @by_translucent_bg;
+@by_remove_red: #FF8888;
+
+@readex_regular: 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+@readex_medium: 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+@readex_bold: 'ReadexPro-Bold', tahoma, verdana, arial, sans-serif;
+@readex_light: 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+
+.cta_btn() {
+    border-radius: 20px;
+    border: 1px solid @by_primary;
+    color: @by_primary;
+    cursor: pointer;
+    text-align: center;
+}
+
+.edit_section_icon(@width, @height, @bg_position){
+    background: url("../images/admin_edit_section.svg") no-repeat;
+    background-position: @bg_position;
+    content:"";
+    display: inline-block;
+    height: @height;
+    vertical-align: middle;
+    width: @width;
+}
