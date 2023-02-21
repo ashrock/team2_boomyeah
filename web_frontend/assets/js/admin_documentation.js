@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // displayDocumentations(data.documentations);
 
     initializeMaterializeDropdown();
-    ux("#doc_form").on("submit", submitDocForm);
+    ux("#add_documentation_form").on("submit", submitDocForm);
     appearEmptyDocumentation();
 
     ux(".edit_title_icon").onEach("click", editTitleDocumentation);
@@ -235,7 +235,7 @@ function submitDocForm(event){
         }, false);
 
         ux("#documentations").html().appendChild(document_block);
-        ux("#doc_form").html().reset();
+        ux("#add_documentation_form").html().reset();
         appearEmptyDocumentation();
 
         ux(".set_privacy_btn").onEach("click", setDocumentPrivacyValues);

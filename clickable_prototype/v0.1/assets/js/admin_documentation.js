@@ -10,12 +10,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     // displayDocumentations(data.documentations);
 
     initializeMaterializeDropdown();
-    $("#doc_form").on("submit", submitDocForm);
+    $("#add_documentation_form").on("submit", onSubmitAddDocumentationForm);
     appearEmptyDocumentation();
 
-    $(".edit_title_icon").on("click", editTitleDocumentation);
+    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
     $(".duplicate_icon").on("click", duplicateDocumentation);
-    $(".document_title").on("blur", disableEditTitleDocumentation);
+    $(".document_title").on("blur", onChangeDocumentationTitle);
 
     $(".active_docs_btn").on("click", appearActiveDocumentation);
     $(".archived_docs_btn").on("click", appearArchivedDocumentations);
@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".invite_collaborators_btn").on("click", function(event){
         event.stopImmediatePropagation();
+        event.preventDefault();
         let invite_modal = document.querySelector("#modal1");
         var instance = M.Modal.getInstance(invite_modal);
         instance.open();
@@ -53,6 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".access_btn").on("click", function(event){
         event.stopImmediatePropagation();
+        event.preventDefault();
         let confirm_modal = document.querySelector("#confirm_to_public");
         var instance = M.Modal.getInstance(confirm_modal);
         instance.open();
@@ -60,6 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     $(".set_to_public_icon ").on("click", function(event){
         event.stopImmediatePropagation();
+        event.preventDefault();
         let confirm_modal = document.querySelector("#confirm_to_public");
         var instance = M.Modal.getInstance(confirm_modal);
         instance.open();
@@ -67,6 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".set_to_private_icon").on("click", function(event){
         event.stopImmediatePropagation();
+        event.preventDefault();
         let confirm_modal = document.querySelector("#confirm_to_private");
         var instance = M.Modal.getInstance(confirm_modal);
         instance.open();
@@ -101,19 +105,27 @@ function getNewDocumentationId(event){
         }
     });
 
-    return largest_id + 1;
+    // return largest_id + 1;
+    return new Date().getTime();
 }
 
 function submitInvite(event){
     event.preventDefault();
 }
 
-function submitDocForm(event){
+function onSubmitAddDocumentationForm(event){
     event.preventDefault();
+    let add_document_form = $(this);
     const input_document_title = $("#input_add_documentation").val();
 
     if(input_document_title){
         const new_documentation_id   = getNewDocumentationId();
+
+        /** TODO: Use AJAX to generate new documentation */
+        $.post(add_document_form.attr("action"), add_document_form.serialize(), (post_data) => {
+            $("#documentations").append(post_data.html);
+        });
+
         const document_block = document.createElement("div");
 
         /* Create document_block */
@@ -229,13 +241,13 @@ function submitDocForm(event){
         }, false);
 
         $("#documentations")[0].appendChild(document_block);
-        $("#doc_form")[0].reset();
+        $("#add_documentation_form")[0].reset();
         appearEmptyDocumentation();
 
         $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
-        $(".edit_title_icon").on("click", editTitleDocumentation);
+        $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
         $(".duplicate_icon").on("click", duplicateDocumentation);
-        $(".document_title").on("blur", disableEditTitleDocumentation);
+        $(".document_title").on("blur", onChangeDocumentationTitle);
         $(".archive_btn").on("click", setRemoveArchiveValue);
         $(".remove_btn").on("click", setRemoveArchiveValue);
         document_block.addEventListener("click", redirectToDocumentView);
@@ -307,7 +319,7 @@ function appearEmptyDocumentation(){
     }
 }
 
-function editTitleDocumentation(event){
+function toggleEditDocumentationTitle(event){
     event.stopImmediatePropagation();
     let edit_title_btn = $(event.target);
     let document_block = edit_title_btn.closest(".document_block");
@@ -322,9 +334,11 @@ function editTitleDocumentation(event){
     });
 }
 
-function disableEditTitleDocumentation(event){
+function onChangeDocumentationTitle(event){
     let document_title = event.target;
     document_title.setAttribute("readonly", "");
+
+    /** TODO: Submit change title form */
 }
 
 function duplicateDocumentation(event){
@@ -350,9 +364,9 @@ function duplicateDocumentation(event){
     cloned_list[0].setAttribute("style", "");
 
     $(cloned_documentation.on("click", redirectToDocumentView));
-    $(cloned_documentation.find(".edit_title_icon").on("click", editTitleDocumentation));
+    $(cloned_documentation.find(".edit_title_icon").on("click", toggleEditDocumentationTitle));
     $(cloned_documentation.find(".duplicate_icon").on("click", duplicateDocumentation));
-    $(cloned_documentation.find(".document_title").on("click", disableEditTitleDocumentation));
+    $(cloned_documentation.find(".document_title").on("click", onChangeDocumentationTitle));
     $(cloned_documentation.find(".archive_btn").on("click", setRemoveArchiveValue));
     $(cloned_documentation.find(".remove_btn").on("click", setRemoveArchiveValue));
     cloned_documentation.find(".set_privacy_btn").on("click", setDocumentPrivacyValues);
@@ -485,9 +499,9 @@ function submitChangeDocumentPrivacy(event){
     dropdown_set_privacy_btn.innerHTML = inner_html;
 
     $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
-    $(".edit_title_icon").on("click", editTitleDocumentation);
+    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
     $(".duplicate_icon").on("click", duplicateDocumentation);
-    $(".document_title").on("blur", disableEditTitleDocumentation);
+    $(".document_title").on("blur", onChangeDocumentationTitle);
     $(".archive_btn").on("click", setRemoveArchiveValue);
     $(".remove_btn").on("click", setRemoveArchiveValue);
 }
