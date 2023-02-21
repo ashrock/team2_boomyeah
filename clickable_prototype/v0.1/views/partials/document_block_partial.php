@@ -12,7 +12,7 @@
         <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_<?= $id ?>">⁝</button>
         <!-- Dropdown Structure -->
         <ul id="document_more_actions_<?= $id ?>" class="dropdown-content more_action_list_private more_action_list_public">
-            <?php if(!$is_archived){ ?>
+            <?php if(!$is_archived_view){ ?>
                 <!-- <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="<?= $id ?>" data-documentation_action="unarchive">Unarchive</a></li> -->
                 <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
                 <li class="divider" tabindex="-1"></li>
@@ -30,6 +30,7 @@
                     <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="<?= $id ?>" data-document_privacy="public">Set to Private</a></li>
                 <?php } ?>
             <?php }else{ ?>
+                <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="<?= $id ?>" data-documentation_action="unarchive">Unarchive</a></li>
             <?php } ?>
             <li class="divider" tabindex="-1"></li>
             <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="<?= $id ?>" data-documentation_action="remove">Remove</a></li>
