@@ -8,3 +8,8 @@
     function add_file($file_url){
         echo BASE_FILE_URL . $file_url;
     }
+
+    function load_view($file_url, $variables = array()){
+        extract($variables);
+        include($file_url);
+    }
