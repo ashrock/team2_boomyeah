@@ -16,7 +16,7 @@
                 <!-- <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="<?= $id ?>" data-documentation_action="unarchive">Unarchive</a></li> -->
                 <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
                 <li class="divider" tabindex="-1"></li>
-                <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
+                <li><a href="#!" class="duplicate_icon" data-document_id="<?= $id ?>">Duplicate</a></li>
                 <li class="divider" tabindex="-1"></li>
                 <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="<?= $id ?>" data-documentation_action="archive">Archive</a></li>
                 <?php if($is_private){ ?>

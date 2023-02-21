@@ -4,7 +4,7 @@
     //adjust the values below to match your database settings
     define('DB_HOST', 'localhost:3306');
     define('DB_USER', 'root');
-    define('DB_PASS', ''); //may need to set DB_PASS as 'root'
+    define('DB_PASS', 'v3rl3tz3n'); //may need to set DB_PASS as 'root'
     define('DB_DATABASE', 'boomyeah_v2'); //make sure to set your database
 
     //connect to database host
@@ -43,7 +43,9 @@
     function run_mysql_query($query){
         global $connection;
         $result = $connection->query($query);
-        return $connection->insert_id;
+
+        // Return boolean if query are UPDATE and DELETE
+        return (strpos($query, 'INSERT') !== false) ? $connection->insert_id : $result;
     }
 
     //returns an escaped string. EG, the string "That's crazy!" will be returned as "That\'s crazy!"
