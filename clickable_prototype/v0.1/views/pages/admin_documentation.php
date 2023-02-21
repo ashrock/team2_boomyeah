@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div id="archived_documents" class="hidden">
-                <!-- Prepend query results here -->
+                <!-- Print HTML returned by BE -->
                 <div class="no_archived_documents hidden">
                     <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                         alt="Empty Content Illustration">
@@ -86,7 +86,7 @@
         </div>
     </div>
     <form id="get_documentations_form" action="../../processes/manage_documentation.php" method="POST">
-        <input type="hidden" name="process_type" value="get_documentations">
+        <input type="hidden" name="action" value="get_documentations">
         <input type="hidden" id="is_archived" name="is_archived">
     </form>
     <?php include_once("../partials/confirm_documentation_modals.php"); ?>
