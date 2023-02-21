@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".active_docs_btn").on("click", appearActiveDocumentation);
     $(".archived_docs_btn").on("click", appearArchivedDocumentations);
-    $(".archive_btn, .remove_btn").on("click", setRemoveArchiveValue);
+    $(".archive_btn").on("click", setRemoveArchiveValue);
     $("#archive_confirm").on("click", submitRemoveArchive);
     $("#remove_confirm").on("click", submitRemoveDocumentation);
     $("#remove_invited_user_confirm").on("click", submitRemoveInvitedUser);
@@ -413,6 +413,8 @@ function getDocumentations(event){
         let documentations_div = $("#get_documentations_form #is_archived").val() == "1" ? "#archived_documents" : "#documentations";
 
         $(documentations_div).html(response_data.result.html);
+
+        $(".remove_btn").on("click", setRemoveDocumentationValue);
         initializeMaterializeDropdown();
     }, "json");
 
