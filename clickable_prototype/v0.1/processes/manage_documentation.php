@@ -41,22 +41,31 @@
                 echo json_encode($response_data);
                 break;
             }
-            case "add_documentation":
-            {
+            case "create_documentation": {
                 $response_data = array("status" => false, "result" => [], "error"  => null);
 
-                if(array_key_exists("documentation", $_POST)){
-                    $documentation_data = array(
-                        ...$_POST["documentation"],
-                        "id" => time(),
-                        "is_archived" => FALSE,
-                        "is_private" => FALSE,
-                        "cache_collaborators_count" => 10
-                    );
-            
-                    $response_html = get_include_contents("../views/partials/document_block_partial.php", $documentation_data);
-                    $response_data["status"] = true;
-                    $response_data["result"]["html"] = $response_html;
+                if(isset($_POST["document_title"])){
+                    $document_title = escape_this_string($_POST["document_title"]);
+
+                    $insert_document_record = run_mysql_query("
+                        INSERT INTO documentations (user_id, workspace_id, title, is_archived, is_private, cache_collaborators_count, created_at, updated_at) 
+                        VALUES ({$_SESSION["user_id"]}, {$_SESSION["workspace_id"]}, '{$document_title}', {$_NO}, {$_YES}, {$_ZERO_VALUE}, NOW(), NOW())
+                    ");
+
+                    if($insert_document_record != $_ZERO_VALUE){
+                        $workspace = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
+                        $new_workspace_order = $workspace["documentations_order"].','. $insert_document_record;
+
+                        $update_workspace_docs_order = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_workspace_order}' WHERE id = {$_SESSION["workspace_id"]}");
+
+                        if($update_workspace_docs_order){
+                            $response_data["status"] = true;
+                            $response_data["result"]["document_id"] = $insert_document_record;
+                        }
+                    }
+                }
+                else{
+                    $response_data["error"] = "Document title is required!";
                 }
 
                 echo json_encode($response_data);

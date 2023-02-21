@@ -43,7 +43,9 @@
     function run_mysql_query($query){
         global $connection;
         $result = $connection->query($query);
-        return $connection->insert_id;
+
+        // Return boolean if query are UPDATE and DELETE
+        return (strpos($query, 'INSERT') !== false) ? $connection->insert_id : $result;
     }
 
     //returns an escaped string. EG, the string "That's crazy!" will be returned as "That\'s crazy!"

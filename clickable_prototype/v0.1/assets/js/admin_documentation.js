@@ -124,19 +124,18 @@ function onSubmitAddDocumentationForm(event){
     if(input_document_title){
         /** Use AJAX to generate new documentation */
         $.post(add_document_form.attr("action"), add_document_form.serialize(), (post_data) => {
-            if(post_data.status){
-                $("#documentations").prepend(post_data.result.html);
-                
-                setTimeout(() => {
-                    initializeMaterializeDropdown();
-                }, 148);
+            
+            if(data.status){
+                /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
+                alert("Documentation added succesfully!");
+                $("#add_documentation_form")[0].reset();
             }
-
-            $("#add_documentation_form")[0].reset();
+            else{
+                alert(data.error);
+            }
         }, "json");
         
         return;
-        window.location.href = "admin_edit_documentation.php"
     }
 }
 
