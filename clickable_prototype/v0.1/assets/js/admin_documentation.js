@@ -10,12 +10,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     // displayDocumentations(data.documentations);
 
     initializeMaterializeDropdown();
-    $("#doc_form").on("submit", submitDocForm);
+    $("#add_documentation_form").on("submit", onSubmitAddDocumentationForm);
     appearEmptyDocumentation();
 
-    $(".edit_title_icon").on("click", editTitleDocumentation);
+    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
     $(".duplicate_icon").on("click", duplicateDocumentation);
-    $(".document_title").on("blur", disableEditTitleDocumentation);
+    $(".document_title").on("blur", onChangeDocumentationTitle);
 
     $(".active_docs_btn").on("click", appearActiveDocumentation);
     $(".archived_docs_btn").on("click", appearArchivedDocumentations);
@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".invite_collaborators_btn").on("click", function(event){
         event.stopImmediatePropagation();
+        event.preventDefault();
         let invite_modal = document.querySelector("#modal1");
         var instance = M.Modal.getInstance(invite_modal);
         instance.open();
@@ -53,6 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".access_btn").on("click", function(event){
         event.stopImmediatePropagation();
+        event.preventDefault();
         let confirm_modal = document.querySelector("#confirm_to_public");
         var instance = M.Modal.getInstance(confirm_modal);
         instance.open();
@@ -60,6 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     $(".set_to_public_icon ").on("click", function(event){
         event.stopImmediatePropagation();
+        event.preventDefault();
         let confirm_modal = document.querySelector("#confirm_to_public");
         var instance = M.Modal.getInstance(confirm_modal);
         instance.open();
@@ -67,6 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".set_to_private_icon").on("click", function(event){
         event.stopImmediatePropagation();
+        event.preventDefault();
         let confirm_modal = document.querySelector("#confirm_to_private");
         var instance = M.Modal.getInstance(confirm_modal);
         instance.open();
@@ -103,146 +107,41 @@ function getNewDocumentationId(event){
         }
     });
 
-    return largest_id + 1;
+    // return largest_id + 1;
+    return new Date().getTime();
 }
 
 function submitInvite(event){
     event.preventDefault();
 }
 
-function submitDocForm(event){
+function onSubmitAddDocumentationForm(event){
     event.preventDefault();
+    let add_document_form = $(this);
     const input_document_title = $("#input_add_documentation").val();
 
     if(input_document_title){
-        const new_documentation_id   = getNewDocumentationId();
-        const document_block = document.createElement("div");
-
-        /* Create document_block */
-        document_block.setAttribute("id", `document_${new_documentation_id}`);
-        document_block.className = "document_block";
+        /** Use AJAX to generate new documentation */
+        $.post(add_document_form.attr("action"), add_document_form.serialize(), (post_data) => {
+            $("#documentations").prepend(post_data.html);
+            
+            setTimeout(() => {
+                let document_block = $("#documentations .document_block")[0];
+                $("#add_documentation_form")[0].reset();
+                appearEmptyDocumentation();
+    
+                $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
+                $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
+                $(".duplicate_icon").on("click", duplicateDocumentation);
+                $(".document_title").on("blur", onChangeDocumentationTitle);
+                $(".archive_btn").on("click", setRemoveArchiveValue);
+                $(".remove_btn").on("click", setRemoveArchiveValue);
+                document_block.addEventListener("click", redirectToDocumentView);
+                initializeMaterializeDropdown();
+            }, 148);
+        }, "json");
         
-        /* Create document_details */
-        const document_details = document.createElement("div");
-        document_details.className = "document_details";
-
-        /* Create document_details child element */
-        const document_title = document.createElement("input");
-        document_title.className = "document_title";
-        document_title.readOnly = true;
-        document_title.setAttribute("name", "document_title");
-        document_title.setAttribute("value", input_document_title);
-        document_details.appendChild(document_title);
-
-        /* Create document_controls */
-        const document_controls = document.createElement("div");
-        document_controls.className = "document_controls"
-
-        /* Create document_controls child more_action_btn */
-        const more_action_btn = document.createElement("button");
-        more_action_btn.innerHTML = "⁝";
-        more_action_btn.className = "more_action_btn dropdown-trigger";
-        more_action_btn.dataset.target = `document_more_actions_${new_documentation_id}`;
-        document_controls.appendChild(more_action_btn);
-
-        /* Create document_controls child dropdown-content */
-        const dropdown_content = document.createElement("ul");
-        dropdown_content.setAttribute("id", `document_more_actions_${new_documentation_id}`);
-        dropdown_content.setAttribute("tabindex", "0");
-        dropdown_content.className = "dropdown-content more_action_list_public";
-        
-        /* Create lists */
-        const list_actions = [
-            {
-                "action_name": "Edit Title",
-                "action_class": "edit_title_btn",
-                "anchor_href": "#!",
-                "icon_class": "edit_title_icon",
-                "dataset": null
-            },
-            {
-                "action_name": "Duplicate",
-                "action_class": null,
-                "anchor_href": "#!",
-                "icon_class": "duplicate_icon",
-                "dataset": null
-            },
-            {
-                "action_name": "Archive",
-                "action_class": null,
-                "anchor_href": "#confirm_to_archive",
-                "icon_class": "archive_icon modal-trigger archive_btn",
-                "dataset": { "documentation_action": "archive" }
-            },
-            {
-                "action_name": "Set to Private",
-                "action_class": null,
-                "anchor_href": "#confirm_to_private",
-                "icon_class": "set_to_private_icon modal-trigger set_privacy_btn",
-                "dataset": { "document_privacy": "public" }
-            },
-            {
-                "action_name": "Remove",
-                "action_class": null,
-                "anchor_href": "#confirm_to_remove",
-                "icon_class": "remove_icon modal-trigger remove_btn",
-                "dataset": { "documentation_action": "remove" }
-            }
-        ]
-
-        list_actions.forEach((action, key) => {
-            let list_action = document.createElement("li");
-            let list_icon   = document.createElement("a");
-
-            list_action.setAttribute("tabindex", "0");
-            if(action.action_class)
-                list_action.className = action.action_class;
-
-            list_icon.className   = action.icon_class;
-            list_icon.setAttribute("href", action.anchor_href);
-            list_icon.innerHTML += action.action_name;
-
-            if(action.dataset){
-                list_icon.dataset.document_id = new_documentation_id;
-                
-                for(let [key, value] of Object.entries(action.dataset)){
-                    list_icon.dataset[key] = value;
-                }
-            }
-
-            list_action.appendChild(list_icon);
-            dropdown_content.appendChild(list_action);
-
-            if(key < 4){
-                let li_divider  = document.createElement("li");
-                li_divider.setAttribute("tabindex", "-1");
-                li_divider.className = "divider";
-                dropdown_content.appendChild(li_divider);
-            }
-        });
-
-        document_controls.appendChild(dropdown_content);
-
-        document_block.appendChild(document_details);
-        document_block.appendChild(document_controls);
-        document_block.className += " animate__animated animate__fadeIn";
-        document_block.addEventListener("animationend", () => {
-            document_block.classList.remove("animate__animated", "animate__fadeIn");
-        }, false);
-
-        $("#documentations")[0].appendChild(document_block);
-        $("#doc_form")[0].reset();
-        appearEmptyDocumentation();
-
-        $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
-        $(".edit_title_icon").on("click", editTitleDocumentation);
-        $(".duplicate_icon").on("click", duplicateDocumentation);
-        $(".document_title").on("blur", disableEditTitleDocumentation);
-        $(".archive_btn").on("click", setRemoveArchiveValue);
-        $(".remove_btn").on("click", setRemoveArchiveValue);
-        document_block.addEventListener("click", redirectToDocumentView);
-        initializeMaterializeDropdown();
-
+        return;
         window.location.href = "admin_edit_documentation.php"
     }
 }
@@ -309,7 +208,7 @@ function appearEmptyDocumentation(){
     }
 }
 
-function editTitleDocumentation(event){
+function toggleEditDocumentationTitle(event){
     event.stopImmediatePropagation();
     let edit_title_btn = $(event.target);
     let document_block = edit_title_btn.closest(".document_block");
@@ -324,9 +223,11 @@ function editTitleDocumentation(event){
     });
 }
 
-function disableEditTitleDocumentation(event){
+function onChangeDocumentationTitle(event){
     let document_title = event.target;
     document_title.setAttribute("readonly", "");
+
+    /** TODO: Submit change title form */
 }
 
 function duplicateDocumentation(event){
@@ -352,9 +253,9 @@ function duplicateDocumentation(event){
     cloned_list[0].setAttribute("style", "");
 
     $(cloned_documentation.on("click", redirectToDocumentView));
-    $(cloned_documentation.find(".edit_title_icon").on("click", editTitleDocumentation));
+    $(cloned_documentation.find(".edit_title_icon").on("click", toggleEditDocumentationTitle));
     $(cloned_documentation.find(".duplicate_icon").on("click", duplicateDocumentation));
-    $(cloned_documentation.find(".document_title").on("click", disableEditTitleDocumentation));
+    $(cloned_documentation.find(".document_title").on("click", onChangeDocumentationTitle));
     $(cloned_documentation.find(".archive_btn").on("click", setRemoveArchiveValue));
     $(cloned_documentation.find(".remove_btn").on("click", setRemoveArchiveValue));
     cloned_documentation.find(".set_privacy_btn").on("click", setDocumentPrivacyValues);
@@ -489,9 +390,9 @@ function submitChangeDocumentPrivacy(event){
     dropdown_set_privacy_btn.innerHTML = inner_html;
 
     $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
-    $(".edit_title_icon").on("click", editTitleDocumentation);
+    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
     $(".duplicate_icon").on("click", duplicateDocumentation);
-    $(".document_title").on("blur", disableEditTitleDocumentation);
+    $(".document_title").on("blur", onChangeDocumentationTitle);
     $(".archive_btn").on("click", setRemoveArchiveValue);
     $(".remove_btn").on("click", setRemoveArchiveValue);
 }

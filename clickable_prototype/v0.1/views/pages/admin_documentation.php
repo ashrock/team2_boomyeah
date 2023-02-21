@@ -39,9 +39,9 @@
     <div id="invite_modal"><?= include_once("../partials/invite_modal.php") ?></div>
     <div id="wrapper">
         <div class="container">
-            <form action="./admin_documentation.html" id="doc_form" method="post">
+            <form action="../view_prototype.php" id="add_documentation_form" method="POST">
                 <div class="group_add_documentation input-field">
-                    <input id="input_add_documentation" type="text" class="validate" autofocus>
+                    <input id="input_add_documentation" type="text" class="validate" name="documentation[title]" autofocus>
                     <label for="input_add_documentation">Add Documentation</label>
                 </div>
                 <span id="save_status" hidden>Saving...</span>
@@ -107,6 +107,19 @@
 <?php
     }
 ?>
+                <?php
+                    for($document_index = 1; $document_index <= 10; $document_index++){
+                        $documentation_data = array(
+                            "id" => $document_index,
+                            "title" => "Title ". $document_index,
+                            "is_archived" => FALSE,
+                            "is_private" => ($document_index % 3 != 0),
+                            "cache_collaborators_count" => 10
+                        );
+
+                        load_view("../partials/document_block_partial.php", $documentation_data);
+                    }
+                ?>
                 <div class="no_documents hidden">
                     <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                         alt="Empty Content Illustration">
@@ -123,82 +136,7 @@
             </div>
         </div>
     </div>
-    <div id="confirmation_modal">
-        <div id="confirm_to_public" class="modal">
-            <div class="modal-content">
-                <h4>Confirmation</h4>
-                <p>Are you sure you want to change this documentation to Public?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
-                <a href="#!" class="modal-close waves-effect btn-flat yes_btn change_privacy_yes_btn">Yes</a>
-            </div>
-        </div>
-    </div>
-    <div id="confirmation_modal_private">
-        <div id="confirm_to_private" class="modal">
-            <div class="modal-content">
-                <h4>Confirmation</h4>
-                <p>Are you sure you want to change this documentation to Private?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
-                <a href="#!" class="modal-close waves-effect btn-flat yes_btn change_privacy_yes_btn">Yes</a>
-            </div>
-        </div>
-    </div>
-    <div id="confirmation_modal_archive">
-        <div id="confirm_to_archive" class="modal">
-            <div class="modal-content">
-                <h4>Confirmation</h4>
-                <p>Are you sure you want to move this documentation to Archive?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
-                <a href="#!" id="archive_confirm" class="modal-close waves-effect btn-flat yes_btn">Yes</a>
-            </div>
-        </div>
-    </div>
-    <div id="confirmation_modal_remove">
-        <div id="confirm_to_remove" class="modal">
-            <div class="modal-content">
-                <h4>Confirmation</h4>
-                <p>Are you sure you want to remove this documentation?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
-                <a href="#!" id="remove_confirm" class="modal-close waves-effect btn-flat yes_btn">Yes</a>
-            </div>
-        </div>
-    </div>
-    <div id="confirmation_modal_remove_invited_user">
-        <div id="confirm_to_remove_invited_user" class="modal">
-            <div class="modal-content">
-                <h4>Confirmation</h4>
-                <p>Are you sure you want to remove access for this user?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
-                <a href="#!" id="remove_invited_user_confirm" class="modal-close waves-effect btn-flat yes_btn">Yes</a>
-            </div>
-        </div>
-    </div>
-    <form id="change_document_privacy_form" action="#" method="POST" hidden>
-        <input type="hidden" id="change_privacy_doc_id" name="document_id">
-        <input type="hidden" id="change_privacy_doc_privacy" name="document_privacy">
-    </form>
-    <form id="remove_archive_form" action="#" method="POST" hidden>
-        <input type="hidden" id="documentation_action" name="documentation_action">
-        <input type="hidden" id="remove_archive_id" name="document_id">
-    </form>
-    <form action="remove_invited_user_form" action="#" method="POST" hidden>
-        <input type="hidden" id="invited_user_id" name="invited_user_id">
-    </form>
-    <form id="get_documentations_form" action="../../processes/manage_documentation.php">
-        <input type="hidden" name="process_type" value="get_documentations">
-        <input type="hidden" name="document_type" value="archived">
-        <input type="hidden" name="documentations_order" value="<?= $documentations_order ?>">
-    </form>
+    <?php include_once("../partials/confirm_documentation_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
