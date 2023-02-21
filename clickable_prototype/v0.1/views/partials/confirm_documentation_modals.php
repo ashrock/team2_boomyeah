@@ -59,14 +59,15 @@
         </div>
     </div>
 </div>
-<form id="change_document_privacy_form" action="#" method="POST" hidden>
+<form id="change_document_privacy_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
     <input type="hidden" id="change_privacy_doc_id" name="document_id">
     <input type="hidden" id="change_privacy_doc_privacy" name="document_privacy">
+    <input type="hidden" name="process_type" value="change_documentation_privacy">
 </form>
-<form id="remove_archive_form" action="#" method="POST" hidden>
+<form id="remove_archive_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
     <input type="hidden" id="documentation_action" name="documentation_action">
     <input type="hidden" id="remove_archive_id" name="document_id">
 </form>
-<form action="remove_invited_user_form" action="#" method="POST" hidden>
+<form action="remove_invited_user_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
     <input type="hidden" id="invited_user_id" name="invited_user_id">
 </form>

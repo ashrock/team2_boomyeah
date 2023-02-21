@@ -6,6 +6,27 @@
 
     if(isset($_POST["process_type"])){
         switch ($_POST["process_type"]) {
+            case "add_documentation":
+            {
+                $response_data = array("status" => false, "result" => [], "error"  => null);
+
+                if(array_key_exists("documentation", $_POST)){
+                    $documentation_data = array(
+                        ...$_POST["documentation"],
+                        "id" => time(),
+                        "is_archived" => FALSE,
+                        "is_private" => FALSE,
+                        "cache_collaborators_count" => 10
+                    );
+            
+                    $response_html = get_include_contents("../views/partials/document_block_partial.php", $documentation_data);
+                    $response_data["status"] = true;
+                    $response_data["result"]["html"] = $response_html;
+                }
+
+                echo json_encode($response_data);
+                break;
+            }
             case "get_documentations":
             {
                 $documentations_html = "";
