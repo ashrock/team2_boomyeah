@@ -9,17 +9,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* Print all documentation */
     // displayDocumentations(data.documentations);
 
-    initializeMaterializeDropdown();
-    $("#add_documentation_form").on("submit", onSubmitAddDocumentationForm);
-    appearEmptyDocumentation();
-
-    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
-    $(".duplicate_icon").on("click", duplicateDocumentation);
-    $(".document_title").on("blur", onChangeDocumentationTitle);
-
-    $(".active_docs_btn").on("click", appearActiveDocumentation);
-    $(".archived_docs_btn").on("click", appearArchivedDocumentations);
-
     document.querySelectorAll("#documentations").forEach((section_tabs_list) => {
         Sortable.create(section_tabs_list);
     });
@@ -37,8 +26,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             addSearchEmailResult(element);
         }
     });
-
-    $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
     
     $(".change_privacy_yes_btn").on("click", submitChangeDocumentPrivacy);
     
@@ -59,6 +46,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         var instance = M.Modal.getInstance(confirm_modal);
         instance.open();
     });
+
+    $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
     
     $(".set_to_public_icon ").on("click", function(event){
         event.stopImmediatePropagation();
@@ -76,6 +65,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         instance.open();
     });
 
+
+    $("#add_documentation_form").on("submit", onSubmitAddDocumentationForm);
+    $("#duplicate_documentation_form").on("submit", onSubmitDuplicateForm);
+    $("#change_document_privacy_form").on("submit", onSubmitChangePrivacy);
+    appearEmptyDocumentation();
+
+    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
+    $(".duplicate_icon").on("click", duplicateDocumentation);
+    $(".document_title").on("blur", onChangeDocumentationTitle);
+
+    $(".active_docs_btn").on("click", appearActiveDocumentation);
+    $(".archived_docs_btn").on("click", appearArchivedDocumentations);
     $(".archive_btn, .remove_btn").on("click", setRemoveArchiveValue);
     $("#archive_confirm, #remove_confirm").on("click", submitRemoveArchive);
     $("#remove_invited_user_confirm").on("click", submitRemoveInvitedUser);
@@ -86,8 +87,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     /* run functions from invite_modal.js */
     initChipsInstance();
-    // initRoleDropdown();
     initSelect();
+    initializeMaterializeDropdown();
 
     M.Dropdown.init($("#docs_view_btn")[0]);
     M.Dropdown.init($("#sort_by_btn")[0]);
@@ -123,22 +124,15 @@ function onSubmitAddDocumentationForm(event){
     if(input_document_title){
         /** Use AJAX to generate new documentation */
         $.post(add_document_form.attr("action"), add_document_form.serialize(), (post_data) => {
-            $("#documentations").prepend(post_data.html);
-            
-            setTimeout(() => {
-                let document_block = $("#documentations .document_block")[0];
-                $("#add_documentation_form")[0].reset();
-                appearEmptyDocumentation();
-    
-                $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
-                $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
-                $(".duplicate_icon").on("click", duplicateDocumentation);
-                $(".document_title").on("blur", onChangeDocumentationTitle);
-                $(".archive_btn").on("click", setRemoveArchiveValue);
-                $(".remove_btn").on("click", setRemoveArchiveValue);
-                document_block.addEventListener("click", redirectToDocumentView);
-                initializeMaterializeDropdown();
-            }, 148);
+            if(post_data.status){
+                $("#documentations").prepend(post_data.result.html);
+                
+                setTimeout(() => {
+                    initializeMaterializeDropdown();
+                }, 148);
+            }
+
+            $("#add_documentation_form")[0].reset();
         }, "json");
         
         return;
@@ -230,46 +224,38 @@ function onChangeDocumentationTitle(event){
     /** TODO: Submit change title form */
 }
 
+function onSubmitDuplicateForm(event){
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    let post_form = $(this);
+    let document_id = post_form.find(".documentation_id").val();
+
+    /** Use AJAX to generate new documentation */
+    $.post(post_form.attr("action"), post_form.serialize(), (post_data) => {
+        if(post_data.status){
+            // Append duplicated documentation
+            $(`#document_${document_id}`).after(post_data.result.html);
+            
+            setTimeout(() => {
+                initializeMaterializeDropdown();
+            }, 148);
+        }
+
+        post_form[0].reset();
+    }, "json");
+
+    return false;  
+}
+
 function duplicateDocumentation(event){
     event.stopImmediatePropagation();
-    let source = event.target.closest(".document_block");
-    let new_documentation_id = getNewDocumentationId();
+    event.preventDefault();
+    let document_id = $(this).attr("data-document_id");
+    let duplicate_form = $("#duplicate_documentation_form");
+    duplicate_form.find(".documentation_id").val(document_id);
+    duplicate_form.trigger("submit");
 
-    let cloned_documentation = $(source).clone();
-    let cloned_title = cloned_documentation.find(".document_title");
-    let cloned_target = cloned_documentation.find(".more_action_btn");
-    let cloned_list = cloned_documentation.find(".dropdown-content");
-    let more_action_title = `document_more_actions_${new_documentation_id}`;
-
-    /* Update document_id of clone */
-    cloned_documentation[0].setAttribute("id", `document_${new_documentation_id}`);
-    cloned_documentation.find(".archive_btn")[0].dataset.document_id     = new_documentation_id;
-    cloned_documentation.find(".remove_btn")[0].dataset.document_id      = new_documentation_id;
-
-    cloned_title[0].setAttribute("style", "");
-    cloned_title.val(`Copy of ${cloned_title.val()}`);
-    cloned_target[0].setAttribute("data-target", more_action_title);
-    cloned_list[0].setAttribute("id", more_action_title);
-    cloned_list[0].setAttribute("style", "");
-
-    $(cloned_documentation.on("click", redirectToDocumentView));
-    $(cloned_documentation.find(".edit_title_icon").on("click", toggleEditDocumentationTitle));
-    $(cloned_documentation.find(".duplicate_icon").on("click", duplicateDocumentation));
-    $(cloned_documentation.find(".document_title").on("click", onChangeDocumentationTitle));
-    $(cloned_documentation.find(".archive_btn").on("click", setRemoveArchiveValue));
-    $(cloned_documentation.find(".remove_btn").on("click", setRemoveArchiveValue));
-    cloned_documentation.find(".set_privacy_btn").on("click", setDocumentPrivacyValues);
-    cloned_documentation.find(".set_privacy_btn").each( () => {
-        $(this).attr("document_id", new_documentation_id);
-    });
-    
-    cloned_documentation[0].className += " animate__animated animate__fadeIn";
-    cloned_documentation.on("animationend", () => {
-        cloned_documentation[0].classList.remove("animate__animated", "animate__fadeIn");
-    }, false);
-
-    source.insertAdjacentElement("afterend", cloned_documentation[0]);
-    initializeMaterializeDropdown();
+    return;
 }
 
 function appearActiveDocumentation(event){
@@ -311,95 +297,32 @@ function setDocumentPrivacyValues(event){
     document.getElementById("change_privacy_doc_privacy").value = documentation_privacy;
 }
 
+function onSubmitChangePrivacy(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    let post_form = $(this);
+    let document_id = post_form.find(".documentation_id").val();
+
+    /** Use AJAX to change documentation privacy */
+    $.post(post_form.attr("action"), post_form.serialize(), (post_data) => {
+        if(post_data.status){
+            // Replace with updated documentation
+            $(`#document_${document_id}`).replaceWith(post_data.result.html);
+            
+            setTimeout(() => {
+                initializeMaterializeDropdown();
+            }, 148);
+        }
+
+        post_form[0].reset();
+    }, "json");
+    return false;
+}
+
 function submitChangeDocumentPrivacy(event){
-    /* This is just for clickable prototype. Will replace all when form is submitted to the backend */
-    const documentation_id      = document.getElementById("change_privacy_doc_id").value;
-    const documentation_privacy = document.getElementById("change_privacy_doc_privacy").value;
-
-    const document_details         = $(`#document_${documentation_id} .document_details`)[0];
-    const dropdown_set_privacy_btn = $(`#document_${documentation_id} .dropdown-content .set_privacy_btn`)[0];
-
-    const dropdown_content = $(`#document_more_actions_${documentation_id}`)[0];
-    
-    let href_value, document_privacy, class_name, inner_html = "";
-
-    /* When changing privacy to Public... */
-    if(documentation_privacy == "private"){
-        document_details.querySelector(".invite_collaborators_btn").remove();
-        $(`#document_${documentation_id} .access_btn`)[0].remove();
-
-        /* Set set_privacy_btn values */
-        href_value       = "#confirm_to_private";
-        document_privacy = "public";
-        class_name       = "set_to_private_icon modal-trigger set_privacy_btn";
-        inner_html       = "Set to Private"
-
-        dropdown_content.innerHTML = `
-            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-            <li class="divider" tabindex="-1"></li>
-            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-            <li class="divider" tabindex="-1"></li>
-            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="${documentation_id}" data-documentation_action="archive">Archive</a></li>
-            <li class="divider" tabindex="-1"></li>
-            <li><a href="#confirm_to_private" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="${documentation_id}" data-document_privacy="public">Set to Private</a></li>
-            <li class="divider" tabindex="-1"></li>
-            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="${documentation_id}" data-documentation_action="remove">Remove</a></li>
-        `;
-    }
-    /* When changing privacy to Private... */
-    else {
-        /* Create invite_collaborators_btn element */
-        const invite_collaborators_btn = document.createElement("button");
-        invite_collaborators_btn.innerHTML = 0;
-        invite_collaborators_btn.className = "invite_collaborators_btn modal-trigger";
-        invite_collaborators_btn.setAttribute("href", "#modal1");
-
-        document_details.append(invite_collaborators_btn);
-
-        /* Create access_btn */
-        const access_btn = document.createElement("button");
-        access_btn.className = "access_btn modal-trigger set_privacy_btn";
-        access_btn.setAttribute("href", "#confirm_to_public");
-        access_btn.setAttribute("data-document_id", documentation_id);
-        access_btn.setAttribute("data-document_privacy", "private");
-        access_btn.addEventListener("click", setDocumentPrivacyValues);
-
-        $(`#document_${documentation_id} .document_controls`)[0].prepend(access_btn);
-
-        /* Set set_privacy_btn values */
-        href_value       = "#confirm_to_public";
-        document_privacy = "private";
-        class_name       = "set_to_public_icon modal-trigger set_privacy_btn";
-        inner_html       = "Set to Public"
-
-        dropdown_content.innerHTML = `
-        <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-        <li class="divider" tabindex="-1"></li>
-        <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-        <li class="divider" tabindex="-1"></li>
-        <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="${documentation_id}" data-documentation_action="archive">Archive</a></li>
-        <li class="divider" tabindex="-1"></li>
-        <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
-        <li class="divider" tabindex="-1"></li>
-        <li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="${documentation_id}" data-document_privacy="private">Set to Public</a></li>
-        <li class="divider" tabindex="-1"></li>
-        <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="${documentation_id}" data-documentation_action="remove">Remove</a></li>
-        `;
-    }
-
-    /* Update dropdown */
-    dropdown_content.className = `dropdown-content more_action_list_${document_privacy}`;
-    dropdown_set_privacy_btn.setAttribute("href", href_value);
-    dropdown_set_privacy_btn.setAttribute("data-document_privacy", document_privacy);
-    dropdown_set_privacy_btn.className = class_name;
-    dropdown_set_privacy_btn.innerHTML = inner_html;
-
-    $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
-    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
-    $(".duplicate_icon").on("click", duplicateDocumentation);
-    $(".document_title").on("blur", onChangeDocumentationTitle);
-    $(".archive_btn").on("click", setRemoveArchiveValue);
-    $(".remove_btn").on("click", setRemoveArchiveValue);
+    event.preventDefault();
+    $("#change_document_privacy_form").trigger("submit");
+    return;
 }
 
 function setRemoveArchiveValue(event){

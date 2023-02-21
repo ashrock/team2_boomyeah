@@ -39,8 +39,9 @@
     <div id="invite_modal"><?= include_once("../partials/invite_modal.php") ?></div>
     <div id="wrapper">
         <div class="container">
-            <form action="../view_prototype.php" id="add_documentation_form" method="POST">
+            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="add_documentation_form" method="POST">
                 <div class="group_add_documentation input-field">
+                    <input type="hidden" name="action" value="add_documentation">
                     <input id="input_add_documentation" type="text" class="validate" name="documentation[title]" autofocus>
                     <label for="input_add_documentation">Add Documentation</label>
                 </div>
@@ -88,6 +89,11 @@
     <form id="get_documentations_form" action="../../processes/manage_documentation.php" method="POST">
         <input type="hidden" name="action" value="get_documentations">
         <input type="hidden" id="is_archived" name="is_archived">
+    </form>
+
+    <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="duplicate_documentation_form">
+        <input type="hidden" name="action" value="duplicate_documentation">
+        <input type="hidden" class="documentation_id" name="documentation_id">
     </form>
     <?php include_once("../partials/confirm_documentation_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
