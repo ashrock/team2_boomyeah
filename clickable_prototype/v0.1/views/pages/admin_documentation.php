@@ -89,6 +89,10 @@
         <input type="hidden" name="action" value="get_documentations">
         <input type="hidden" id="is_archived" name="is_archived">
     </form>
+    <form id="remove_documentation_form" action="../../processes/manage_documentation.php" method="POST">
+        <input type="hidden" name="action" value="remove_documentation">
+        <input type="hidden" id="remove_documentation_id" name="remove_documentation_id">
+    </form>
     <?php include_once("../partials/confirm_documentation_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>

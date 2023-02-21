@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".active_docs_btn").on("click", appearActiveDocumentation);
     $(".archived_docs_btn").on("click", appearArchivedDocumentations);
+    $(".remove_btn").on("click", setRemoveDocumentationValue);
+    $("#remove_confirm").on("click", submitRemoveDocumentation);
 
     document.querySelectorAll("#documentations").forEach((section_tabs_list) => {
         Sortable.create(section_tabs_list);
@@ -77,7 +79,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     $(".archive_btn, .remove_btn").on("click", setRemoveArchiveValue);
-    $("#archive_confirm, #remove_confirm").on("click", submitRemoveArchive);
+    $("#archive_confirm").on("click", submitRemoveArchive);
+    $("#remove_confirm").on("click", submitRemoveDocumentation);
     $("#remove_invited_user_confirm").on("click", submitRemoveInvitedUser);
     $("#add_invite_btn").on("click", addPeopleWithAccess);
 
@@ -402,29 +405,40 @@ function submitChangeDocumentPrivacy(event){
     $(".remove_btn").on("click", setRemoveArchiveValue);
 }
 
-function setRemoveArchiveValue(event){
-    const documentation        = event.target;
-    const documentation_id     = documentation.getAttribute("data-document_id");
-    const documentation_action = documentation.getAttribute("data-documentation_action");
+function setRemoveDocumentationValue(event){
+    event.stopImmediatePropagation();
+
+    const documentation    = $(this);
+    const documentation_id = documentation.data("document_id");
 
     /* Set form values */
-    document.getElementById("remove_archive_id").value    = documentation_id;
-    document.getElementById("documentation_action").value = documentation_action;
+    $("#remove_documentation_form #remove_documentation_id").val(documentation_id);
+
+    let remove_modal = document.querySelector("#confirm_to_remove");
+    var instance = M.Modal.getInstance(remove_modal);
+    instance.open();
 }
 
-function submitRemoveArchive(event){
-    /* This is just for clickable prototype. Will replace all when form is submitted to the backend */
-    const documentation_id = document.getElementById("remove_archive_id").value;
-    
-    /* Will not need this for now but will be used when form is submitted to the backend */
-    const documentation_action = document.getElementById("documentation_action").value;
+function submitRemoveDocumentation(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
 
-    $(`#document_${documentation_id}`)[0].className += " animate__animated animate__fadeOut";
-    $(`#document_${documentation_id}`)[0].addEventListener("animationend", () => {
-        $(`#document_${documentation_id}`)[0].remove();
-    });
+    let form = $("#remove_documentation_form");
 
-    appearEmptyDocumentation();
+    $.post(form.attr("action"), form.serialize(), (response_data) => {
+        let documentation = document.getElementById(`document_${response_data.result.documentation_id}`);
+
+        documentation.className += " animate__animated animate__fadeOut";
+        documentation.addEventListener("animationend", () => {
+            documentation.remove();
+        }, false);
+    }, "json");
+
+    let remove_modal = document.querySelector("#confirm_to_remove");
+    var instance = M.Modal.getInstance(remove_modal);
+    instance.close();
+
+    return false;
 }
 
 function redirectToDocumentView(event){
@@ -470,4 +484,12 @@ function getDocumentations(event){
     }, "json");
 
     return false;
+}
+
+function setRemoveArchiveValue(){
+    
+}
+
+function submitRemoveArchive(){
+
 }
