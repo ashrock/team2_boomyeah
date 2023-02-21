@@ -41,7 +41,7 @@
         <div class="container">
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="add_documentation_form" method="POST">
                 <div class="group_add_documentation input-field">
-                    <input type="hidden" name="process_type" value="add_documentation">
+                    <input type="hidden" name="action" value="add_documentation">
                     <input id="input_add_documentation" type="text" class="validate" name="documentation[title]" autofocus>
                     <label for="input_add_documentation">Add Documentation</label>
                 </div>
@@ -77,7 +77,7 @@
                 </div>
             </div>
             <div id="archived_documents" class="hidden">
-                <!-- Prepend query results here -->
+                <!-- Print HTML returned by BE -->
                 <div class="no_archived_documents hidden">
                     <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                         alt="Empty Content Illustration">
@@ -87,12 +87,12 @@
         </div>
     </div>
     <form id="get_documentations_form" action="../../processes/manage_documentation.php" method="POST">
-        <input type="hidden" name="process_type" value="get_documentations">
+        <input type="hidden" name="action" value="get_documentations">
         <input type="hidden" id="is_archived" name="is_archived">
     </form>
 
     <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="duplicate_documentation_form">
-        <input type="hidden" name="process_type" value="duplicate_documentation">
+        <input type="hidden" name="action" value="duplicate_documentation">
         <input type="hidden" class="documentation_id" name="documentation_id">
     </form>
     <?php include_once("../partials/confirm_documentation_modals.php"); ?>

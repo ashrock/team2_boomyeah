@@ -266,7 +266,10 @@ function appearActiveDocumentation(event){
     docs_view_btn.innerText = active_docs_btn.innerText;
     $("#documentations").removeClass("hidden");
     $("#archived_documents").addClass("hidden");
-    window.location.reload();
+    
+    /* Update form value */
+    $("#get_documentations_form #is_archived").val("0");
+    $("#get_documentations_form").submit();
 }
 
 function appearArchivedDocumentations(event){
@@ -278,6 +281,7 @@ function appearArchivedDocumentations(event){
     $("#archived_documents").removeClass("hidden");
     $("#documentations").addClass("hidden");
 
+    /* Update form value */
     $("#get_documentations_form #is_archived").val("1");
     $("#get_documentations_form").submit();
 }
@@ -382,7 +386,9 @@ function getDocumentations(event){
     let form = $(this);
     
     $.post(form.attr("action"), form.serialize(), (response_data) => {
-        $("#archived_documents").html(response_data.result.html);
+        let documentations_div = $("#get_documentations_form #is_archived").val() == "1" ? "#archived_documents" : "#documentations";
+
+        $(documentations_div).html(response_data.result.html);
         initializeMaterializeDropdown();
     }, "json");
 
