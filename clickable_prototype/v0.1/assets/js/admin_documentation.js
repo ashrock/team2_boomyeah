@@ -87,6 +87,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     M.Dropdown.init($("#docs_view_btn")[0]);
     M.Dropdown.init($("#sort_by_btn")[0]);
+
+    $("#get_documentations_form").on("submit", getDocumentations);
 });
 
 function getNewDocumentationId(event){
@@ -388,6 +390,8 @@ function appearArchivedDocumentations(event){
     docs_view_btn.innerText = archived_docs_btn.innerText;
     $("#archived_documents").removeClass("hidden");
     $("#documentations").addClass("hidden");
+
+    $("#get_documentations_form").submit();
 }
 
 /* Will set values needed for changing a documentation's privacy. Values will be used after clicking 'Yes' on the modal */
@@ -546,4 +550,15 @@ function sort_documentations(event){
     for (let i = 0; i < documentation_lists_to_sort.length; i++) {
         documentation_lists.appendChild(documentation_lists_to_sort[i]);
     }
+}
+
+function getDocumentations(event){
+    event.preventDefault();
+    let form = $(this);
+    
+    $.post(form.attr("action"), form.serialize(), (response_data) => {
+        $("#archived_documents").html(response_data);
+    });
+
+    return false;
 }

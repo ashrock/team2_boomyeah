@@ -1,4 +1,16 @@
-<?php include_once("../view_helper.php"); ?>
+<?php
+    session_start();
+
+    // Sample admin session
+    $_SESSION["user_id"]       = 1;
+    $_SESSION["user_level_id"] = 9;
+    $_SESSION["workspace_id"]  = 1;
+    // END
+
+    include_once("../view_helper.php");  
+    include_once("../../config/connection.php");
+    include_once("../../config/constants.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,284 +53,60 @@
                     <li class="divider" tabindex="-1"></li>
                     <li><a href="#!" class="archived_docs_btn">Archived</a></li>
                 </ul>
-                <button id="sort_by_btn" class="dropdown-trigger sort_btn" data-target="sort_by_list">Sort by</button>
-                <ul id='sort_by_list' class='dropdown-content sort_dropdown'>
-                    <li class="sort_by" data-sort-by="az">A-Z</li>
-                    <li class="sort_by" data-sort-by="za">Z-A</li>
-                </ul>
             </div>
             <div id="documentations">
-                <div id="document_1" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Employee Handbook" id="" class="document_title" readonly="">
-                        <button class="invite_collaborators_btn modal-trigger" href="#modal1"> 15</button>
-                    </div>
-                    <div class="document_controls">
-                        <button class="access_btn modal-trigger set_privacy_btn" href="#confirm_to_public" data-document_id="1" data-document_privacy="private"></button>
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_1">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_1" class="dropdown-content more_action_list_private">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="1" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
-                            <li class="divider" tabindex="-1"></li><li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="1" data-document_privacy="private">Set to Public</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="1" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_2" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Company Handout" id="" class="document_title" readonly="">
-                        <button class="invite_collaborators_btn modal-trigger" href="#modal1"> 1</button>
-                    </div>
-                    <div class="document_controls">
-                        <button class="access_btn modal-trigger set_privacy_btn" href="#confirm_to_public" data-document_id="2" data-document_privacy="private"></button>
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_2">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_2" class="dropdown-content more_action_list_private">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="2" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
-                            <li class="divider" tabindex="-1"></li><li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="2" data-document_privacy="private">Set to Public</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="2" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_3" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Accounting" id="" class="document_title" readonly="">
-                        
-                    </div>
-                    <div class="document_controls">
-                        
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_3">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_3" class="dropdown-content more_action_list_public">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="3" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="3" data-document_privacy="public">Set to Private</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="3" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_4" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Marketing" id="" class="document_title" readonly="">
-                        
-                    </div>
-                    <div class="document_controls">
-                        
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_4">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_4" class="dropdown-content more_action_list_public">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="4" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="4" data-document_privacy="public">Set to Private</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="4" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_5" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Engineering" id="" class="document_title" readonly="">
-                        <button class="invite_collaborators_btn modal-trigger" href="#modal1"> 6</button>
-                    </div>
-                    <div class="document_controls">
-                        <button class="access_btn modal-trigger set_privacy_btn" href="#confirm_to_public" data-document_id="5" data-document_privacy="private"></button>
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_5">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_5" class="dropdown-content more_action_list_private">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="5" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
-                            <li class="divider" tabindex="-1"></li><li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="5" data-document_privacy="private">Set to Public</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="5" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_6" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Product Team" id="" class="document_title" readonly="">
-                        <button class="invite_collaborators_btn modal-trigger" href="#modal1"> 9</button>
-                    </div>
-                    <div class="document_controls">
-                        <button class="access_btn modal-trigger set_privacy_btn" href="#confirm_to_public" data-document_id="6" data-document_privacy="private"></button>
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_6">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_6" class="dropdown-content more_action_list_private">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="6" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
-                            <li class="divider" tabindex="-1"></li><li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="6" data-document_privacy="private">Set to Public</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="6" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_7" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="UI/UX" id="" class="document_title" readonly="">
-                        <button class="invite_collaborators_btn modal-trigger" href="#modal1"> 9</button>
-                    </div>
-                    <div class="document_controls">
-                        <button class="access_btn modal-trigger set_privacy_btn" href="#confirm_to_public" data-document_id="7" data-document_privacy="private"></button>
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_7">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_7" class="dropdown-content more_action_list_private">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="7" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
-                            <li class="divider" tabindex="-1"></li><li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="7" data-document_privacy="private">Set to Public</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="7" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_8" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Admissions" id="" class="document_title" readonly="">
-                        <button class="invite_collaborators_btn modal-trigger" href="#modal1"> 9</button>
-                    </div>
-                    <div class="document_controls">
-                        <button class="access_btn modal-trigger set_privacy_btn" href="#confirm_to_public" data-document_id="8" data-document_privacy="private"></button>
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_8">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_8" class="dropdown-content more_action_list_private">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="8" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
-                            <li class="divider" tabindex="-1"></li><li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="8" data-document_privacy="private">Set to Public</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="8" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_9" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Trainee" id="" class="document_title" readonly="">
-                        
-                    </div>
-                    <div class="document_controls">
-                        
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_9">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_9" class="dropdown-content more_action_list_public">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="9" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="9" data-document_privacy="public">Set to Private</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="9" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_10" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Instructors" id="" class="document_title" readonly="">
-                        
-                    </div>
-                    <div class="document_controls">
-                        
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_10">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_10" class="dropdown-content more_action_list_public">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="10" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="10" data-document_privacy="public">Set to Private</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="10" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_11" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Business Leads" id="" class="document_title" readonly="">
-                        <button class="invite_collaborators_btn modal-trigger" href="#modal1"> 10</button>
-                    </div>
-                    <div class="document_controls">
-                        <button class="access_btn modal-trigger set_privacy_btn" href="#confirm_to_public" data-document_id="11" data-document_privacy="private"></button>
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_11">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_11" class="dropdown-content more_action_list_private">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="11" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
-                            <li class="divider" tabindex="-1"></li><li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="11" data-document_privacy="private">Set to Public</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="11" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_12" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Intern" id="" class="document_title" readonly="">
-                        
-                    </div>
-                    <div class="document_controls">
-                        
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_12">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_12" class="dropdown-content more_action_list_public">
-                            <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="12" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="12" data-document_privacy="public">Set to Private</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="12" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
+<?php
+    $documentations_order = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
+    $documentations_order = $documentations_order["documentations_order"];
+
+    $documentations = fetch_all("SELECT id, title, is_archived, is_private, cache_collaborators_count
+        FROM documentations
+        WHERE workspace_id = {$_SESSION["workspace_id"]} AND is_archived = {$_NO}
+        ORDER BY FIELD (id, {$documentations_order});
+    ");
+?>
+
+<?php
+    for($documentations_index = 0; $documentations_index < count($documentations); $documentations_index++){
+        $documentation = $documentations[$documentations_index];
+?>
+    <div id="document_<?= $documentation["id"] ?>" class="document_block">
+        <div class="document_details">
+            <input type="text" name="document_title" value="<?= $documentation["title"] ?>" id="" class="document_title" readonly="">
+<?php if($documentation["is_private"] == "1"){ ?>
+            <button class="invite_collaborators_btn modal-trigger" href="#modal1"> <?= $documentation["cache_collaborators_count"] ? $documentation["cache_collaborators_count"] : "0" ?></button>
+<?php } ?>
+        </div>
+        <div class="document_controls">
+<?php if($documentation["is_private"] == "1"){ ?>
+            <button class="access_btn modal-trigger set_privacy_btn" href="#confirm_to_public" data-document_id="<?= $documentation["id"] ?>" data-document_privacy="private"></button>
+<?php } ?>
+            <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_<?= $documentation["id"] ?>">⁝</button>
+            <!-- Dropdown Structure -->
+            <ul id="document_more_actions_<?= $documentation["id"] ?>" class="dropdown-content more_action_list_private">
+                <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
+                <li class="divider" tabindex="-1"></li>
+                <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
+                <li class="divider" tabindex="-1"></li>
+                <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="<?= $documentation["id"] ?>" data-documentation_action="archive">Archive</a></li>
+<?php if($documentation["is_private"] == "1"){ ?>
+                <li class="divider" tabindex="-1"></li>
+                <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
+<?php } ?>
+                <li class="divider" tabindex="-1"></li>
+<?php if($documentation["is_private"] == "1"){ ?>
+                <li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="<?= $documentation["id"] ?>" data-document_privacy="private">Set to Public</a></li>
+<?php } else { ?>
+                <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="<?= $documentation["id"] ?>" data-document_privacy="private">Set to Private</a></li>
+<?php } ?>
+                <li class="divider" tabindex="-1"></li>
+                <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="<?= $documentation["id"] ?>" data-documentation_action="remove">Remove</a></li>
+            </ul>
+        </div>
+    </div>
+<?php
+    }
+?>
                 <div class="no_documents hidden">
                     <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                         alt="Empty Content Illustration">
@@ -326,52 +114,7 @@
                 </div>
             </div>
             <div id="archived_documents" class="hidden">
-                <div id="document_100" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Company Handout" id="" class="document_title" readonly="">
-                        <button class="invite_collaborators_btn modal-trigger archived_disabled" href="#modal1"> 1</button>
-                    </div>
-                    <div class="document_controls">
-                        <button class="access_btn modal-trigger archived_disabled" href="#confirm_to_public"></button>
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_100">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_100" class="dropdown-content more_action_list_private">
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="100" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="100" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_101" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Accounting" id="" class="document_title" readonly="">
-                    </div>
-                    <div class="document_controls">
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_101">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_101" class="dropdown-content more_action_list_private">
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="101" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="101" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="document_102" class="document_block">
-                    <div class="document_details">
-                        <input type="text" name="document_title" value="Engineering" id="" class="document_title" readonly="">
-                        <button class="invite_collaborators_btn modal-trigger archived_disabled" href="#modal1"> 6</button>
-                    </div>
-                    <div class="document_controls">
-                        <button class="access_btn modal-trigger archived_disabled" href="#confirm_to_public"></button>
-                        <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_102">⁝</button>
-                        <!-- Dropdown Structure -->
-                        <ul id="document_more_actions_102" class="dropdown-content more_action_list_private">
-                            <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="102" data-documentation_action="archive">Archive</a></li>
-                            <li class="divider" tabindex="-1"></li>
-                            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="102" data-documentation_action="remove">Remove</a></li>
-                        </ul>
-                    </div>
-                </div>
+                <!-- Prepend query results here -->
                 <div class="no_archived_documents hidden">
                     <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                         alt="Empty Content Illustration">
@@ -450,6 +193,11 @@
     </form>
     <form action="remove_invited_user_form" action="#" method="POST" hidden>
         <input type="hidden" id="invited_user_id" name="invited_user_id">
+    </form>
+    <form id="get_documentations_form" action="../../processes/manage_documentation.php">
+        <input type="hidden" name="process_type" value="get_documentations">
+        <input type="hidden" name="document_type" value="archived">
+        <input type="hidden" name="documentations_order" value="<?= $documentations_order ?>">
     </form>
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
