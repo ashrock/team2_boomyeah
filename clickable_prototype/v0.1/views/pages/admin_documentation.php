@@ -1,4 +1,16 @@
-<?php include_once("../view_helper.php"); ?>
+<?php
+    session_start();
+
+    // Sample admin session
+    $_SESSION["user_id"]       = 1;
+    $_SESSION["user_level_id"] = 9;
+    $_SESSION["workspace_id"]  = 1;
+    // END
+
+    include_once("../view_helper.php");  
+    include_once("../../config/connection.php");
+    include_once("../../config/constants.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,16 +56,17 @@
             </div>
             <div id="documentations">
                 <?php
-                    for($document_index = 1; $document_index <= 10; $document_index++){
-                        $documentation_data = array(
-                            "id" => $document_index,
-                            "title" => "Title ". $document_index,
-                            "is_archived" => FALSE,
-                            "is_private" => ($document_index % 3 != 0),
-                            "cache_collaborators_count" => 10
-                        );
+                    $documentations_order = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
+                    $documentations_order = $documentations_order["documentations_order"];
 
-                        load_view("../partials/document_block_partial.php", $documentation_data);
+                    $documentations = fetch_all("SELECT id, title, is_archived, is_private, cache_collaborators_count
+                        FROM documentations
+                        WHERE workspace_id = {$_SESSION["workspace_id"]} AND is_archived = {$_NO}
+                        ORDER BY FIELD (id, {$documentations_order});
+                    ");
+
+                    for($documentations_index = 0; $documentations_index < count($documentations); $documentations_index++){
+                        load_view("../partials/document_block_partial.php", $documentations[$documentations_index]);
                     }
                 ?>
                 <div class="no_documents hidden">
@@ -63,19 +76,7 @@
                 </div>
             </div>
             <div id="archived_documents" class="hidden">
-                <?php
-                    for($document_index = 101; $document_index <= 106; $document_index++){
-                        $documentation_data = array(
-                            "id" => $document_index,
-                            "title" => "Title ". $document_index,
-                            "is_archived" => TRUE,
-                            "is_private" => ($document_index % 3 != 0),
-                            "cache_collaborators_count" => 10
-                        );
-
-                        load_view("../partials/document_block_partial.php", $documentation_data);
-                    }
-                ?>
+                <!-- Prepend query results here -->
                 <div class="no_archived_documents hidden">
                     <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                         alt="Empty Content Illustration">
@@ -84,6 +85,10 @@
             </div>
         </div>
     </div>
+    <form id="get_documentations_form" action="../../processes/manage_documentation.php" method="POST">
+        <input type="hidden" name="process_type" value="get_documentations">
+        <input type="hidden" id="is_archived" name="is_archived">
+    </form>
     <?php include_once("../partials/confirm_documentation_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
