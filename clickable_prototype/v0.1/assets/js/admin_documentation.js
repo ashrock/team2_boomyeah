@@ -58,6 +58,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         let confirm_modal = document.querySelector("#confirm_to_public");
         var instance = M.Modal.getInstance(confirm_modal);
         instance.open();
+
+        let change_document_privacy_form = $("#change_document_privacy_form");
+        change_document_privacy_form.find("#document_id").val($(this).attr("data-document_id"));
+        change_document_privacy_form.find("#update_value").val(0);    
     });
 
     $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
@@ -108,7 +112,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     M.Dropdown.init($("#sort_by_btn")[0]);
 
     $("#get_documentations_form").on("submit", getDocumentations);
+    
 });
+
 
 function getNewDocumentationId(event){
     let documentation_children = document.querySelectorAll("#documentations .document_block");
@@ -137,8 +143,7 @@ function onSubmitAddDocumentationForm(event){
 
     if(input_document_title){
         /** Use AJAX to generate new documentation */
-        $.post(add_document_form.attr("action"), add_document_form.serialize(), (post_data) => {
-            
+        $.post(add_document_form.attr("action"), add_document_form.serialize(), (data) => {
             if(data.status){
                 /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
                 alert("Documentation added succesfully!");
@@ -151,42 +156,6 @@ function onSubmitAddDocumentationForm(event){
         
         return;
     }
-}
-
-function displayDocumentations(documentations){
-    const documentation_div = document.getElementById("documentations");
-    let document_block = "";
-
-    /* Print all documentation */
-    documentations.forEach((document, index) => {
-        document_block += `
-            <div id="document_${index + 1}" class="document_block">
-                <div class="document_details">
-                    <input type="text" name="document_title" value="${document.title}" id="" class="document_title" readonly="">
-                    ${ document.is_private ? `<button class="invite_collaborators_btn modal-trigger" href="#modal1"> ${document.collaborator_count}</button>` : ''}
-                </div>
-                <div class="document_controls">
-                    ${ document.is_private ? `<button class="access_btn modal-trigger set_privacy_btn" href="#confirm_to_public" data-document_id="${index + 1}" data-document_privacy="private"></button>` : '' }
-                    <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_${ index + 1}">⁝</button>
-                    <!-- Dropdown Structure -->
-                    <ul id="document_more_actions_${ index + 1}" class="dropdown-content more_action_list_${ document.is_private ? "private" : "public" }">
-                        <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                        <li class="divider" tabindex="-1"></li>
-                        <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                        <li class="divider" tabindex="-1"></li>
-                        <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="${index + 1}" data-documentation_action="archive">Archive</a></li>
-                        <li class="divider" tabindex="-1"></li>
-                        ${ document.is_private ? `<li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
-                        <li class="divider" tabindex="-1"></li><li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="${index + 1}" data-document_privacy="private">Set to Public</a></li>` : 
-                        `<li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="${index + 1}" data-document_privacy="public">Set to Private</a></li>` }
-                        <li class="divider" tabindex="-1"></li>
-                        <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="${index + 1}" data-documentation_action="remove">Remove</a></li>
-                    </ul>
-                </div>
-            </div>`;
-    });
-
-    console.log(document_block);
 }
 
 function initializeMaterializeDropdown(){
@@ -231,10 +200,32 @@ function toggleEditDocumentationTitle(event){
 }
 
 function onChangeDocumentationTitle(event){
+    event.preventDefault();
+
     let document_title = event.target;
     document_title.setAttribute("readonly", "");
 
-    /** TODO: Submit change title form */
+    let document_title_input = $(this);
+    let edit_doc_title_form = document_title_input.closest(".edit_title_form");
+
+    if(document_title_input.val()){
+        /** Use AJAX to generate new documentation */
+        $.post(edit_doc_title_form.attr("action"), edit_doc_title_form.serialize(), (data) => {
+            if(data.status){
+                /* TODO: Improve UX after success updating of title. Add animation. */
+
+            }
+            else{
+                /* TODO: Improve UX after updating empty title. Add animation red border. */
+                alert(data.error);
+            }
+        }, "json");
+    }
+    else{
+        /* TODO: Improve UX after updating empty title. Add animation red border. */
+    }
+
+    return;
 }
 
 function onSubmitDuplicateForm(event){
@@ -306,8 +297,10 @@ function setDocumentPrivacyValues(event){
     const documentation_privacy = documentation.getAttribute("data-document_privacy");
 
     /* Set form values */
-    document.getElementById("change_privacy_doc_id").value = documentation_id;
-    document.getElementById("change_privacy_doc_privacy").value = documentation_privacy;
+    let change_document_privacy_form = $("#change_document_privacy_form");
+    
+    change_document_privacy_form.find("#document_id").val(documentation_id);
+    change_document_privacy_form.find("#update_value").val( (documentation_privacy == "public") ? 1 : 0 );
 }
 
 function onSubmitChangePrivacy(event){
@@ -318,10 +311,14 @@ function onSubmitChangePrivacy(event){
 
     /** Use AJAX to change documentation privacy */
     $.post(post_form.attr("action"), post_form.serialize(), (post_data) => {
+        console.log('post_data', post_data);
         if(post_data.status){
-            // Replace with updated documentation
+            /* TODO: Improve UX after success updating. Add animation to indication the replace with the updated . */
+            console.log('post_data.result.document_id', post_data.result.document_id)
+            console.log('post_data.result.html', post_data.result.html);
+
             $(`#document_${document_id}`).replaceWith(post_data.result.html);
-            
+
             setTimeout(() => {
                 initializeMaterializeDropdown();
             }, 148);
@@ -329,12 +326,43 @@ function onSubmitChangePrivacy(event){
 
         post_form[0].reset();
     }, "json");
+
     return false;
 }
 
 function submitChangeDocumentPrivacy(event){
     event.preventDefault();
+
     $("#change_document_privacy_form").trigger("submit");
+
+    return;
+}
+
+function setRemoveArchiveValue(event){
+    const documentation        = event.target;
+    const documentation_id     = documentation.getAttribute("data-document_id");
+    console.log('documentation_id', documentation_id)
+
+    /* Set form values */
+    let archive_document_form = $("#remove_archive_form");
+    archive_document_form.find("#document_id").val(documentation_id);
+}
+
+function submitRemoveArchive(event){
+    let archive_document_form = $("#remove_archive_form");
+
+    $.post(archive_document_form.attr("action"), archive_document_form.serialize(), (data) => {
+        if(data.status){
+            /* TODO: Improve UX after success updating. Add animation to remove the archived document from the list. */
+            
+            appearEmptyDocumentation();
+        }
+        else{
+            /* TODO: Improve UX after error. Add animation red border. */
+            alert(data.error);
+        }
+    }, "json");
+    
     return;
 }
 
@@ -419,12 +447,4 @@ function getDocumentations(event){
     }, "json");
 
     return false;
-}
-
-function setRemoveArchiveValue(){
-    
-}
-
-function submitRemoveArchive(){
-
 }

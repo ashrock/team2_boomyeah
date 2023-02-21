@@ -28,10 +28,6 @@
 
                 // Generate HTML
                 for($documentations_index = 0; $documentations_index < count($get_documentations); $documentations_index++){
-                    if($_POST["is_archived"] == "{$_YES}"){
-                        $get_documentations[$documentations_index]["is_archived_view"] = $_YES;
-                    }
-
                     $get_documentations_html .= get_include_contents("../views/partials/document_block_partial.php", $get_documentations[$documentations_index]);
                 }
     
@@ -64,7 +60,7 @@
                 break;
             }
             case "create_documentation": {
-                $response_data = array("status" => false, "result" => [], "error"  => null);
+                $response_data = array("status" => false, "result" => [], "error" => null);
 
                 if(isset($_POST["document_title"])){
                     $document_title = escape_this_string($_POST["document_title"]);
@@ -88,6 +84,37 @@
                 }
                 else{
                     $response_data["error"] = "Document title is required!";
+                }
+
+                echo json_encode($response_data);
+                break;
+            }
+            case "update_document": {
+                $response_data = array("status" => false, "result" => [], "error" => null);
+                
+                if(isset($_POST["update_type"]) && isset($_POST["document_id"])){
+                    $document = fetch_record("SELECT id FROM documentations WHERE id = {$_POST["document_id"]}");
+
+                    if(count($document) > $_ZERO_VALUE){
+                        if( in_array($_POST["update_type"], ["title", "is_archived", "is_private"]) ){
+                            $update_document = run_mysql_query("UPDATE documentations SET {$_POST["update_type"]} = '{$_POST["update_value"]}' WHERE id = {$_POST["document_id"]}");
+                            
+                            if($update_document){
+                                $response_data["status"] = true;
+                                $response_data["result"]["update_type"] = $_POST["update_type"];
+
+                                if($_POST["update_type"] == "is_private"){
+                                    $updated_document = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$_POST["document_id"]}");
+                                    
+                                    $response_data["result"]["document_id"] = $updated_document["id"];
+                                    $response_data["result"]["html"] = get_include_contents("../views/partials/document_block_partial.php", $updated_document);
+                                }
+                            }
+                        }
+                    }
+                }
+                else{
+                    $response_data["error"] = "Missing required params: document_id and update_type.";
                 }
 
                 echo json_encode($response_data);
