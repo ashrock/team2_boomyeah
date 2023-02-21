@@ -292,6 +292,7 @@ function appearArchivedDocumentations(event){
     $("#archived_documents").removeClass("hidden");
     $("#documentations").addClass("hidden");
 
+    $("#get_documentations_form #is_archived").val("1");
     $("#get_documentations_form").submit();
 }
 
@@ -458,8 +459,9 @@ function getDocumentations(event){
     let form = $(this);
     
     $.post(form.attr("action"), form.serialize(), (response_data) => {
-        $("#archived_documents").html(response_data);
-    });
+        $("#archived_documents").html(response_data.result.html);
+        initializeMaterializeDropdown();
+    }, "json");
 
     return false;
 }

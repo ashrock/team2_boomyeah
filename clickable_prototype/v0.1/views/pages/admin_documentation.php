@@ -55,69 +55,18 @@
                 </ul>
             </div>
             <div id="documentations">
-<?php
-    $documentations_order = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
-    $documentations_order = $documentations_order["documentations_order"];
-
-    $documentations = fetch_all("SELECT id, title, is_archived, is_private, cache_collaborators_count
-        FROM documentations
-        WHERE workspace_id = {$_SESSION["workspace_id"]} AND is_archived = {$_NO}
-        ORDER BY FIELD (id, {$documentations_order});
-    ");
-?>
-
-<?php
-    for($documentations_index = 0; $documentations_index < count($documentations); $documentations_index++){
-        $documentation = $documentations[$documentations_index];
-?>
-    <div id="document_<?= $documentation["id"] ?>" class="document_block">
-        <div class="document_details">
-            <input type="text" name="document_title" value="<?= $documentation["title"] ?>" id="" class="document_title" readonly="">
-<?php if($documentation["is_private"] == "1"){ ?>
-            <button class="invite_collaborators_btn modal-trigger" href="#modal1"> <?= $documentation["cache_collaborators_count"] ? $documentation["cache_collaborators_count"] : "0" ?></button>
-<?php } ?>
-        </div>
-        <div class="document_controls">
-<?php if($documentation["is_private"] == "1"){ ?>
-            <button class="access_btn modal-trigger set_privacy_btn" href="#confirm_to_public" data-document_id="<?= $documentation["id"] ?>" data-document_privacy="private"></button>
-<?php } ?>
-            <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_<?= $documentation["id"] ?>">⁝</button>
-            <!-- Dropdown Structure -->
-            <ul id="document_more_actions_<?= $documentation["id"] ?>" class="dropdown-content more_action_list_private">
-                <li class="edit_title_btn"><a href="#!" class="edit_title_icon">Edit Title</a></li>
-                <li class="divider" tabindex="-1"></li>
-                <li><a href="#!" class="duplicate_icon">Duplicate</a></li>
-                <li class="divider" tabindex="-1"></li>
-                <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="<?= $documentation["id"] ?>" data-documentation_action="archive">Archive</a></li>
-<?php if($documentation["is_private"] == "1"){ ?>
-                <li class="divider" tabindex="-1"></li>
-                <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
-<?php } ?>
-                <li class="divider" tabindex="-1"></li>
-<?php if($documentation["is_private"] == "1"){ ?>
-                <li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="<?= $documentation["id"] ?>" data-document_privacy="private">Set to Public</a></li>
-<?php } else { ?>
-                <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="<?= $documentation["id"] ?>" data-document_privacy="private">Set to Private</a></li>
-<?php } ?>
-                <li class="divider" tabindex="-1"></li>
-                <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="<?= $documentation["id"] ?>" data-documentation_action="remove">Remove</a></li>
-            </ul>
-        </div>
-    </div>
-<?php
-    }
-?>
                 <?php
-                    for($document_index = 1; $document_index <= 10; $document_index++){
-                        $documentation_data = array(
-                            "id" => $document_index,
-                            "title" => "Title ". $document_index,
-                            "is_archived" => FALSE,
-                            "is_private" => ($document_index % 3 != 0),
-                            "cache_collaborators_count" => 10
-                        );
+                    $documentations_order = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
+                    $documentations_order = $documentations_order["documentations_order"];
 
-                        load_view("../partials/document_block_partial.php", $documentation_data);
+                    $documentations = fetch_all("SELECT id, title, is_archived, is_private, cache_collaborators_count
+                        FROM documentations
+                        WHERE workspace_id = {$_SESSION["workspace_id"]} AND is_archived = {$_NO}
+                        ORDER BY FIELD (id, {$documentations_order});
+                    ");
+
+                    for($documentations_index = 0; $documentations_index < count($documentations); $documentations_index++){
+                        load_view("../partials/document_block_partial.php", $documentations[$documentations_index]);
                     }
                 ?>
                 <div class="no_documents hidden">
@@ -136,6 +85,10 @@
             </div>
         </div>
     </div>
+    <form id="get_documentations_form" action="../../processes/manage_documentation.php" method="POST">
+        <input type="hidden" name="process_type" value="get_documentations">
+        <input type="hidden" id="is_archived" name="is_archived">
+    </form>
     <?php include_once("../partials/confirm_documentation_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
