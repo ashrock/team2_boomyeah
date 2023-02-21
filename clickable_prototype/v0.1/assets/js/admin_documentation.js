@@ -123,26 +123,17 @@ function onSubmitAddDocumentationForm(event){
     if(input_document_title){
         /** Use AJAX to generate new documentation */
         $.post(add_document_form.attr("action"), add_document_form.serialize(), (post_data) => {
-            $("#documentations").prepend(post_data.html);
             
-            setTimeout(() => {
-                let document_block = $("#documentations .document_block")[0];
-                $("#add_documentation_form")[0].reset();
-                appearEmptyDocumentation();
-    
-                $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
-                $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
-                $(".duplicate_icon").on("click", duplicateDocumentation);
-                $(".document_title").on("blur", onChangeDocumentationTitle);
-                $(".archive_btn").on("click", setRemoveArchiveValue);
-                $(".remove_btn").on("click", setRemoveArchiveValue);
-                document_block.addEventListener("click", redirectToDocumentView);
-                initializeMaterializeDropdown();
-            }, 148);
+            if(data.status){
+                /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
+                alert("Documentation added succesfully!");
+            }
+            else{
+                alert(data.error);
+            }
         }, "json");
         
         return;
-        window.location.href = "admin_edit_documentation.php"
     }
 }
 

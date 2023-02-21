@@ -39,9 +39,10 @@
     <div id="invite_modal"><?= include_once("../partials/invite_modal.php") ?></div>
     <div id="wrapper">
         <div class="container">
-            <form action="../view_prototype.php" id="add_documentation_form" method="POST">
+            <form action="../../processes/manage_documentation.php" id="add_documentation_form" method="POST">
                 <div class="group_add_documentation input-field">
-                    <input id="input_add_documentation" type="text" class="validate" name="documentation[title]" autofocus>
+                    <input id="input_add_documentation" type="text" class="validate" name="document_title" autofocus>
+                    <input type="hidden" name="action" value="create_documentation">
                     <label for="input_add_documentation">Add Documentation</label>
                 </div>
                 <span id="save_status" hidden>Saving...</span>
