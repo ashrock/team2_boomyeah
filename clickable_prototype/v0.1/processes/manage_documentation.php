@@ -38,7 +38,7 @@
             }
             case "remove_documentation": {
                 if($_SESSION["user_level_id"] == $_USER_LEVEL["admin"]){
-                    // run_mysql_query("DELETE FROM documentations WHERE id = {$_POST["remove_documentation_id"]};");
+                    run_mysql_query("DELETE FROM documentations WHERE id = {$_POST["remove_documentation_id"]};");
 
                     /* Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table */
                     $documentations_order = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
@@ -50,7 +50,7 @@
                         unset($documentations_order[$documentation_index]);
 
                         $documentations_order = implode(",", $documentations_order);
-                        // run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION["workspace_id"]};");
+                        run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION["workspace_id"]};");
 
                         $response_data["status"] = true;
                         $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
