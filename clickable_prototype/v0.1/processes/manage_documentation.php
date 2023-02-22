@@ -89,22 +89,22 @@
 
                 break;
             }
-            case "update_document": {
-                if(isset($_POST["update_type"]) && isset($_POST["document_id"])){
-                    $document = fetch_record("SELECT id FROM documentations WHERE id = {$_POST["document_id"]}");
+            case "update_documentation": {
+                if(isset($_POST["update_type"]) && isset($_POST["documentation_id"])){
+                    $document = fetch_record("SELECT id FROM documentations WHERE id = {$_POST["documentation_id"]}");
 
                     if(count($document) > $_ZERO_VALUE){
                         if( in_array($_POST["update_type"], ["title", "is_archived", "is_private"]) ){
-                            $update_document = run_mysql_query("UPDATE documentations SET {$_POST["update_type"]} = '{$_POST["update_value"]}' WHERE id = {$_POST["document_id"]}");
+                            $update_document = run_mysql_query("UPDATE documentations SET {$_POST["update_type"]} = '{$_POST["update_value"]}' WHERE id = {$_POST["documentation_id"]}");
                             
                             if($update_document){
                                 $response_data["status"] = true;
                                 $response_data["result"]["update_type"] = $_POST["update_type"];
 
                                 if($_POST["update_type"] == "is_private"){
-                                    $updated_document = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$_POST["document_id"]}");
+                                    $updated_document = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$_POST["documentation_id"]}");
 
-                                    $response_data["result"]["document_id"] = $updated_document["id"];
+                                    $response_data["result"]["documentation_id"] = $updated_document["id"];
                                     $response_data["result"]["html"] = get_include_contents("../views/partials/document_block_partial.php", $updated_document);
                                 }
                                 elseif($_POST["update_type"] == "is_archived" ){
@@ -113,14 +113,14 @@
                                     $new_documents_order = NULL;
 
                                     if($_POST["update_value"] == $_YES){
-                                        if (($key = array_search($_POST["document_id"], $documentation_order_array)) !== false) {
+                                        if (($key = array_search($_POST["documentation_id"], $documentation_order_array)) !== false) {
                                             unset($documentation_order_array[$key]);
                                         }
 
                                         $new_documents_order = implode(",", $documentation_order_array);
                                     }
                                     else {
-                                        $new_documents_order = $workspace["documentations_order"].','. $_POST["document_id"];
+                                        $new_documents_order = $workspace["documentations_order"].','. $_POST["documentation_id"];
                                     }
 
                                     $update_workspace = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
@@ -130,7 +130,7 @@
                     }
                 }
                 else{
-                    $response_data["error"] = "Missing required params: document_id and update_type.";
+                    $response_data["error"] = "Missing required params: documentation_id and update_type.";
                 }
 
                 break;
