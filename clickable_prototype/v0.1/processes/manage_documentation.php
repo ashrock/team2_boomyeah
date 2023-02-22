@@ -5,10 +5,10 @@
     include_once("./partial_helper.php");
 
     if(isset($_POST["action"])){
+        $response_data = array("status" => false, "result" => [], "error"  => null);
+
         switch ($_POST["action"]) {
             case "get_documentations": {
-                $response_data = array("status" => false, "result" => [], "error"  => null);
-                
                 // Declare initial variables and values
                 $get_documentations_html  = "";
                 $get_documentations_query = "SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE workspace_id = {$_SESSION["workspace_id"]}";
@@ -34,7 +34,29 @@
                 $response_data["status"] = true;
                 $response_data["result"]["html"] = $get_documentations_html;
 
-                echo json_encode($response_data);
+                break;
+            }
+            case "remove_documentation": {
+                if($_SESSION["user_level_id"] == $_USER_LEVEL["admin"]){
+                    run_mysql_query("DELETE FROM documentations WHERE id = {$_POST["remove_documentation_id"]};");
+
+                    /* Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table */
+                    $documentations_order = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
+                    $documentations_order = explode(",", $documentations_order["documentations_order"]);
+                    
+                    $documentation_index = array_search($_POST["remove_documentation_id"], $documentations_order);
+                    
+                    if($documentation_index !== FALSE){
+                        unset($documentations_order[$documentation_index]);
+
+                        $documentations_order = implode(",", $documentations_order);
+                        run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION["workspace_id"]};");
+
+                        $response_data["status"] = true;
+                        $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
+                    }
+                }
+
                 break;
             }
             case "create_documentation": {
@@ -100,4 +122,6 @@
             }
         }
     }
+
+    echo json_encode($response_data);
 ?>
