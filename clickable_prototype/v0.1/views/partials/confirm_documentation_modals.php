@@ -66,7 +66,7 @@
     <input type="hidden" name="update_value" id="update_value" value=""> 
 
 </form>
-<form id="remove_archive_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
+<form id="archive_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
     <input type="hidden" name="documentation_id" id="documentation_id" value="">
     <input type="hidden" name="action" value="update_documentation">
     <input type="hidden" name="update_type" value="is_archived">
