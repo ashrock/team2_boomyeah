@@ -9,19 +9,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* Print all documentation */
     // displayDocumentations(data.documentations);
 
-    initializeMaterializeDropdown();
-    $("#add_documentation_form").on("submit", onSubmitAddDocumentationForm);
-    appearEmptyDocumentation();
-
-    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
-    $(".duplicate_icon").on("click", duplicateDocumentation);
-    $(".document_title").on("blur", onChangeDocumentationTitle);
-
-    $(".active_docs_btn").on("click", appearActiveDocumentation);
-    $(".archived_docs_btn").on("click", appearArchivedDocumentations);
-    $(".remove_btn").on("click", setRemoveDocumentationValue);
-    $("#remove_confirm").on("click", submitRemoveDocumentation);
-
     document.querySelectorAll("#documentations").forEach((section_tabs_list) => {
         Sortable.create(section_tabs_list);
     });
@@ -95,7 +82,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     $(".active_docs_btn").on("click", appearActiveDocumentation);
     $(".archived_docs_btn").on("click", appearArchivedDocumentations);
     $(".archive_btn").on("click", setRemoveArchiveValue);
+    
     $("#archive_confirm").on("click", submitRemoveArchive);
+    $(".remove_btn").on("click", setRemoveDocumentationValue);
     $("#remove_confirm").on("click", submitRemoveDocumentation);
     $("#remove_invited_user_confirm").on("click", submitRemoveInvitedUser);
     $("#add_invite_btn").on("click", addPeopleWithAccess);
@@ -112,9 +101,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     M.Dropdown.init($("#sort_by_btn")[0]);
 
     $("#get_documentations_form").on("submit", getDocumentations);
-    
 });
 
+$(document).ready(function(){
+    $("body")
+        .on("click", ".archive_btn, .remove_btn", setRemoveArchiveValue)
+});
 
 function getNewDocumentationId(event){
     let documentation_children = document.querySelectorAll("#documentations .document_block");
@@ -239,10 +231,15 @@ function onSubmitDuplicateForm(event){
         if(post_data.status){
             // Append duplicated documentation
             $(`#document_${document_id}`).after(post_data.result.html);
-            
-            setTimeout(() => {
-                initializeMaterializeDropdown();
-            }, 148);
+
+            let documentation = $(`#document_${post_data.result.documentation_id}`);
+            documentation.addClass("animate__animated animate__fadeIn");
+            documentation.on("animationend", () => {
+                documentation.removeClass("animate__animated", "animate__fadeIn");
+            });
+
+            $(".remove_btn").on("click", setRemoveDocumentationValue);
+            initializeMaterializeDropdown();
         }
 
         post_form[0].reset();
@@ -254,12 +251,13 @@ function onSubmitDuplicateForm(event){
 function duplicateDocumentation(event){
     event.stopImmediatePropagation();
     event.preventDefault();
-    let document_id = $(this).attr("data-document_id");
+
+    let document_id = $(this).data("document_id");
     let duplicate_form = $("#duplicate_documentation_form");
     duplicate_form.find(".documentation_id").val(document_id);
     duplicate_form.trigger("submit");
 
-    return;
+    return false;
 }
 
 function appearActiveDocumentation(event){
@@ -339,13 +337,15 @@ function submitChangeDocumentPrivacy(event){
 }
 
 function setRemoveArchiveValue(event){
-    const documentation        = event.target;
-    const documentation_id     = documentation.getAttribute("data-document_id");
-    console.log('documentation_id', documentation_id)
-
+    let archive_button = $(this);
+    let document_id     = archive_button.attr("data-document_id");
+    let document_action = archive_button.attr("data-documentation_action");
+    $("#confirm_to_archive").find("p").text("Are you sure you want to Unarchive this documentation?");
+    
     /* Set form values */
     let archive_document_form = $("#remove_archive_form");
-    archive_document_form.find("#document_id").val(documentation_id);
+    archive_document_form.find("#document_id").val(document_id);
+    archive_document_form.find("#update_value").val( (document_action == "archive") ? 1 : 0 );
 }
 
 function submitRemoveArchive(event){
@@ -387,12 +387,13 @@ function submitRemoveDocumentation(event){
     let form = $("#remove_documentation_form");
 
     $.post(form.attr("action"), form.serialize(), (response_data) => {
-        let documentation = document.getElementById(`document_${response_data.result.documentation_id}`);
+        let documentation = $(`#document_${response_data.result.documentation_id}`);
 
-        documentation.className += " animate__animated animate__fadeOut";
-        documentation.addEventListener("animationend", () => {
+        documentation.addClass("animate__animated animate__fadeOut");
+        documentation.on("animationend", () => {
             documentation.remove();
-        }, false);
+        });
+
     }, "json");
 
     let remove_modal = document.querySelector("#confirm_to_remove");

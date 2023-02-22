@@ -70,7 +70,7 @@
     <input type="hidden" name="document_id" id="document_id" value="">
     <input type="hidden" name="action" value="update_document">
     <input type="hidden" name="update_type" value="is_archived">
-    <input type="hidden" name="update_value" value="1">
+    <input type="hidden" name="update_value" id="update_value" value="">
 </form>
 <form action="remove_invited_user_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
     <input type="hidden" id="invited_user_id" name="invited_user_id">
