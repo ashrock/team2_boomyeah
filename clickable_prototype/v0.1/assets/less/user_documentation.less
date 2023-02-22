@@ -5,7 +5,7 @@
 ::-webkit-scrollbar {
     display: none;
 }
-#search_section_form{
+#select_section_form{
     display: none !important;
 }
 .user{
@@ -66,11 +66,10 @@
                     position: absolute;
                     width: 100%;
                 }
-    
+
                 input:-internal-autofill-selected {
                     background-color: @by_bg;
                 }
-    
                 input.valid,
                 input.validate {
                     background-color: @by_bg;
@@ -95,6 +94,7 @@
                 
             }
         }
+
         #docs_view_btn {
             background-color: transparent;
             border: none;
@@ -296,6 +296,13 @@
 @media only screen and (max-width: 623px){
     .user{
         padding: 0 10px;
+        .container{
+            #documentations{
+                .mobile_block{
+                    height: 76px;
+                }
+            }
+        }
     }
 }
 @media only screen and (min-width: 993px){

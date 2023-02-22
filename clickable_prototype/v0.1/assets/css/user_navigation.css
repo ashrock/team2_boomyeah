@@ -16,16 +16,8 @@
 }
 #mobile_container {
   background: #fcfcff;
-  border-radius: 38px !important;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.168);
-  padding: 0 19px;
-  margin: 16px !important;
-}
-#select_section_form {
-  display: none !important;
-}
-.header_mobile {
-  height: initial !important;
+  padding: 0px 9px;
 }
 .header_mobile .mobile {
   height: 22px !important;
