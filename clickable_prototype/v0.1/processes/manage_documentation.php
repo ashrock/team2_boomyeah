@@ -155,9 +155,8 @@
                             // Fetch tabs
                             // END
                         // END
-                    //END
-                //END
-                // TODO: END
+                    // END
+                // END
 
                 // Get documentations_order and insert newly created documentation_id
                 $get_workspace        = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION['workspace_id']};");
