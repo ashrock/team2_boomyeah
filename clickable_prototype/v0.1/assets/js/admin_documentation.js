@@ -212,7 +212,7 @@ function onChangeDocumentationTitle(event){
         $.post(edit_doc_title_form.attr("action"), edit_doc_title_form.serialize(), (data) => {
             if(data.status){
                 /* TODO: Improve UX after success updating of title. Add animation. */
-
+                edit_doc_title_form.parent().addClass("animate__animated animate__fadeIn").removeClass("error");
             }
             else{
                 /* TODO: Improve UX after updating empty title. Add animation red border. */
@@ -224,7 +224,6 @@ function onChangeDocumentationTitle(event){
         alert("Please add documentation title");
         edit_doc_title_form.parent().addClass("error");
     }
-
     return;
 }
 
