@@ -60,15 +60,15 @@
     </div>
 </div>
 <form id="change_document_privacy_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
-    <input type="hidden" name="document_id" id="document_id" value="">
-    <input type="hidden" name="action" value="update_document">
+    <input type="hidden" name="documentation_id" id="documentation_id" value="">
+    <input type="hidden" name="action" value="update_documentation">
     <input type="hidden" name="update_type" value="is_private">
     <input type="hidden" name="update_value" id="update_value" value=""> 
 
 </form>
 <form id="remove_archive_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
-    <input type="hidden" name="document_id" id="document_id" value="">
-    <input type="hidden" name="action" value="update_document">
+    <input type="hidden" name="documentation_id" id="documentation_id" value="">
+    <input type="hidden" name="action" value="update_documentation">
     <input type="hidden" name="update_type" value="is_archived">
     <input type="hidden" name="update_value" id="update_value" value="">
 </form>
