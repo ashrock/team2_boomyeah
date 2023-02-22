@@ -9,6 +9,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* Print all documentation */
     // displayDocumentations(data.documentations);
 
+    initializeMaterializeDropdown();
+    $("#add_documentation_form").on("submit", onSubmitAddDocumentationForm);
+    appearEmptyDocumentation();
+
+    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
+    $(".duplicate_icon").on("click", duplicateDocumentation);
+    $(".document_title").on("blur", onChangeDocumentationTitle);
+
+    $(".active_docs_btn").on("click", appearActiveDocumentation);
+    $(".archived_docs_btn").on("click", appearArchivedDocumentations);
+    $(".remove_btn").on("click", setRemoveDocumentationValue);
+    $("#remove_confirm").on("click", submitRemoveDocumentation);
+
     document.querySelectorAll("#documentations").forEach((section_tabs_list) => {
         Sortable.create(section_tabs_list);
     });
@@ -81,8 +94,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".active_docs_btn").on("click", appearActiveDocumentation);
     $(".archived_docs_btn").on("click", appearArchivedDocumentations);
-   
-    $("#archive_confirm, #remove_confirm").on("click", submitRemoveArchive);
+    $(".archive_btn").on("click", setRemoveArchiveValue);
+    
+    $("#archive_confirm").on("click", submitRemoveArchive);
+    $("#remove_confirm").on("click", submitRemoveDocumentation);
     $("#remove_invited_user_confirm").on("click", submitRemoveInvitedUser);
     $("#add_invite_btn").on("click", addPeopleWithAccess);
 
@@ -358,6 +373,42 @@ function submitRemoveArchive(event){
     return;
 }
 
+function setRemoveDocumentationValue(event){
+    event.stopImmediatePropagation();
+
+    const documentation    = $(this);
+    const documentation_id = documentation.data("document_id");
+
+    /* Set form values */
+    $("#remove_documentation_form #remove_documentation_id").val(documentation_id);
+
+    let remove_modal = document.querySelector("#confirm_to_remove");
+    var instance = M.Modal.getInstance(remove_modal);
+    instance.open();
+}
+
+function submitRemoveDocumentation(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+
+    let form = $("#remove_documentation_form");
+
+    $.post(form.attr("action"), form.serialize(), (response_data) => {
+        let documentation = document.getElementById(`document_${response_data.result.documentation_id}`);
+
+        documentation.className += " animate__animated animate__fadeOut";
+        documentation.addEventListener("animationend", () => {
+            documentation.remove();
+        }, false);
+    }, "json");
+
+    let remove_modal = document.querySelector("#confirm_to_remove");
+    var instance = M.Modal.getInstance(remove_modal);
+    instance.close();
+
+    return false;
+}
+
 function redirectToDocumentView(event){
     if(event.target.classList.contains("set_privacy_btn") || 
         event.target.classList.contains("more_action_btn") || 
@@ -397,6 +448,8 @@ function getDocumentations(event){
         let documentations_div = $("#get_documentations_form #is_archived").val() == "1" ? "#archived_documents" : "#documentations";
 
         $(documentations_div).html(response_data.result.html);
+
+        $(".remove_btn").on("click", setRemoveDocumentationValue);
         initializeMaterializeDropdown();
     }, "json");
 
