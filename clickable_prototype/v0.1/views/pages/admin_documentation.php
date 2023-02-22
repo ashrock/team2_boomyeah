@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="<?= add_file("assets/js/vendor/jquery-3.6.3.min.js") ?>"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <script src="<?= add_file("assets/js/vendor/Sortable.min.js") ?>"></script>
 </head>
 
