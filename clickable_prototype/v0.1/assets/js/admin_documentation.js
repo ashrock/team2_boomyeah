@@ -10,8 +10,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     // displayDocumentations(data.documentations);
 
     document.querySelectorAll("#documentations").forEach((section_tabs_list) => {
-        Sortable.create(section_tabs_list);
+        Sortable.create(section_tabs_list, {
+            onEnd: () => {
+                updateDocumentationsOrder(section_tabs_list);
+            }
+        });
     });
+
+    // $("#documentations").sortable();
 
     // const email_address = document.querySelector("#email_address");    
     // email_address.addEventListener("keyup", validateEmail);
@@ -91,6 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".invited_user_role").on("change", setRoleChangeAction);
     $(".sort_by").on("click", sort_documentations);
+    $("#reorder_documentations_form").on("submit", submitReorderDocumentations);
 
     /* run functions from invite_modal.js */
     initChipsInstance();
@@ -445,6 +452,33 @@ function getDocumentations(event){
 
         $(".remove_btn").on("click", setRemoveDocumentationValue);
         initializeMaterializeDropdown();
+    }, "json");
+
+    return false;
+}
+
+function updateDocumentationsOrder(documentations){
+    let documentation_children = documentations.children;
+    var new_documentations_order = "";
+
+    /* Get documentation_id from documentation_children */
+    for(let index=0; index < documentation_children.length; index++){
+        new_documentations_order += (index == (documentation_children.length - 1)) ? `${documentation_children[index].id.split("_")[1]}` : `${documentation_children[index].id.split("_")[1]},`;
+    }
+
+    /* Update form value and submit form */
+    $("#reorder_documentations_form #documentations_order").val(new_documentations_order);
+    $("#reorder_documentations_form").submit();
+}
+
+function submitReorderDocumentations(event){
+    event.preventDefault();
+    let form = $(this);
+
+    $.post(form.attr("action"), form.serialize(), (response_data) => {
+        if(!response_data.status){
+            alert("An error occured while reordering documentations!");
+        }
     }, "json");
 
     return false;

@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="<?= add_file("assets/js/vendor/jquery-3.6.3.min.js") ?>"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <script src="<?= add_file("assets/js/vendor/Sortable.min.js") ?>"></script>
 </head>
 
@@ -70,11 +71,11 @@
                         load_view("../partials/document_block_partial.php", $documentations[$documentations_index]);
                     }
                 ?>
-                <div class="no_documents hidden">
+                <!-- <div class="no_documents hidden">
                     <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                         alt="Empty Content Illustration">
                     <p>You have no documentations yet</p>
-                </div>
+                </div> -->
             </div>
             <div id="archived_documents" class="hidden">
                 <!-- Print HTML returned by BE -->
@@ -97,6 +98,10 @@
     <form id="remove_documentation_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
         <input type="hidden" name="action" value="remove_documentation">
         <input type="hidden" id="remove_documentation_id" name="remove_documentation_id">
+    </form>
+    <form id="reorder_documentations_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
+        <input type="hidden" name="action" value="reorder_documentations_form">
+        <input type="hidden" id="documentations_order" name="documentations_order">
     </form>
     <?php include_once("../partials/confirm_documentation_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
