@@ -68,7 +68,7 @@
 
                     $insert_document_record = run_mysql_query("
                         INSERT INTO documentations (user_id, workspace_id, title, is_archived, is_private, cache_collaborators_count, created_at, updated_at) 
-                        VALUES ({$_SESSION["user_id"]}, {$_SESSION["workspace_id"]}, \"{$document_title}\", {$_NO}, {$_YES}, {$_ZERO_VALUE}, NOW(), NOW())
+                        VALUES ({$_SESSION["user_id"]}, {$_SESSION["workspace_id"]}, '{$document_title}', {$_NO}, {$_YES}, {$_ZERO_VALUE}, NOW(), NOW())
                     ");
 
                     if($insert_document_record != $_ZERO_VALUE){
@@ -95,7 +95,8 @@
 
                     if(count($document) > $_ZERO_VALUE){
                         if( in_array($_POST["update_type"], ["title", "is_archived", "is_private"]) ){
-                            $update_document = run_mysql_query("UPDATE documentations SET {$_POST["update_type"]} = \"{$_POST["update_value"]}\" WHERE id = {$_POST["documentation_id"]}");
+                            $update_value = escape_this_string($_POST["update_value"]);
+                            $update_document = run_mysql_query("UPDATE documentations SET {$_POST["update_type"]} = '{$update_value}' WHERE id = {$_POST["documentation_id"]}");
                             
                             if($update_document){
                                 $response_data["status"] = true;
@@ -137,12 +138,14 @@
             }
             case "duplicate_documentation": {
                 // Fetch documentation
-                $documentation_id = (int)$_POST['documentation_id'];
-                $get_documentation = fetch_record("SELECT id, title, description, sections_order, is_archived, is_private FROM documentations WHERE id = {$documentation_id};");
+                $documentation_id     = (int)$_POST['documentation_id'];
+                $get_documentation    = fetch_record("SELECT id, title, description, sections_order, is_archived, is_private FROM documentations WHERE id = {$documentation_id};");
+                $document_title       = escape_this_string($get_documentation['title']);
+                $document_description = escape_this_string($get_documentation['description']);
 
                 // Create new documentation
                 $duplicate_documentation = run_mysql_query("INSERT INTO documentations (user_id, workspace_id, title, description, sections_order, is_archived, is_private, created_at, updated_at) 
-                    VALUES ({$_SESSION['user_id']}, {$_SESSION['workspace_id']}, \"Copy of {$get_documentation['title']}\", \"{$get_documentation['description']}\", '{$get_documentation['sections_order']}', 
+                    VALUES ({$_SESSION['user_id']}, {$_SESSION['workspace_id']}, 'Copy of {$document_title}', '{$document_description}', '{$get_documentation['sections_order']}', 
                     {$get_documentation['is_archived']}, {$get_documentation['is_private']}, NOW(), NOW());
                 ");
 
