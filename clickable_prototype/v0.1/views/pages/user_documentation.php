@@ -1,4 +1,16 @@
-<?php include_once("../view_helper.php"); ?>
+<?php
+    session_start();
+
+    // Sample admin session
+    $_SESSION["user_id"]       = 3;
+    $_SESSION["user_level_id"] = 9;
+    $_SESSION["workspace_id"]  = 1;
+    // END
+
+    include_once("../view_helper.php");  
+    include_once("../../config/connection.php");
+    include_once("../../config/constants.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,75 +37,29 @@
         <div class="container" id="user_doc">
             <button id="docs_view_btn" class="dropdown-trigger" data-target="docs_view_list">Documentations</button>
             <div id="documentations">
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>Employee Handbook</h2>
-                        <button class="invite_collaborators_btn"> 15</button>
-                    </div>
-                    <div class="document_controls"><button class="access_btn"></button></div>
-                </div>
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>Company Handout</h2>
-                        <button class="invite_collaborators_btn"> 1</button>
-                    </div>
-                    <div class="document_controls"><button class="access_btn"></button></div>
-                </div>
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>Accounting</h2>
-                    </div>
-                </div>
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>Marketing</h2>
-                    </div>
-                </div>
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>Engineering</h2>
-                        <button class="invite_collaborators_btn"> 6</button>
-                    </div>
-                    <div class="document_controls"><button class="access_btn"></button></div>
-                </div>
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>Product Team</h2>
-                        <button class="invite_collaborators_btn"> 9</button>
-                    </div>
-                    <div class="document_controls"><button class="access_btn"></button></div>
-                </div>
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>UI/UX</h2>
-                        <button class="invite_collaborators_btn"> 9</button>
-                    </div>
-                    <div class="document_controls"><button class="access_btn"></button></div>
-                </div>
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>Admissions</h2>
-                        <button class="invite_collaborators_btn"> 9</button>
-                    </div>
-                    <div class="document_controls"><button class="access_btn"></button></div>
-                </div>
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>Trainee</h2>
-                    </div>
-                </div>
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>Instructors</h2>
-                    </div>
-                </div>
-                <div class="document_block">
-                    <div class="document_details">
-                        <h2>Business Leads</h2>
-                        <button class="invite_collaborators_btn"> 10</button>
-                    </div>
-                    <div class="document_controls"><button class="access_btn"></button></div>
-                </div>
+                <?php
+                    $documentations_order = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
+                    $documentations_order = $documentations_order["documentations_order"];
+
+                    $documentations = fetch_all("SELECT id, title, is_private, cache_collaborators_count
+                        FROM documentations
+                        WHERE workspace_id = {$_SESSION["workspace_id"]} AND (is_private = 0 OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = {$_SESSION["user_id"]} )) AND is_archived = {$_NO}
+                        ORDER BY FIELD (id, {$documentations_order});
+                    ");
+
+                    for($documentations_index = 0; $documentations_index < count($documentations); $documentations_index++){ ?>
+                        <div class="document_block">
+                            <div class="document_details">
+                                <h2><?= $documentations[$documentations_index]["title"] ?></h2>
+                                <?php if($documentations[$documentations_index]["is_private"]){ ?>
+                                    <button class="invite_collaborators_btn"><?= $documentations[$documentations_index]["cache_collaborators_count"] ?></button> 
+                                <?php  } ?>
+                            </div>
+                            <?php if($documentations[$documentations_index]["is_private"]){ ?>
+                                <div class="document_controls"><button class="access_btn"></button></div>
+                            <?php  } ?>
+                        </div>
+                <?php } ?>
             </div>
         </div>
     </div>
