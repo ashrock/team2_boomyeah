@@ -16,7 +16,7 @@
                 <div class="login_documentation">
                     <h1>Boom<span>YEAH</span></h1>
                     <p>Your Team's Documentation Tool</p>
-                    <a href="<?= VIEWS_URL ?>/pages/admin_documentation.php" class="login_btn">Log In with Google</a>
+                    <a href="<?= VIEWS_URL ?>/pages/<?= isset($_GET["user_level"]) ? $_GET["user_level"] : 'admin' ?>_documentation.php" class="login_btn">Log In with Google</a>
                 </div>
             </div>
         </div>
