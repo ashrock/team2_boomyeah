@@ -214,7 +214,8 @@ function onChangeDocumentationTitle(event){
         }, "json");
     }
     else{
-        /* TODO: Improve UX after updating empty title. Add animation red border. */
+        alert("Please add documentation title");
+        edit_doc_title_form.parent().addClass("error");
     }
 
     return;
