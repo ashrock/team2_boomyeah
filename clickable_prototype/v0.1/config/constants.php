@@ -4,4 +4,6 @@
     $_YES = 1;
 
     $_ZERO_VALUE = 0;
+
+    $_USER_LEVEL = array("admin" => 9, "user" => 1);
 ?>
