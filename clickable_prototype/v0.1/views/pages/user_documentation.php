@@ -33,7 +33,7 @@
 <body>
     <!--- Add #main_navigation --->
     
-    <div id="main_navigation"><?= include_once("../partials/main_navigation.php") ?></div>
+    <div id="main_navigation"><?php include_once("../partials/main_navigation.php") ?></div>
     <div class="user">
         <div class="container" id="user_doc">
             <button id="docs_view_btn" class="dropdown-trigger" data-target="docs_view_list">Documentations</button>
