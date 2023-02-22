@@ -72,9 +72,9 @@
 
                     if($insert_document_record != $_ZERO_VALUE){
                         $workspace = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
-                        $new_workspace_order = $workspace["documentations_order"].','. $insert_document_record;
+                        $new_documents_order = $workspace["documentations_order"].','. $insert_document_record;
 
-                        $update_workspace_docs_order = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_workspace_order}' WHERE id = {$_SESSION["workspace_id"]}");
+                        $update_workspace_docs_order = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
 
                         if($update_workspace_docs_order){
                             $response_data["status"] = true;
@@ -105,9 +105,27 @@
 
                                 if($_POST["update_type"] == "is_private"){
                                     $updated_document = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$_POST["document_id"]}");
-                                    
+
                                     $response_data["result"]["document_id"] = $updated_document["id"];
                                     $response_data["result"]["html"] = get_include_contents("../views/partials/document_block_partial.php", $updated_document);
+                                }
+                                elseif($_POST["update_type"] == "is_archived" ){
+                                    $workspace = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]}");
+                                    $documentation_order_array = explode(",", $workspace["documentations_order"]);
+                                    $new_documents_order = NULL;
+
+                                    if($_POST["update_value"] == $_YES){
+                                        if (($key = array_search($_POST["document_id"], $documentation_order_array)) !== false) {
+                                            unset($documentation_order_array[$key]);
+                                        }
+
+                                        $new_documents_order = implode(",", $documentation_order_array);
+                                    }
+                                    else {
+                                        $new_documents_order = $workspace["documentations_order"].','. $_POST["document_id"];
+                                    }
+
+                                    $update_workspace = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
                                 }
                             }
                         }

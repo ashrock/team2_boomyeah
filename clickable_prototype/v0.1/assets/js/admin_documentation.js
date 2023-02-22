@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     $(".active_docs_btn").on("click", appearActiveDocumentation);
     $(".archived_docs_btn").on("click", appearArchivedDocumentations);
     $(".archive_btn").on("click", setRemoveArchiveValue);
+    
     $("#archive_confirm").on("click", submitRemoveArchive);
     $("#remove_confirm").on("click", submitRemoveDocumentation);
     $("#remove_invited_user_confirm").on("click", submitRemoveInvitedUser);
@@ -115,6 +116,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     
 });
 
+$(document).ready(function(){
+    $("body")
+        .on("click", ".archive_btn, .remove_btn", setRemoveArchiveValue)
+});
 
 function getNewDocumentationId(event){
     let documentation_children = document.querySelectorAll("#documentations .document_block");
@@ -339,13 +344,15 @@ function submitChangeDocumentPrivacy(event){
 }
 
 function setRemoveArchiveValue(event){
-    const documentation        = event.target;
-    const documentation_id     = documentation.getAttribute("data-document_id");
-    console.log('documentation_id', documentation_id)
-
+    let archive_button = $(this);
+    let document_id     = archive_button.attr("data-document_id");
+    let document_action = archive_button.attr("data-documentation_action");
+    $("#confirm_to_archive").find("p").text("Are you sure you want to Unarchive this documentation?");
+    
     /* Set form values */
     let archive_document_form = $("#remove_archive_form");
-    archive_document_form.find("#document_id").val(documentation_id);
+    archive_document_form.find("#document_id").val(document_id);
+    archive_document_form.find("#update_value").val( (document_action == "archive") ? 1 : 0 );
 }
 
 function submitRemoveArchive(event){
