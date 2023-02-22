@@ -149,6 +149,14 @@
                 ");
 
                 // TODO: Create sections, pages, and tabs
+                // Check if sections_order exists
+                    // Fetch sections and its pages
+                        // Check page's tabs_order exists
+                            // Fetch tabs
+                            // END
+                        // END
+                    // END
+                // END
 
                 // Get documentations_order and insert newly created documentation_id
                 $get_workspace        = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION['workspace_id']};");

@@ -23,9 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             addSearchEmailResult(element);
         }
     });
-    
-    $(".change_privacy_yes_btn").on("click", submitChangeDocumentPrivacy);
-    
+
     $(".document_block").on("click", redirectToDocumentView);
 
     $(".invite_collaborators_btn").on("click", function(event){
@@ -47,8 +45,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
         change_document_privacy_form.find("#update_value").val(0);    
     });
-
-    $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
     
     $(".set_to_public_icon ").on("click", function(event){
         event.stopImmediatePropagation();
@@ -65,14 +61,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         var instance = M.Modal.getInstance(confirm_modal);
         instance.open();
     });
-
-
     
     $("#duplicate_documentation_form").on("submit", onSubmitDuplicateForm);
     $("#change_document_privacy_form").on("submit", onSubmitChangePrivacy);
     appearEmptyDocumentation();
 
-    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
     $(".duplicate_icon").on("click", duplicateDocumentation);
     $(".document_title").on("blur", onChangeDocumentationTitle);
 
@@ -80,7 +73,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     $(".archived_docs_btn").on("click", appearArchivedDocumentations);
     
     $("#archive_confirm").on("click", submitArchive);
-    // $(".remove_btn").on("click", setRemoveDocumentationValue);
     $("#remove_confirm").on("click", submitRemoveDocumentation);
     $("#remove_invited_user_confirm").on("click", submitRemoveInvitedUser);
     $("#add_invite_btn").on("click", addPeopleWithAccess);
@@ -94,15 +86,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     initializeMaterializeDropdown();
 
     M.Dropdown.init($("#docs_view_btn")[0]);
+
+    $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
 });
 
 $(document).ready(function(){
+    
     $("body")
         .on("submit", "#add_documentation_form", onSubmitAddDocumentationForm)
         .on("submit", "#get_documentations_form", getDocumentations)
-        .on("click", ".change_privacy_yes_btn", submitChangeDocumentPrivacy)
         .on("click", ".archive_btn", setArchiveValue)
         .on("click", ".remove_btn", setRemoveDocumentationValue)
+        .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
+        .on("click", ".change_privacy_yes_btn", submitChangeDocumentPrivacy)
+        .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
+        .on("blur", ".document_title", onChangeDocumentationTitle)
 });
 
 function submitInvite(event){
