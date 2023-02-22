@@ -38,7 +38,7 @@
             }
             case "remove_documentation": {
                 if($_SESSION["user_level_id"] == $_USER_LEVEL["admin"]){
-                    run_mysql_query("DELETE FROM documentations WHERE id = {$_POST["remove_documentation_id"]};");
+                    // run_mysql_query("DELETE FROM documentations WHERE id = {$_POST["remove_documentation_id"]};");
 
                     /* Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table */
                     $documentations_order = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
@@ -50,17 +50,20 @@
                         unset($documentations_order[$documentation_index]);
 
                         $documentations_order = implode(",", $documentations_order);
-                        run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION["workspace_id"]};");
+                        // run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION["workspace_id"]};");
 
                         $response_data["status"] = true;
                         $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
                     }
+                } 
+                else {
+                    $response_data["error"] = "You are not allowed to do this action!";
                 }
 
                 break;
             }
             case "create_documentation": {
-                $response_data = array("status" => false, "result" => [], "error" => null);
+                // $response_data = array("status" => false, "result" => [], "error" => null);
 
                 if(isset($_POST["document_title"])){
                     $document_title = escape_this_string($_POST["document_title"]);
@@ -86,11 +89,11 @@
                     $response_data["error"] = "Document title is required!";
                 }
 
-                echo json_encode($response_data);
+                // echo json_encode($response_data);
                 break;
             }
             case "update_document": {
-                $response_data = array("status" => false, "result" => [], "error" => null);
+                // $response_data = array("status" => false, "result" => [], "error" => null);
                 
                 if(isset($_POST["update_type"]) && isset($_POST["document_id"])){
                     $document = fetch_record("SELECT id FROM documentations WHERE id = {$_POST["document_id"]}");
@@ -117,7 +120,44 @@
                     $response_data["error"] = "Missing required params: document_id and update_type.";
                 }
 
-                echo json_encode($response_data);
+                // echo json_encode($response_data);
+                break;
+            }
+            case "duplicate_documentation": {
+                // Fetch documentation
+                $documentation_id = (int)$_POST['documentation_id'];
+                $get_documentation = fetch_record("SELECT id, title, description, sections_order, is_archived, is_private FROM documentations WHERE id = {$documentation_id};");
+
+                // Create new documentation
+                $duplicate_documentation = run_mysql_query("INSERT INTO documentations (user_id, workspace_id, title, description, sections_order, is_archived, is_private, created_at, updated_at) 
+                    VALUES ({$_SESSION['user_id']}, {$_SESSION['workspace_id']}, \"Copy of {$get_documentation['title']}\", \"{$get_documentation['description']}\", '{$get_documentation['sections_order']}', 
+                    {$get_documentation['is_archived']}, {$get_documentation['is_private']}, NOW(), NOW());
+                ");
+
+                // TODO: Create sections, pages, and tabs
+
+                // Get documentations_order and insert newly created documentation_id
+                $get_workspace        = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION['workspace_id']};");
+                $documentations_order = explode(",", $get_workspace["documentations_order"]);
+
+                for($document_index=0; $document_index < count($documentations_order); $document_index++){
+                    if($documentation_id == $documentations_order[$document_index]){
+                        array_splice($documentations_order, $document_index + 1, 0, "{$duplicate_documentation}");
+                    }
+                }
+
+                // Convert array to comma-separated string and update documentations_order of documentations_order
+                $documentations_order = implode(",", $documentations_order);
+                run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION['workspace_id']};");
+
+                // Fetch newly created documentation and generate html
+                $get_documentation  = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$duplicate_documentation};");
+                $documentation_html = get_include_contents("../views/partials/document_block_partial.php", $get_documentation);
+
+                $response_data["status"]                     = true;
+                $response_data["result"]["documentation_id"] = $duplicate_documentation;
+                $response_data["result"]["html"]             = $documentation_html;
+
                 break;
             }
         }
