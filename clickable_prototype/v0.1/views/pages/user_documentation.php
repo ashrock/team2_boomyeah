@@ -3,7 +3,7 @@
 
     // Sample admin session
     $_SESSION["user_id"]       = 3;
-    $_SESSION["user_level_id"] = 9;
+    $_SESSION["user_level_id"] = 1;
     $_SESSION["workspace_id"]  = 1;
     // END
 
