@@ -1,6 +1,12 @@
+<?php
+    $request_uri = explode("/", $_SERVER["REQUEST_URI"]);
+    $request_uri = $request_uri[count($request_uri) - 1];
+?>
 <div id="nav_documentation">
     <div class="nav_holder">
-        <a href="#" data-target="slide-out" class="sidenav-trigger"></a>
+        <?php if(!in_array($request_uri, ["admin_documentation.php", "user_documentation.php"])){ ?>
+            <a href="#" data-target="slide-out" class="sidenav-trigger"></a>
+        <?php } ?>
     </div>
     <ul id="slide-out" class="sidenav">
         <a href="#" data-target="slide-out" class="sidenav-trigger nav"></a>
@@ -26,7 +32,9 @@
 </div>
 <div id="mobile_container">
     <div class="header_mobile">
-        <a href="#" data-target="mobile_nav" class="mobile sidenav-trigger"></a>
+        <?php if(!in_array($request_uri, ["admin_documentation.php", "user_documentation.php"])){ ?>
+            <a href="#" data-target="mobile_nav" class="mobile sidenav-trigger"></a>
+        <?php } ?>
         <ul id="mobile_nav" class="sidenav">
             <a href="#" data-target="mobile_nav" class="sidenav-trigger"></a>
             <li><img src="<?= add_file("assets/images/global_logo.svg") ?>" alt="mobile_logo"></li>
