@@ -60,13 +60,17 @@
     </div>
 </div>
 <form id="change_document_privacy_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
-    <input type="hidden" id="change_privacy_doc_id" class="document_id" name="document_id">
-    <input type="hidden" id="change_privacy_doc_privacy" name="document_privacy">
-    <input type="hidden" name="action" value="change_documentation_privacy">
+    <input type="hidden" name="documentation_id" id="documentation_id" value="">
+    <input type="hidden" name="action" value="update_documentation">
+    <input type="hidden" name="update_type" value="is_private">
+    <input type="hidden" name="update_value" id="update_value" value=""> 
+
 </form>
-<form id="remove_archive_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
-    <input type="hidden" id="documentation_action" name="documentation_action">
-    <input type="hidden" id="remove_archive_id" name="document_id">
+<form id="archive_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
+    <input type="hidden" name="documentation_id" id="documentation_id" value="">
+    <input type="hidden" name="action" value="update_documentation">
+    <input type="hidden" name="update_type" value="is_archived">
+    <input type="hidden" name="update_value" id="update_value" value="">
 </form>
 <form action="remove_invited_user_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
     <input type="hidden" id="invited_user_id" name="invited_user_id">
