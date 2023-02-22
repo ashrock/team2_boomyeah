@@ -99,7 +99,7 @@
         <input type="hidden" id="remove_documentation_id" name="remove_documentation_id">
     </form>
     <form id="reorder_documentations_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
-        <input type="hidden" name="action" value="reorder_documentations_form">
+        <input type="hidden" name="action" value="reorder_documentations">
         <input type="hidden" id="documentations_order" name="documentations_order">
     </form>
     <?php include_once("../partials/confirm_documentation_modals.php"); ?>

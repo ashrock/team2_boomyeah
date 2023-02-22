@@ -172,7 +172,7 @@
 
                 break;
             }
-            case "reorder_documentations_form": {
+            case "reorder_documentations": {
                 run_mysql_query("UPDATE workspaces SET documentations_order = '{$_POST['documentations_order']}' WHERE id = {$_SESSION["workspace_id"]}");
 
                 $response_data["status"] = true;
