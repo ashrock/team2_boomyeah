@@ -63,8 +63,6 @@
                 break;
             }
             case "create_documentation": {
-                // $response_data = array("status" => false, "result" => [], "error" => null);
-
                 if(isset($_POST["document_title"])){
                     $document_title = escape_this_string($_POST["document_title"]);
 
@@ -89,12 +87,9 @@
                     $response_data["error"] = "Document title is required!";
                 }
 
-                // echo json_encode($response_data);
                 break;
             }
             case "update_document": {
-                // $response_data = array("status" => false, "result" => [], "error" => null);
-                
                 if(isset($_POST["update_type"]) && isset($_POST["document_id"])){
                     $document = fetch_record("SELECT id FROM documentations WHERE id = {$_POST["document_id"]}");
 
@@ -138,7 +133,6 @@
                     $response_data["error"] = "Missing required params: document_id and update_type.";
                 }
 
-                // echo json_encode($response_data);
                 break;
             }
             case "duplicate_documentation": {
