@@ -86,14 +86,17 @@
             </div>
         </div>
     </div>
-    <form id="get_documentations_form" action="../../processes/manage_documentation.php" method="POST">
+    <form id="get_documentations_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
         <input type="hidden" name="action" value="get_documentations">
         <input type="hidden" id="is_archived" name="is_archived">
     </form>
-
     <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="duplicate_documentation_form">
         <input type="hidden" name="action" value="duplicate_documentation">
         <input type="hidden" class="documentation_id" name="documentation_id">
+    </form>
+    <form id="remove_documentation_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
+        <input type="hidden" name="action" value="remove_documentation">
+        <input type="hidden" id="remove_documentation_id" name="remove_documentation_id">
     </form>
     <?php include_once("../partials/confirm_documentation_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
