@@ -37,17 +37,11 @@
             <li><a href="#!">Trainee</a></li>
             <li><a href="#!">Engineering</a></li>
         </ul>
-        <form method="POST" action="/" id="search_documentation_form" class="mobile_search_form">
-            <input type="text" id="search_documentation_field" class="mobile_search_field" placeholder="Search Documentation">
-        </form>
-        <form method="POST" action="/" id="search_section_form" class="mobile_search_form">
-            <input type="text" id="search_section_field" class="mobile_search_field" placeholder="Search Section">
-        </form>
         <form action="#" id="select_section_form" method="POST">
-            <div class="input-field select">
-                <select>
+            <div class="input-field select dropdown-trigger">
+                <select class='dropdown-content'>
                     <option value="employee_handbook">Employee Handbook</option>
-                    <option value="employee_handbook">About Company</option>
+                    <option value="about_company">About Company</option>
                     <option value="terms">Terms of Employment</option>
                     <option value="general">General Policies & Procedures</option>
                 </select>
