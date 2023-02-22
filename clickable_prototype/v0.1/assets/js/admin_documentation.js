@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         instance.open();
 
         let change_document_privacy_form = $("#change_document_privacy_form");
-        change_document_privacy_form.find("#document_id").val($(this).attr("data-document_id"));
+        change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
         change_document_privacy_form.find("#update_value").val(0);    
     });
 
@@ -297,7 +297,7 @@ function setDocumentPrivacyValues(event){
     /* Set form values */
     let change_document_privacy_form = $("#change_document_privacy_form");
     
-    change_document_privacy_form.find("#document_id").val(documentation_id);
+    change_document_privacy_form.find("#documentation_id").val(documentation_id);
     change_document_privacy_form.find("#update_value").val( (documentation_privacy == "public") ? 1 : 0 );
 }
 
@@ -305,17 +305,16 @@ function onSubmitChangePrivacy(event){
     event.stopImmediatePropagation();
     event.preventDefault();
     let post_form = $(this);
-    let document_id = post_form.find(".documentation_id").val();
-
+    
     /** Use AJAX to change documentation privacy */
     $.post(post_form.attr("action"), post_form.serialize(), (post_data) => {
         console.log('post_data', post_data);
         if(post_data.status){
             /* TODO: Improve UX after success updating. Add animation to indication the replace with the updated . */
-            console.log('post_data.result.document_id', post_data.result.document_id)
+            console.log('post_data.result.document_id', post_data.result.documentation_id)
             console.log('post_data.result.html', post_data.result.html);
 
-            $(`#document_${document_id}`).replaceWith(post_data.result.html);
+            $(`#document_${documentation_id}`).replaceWith(post_data.result.html);
 
             setTimeout(() => {
                 initializeMaterializeDropdown();
@@ -344,7 +343,7 @@ function setRemoveArchiveValue(event){
     
     /* Set form values */
     let archive_document_form = $("#remove_archive_form");
-    archive_document_form.find("#document_id").val(document_id);
+    archive_document_form.find("#documentation_id").val(document_id);
     archive_document_form.find("#update_value").val( (document_action == "archive") ? 1 : 0 );
 }
 
