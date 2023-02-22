@@ -1,13 +1,9 @@
-// import data from "../json/large_dataset.json" assert { type: "json" };
 document.addEventListener("DOMContentLoaded", async () => {
     let modal = document.querySelectorAll('.modal');
     let instances = M.Modal.init(modal);
 
     const invite_form = document.querySelector("#invite_form");
     invite_form.addEventListener("submit", submitInvite);
-
-    /* Print all documentation */
-    // displayDocumentations(data.documentations);
 
     document.querySelectorAll("#documentations").forEach((section_tabs_list) => {
         Sortable.create(section_tabs_list, {
@@ -16,11 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
     });
-
-    // $("#documentations").sortable();
-
-    // const email_address = document.querySelector("#email_address");    
-    // email_address.addEventListener("keyup", validateEmail);
 
     document.addEventListener("click", (event) => {
         event.stopPropagation();
@@ -76,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
 
-    $("#add_documentation_form").on("submit", onSubmitAddDocumentationForm);
+    
     $("#duplicate_documentation_form").on("submit", onSubmitDuplicateForm);
     $("#change_document_privacy_form").on("submit", onSubmitChangePrivacy);
     appearEmptyDocumentation();
@@ -87,16 +78,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $(".active_docs_btn").on("click", appearActiveDocumentation);
     $(".archived_docs_btn").on("click", appearArchivedDocumentations);
-    $(".archive_btn").on("click", setRemoveArchiveValue);
     
-    $("#archive_confirm").on("click", submitRemoveArchive);
-    $(".remove_btn").on("click", setRemoveDocumentationValue);
+    $("#archive_confirm").on("click", submitArchive);
+    // $(".remove_btn").on("click", setRemoveDocumentationValue);
     $("#remove_confirm").on("click", submitRemoveDocumentation);
     $("#remove_invited_user_confirm").on("click", submitRemoveInvitedUser);
     $("#add_invite_btn").on("click", addPeopleWithAccess);
 
     $(".invited_user_role").on("change", setRoleChangeAction);
-    $(".sort_by").on("click", sort_documentations);
     $("#reorder_documentations_form").on("submit", submitReorderDocumentations);
 
     /* run functions from invite_modal.js */
@@ -105,31 +94,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     initializeMaterializeDropdown();
 
     M.Dropdown.init($("#docs_view_btn")[0]);
-    M.Dropdown.init($("#sort_by_btn")[0]);
-
-    $("#get_documentations_form").on("submit", getDocumentations);
 });
 
 $(document).ready(function(){
     $("body")
-        .on("click", ".archive_btn, .remove_btn", setRemoveArchiveValue)
+        .on("submit", "#add_documentation_form", onSubmitAddDocumentationForm)
+        .on("submit", "#get_documentations_form", getDocumentations)
+        .on("click", ".change_privacy_yes_btn", submitChangeDocumentPrivacy)
+        .on("click", ".archive_btn", setArchiveValue)
+        .on("click", ".remove_btn", setRemoveDocumentationValue)
 });
-
-function getNewDocumentationId(event){
-    let documentation_children = document.querySelectorAll("#documentations .document_block");
-    let largest_id = 1;
-
-    documentation_children.forEach(documentation_child => {
-        let document_id = parseInt(documentation_child.id.split("_")[1]);
-
-        if(document_id > largest_id){
-            largest_id = document_id;
-        }
-    });
-
-    // return largest_id + 1;
-    return new Date().getTime();
-}
 
 function submitInvite(event){
     event.preventDefault();
@@ -142,14 +116,14 @@ function onSubmitAddDocumentationForm(event){
 
     if(input_document_title){
         /** Use AJAX to generate new documentation */
-        $.post(add_document_form.attr("action"), add_document_form.serialize(), (data) => {
-            if(data.status){
+        $.post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
+            if(response_data.status){
                 /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
                 alert("Documentation added succesfully!");
                 $("#add_documentation_form")[0].reset();
             }
             else{
-                alert(data.error);
+                alert(response_data.error);
             }
         }, "json");
         
@@ -209,14 +183,14 @@ function onChangeDocumentationTitle(event){
 
     if(document_title_input.val()){
         /** Use AJAX to generate new documentation */
-        $.post(edit_doc_title_form.attr("action"), edit_doc_title_form.serialize(), (data) => {
-            if(data.status){
+        $.post(edit_doc_title_form.attr("action"), edit_doc_title_form.serialize(), (response_data) => {
+            if(response_data.status){
                 /* TODO: Improve UX after success updating of title. Add animation. */
                 edit_doc_title_form.parent().addClass("animate__animated animate__fadeIn").removeClass("error");
             }
             else{
                 /* TODO: Improve UX after updating empty title. Add animation red border. */
-                alert(data.error);
+                alert(response_data.error);
             }
         }, "json");
     }
@@ -315,13 +289,9 @@ function onSubmitChangePrivacy(event){
     
     /** Use AJAX to change documentation privacy */
     $.post(post_form.attr("action"), post_form.serialize(), (post_data) => {
-        console.log('post_data', post_data);
         if(post_data.status){
             /* TODO: Improve UX after success updating. Add animation to indication the replace with the updated . */
-            console.log('post_data.result.document_id', post_data.result.documentation_id)
-            console.log('post_data.result.html', post_data.result.html);
-
-            $(`#document_${documentation_id}`).replaceWith(post_data.result.html);
+            $(`#document_${post_data.result.documentation_id}`).replaceWith(post_data.result.html);
 
             setTimeout(() => {
                 initializeMaterializeDropdown();
@@ -342,30 +312,38 @@ function submitChangeDocumentPrivacy(event){
     return;
 }
 
-function setRemoveArchiveValue(event){
-    let archive_button = $(this);
+function setArchiveValue(event){
+    let archive_button  = $(this);
     let document_id     = archive_button.attr("data-document_id");
     let document_action = archive_button.attr("data-documentation_action");
-    $("#confirm_to_archive").find("p").text("Are you sure you want to Unarchive this documentation?");
+    let is_archived     = (document_action == "archive");
+
+    $("#confirm_to_archive").find("p").text( (is_archived) ? "Are you sure you want to move this documentation to Archive?" : "Are you sure you want to Unarchive this documentation?");
     
     /* Set form values */
-    let archive_document_form = $("#remove_archive_form");
+    let archive_document_form = $("#archive_form");
     archive_document_form.find("#documentation_id").val(document_id);
-    archive_document_form.find("#update_value").val( (document_action == "archive") ? 1 : 0 );
+    archive_document_form.find("#update_value").val( (is_archived) ? 1 : 0 );
 }
 
-function submitRemoveArchive(event){
-    let archive_document_form = $("#remove_archive_form");
+function submitArchive(event){
+    let archive_document_form = $("#archive_form");
 
-    $.post(archive_document_form.attr("action"), archive_document_form.serialize(), (data) => {
-        if(data.status){
+    $.post(archive_document_form.attr("action"), archive_document_form.serialize(), (response_data) => {
+        if(response_data.status){
             /* TODO: Improve UX after success updating. Add animation to remove the archived document from the list. */
-            
+            let documentation = $(`#document_${response_data.result.documentation_id}`);
+
+            documentation.addClass("animate__animated animate__fadeOut");
+            documentation.on("animationend", () => {
+                documentation.remove();
+            });
+
             appearEmptyDocumentation();
         }
         else{
             /* TODO: Improve UX after error. Add animation red border. */
-            alert(data.error);
+            alert(response_data.error);
         }
     }, "json");
     
@@ -418,26 +396,6 @@ function redirectToDocumentView(event){
     }
 
     location.href = "admin_edit_documentation.php";
-}
-
-function sort_documentations(event){
-    let sort_by = $(event.target).attr("data-sort-by");
-    let documentation_lists = document.getElementById('documentations');
-    let documentation_list_nodes = documentation_lists.childNodes;
-
-    let documentation_lists_to_sort = [];
-
-    for (let i in documentation_list_nodes) {
-        (documentation_list_nodes[i].nodeType == 1) && documentation_lists_to_sort.push(documentation_list_nodes[i]);
-    }
-    
-    documentation_lists_to_sort.sort(function(a, b) {
-        return a.innerHTML == b.innerHTML ? 0 : ( sort_by === "az" ? (a.innerHTML > b.innerHTML ? 1 : -1) : (b.innerHTML > a.innerHTML ? 1 : -1) );
-    });
-
-    for (let i = 0; i < documentation_lists_to_sort.length; i++) {
-        documentation_lists.appendChild(documentation_lists_to_sort[i]);
-    }
 }
 
 function getDocumentations(event){
