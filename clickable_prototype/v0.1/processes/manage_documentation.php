@@ -51,10 +51,10 @@
 
                         $documentations_order = implode(",", $documentations_order);
                         run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION["workspace_id"]};");
-
-                        $response_data["status"] = true;
-                        $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
                     }
+
+                    $response_data["status"] = true;
+                    $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
                 } 
                 else {
                     $response_data["error"] = "You are not allowed to do this action!";
@@ -73,7 +73,7 @@
 
                     if($insert_document_record != $_ZERO_VALUE){
                         $workspace = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
-                        $new_documents_order = $workspace["documentations_order"].','. $insert_document_record;
+                        $new_documents_order = (strlen($workspace["documentations_order"])) ? $workspace["documentations_order"].','. $insert_document_record : $insert_document_record;
 
                         $update_workspace_docs_order = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
 
@@ -95,16 +95,16 @@
 
                     if(count($document) > $_ZERO_VALUE){
                         if( in_array($_POST["update_type"], ["title", "is_archived", "is_private"]) ){
-                            $update_document = run_mysql_query("UPDATE documentations SET {$_POST["update_type"]} = '{$_POST["update_value"]}' WHERE id = {$_POST["documentation_id"]}");
+                            $update_value = escape_this_string($_POST["update_value"]);
+                            $update_document = run_mysql_query("UPDATE documentations SET {$_POST["update_type"]} = '{$update_value}' WHERE id = {$_POST["documentation_id"]}");
                             
                             if($update_document){
+                                $updated_document = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$_POST["documentation_id"]}");
                                 $response_data["status"] = true;
+                                $response_data["result"]["documentation_id"] = $updated_document["id"];
                                 $response_data["result"]["update_type"] = $_POST["update_type"];
 
                                 if($_POST["update_type"] == "is_private"){
-                                    $updated_document = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$_POST["documentation_id"]}");
-
-                                    $response_data["result"]["documentation_id"] = $updated_document["id"];
                                     $response_data["result"]["html"] = get_include_contents("../views/partials/document_block_partial.php", $updated_document);
                                 }
                                 elseif($_POST["update_type"] == "is_archived" ){
@@ -120,7 +120,7 @@
                                         $new_documents_order = implode(",", $documentation_order_array);
                                     }
                                     else {
-                                        $new_documents_order = $workspace["documentations_order"].','. $_POST["documentation_id"];
+                                        $new_documents_order = (strlen($workspace["documentations_order"])) ? $workspace["documentations_order"].','. $_POST["documentation_id"] : $_POST["documentation_id"];
                                     }
 
                                     $update_workspace = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
@@ -137,12 +137,14 @@
             }
             case "duplicate_documentation": {
                 // Fetch documentation
-                $documentation_id = (int)$_POST['documentation_id'];
-                $get_documentation = fetch_record("SELECT id, title, description, sections_order, is_archived, is_private FROM documentations WHERE id = {$documentation_id};");
+                $documentation_id     = (int)$_POST['documentation_id'];
+                $get_documentation    = fetch_record("SELECT id, title, description, sections_order, is_archived, is_private FROM documentations WHERE id = {$documentation_id};");
+                $document_title       = escape_this_string($get_documentation['title']);
+                $document_description = escape_this_string($get_documentation['description']);
 
                 // Create new documentation
                 $duplicate_documentation = run_mysql_query("INSERT INTO documentations (user_id, workspace_id, title, description, sections_order, is_archived, is_private, created_at, updated_at) 
-                    VALUES ({$_SESSION['user_id']}, {$_SESSION['workspace_id']}, \"Copy of {$get_documentation['title']}\", \"{$get_documentation['description']}\", '{$get_documentation['sections_order']}', 
+                    VALUES ({$_SESSION['user_id']}, {$_SESSION['workspace_id']}, 'Copy of {$document_title}', '{$document_description}', '{$get_documentation['sections_order']}', 
                     {$get_documentation['is_archived']}, {$get_documentation['is_private']}, NOW(), NOW());
                 ");
 
