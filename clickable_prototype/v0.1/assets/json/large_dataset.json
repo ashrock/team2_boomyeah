@@ -1,0 +1,395 @@
+{
+    "documentations" : [
+        { "title" : "Employee Handbook", "is_private": 1, "collaborator_count": 15 },
+        { "title" : "Company Handout", "is_private": 1, "collaborator_count": 1 },
+        { "title" : "Accounting", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Marketing", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Engineering", "is_private": 1, "collaborator_count": 6 },
+        { "title" : "Product Team", "is_private": 1, "collaborator_count": 9 },
+        { "title" : "UI/UX", "is_private": 1, "collaborator_count": 9 },
+        { "title" : "Admissions", "is_private": 1, "collaborator_count": 9 },
+        { "title" : "Trainee", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Instructors", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Business Leads", "is_private": 1, "collaborator_count": 10 },
+        { "title" : "Team Building 2020", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "V88 Core Team", "is_private": 1, "collaborator_count": 14 },
+        { "title" : "Meals", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Datacompass Mini Team Building", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Thunders", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Juniors", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "V88 Ladies", "is_private": 1, "collaborator_count": 30 },
+        { "title" : "Policies and Rules", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Money Management", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "HR 101", "is_private": 1, "collaborator_count": 3 },
+        { "title" : "Government", "is_private": 1, "collaborator_count": 20 },
+        { "title" : "Real Estate And Investments", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Being a Good Employee and As a Person", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "UX 201", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Village 88 Secrets", "is_private": 1, "collaborator_count": 30 },
+        { "title" : "Jokes and Funny Memories", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Learn Platform Team 5 Mini Team Building", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "V88 Babies", "is_private": 1, "collaborator_count": 13 },
+        { "title" : "How to connect your thoughts", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "The future of Village 88", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Village 88 All Team Buildings", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Data Compass Tech Guide", "is_private": 1, "collaborator_count": 13 },
+        { "title" : "Learn Platform Tech Guide", "is_private": 1, "collaborator_count": 31 },
+        { "title" : "Business Management", "is_private": 1, "collaborator_count": 11 },
+        { "title" : "Focus Tracker Guide", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Comprehensive Javascript Guide", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Ruby On Rails Tips and Tricks", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Database Tutorials", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Server Stuffs", "is_private": 1, "collaborator_count": 4 },
+        { "title" : "DevOps", "is_private": 1, "collaborator_count": 5 },
+        { "title" : "How to manage your time and have self discipline", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "V88 FAQs", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Meals And Foods", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Culture and Goals", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "2022", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Christmas Party Games and Preparations", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "How to Invest in Businesses", "is_private": 1, "collaborator_count": 10 },
+        { "title" : "Car Show", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Design Guides", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Construction Building", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Buying Real Estate", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "V88 Ex Employees", "is_private": 1, "collaborator_count": 18 },
+        { "title" : "2019 - Team Building Tagaytay Memories", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "New Hires 2018", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Coding Techniques", "is_private": 1, "collaborator_count": 45 },
+        { "title" : "Employee Mottos And Saying", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Village 88 Talents", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Food Busters", "is_private": 1, "collaborator_count": 2 },
+        { "title" : "Team Riders", "is_private": 1, "collaborator_count": 10 },
+        { "title" : "RoadTrips and Adventures", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Tangadan Falls Escapade", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Batch 4 Outing", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Employee Freebies", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "2016: City Dorm Days", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Work Ethics", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "DMMMSU Graduates", "is_private": 1, "collaborator_count": 22 },
+        { "title" : "V88 Gamers", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Boys Basketball Tournament", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Anything about sports", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Computer Parts Enthusiasts", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Data Compass Revamps", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Github Guides", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Legalities", "is_private": 1, "collaborator_count": 10 },
+        { "title" : "Business Permit and Self Employment", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Video Editors", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Village 88 Penthouse", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Employee Equipments (Laptop, Phones, Devices)", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Sagada Team Building", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "2017 Employee Handbook", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Focus Tracker Tool", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Company Tools", "is_private": 1, "collaborator_count": 13 },
+        { "title" : "Technologies for Training", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "All Training Batches", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Startup Mentality", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Spiritual Guides", "is_private": 1, "collaborator_count": 44 },
+        { "title" : "Motivational Stuffs", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "What are your goals?", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "All about beauties", "is_private": 1, "collaborator_count": 11 },
+        { "title" : "Proscastination", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "V88 Core Values", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Attitude is greater than skill", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "How to get Wealthy", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Company Funny Moments", "is_private": 1, "collaborator_count": 59 },
+        { "title" : "H.O.P.E", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Our Ups And Down", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "The CEO and CTO", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Health Matters", "is_private": 0, "collaborator_count": 0 }
+    ],
+    "section_outline" :  {
+        "document_title" : "Village 88 Training Guide",
+        "document_description" : "Village 88 Training is designed to help you level up your coding skills in just 16 weeks and get hired faster by companies of your choice. The training program we are offering to the world through Coding Dojo is now offered exclusively to Filipinos for a reasonable price: YOUR COMMITMENT. Since offering the training in 2020, our alums now work in over 25 companies in the Philippines and internationally and get hired within two months after graduating. You are at the best place to learn the basics of advanced full-stack technologies. You will uncover your potential through our need-to-know lessons with hands-on assignments designed to help you apply the industry's best practices. Our platform facilitates a conducive environment for optimal learning. We encourage the practice of proper work ethics patterned after the real-world work setup. We are looking for Filipinos who are passionate about programming and committed to investing time and effort, especially CS/IT graduates. If you think you got what it takes to be a Village 88 Trainee, ",
+        "sections" : [
+            "About Village 88 Training",
+            "Level up your skills",
+            "Learn industry-relevant software development skills",
+            "Michael Choi",
+            "Curriculum",
+            "Training Routine",
+            "Training Comparison",
+            "Application Process",
+            "Alumni Success Stories",
+            "FAQ",
+            "Week 1 - 2: Web Fundamentals",
+            "Week 3 - 7: PHP",
+            "Week 8 - 11: JS",
+            "Week 12 - 15: Elective",
+            "Week 16: Career Preparation and Graduation",
+            "Final: Career Matching",
+            "Zoom sessions",
+            "Self-paced learning in HackerHero",
+            "Team Collaboration in Discord (with Instructor Input and Guidance)",
+            "Solo daily assignments",
+            "Solo exam per track",
+            "Solo capstone making",
+            "Choose your career path: Frontend, Backend, or Quality Assurance.",
+            "Batch 1",
+            "Registration",
+            "Pre-training Homework",
+            "Start of the Training",
+            "Batch 2 Testimonials",
+            "Batch 4 Stories",
+            "UX 101 : Fundamentals I",
+            "Ready to take on the Training?",
+            "Village 88 Training is offered free to Filipinos residing in the Philippines",
+            "Php 0.00 for Filipinos in the Philippines",
+            "Over 10 years with 10,000+ Alumns",
+            "2 Full stack; 30+ up-to-date technologies",
+            "Follow us now: facebook.com/Village88",
+            "Prepare your peripherals (mic and camera)",
+            "Our curriculum",
+            "Great companies hire Village 88 alums",
+            "Front-end Track",
+            "Village 88 Resume Workshop",
+            "Advanced JavaScript Track",
+            "Can I still apply if I have a full time job?",
+            "40+ Technologies",
+            "Training Outputs",
+            "Batch 5 Training Application (Part I)",
+            "What are the requirements?",
+            "Our upcoming training will tentatively start by January 2024",
+            "70+ Graduates",
+            "Commit a minimum of 40-50 hours each week"
+        ]
+    },
+    "collaborators" : [
+        { "name" : "KB Tonel", "email" : "ktonel@village88.com", "access_right" : "Owner" },
+        { "name" : "Michael Choi", "email" : "mchoi@village88.com", "access_right" : "Editor" },
+        { "name" : "Jhaver Gurtiza", "email" : "jgurtiza@village88.com", "access_right" : "Viewer" },
+        { "name" : "John Supsupin", "email" : "jsupsupin@village88.com", "access_right" : "Viewer" },
+        { "name" : "Jan Dreau Ganggangan", "email" : "jganggangan@village88.com", "access_right" : "Viewer" },
+        { "name" : "Jessie De Leon", "email" : "jdeleon@village88.com", "access_right" : "Viewer" },
+        { "name" : "Jovic Abengona", "email" : "jovicabengona@village88.com", "access_right" : "Viewer" }
+    ],
+    "section_pages" : {
+        "section_title": "UX 101 : Fundamentals I",
+        "section_description": "Learn about UX designs and level up your skills in UX. ",
+        "pages": {
+            "page_1": [
+                {
+                    "tab_title": "Introduction to the UX Course",
+                    "tab_description": "<iframe width='940' height='529' src='https://www.youtube.com/embed/bVPf2gV2-nI' title='Introduction' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen=''></iframe><p>The goal of this course is for you to understand what UX is, what it is NOT, how to level up your UX skills as an individual, and how to apply this in a team environment.</p><p>Learning how to create an application with a good UX is critical and can benefit you in many ways:</p><ul><li>First, it can help you understand your users so that you can create products and services designed to accommodate their needs. </li><li>Second, a solid understanding of UX principles can help you make better design decisions, improving your product's or service's overall user experience. </li><li>Third, it can also help you be a better person, as this course will help you not only as an aspiring UX designer but also as an individual. </li><li>Finally, UX skills are in high demand in a variety of industries, so learning UX can open up new career opportunities.</li></ul><p>I would even argue that the whole goal of a lot of startups is to create a product with significant UX improvements to what the users are used to seeing. A startup that offers a 10X UX experience will radically revolutionize that industry. A startup that offers 30-50%+ UX experience could still be a very viable business. Thus, the need for great UX Designers.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                }
+            ],
+            "page_2": [
+                {
+                    "tab_title": "Village 88’s Core Competencies: Why You Are Doing This Course",
+                    "tab_description": "<p>Welcome to Village 88 and to our UX Course! But Before anything else, let’s talk about why you are doing this. Why are we having you take this UX course? </p><p>Watch these videos to understand better.</p><div class='iframe_container'><iframe width='560' height='315' src='https://www.youtube.com/embed/9ZPt44gYi-0' title='YouTube video player' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen=''></iframe></div><div class='iframe_container'><iframe width='560' height='315' src='https://www.youtube.com/embed/FLNusrslQwo' title='YouTube video player' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen=''></iframe></div>",
+                    "is_allow_comments": 1,
+                    "comments": [
+                        {
+                            "name": "Zark Muckerberg",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "Just an hour",
+                            "comment": "Great insight here, Michael! Looking forward to the rest of the course!",
+                            "replies": []
+                        },
+                        {
+                            "name": "Felix Kjellberg",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "5 mins",
+                            "comment": "This course will definitely be a success!",
+                            "replies": []
+                        }
+                    ]
+                },
+                {
+                    "tab_title": "What is UX and why is this important?",
+                    "tab_description": "<iframe width='940' height='529' src='https://www.youtube.com/embed/MuAvyLGYtLE' title='What is UX and why is this important?' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen=''></iframe>",
+                    "is_allow_comments": 1,
+                    "comments": [
+                        {
+                            "name": "Zark Muckerberg",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "Just an hour",
+                            "comment": "Great insight here, Michael! Looking forward to the rest of the course!",
+                            "replies": []
+                        },
+                        {
+                            "name": "Felix Kjellberg",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "5 mins",
+                            "comment": "Great way to establish the importance of UX here, Michael. This course will definitely be a success!",
+                            "replies": [
+                                {
+                                    "name": "Zark Muckerberg",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "3 mins",
+                                    "comment": "I agree! This course is so well-done!"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tab_title": "Defining UX",
+                    "tab_description": "<p>User Experience (UX) is focused on how the product works. It's about minimizing the energy needed by the user to accomplish their desired tasks. We'll break down this 'energy' concept even further.\n\nRemember when you've used a great application with high UX and it almost felt effortless? Remember other application you've used and you hated them because it was energy draining?\n\nGood UX = effortless or essentially, minimum energy needed to accomplish desired tasks Bad UX = draining, or essentially, high energy needed to accomplish desired tasks\n\nDefining UX this way will be important and will be key in how you focus on improving your UX skills.\n\nDesigning an application or any product with a high user satsifaction is what the goal of UX is. In this course, you'll learn some of the fundamentals of what makes a great user experience. It's also important to know what UX is not as a lot of people often get used between UX and design.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Importance of UX",
+                    "tab_description": "<p>To think about why UX is important, imagine you went back 200 years ago, back in the days when you would take a horse carriage ride to go from point A to point B. In fact, imagine this was an important travel route for many people, where thousands of people each day traveled from point A to point B and point B back to point A. We'll say that the energy consumption for solving this need this way consumes energy of 100kJ.</p><p>Imagine that when there has been a new route discovered and that now people can go from point A to point B with 20% less energy! This form of energy could be 20% less in terms of energy needed to stay awake and alert, or could even save 20% of the time (where we would argue that wasting time is also a form of energy as no one likes to waste time and wasting time is energy draining!). Do you think people would all move immediately to this new enhanced UX solution? Maybe not immediately, but eventually, once people have all been exposed to this better UX solution, they will most likely switch over.</p><p>Imagine that there is a breakthrough and someone created a new transportation device (e.g., a car) where it now takes 10X less energy to go from point A to point B. When that happens, it's a whole new industry where the old industry is now disrupted. Designing a solution with 10X improvement (over the competitors or over an existing solution) creates a whole new era for that industry, and this is exactly what Apple, Google, Microsoft, and other major software firms have done.</p><p>You may be able to create a 10X UX improvement. If you do, you should talk to me so that we can work on that together. However, even if you were to create a 20-40%+ UX improvement in helping people achieve their desired tasks, you can build a healthy business.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                }
+            ],
+            "page_3": [
+                {
+                    "tab_title": "UX vs. UI (What Is Your Goal As A UX Designer?)",
+                    "tab_description": "<div class='iframe_container'><iframe width='560' height='315' src='https://www.youtube.com/embed/4tSl0XqAg1M' title='YouTube video player' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen=''></iframe></div><p>We’ve discussed UX. Now let’s talk about UI or User Interface. </p>",
+                    "is_allow_comments": 1,
+                    "comments": [
+                        {
+                            "name": "Zark Muckerberg",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "Just an hour",
+                            "comment": "Great insight here, Michael! Looking forward to the rest of the course!",
+                            "replies": []
+                        },
+                        {
+                            "name": "Marzia Kjellberg",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "30 mins",
+                            "comment": "I never thought that UI and UX had such differences. Goes to show that I have been neglecting UX all these years (and I've been in the industry for years now!)",
+                            "replies": [
+                                {
+                                    "name": "Felix Kjellberg",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "10 mins",
+                                    "comment": "Same thing for me. I just realized my previous projects have terrible UX!"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Felix Kjellberg",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "5 mins",
+                            "comment": "This course will definitely be a success!",
+                            "replies": []
+                        }
+                    ]
+                },
+                {
+                    "tab_title": "What is UI",
+                    "tab_description": "<p>UI stands for “User Interface.” Think of User Experience as designing an application in black and white and where you're doing things like rough sketches with pencil. UI is basically where a graphic designer takes that black/white version and adds color, beautiful icons, nice fonts, backgrounds, etc. UI is basically making things look beautiful in a color TV environment. UX is designing things for a simple black/white TV.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Comparison",
+                    "tab_description": "<p>Going back to the car analogy. Imagine that the car was a black-and-white version, not really that fancy. Adding UI is basically where you add color and have many different cars with different colors and looks.</p><p>In this context, which one is more important and innovative? UX or UI? The clear winner is UX. UX comes first, and then UI comes later. </p><p>UI is what looks right, and UX is what feels right. UI is like the book cover that is pleasing to the eyes, and UX is like the book's content that taps the inner emotions of readers when they read it. In other words, UX is what pleases the users’ emotions. </p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Your Goal",
+                    "tab_description": "<p>As a UX Designer, your goal is not to make everything look good but to make everything feel good as they use your product. Your goal is to make users happy as your product solves their problems in the easiest way possible. In other words, minimized efforts or reduced energy cost.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                }
+            ],
+            "page_4": [
+                {
+                    "tab_title": "Best Practice #1: Minimize The “Energy Cost” (How To Achieve Your Goal)",
+                    "tab_description": "<p>The goal of a UX designer is to solve their users’ problems, reduce or remove their stress, and in the end, make them happy. And the way to do that is to create a great user experience. </p><p>And what is a great user experience?</p><p>It is achieving users’ goals using minimal energy. It’s a great experience when they don’t need to spend too much time and effort just to do what they want in your app. </p><p>How would you do that? Minimize your users' 'energy cost.' </p><div class='iframe_container'><iframe width='560' height='315' src='https://www.youtube.com/embed/VcNE0Y9GRmw' title='YouTube video player' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen=''></iframe></div><div class='iframe_container'><iframe width='560' height='315' src='https://www.youtube.com/embed/MHajCM6HeJE' title='YouTube video player' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen=''></iframe></div><p>Energy cost is basically the efforts users make to use your product or navigate through your design. But nobody likes too much work! Your goal is to reduce the user’s energy by making your design intuitive and easy to use. </p><p>There are types of Energy Costs to focus on reducing when you design:</p><ul><li>Hand Energy Cost</li><li>Eye Energy Cost</li><li>Thought Energy Cost</li></ul><p>We will talk more about this in the succeeding chapters.</p>",
+                    "is_allow_comments": 1,
+                    "comments": []
+                }
+            ],
+            "page_5": [
+                {
+                    "tab_title": "Hand Energy Cost",
+                    "tab_description": "<ul><li>-10 points for each mouse click or each time you have to touch the screen on your phone/tablet</li><li>-20 points for the first keyboard strike on that particular page/screen.  </li><li>-10 points for each additional keyboard strike.  The first keyboard strike takes more energy as you have to mouse your hand all the way to your keyboard and type.</li></ul><p>Common ways to remove this energy cost is simple</p><ul><li>For things where obviously the user has to type, instead of requiring the user to click on the text area and type, automatically have the text area be focused so that the first click is necessary.</li><li>Design an application so that they don't have to click as much</li><li>Design an application so that they don't have to type as much</li></ul><p>Note that for login and registration, why do you think people like using Google or FB login?  It's because it costs less energy to accomplish the desired tasks!  The desired tasks for the user is basically 'as a user, I want to login to the application!'.  Note that for a typical registration form where you have to click and type your name, email address, password, confirm password, etc, and then login afterwards, this could easily have an energy cost of 300-500 energy consumption points (according to the scale above).  Now, the the user using FB login or Google login could achieve their desired outcome by only having to click 2 times (20 energy cost).  That's a 10X+ improvement.  No wonder people prefer FB login or Google login instaed of manually registering and loggin in.</p>",
+                    "is_allow_comments": 1,
+                    "comments": [
+                        {
+                            "name": "Jovic Abengona",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "Jan. 15, 2023",
+                            "comment": "I didn't know that things like these could cause bad UX. I thought before that when too many mouse clicks are required, all I need is to be used to it. Thank you for sharing this to us, Michael!",
+                            "replies": []
+                        },
+                        {
+                            "name": "Zark Muckerberg",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "Just an hour",
+                            "comment": "I learned a lot from this! I'll definitely observe good UX in designing my future projects. Thank you for the knowledge, Michael!",
+                            "replies": [
+                                {
+                                    "name": "Cim Took",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "48 mins",
+                                    "comment": "<p>Bad UX (user experience) can negatively impact a user's experience with a product or service. It can lead to confusion, frustration, and ultimately, a lack of engagement or abandonment of the product. Common issues that contribute to bad UX include poor navigation, lack of consistency, overwhelming amount of information, and not understanding the user's needs or goals. To improve UX, it's important to conduct user research and testing, and to have a clear understanding of the user's needs and goals. Additionally, using clear and consistent design principles, and keeping the user's needs at the forefront can help to create a positive experience.\n\nBad UX can manifest in a variety of ways, but some common examples include:</p><ul><li><p>Confusing navigation: If a user cannot easily find what they are looking for, they may become frustrated and give up on the product. Navigation should be clear and intuitive, with a consistent layout and clear labels for buttons and links.</p></li><li><p>Lack of consistency: Inconsistencies in design and functionality can create confusion for the user. Consistency helps the user build a mental model of how the product works, which makes it easier for them to use.</p></li><li><p>Overwhelming amount of information: Presenting too much information at once can be overwhelming and make it difficult for the user to find what they need. It's important to prioritize the most important information and present it in a clear and organized way.</p></li><li><p>Not understanding user needs: It's crucial to understand the user's needs and goals in order to design a product that meets their needs. Without this understanding, the product may fail to meet the user's expectations, resulting in a poor experience.</p></li><li><p>Lack of feedback: Providing feedback to the user can help them understand what is happening and what they need to do. For example, when a button is clicked, the user should be provided with feedback, such as a message or visual indication that their action has been successful.</p></li><li><p>No clear Call to Action: A clear call to action (CTA) is a key element of user interface that tells the user what to do next. Without a clear CTA, the user may not know how to proceed, or they may become frustrated trying to find the next step.</p></li><li><p>No mobile optimization: With the increasing use of mobile devices, it is important to ensure that your website or application is optimized for smaller screens and touch-based interactions. A product that is not optimized for mobile may be difficult to use and could lead to a poor user experience.</p></li></ul><p>These are just a few examples, but the bottom line is that bad UX can significantly harm the user's experience and discourage them from using the product. To prevent this, it is important to conduct user research and testing, to have a clear understanding of the user's needs and goals, and to use clear and consistent design principles that prioritize the user's needs.</p>"
+                                },
+                                {
+                                    "name": "Mark Cuban",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "37 mins",
+                                    "comment": "<p>One observation about UX is that it is a constantly evolving field. Technology and user expectations change over time, and what was considered good UX a few years ago may no longer be effective. For example, the rise of mobile devices has led to a greater emphasis on designing for smaller screens and touch-based interactions. Additionally, the increasing use of artificial intelligence and machine learning has led to the development of new interaction models, such as conversational interfaces.Another observation is that UX is a multidisciplinary field that draws on a variety of disciplines including psychology, sociology, and computer science. It involves understanding user needs and behavior, as well as the technical capabilities of the product or service.Lastly, good UX is not only about making a product look good, but also about making it easy and efficient to use and meet the user's goals and needs. A product with a beautiful design but difficult to use would not be considered good UX.</p>"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Felix Kjellberg",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "5 mins",
+                            "comment": "What's surprising is a lot of tech giants are actually guilty of having bad UX in their websites. It shows how UX is often disregarded. It's about time that we learn better and observe better UX.",
+                            "replies": []
+                        }
+                    ]
+                },
+                {
+                    "tab_title": "Eye Energy",
+                    "tab_description": "<div class='iframe_container'><iframe width='560' height='315' src='https://www.youtube.com/embed/itweHQowVU8' title='YouTube video player' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen=' '></iframe></div><p>Minimizing hand energy is quite easy. Measuring and minimizing eye energy is not as easy, but it is still doable. One of the easiest ways to do this is to use your mouse to track where your eye is looking and then to measure how many pixels your mouse moved for you to accomplish each user story.</p><p>For example, consider the following two-form comparison:</p><p>Note that the left doesn't require the eye to move as much, while the right form requires the eye to move a lot more. The latter consumes more eye energy.</p><p>Note how this requires a lot of energy to navigate through as your eye needs to wander through a lot, and it is not so effortless.</p><p>Common mistakes of high eye energy cost and how to fix them are as follows:</p><p><img src='https://cdn.hackerhero.com/1.1/assets/uploads/level-modules/2247-uxexample-1666643342746.jpeg' alt='Semantic description of image' title='Image Title'></p><p>Note that the left doesn't require the eye to move as much, while the right form requires the eye to move a lot more. The latter consumes more eye energy.</p><p>Note how this requires a lot of energy to navigate through as your eye needs to wander through a lot, and it is not so effortless.</p><p>Common mistakes of high eye energy cost and how to fix them are as follows:</p><ul><li>using too many font sizes -&gt; use no more than 3 font sizes</li><li>using too many colors -&gt; use no more than 5 font colors. Use font color consistently (e.g., same color for links, same color for headers, same color for texts, etc.). Consistency is important as the color will signal actions.</li><li>using too many font types -&gt; use no more than 2 font types</li><li>not using enough white spaces -&gt; remember the sacred space and allow people to breathe!</li><li>not being consistent with font sizes or font type or how the color is used</li><li>not using the font size or contrast to correlate importance. Highlight the most important items with bigger font sizes and/or higher contrast. For less important items, use a smaller font size or lower contrast.</li></ul>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Bad Example",
+                    "tab_description": "<p><img src='https://cdn.hackerhero.com/1.1/assets/uploads/level-modules/2247-hhbefore-1666687158917.png' alt='Semantic description of image' title='Image Title'></p><p>Here's another example. Although this example doesn't have the UI layer like the above, see how the left has a lot of font sizes, doesn't use white spacing enough, and is not consistent with how spacing is done.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Better Example",
+                    "tab_description": "<p><img src='https://cdn.hackerhero.com/1.1/assets/uploads/level-modules/2247-hhafter-1666687354845.png' alt='Semantic description of image' title='Image Title'></p><p>Although the two designs, from quick glance, may look very similar, the difference in UX is huge where the latter design, I would argue, is at least 3-5 times better than the original design.</p><p>Eye energy is more on the UI design. But even though this is more on UI design, it is an important part of UX designing because it can affect users’ experience by simply looking at the design.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Thought Energy",
+                    "tab_description": "<p>In the end, a great UX is one that requires the least energy. This is not only hand and eye energy but also the energy required by the users to think.</p><p>Now, for me, this is the most important energy to reduce. Why? Because every action usually starts with thinking. And if your users think less, they use less eye and hand energy. </p><p>Remember that when the users are using your application, they have certain 'tasks' they are trying to accomplish. Another way to put this is that they have urgent 'user stories' they are trying to meet.</p><p>Remember that features and user stories can all be categorized as the following:</p><p>When you have a page in your application that has a lot of elements (e.g., buttons, texts, headers, images, links, etc.), it requires the brain to be actively engaged so that it filters out unnecessary information. If the page is complex and has lots of elements, this 'filtering' takes enormous thought energy.</p><p>Ways to reduce thought energy are as follows:</p><ol><li>Don't include any need-to-have features. Avoid these like the plague.</li><li>Know what must-have features are and which are nice-to-have features. It's okay to include nice-to-have features, but as soon as you get confused about which are must-haves vs. nice have, you're off to a bad start.</li><li>Use font size, color, or contrast ratio to make the must-to-have features stand out more than the nice-to-have features.</li><li>Use proven layouts to make information flow naturally. Avoid creating your own custom layout that the users are not used to seeing. Stick with the best practices layout that's appropriate for your application size (e.g., desktop, mobile, tablet).</li><li>Use appropriate messaging to address the user's needs or to guide the users. For example, adding a one-sentence or a short description about what the key feature is and explaining that in a text to the user can be helpful. Especially as new users are navigating through your application.</li></ol><p>As you get into UX, you'll hear people saying, 'Don't make me think!'. Using your application should be almost effortless and intuitive. You do this by knowing what are must to have features and also by better understanding your user base. Do all the thinking so that your users won’t have to.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                }
+            ],
+            "page_6": [
+                {
+                    "tab_title": "Things to remember",
+                    "tab_description": "<ol><li><p>Clarity: The design should be clear and easy to understand. This includes using simple language, providing clear instructions, and using intuitive visual cues. Clarity helps users understand what they are supposed to do, and how to do it.</p></li><li><p>Functionality: The design should serve a purpose and meet the needs of the user. This includes providing all the necessary features, and making sure they are easy to access and use. Functionality helps users achieve their goals quickly and efficiently.</p></li><li><p>Accessibility: The design should be usable for people with disabilities. This includes providing alternative ways to interact with the interface, such as keyboard shortcuts or voice commands, and making sure the design is compatible with assistive technologies such as screen readers. Accessibility helps ensure that everyone can use the design, regardless of their abilities.</p></li><li><p>Simplicity: The design should be simple and uncluttered. This includes using minimalistic design, avoiding unnecessary elements, and making sure the layout is easy to understand. Simplicity helps users focus on what's important, and makes it easier for them to use the design.</p></li><li><p>Flexibility: The design should allow for customization and personalization. This includes providing options for users to tailor the design to their preferences, and allowing them to save their settings for future use. Flexibility helps users feel in control of the design and makes it more convenient for them to use.</p></li><li><p>Feedback: The design should provide feedback to the user on the results of their actions. This includes displaying messages, providing confirmation dialogs, and using visual cues to indicate the status of an action. Feedback helps users understand what's happening and what they need to do next.</p></li><li><p>Aesthetics: The design should be visually pleasing and consistent. This includes using a consistent style, providing a visually pleasing layout, and making sure the design is cohesive and balanced. Aesthetics helps create an enjoyable user experience and makes the design more memorable.</p></li><li><p>Usability: The design should be easy to use and navigate. This includes providing clear and consistent navigation, making sure the layout is logical, and providing helpful tooltips and documentation. Usability helps users understand how to use the design and makes it more efficient to use.</p></li><li><p>Learnability: The design should be easy to learn. This includes providing a tutorial or walk-through, displaying helpful information at relevant times, and making sure the interface is intuitive. Learnability helps users understand how to use the design, and makes it more convenient for them to use.</p></li><li><p>Error prevention: The design should minimize the possibility of user errors. This includes providing clear instructions, validating user input, and providing helpful error messages. Error prevention helps reduce frustration and makes the design more reliable.</p></li></ol>",
+                    "is_allow_comments": 1,
+                    "comments": [
+                        {
+                            "name": "Stephen Strange",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "Jan. 15, 2023",
+                            "comment": "Thank you for creating this course, Michael. It really helps a lot especially those who aspire to be a UI/UX designer."
+                        },
+                        {
+                            "name": "Tony Stark",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "Jan. 18, 2023",
+                            "comment": "I will definitely share this to my team. Excellent work!"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

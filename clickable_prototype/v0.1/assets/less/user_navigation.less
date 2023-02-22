@@ -1,0 +1,44 @@
+// out: false
+@import url(./variables.less);
+
+#mobile_container{
+    background: @by_mobile_nav;
+    border-radius: 38px !important;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.168);
+    padding: 0 19px;
+    margin: 16px !important;
+}
+#select_section_form{
+    display: none !important;
+}
+.header_mobile{
+    height: initial !important;
+}
+.header_mobile{
+    .mobile{
+        height: 22px !important;
+    }
+}
+.mobile_search_form{
+    flex-grow: 1;
+    & ~ img{
+        height: 24px;
+        width: 24px;
+    }
+    .mobile_search_field{
+        box-shadow: none !important;
+        color: @by_black !important;
+        font: 12px/40px @readex_regular;
+        height: 40px !important;
+        line-height: 40px !important;
+        margin: 0px !important;
+        outline: none !important;
+
+        &::placeholder{
+            color: @by_black;
+            font: 12px/40px @readex_regular;
+        }
+    }
+}
+
+
