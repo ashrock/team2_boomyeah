@@ -68,12 +68,12 @@
 
                     $insert_document_record = run_mysql_query("
                         INSERT INTO documentations (user_id, workspace_id, title, is_archived, is_private, cache_collaborators_count, created_at, updated_at) 
-                        VALUES ({$_SESSION["user_id"]}, {$_SESSION["workspace_id"]}, '{$document_title}', {$_NO}, {$_YES}, {$_ZERO_VALUE}, NOW(), NOW())
+                        VALUES ({$_SESSION["user_id"]}, {$_SESSION["workspace_id"]}, \"{$document_title}\", {$_NO}, {$_YES}, {$_ZERO_VALUE}, NOW(), NOW())
                     ");
 
                     if($insert_document_record != $_ZERO_VALUE){
                         $workspace = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
-                        $new_documents_order = $workspace["documentations_order"].','. $insert_document_record;
+                        $new_documents_order = (strlen($workspace["documentations_order"])) ? $workspace["documentations_order"].','. $insert_document_record : $insert_document_record;
 
                         $update_workspace_docs_order = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
 
@@ -95,7 +95,7 @@
 
                     if(count($document) > $_ZERO_VALUE){
                         if( in_array($_POST["update_type"], ["title", "is_archived", "is_private"]) ){
-                            $update_document = run_mysql_query("UPDATE documentations SET {$_POST["update_type"]} = '{$_POST["update_value"]}' WHERE id = {$_POST["documentation_id"]}");
+                            $update_document = run_mysql_query("UPDATE documentations SET {$_POST["update_type"]} = \"{$_POST["update_value"]}\" WHERE id = {$_POST["documentation_id"]}");
                             
                             if($update_document){
                                 $response_data["status"] = true;
@@ -120,7 +120,7 @@
                                         $new_documents_order = implode(",", $documentation_order_array);
                                     }
                                     else {
-                                        $new_documents_order = $workspace["documentations_order"].','. $_POST["documentation_id"];
+                                        $new_documents_order = (strlen($workspace["documentations_order"])) ? $workspace["documentations_order"].','. $_POST["documentation_id"] : $_POST["documentation_id"];
                                     }
 
                                     $update_workspace = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
