@@ -10,7 +10,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     // displayDocumentations(data.documentations);
 
     document.querySelectorAll("#documentations").forEach((section_tabs_list) => {
-        Sortable.create(section_tabs_list);
+        Sortable.create(section_tabs_list, {
+            onEnd: (event) => {
+                console.log(event, "saveDocumentationOrder")
+            }
+        });
     });
 
     // const email_address = document.querySelector("#email_address");    
