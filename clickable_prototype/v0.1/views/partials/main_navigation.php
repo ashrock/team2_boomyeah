@@ -55,6 +55,6 @@
                 </select>
             </div>
         </form>
-        <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/user_profile.png" alt="user_profile">
+        <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/user_profile.png" alt="user_profile" class="user_profile" >
     </div>
 </div>
