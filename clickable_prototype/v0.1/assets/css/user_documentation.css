@@ -745,6 +745,13 @@ body::-webkit-scrollbar-thumb {
 #select_section_form {
   display: none !important;
 }
+.header_mobile img {
+  position: absolute;
+  right: 10px;
+}
+.header_mobile a {
+  display: none !important;
+}
 .user .container {
   background-color: #ffffff;
   border-radius: 12px;
