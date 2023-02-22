@@ -1,6 +1,12 @@
+<?php
+    $request_uri = explode("/", $_SERVER["REQUEST_URI"]);
+    $request_uri = $request_uri[count($request_uri) - 1];
+?>
 <div id="nav_documentation">
     <div class="nav_holder">
-        <a href="#" data-target="slide-out" class="sidenav-trigger"></a>
+        <?php if(!in_array($request_uri, ["admin_documentation.php", "user_documentation.php"])){ ?>
+            <a href="#" data-target="slide-out" class="sidenav-trigger"></a>
+        <?php } ?>
     </div>
     <ul id="slide-out" class="sidenav">
         <a href="#" data-target="slide-out" class="sidenav-trigger nav"></a>
@@ -26,7 +32,9 @@
 </div>
 <div id="mobile_container">
     <div class="header_mobile">
-        <a href="#" data-target="mobile_nav" class="mobile sidenav-trigger"></a>
+        <?php if(!in_array($request_uri, ["admin_documentation.php", "user_documentation.php"])){ ?>
+            <a href="#" data-target="mobile_nav" class="mobile sidenav-trigger"></a>
+        <?php } ?>
         <ul id="mobile_nav" class="sidenav">
             <a href="#" data-target="mobile_nav" class="sidenav-trigger"></a>
             <li><img src="<?= add_file("assets/images/global_logo.svg") ?>" alt="mobile_logo"></li>
@@ -37,17 +45,11 @@
             <li><a href="#!">Trainee</a></li>
             <li><a href="#!">Engineering</a></li>
         </ul>
-        <form method="POST" action="/" id="search_documentation_form" class="mobile_search_form">
-            <input type="text" id="search_documentation_field" class="mobile_search_field" placeholder="Search Documentation">
-        </form>
-        <form method="POST" action="/" id="search_section_form" class="mobile_search_form">
-            <input type="text" id="search_section_field" class="mobile_search_field" placeholder="Search Section">
-        </form>
         <form action="#" id="select_section_form" method="POST">
-            <div class="input-field select">
-                <select>
+            <div class="input-field select dropdown-trigger">
+                <select class='dropdown-content'>
                     <option value="employee_handbook">Employee Handbook</option>
-                    <option value="employee_handbook">About Company</option>
+                    <option value="about_company">About Company</option>
                     <option value="terms">Terms of Employment</option>
                     <option value="general">General Policies & Procedures</option>
                 </select>

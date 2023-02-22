@@ -51,10 +51,10 @@
 
                         $documentations_order = implode(",", $documentations_order);
                         run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION["workspace_id"]};");
-
-                        $response_data["status"] = true;
-                        $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
                     }
+
+                    $response_data["status"] = true;
+                    $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
                 } 
                 else {
                     $response_data["error"] = "You are not allowed to do this action!";
@@ -99,13 +99,12 @@
                             $update_document = run_mysql_query("UPDATE documentations SET {$_POST["update_type"]} = '{$update_value}' WHERE id = {$_POST["documentation_id"]}");
                             
                             if($update_document){
+                                $updated_document = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$_POST["documentation_id"]}");
                                 $response_data["status"] = true;
+                                $response_data["result"]["documentation_id"] = $updated_document["id"];
                                 $response_data["result"]["update_type"] = $_POST["update_type"];
 
                                 if($_POST["update_type"] == "is_private"){
-                                    $updated_document = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$_POST["documentation_id"]}");
-
-                                    $response_data["result"]["documentation_id"] = $updated_document["id"];
                                     $response_data["result"]["html"] = get_include_contents("../views/partials/document_block_partial.php", $updated_document);
                                 }
                                 elseif($_POST["update_type"] == "is_archived" ){
