@@ -9,19 +9,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* Print all documentation */
     // displayDocumentations(data.documentations);
 
-    initializeMaterializeDropdown();
-    $("#add_documentation_form").on("submit", onSubmitAddDocumentationForm);
-    appearEmptyDocumentation();
-
-    $(".edit_title_icon").on("click", toggleEditDocumentationTitle);
-    $(".duplicate_icon").on("click", duplicateDocumentation);
-    $(".document_title").on("blur", onChangeDocumentationTitle);
-
-    $(".active_docs_btn").on("click", appearActiveDocumentation);
-    $(".archived_docs_btn").on("click", appearArchivedDocumentations);
-    $(".remove_btn").on("click", setRemoveDocumentationValue);
-    $("#remove_confirm").on("click", submitRemoveDocumentation);
-
     document.querySelectorAll("#documentations").forEach((section_tabs_list) => {
         Sortable.create(section_tabs_list);
     });
@@ -60,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         instance.open();
 
         let change_document_privacy_form = $("#change_document_privacy_form");
-        change_document_privacy_form.find("#document_id").val($(this).attr("data-document_id"));
+        change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
         change_document_privacy_form.find("#update_value").val(0);    
     });
 
@@ -97,6 +84,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     $(".archive_btn").on("click", setRemoveArchiveValue);
     
     $("#archive_confirm").on("click", submitRemoveArchive);
+    $(".remove_btn").on("click", setRemoveDocumentationValue);
     $("#remove_confirm").on("click", submitRemoveDocumentation);
     $("#remove_invited_user_confirm").on("click", submitRemoveInvitedUser);
     $("#add_invite_btn").on("click", addPeopleWithAccess);
@@ -113,7 +101,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     M.Dropdown.init($("#sort_by_btn")[0]);
 
     $("#get_documentations_form").on("submit", getDocumentations);
-    
 });
 
 $(document).ready(function(){
@@ -244,10 +231,15 @@ function onSubmitDuplicateForm(event){
         if(post_data.status){
             // Append duplicated documentation
             $(`#document_${document_id}`).after(post_data.result.html);
-            
-            setTimeout(() => {
-                initializeMaterializeDropdown();
-            }, 148);
+
+            let documentation = $(`#document_${post_data.result.documentation_id}`);
+            documentation.addClass("animate__animated animate__fadeIn");
+            documentation.on("animationend", () => {
+                documentation.removeClass("animate__animated", "animate__fadeIn");
+            });
+
+            $(".remove_btn").on("click", setRemoveDocumentationValue);
+            initializeMaterializeDropdown();
         }
 
         post_form[0].reset();
@@ -259,12 +251,13 @@ function onSubmitDuplicateForm(event){
 function duplicateDocumentation(event){
     event.stopImmediatePropagation();
     event.preventDefault();
-    let document_id = $(this).attr("data-document_id");
+
+    let document_id = $(this).data("document_id");
     let duplicate_form = $("#duplicate_documentation_form");
     duplicate_form.find(".documentation_id").val(document_id);
     duplicate_form.trigger("submit");
 
-    return;
+    return false;
 }
 
 function appearActiveDocumentation(event){
@@ -304,7 +297,7 @@ function setDocumentPrivacyValues(event){
     /* Set form values */
     let change_document_privacy_form = $("#change_document_privacy_form");
     
-    change_document_privacy_form.find("#document_id").val(documentation_id);
+    change_document_privacy_form.find("#documentation_id").val(documentation_id);
     change_document_privacy_form.find("#update_value").val( (documentation_privacy == "public") ? 1 : 0 );
 }
 
@@ -312,17 +305,16 @@ function onSubmitChangePrivacy(event){
     event.stopImmediatePropagation();
     event.preventDefault();
     let post_form = $(this);
-    let document_id = post_form.find(".documentation_id").val();
-
+    
     /** Use AJAX to change documentation privacy */
     $.post(post_form.attr("action"), post_form.serialize(), (post_data) => {
         console.log('post_data', post_data);
         if(post_data.status){
             /* TODO: Improve UX after success updating. Add animation to indication the replace with the updated . */
-            console.log('post_data.result.document_id', post_data.result.document_id)
+            console.log('post_data.result.document_id', post_data.result.documentation_id)
             console.log('post_data.result.html', post_data.result.html);
 
-            $(`#document_${document_id}`).replaceWith(post_data.result.html);
+            $(`#document_${documentation_id}`).replaceWith(post_data.result.html);
 
             setTimeout(() => {
                 initializeMaterializeDropdown();
@@ -351,7 +343,7 @@ function setRemoveArchiveValue(event){
     
     /* Set form values */
     let archive_document_form = $("#remove_archive_form");
-    archive_document_form.find("#document_id").val(document_id);
+    archive_document_form.find("#documentation_id").val(document_id);
     archive_document_form.find("#update_value").val( (document_action == "archive") ? 1 : 0 );
 }
 
@@ -394,12 +386,13 @@ function submitRemoveDocumentation(event){
     let form = $("#remove_documentation_form");
 
     $.post(form.attr("action"), form.serialize(), (response_data) => {
-        let documentation = document.getElementById(`document_${response_data.result.documentation_id}`);
+        let documentation = $(`#document_${response_data.result.documentation_id}`);
 
-        documentation.className += " animate__animated animate__fadeOut";
-        documentation.addEventListener("animationend", () => {
+        documentation.addClass("animate__animated animate__fadeOut");
+        documentation.on("animationend", () => {
             documentation.remove();
-        }, false);
+        });
+
     }, "json");
 
     let remove_modal = document.querySelector("#confirm_to_remove");
