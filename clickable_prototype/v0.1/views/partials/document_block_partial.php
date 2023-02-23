@@ -31,7 +31,7 @@
                 <?php } else{ ?>
                     <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="<?= $id ?>" data-document_privacy="public">Set to Private</a></li>
                 <?php } ?>
-            <?php }else{ ?>
+            <?php } else { ?>
                 <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="<?= $id ?>" data-documentation_action="unarchive">Unarchive</a></li>
             <?php } ?>
             <li class="divider" tabindex="-1"></li>
