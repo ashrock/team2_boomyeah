@@ -55,33 +55,35 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
-#header_container .header .user_profile a {
-  background: #ffffff;
-  border-radius: 40px;
-  border: 1px solid #bbccf3;
-  font: 14px/20px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
-  margin: 0 16px;
-  padding: 10px 54px 10px 24px;
-  position: relative;
-  text-decoration: none;
-}
-#header_container .header .user_profile a::after {
-  background: url('../../assets/images/header_sprite.svg') no-repeat;
-  background-position: 1px 0px;
-  content: '';
-  display: inline;
-  height: 24px;
-  position: absolute;
-  right: 20px;
-  top: 8px;
-  width: 24px;
-}
-#header_container .header .user_profile .user_settings button {
+#header_container .header .user_profile .user_settings #logout {
   background: url("../images/header_sprite.svg") no-repeat;
   background-position: -40px 0px;
   border: none;
-  height: 28px;
+  color: transparent;
+  cursor: pointer;
+  display: inline-block;
+  height: 29px;
+  transform: translate(8px, -10px);
   width: 28px;
+}
+#header_container .header .user_profile .user_settings #dropdown_logout {
+  height: 40px;
+  overflow: hidden;
+}
+#header_container .header .user_profile .user_settings #dropdown_logout li {
+  background: #f4f7fa;
+  border-radius: 8px;
+}
+#header_container .header .user_profile .user_settings #dropdown_logout li .log_out_btn {
+  color: #78716c;
+  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  padding: 12px 0;
+  position: relative;
+  text-align: center;
+  z-index: 9999;
+}
+#header_container .header .user_profile .user_settings #dropdown_logout li:hover {
+  background: #e8f2ff;
 }
 @media screen and (max-width: 632px) {
   #header_container {
@@ -683,16 +685,26 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
   width: 10px;
 }
-@keyframes slideSwipeLeft {
+.animated_blinkBorder {
+  animation-name: blinkBorder;
+}
+@keyframes blinkBorder {
   0% {
-    opacity: 0;
-    transform: translateX(10%);
+    border-color: transparent;
+    box-shadow: none;
   }
-  80% {
-    transform: translateX(0%);
+  30% {
+    border-color: #2563eb;
+  }
+  50% {
+    box-shadow: 0 0 12px #2563eb;
+  }
+  70% {
+    border-color: #2563eb;
   }
   100% {
-    opacity: 1;
+    border-color: transparent;
+    box-shadow: none;
   }
 }
 @font-face {
