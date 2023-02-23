@@ -83,7 +83,7 @@
         <input type="hidden" name="action" value="get_documentations">
         <input type="hidden" id="is_archived" name="is_archived">
     </form>
-    <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="duplicate_documentation_form">
+    <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="duplicate_documentation_form" method="POST">
         <input type="hidden" name="action" value="duplicate_documentation">
         <input type="hidden" class="documentation_id" name="documentation_id">
     </form>
