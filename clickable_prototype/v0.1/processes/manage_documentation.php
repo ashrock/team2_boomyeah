@@ -26,9 +26,15 @@
                 // Run MySQL query
                 $get_documentations = fetch_all($get_documentations_query);
 
-                // Generate HTML
-                for($documentations_index = 0; $documentations_index < count($get_documentations); $documentations_index++){
-                    $get_documentations_html .= get_include_contents("../views/partials/document_block_partial.php", $get_documentations[$documentations_index]);
+                if(count($get_documentations)){
+                    // Generate HTML
+                    for($documentations_index = 0; $documentations_index < count($get_documentations); $documentations_index++){
+                        $get_documentations_html .= get_include_contents("../views/partials/document_block_partial.php", $get_documentations[$documentations_index]);
+                    }
+                }
+                else{
+                    $message = ($_POST["is_archived"] == "{$_NO}") ? "You have no documentations yet." : "You have no archived documentations yet.";
+                    $get_documentations_html = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
                 }
     
                 $response_data["status"] = true;
@@ -48,13 +54,21 @@
                     
                     if($documentation_index !== FALSE){
                         unset($documentations_order[$documentation_index]);
+                        $documentations_count = count($documentations_order);
 
-                        $documentations_order = implode(",", $documentations_order);
+                        $documentations_order = ($documentations_count) ? implode(",", $documentations_order) : "";
                         run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION["workspace_id"]};");
                     }
 
                     $response_data["status"] = true;
                     $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
+                    
+                    if(!$documentations_count){
+                        $message = ($_POST["remove_is_archived"] == "{$_NO}") ? "You have no documentations yet." : "You have no archived documentations yet.";
+
+                        $response_data["result"]["is_archived"]            = $_POST["remove_is_archived"];
+                        $response_data["result"]["no_documentations_html"] = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
+                    }
                 } 
                 else {
                     $response_data["error"] = "You are not allowed to do this action!";
@@ -143,42 +157,52 @@
                 $document_description = escape_this_string($get_documentation['description']);
 
                 // Create new documentation
-                $duplicate_documentation = run_mysql_query("INSERT INTO documentations (user_id, workspace_id, title, description, sections_order, is_archived, is_private, created_at, updated_at) 
+                $duplicate_documentation = run_mysql_query("INSERT INTO documentations (user_id, workspace_id, title, description, sections_order, is_archived, is_private, cache_collaborators_count, created_at, updated_at) 
                     VALUES ({$_SESSION['user_id']}, {$_SESSION['workspace_id']}, 'Copy of {$document_title}', '{$document_description}', '{$get_documentation['sections_order']}', 
-                    {$get_documentation['is_archived']}, {$get_documentation['is_private']}, NOW(), NOW());
+                    {$get_documentation['is_archived']}, {$get_documentation['is_private']}, {$_ZERO_VALUE}, NOW(), NOW());
                 ");
 
-                // TODO: Create sections, pages, and tabs
-                // Check if sections_order exists
-                    // Fetch sections and its pages
-                        // Check page's tabs_order exists
-                            // Fetch tabs
+                if($duplicate_documentation){
+                    // TODO: Create sections, pages, and tabs
+                    // Check if sections_order exists
+                        // Fetch sections and its pages
+                            // Check page's tabs_order exists
+                                // Fetch tabs
+                                // END
                             // END
                         // END
                     // END
-                // END
-
-                // Get documentations_order and insert newly created documentation_id
-                $get_workspace        = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION['workspace_id']};");
-                $documentations_order = explode(",", $get_workspace["documentations_order"]);
-
-                for($document_index=0; $document_index < count($documentations_order); $document_index++){
-                    if($documentation_id == $documentations_order[$document_index]){
-                        array_splice($documentations_order, $document_index + 1, 0, "{$duplicate_documentation}");
+    
+                    // Get documentations_order and insert newly created documentation_id
+                    $get_workspace        = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION['workspace_id']};");
+                    $documentations_order = explode(",", $get_workspace["documentations_order"]);
+    
+                    for($document_index=0; $document_index < count($documentations_order); $document_index++){
+                        if($documentation_id == $documentations_order[$document_index]){
+                            array_splice($documentations_order, $document_index + 1, 0, "{$duplicate_documentation}");
+                        }
+                    }
+    
+                    // Convert array to comma-separated string and update documentations_order of documentations_order
+                    $documentations_order = implode(",", $documentations_order);
+                    $update_documentations_order = run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION['workspace_id']};");
+    
+                    if($update_documentations_order){
+                        // Fetch newly created documentation and generate html
+                        $get_documentation  = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$duplicate_documentation};");
+                        $documentation_html = get_include_contents("../views/partials/document_block_partial.php", $get_documentation);
+        
+                        $response_data["status"]                     = true;
+                        $response_data["result"]["documentation_id"] = $duplicate_documentation;
+                        $response_data["result"]["html"]             = $documentation_html;
+                    }
+                    else {
+                        $response_data["error"] = "An error occurred while trying to update your workspace.";
                     }
                 }
-
-                // Convert array to comma-separated string and update documentations_order of documentations_order
-                $documentations_order = implode(",", $documentations_order);
-                run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION['workspace_id']};");
-
-                // Fetch newly created documentation and generate html
-                $get_documentation  = fetch_record("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = {$duplicate_documentation};");
-                $documentation_html = get_include_contents("../views/partials/document_block_partial.php", $get_documentation);
-
-                $response_data["status"]                     = true;
-                $response_data["result"]["documentation_id"] = $duplicate_documentation;
-                $response_data["result"]["html"]             = $documentation_html;
+                else {
+                    $response_data["error"] = "An error occurred while trying to duplicate documentation.";
+                }
 
                 break;
             }

@@ -2,9 +2,9 @@
     /*--------------------BEGINNING OF THE CONNECTION PROCESS------------------*/
     //define constants for db_host, db_user, db_pass, and db_database
     //adjust the values below to match your database settings
-    define('DB_HOST', 'localhost:3306');
+    define('DB_HOST', 'localhost:8889');
     define('DB_USER', 'root');
-    define('DB_PASS', ''); //may need to set DB_PASS as 'root'
+    define('DB_PASS', 'root'); //may need to set DB_PASS as 'root'
     define('DB_DATABASE', 'boomyeah_v2'); //make sure to set your database
 
     //connect to database host
@@ -46,6 +46,7 @@
 
         // Return boolean if query are UPDATE and DELETE
         return (strpos($query, 'INSERT') !== false) ? $connection->insert_id : $result;
+        // return $query;
     }
 
     //returns an escaped string. EG, the string "That's crazy!" will be returned as "That\'s crazy!"
