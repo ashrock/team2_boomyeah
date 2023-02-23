@@ -6,12 +6,10 @@ $(document).ready(async function(){
     const invite_form = document.querySelector("#invite_form");
     invite_form.addEventListener("submit", submitInvite);
 
-    document.querySelectorAll("#documentations").forEach((section_tabs_list) => {
-        Sortable.create(section_tabs_list, {
-            onEnd: () => {
-                updateDocumentationsOrder(section_tabs_list);
-            }
-        });
+    Sortable.create(document.querySelector("#documentations"), {
+        onEnd: () => {
+            updateDocumentationsOrder(document.querySelector("#documentations"));
+        }
     });
 
     document.addEventListener("click", (event) => {
@@ -23,59 +21,6 @@ $(document).ready(async function(){
         if(element){
             addSearchEmailResult(element);
         }
-    });
-
-    $(".document_block").on("click", redirectToDocumentView);
-
-    $(".invite_collaborators_btn").on("click", function(event){
-        event.stopImmediatePropagation();
-        event.preventDefault();
-        let invite_modal = document.querySelector("#modal1");
-        var instance = M.Modal.getInstance(invite_modal);
-        instance.open();
-    });
-
-    $(".access_btn").on("click", function(event){
-        event.stopImmediatePropagation();
-        event.preventDefault();
-        let confirm_modal = document.querySelector("#confirm_to_public");
-        var instance = M.Modal.getInstance(confirm_modal);
-        displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
-        instance.open();
-
-        let change_document_privacy_form = $("#change_document_privacy_form");
-        change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
-        change_document_privacy_form.find("#update_value").val(0);    
-    });
-    
-    $(".set_to_public_icon").on("click", function(event){
-        event.stopImmediatePropagation();
-        event.preventDefault();
-
-        let change_document_privacy_form = $("#change_document_privacy_form");
-        change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
-        change_document_privacy_form.find("#update_value").val(0);
-
-        let confirm_modal = document.querySelector("#confirm_to_public");
-        var instance = M.Modal.getInstance(confirm_modal);
-
-        displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
-        instance.open();
-    });
-
-    $(".set_to_private_icon").on("click", function(event){
-        event.stopImmediatePropagation();
-        event.preventDefault();
-
-        let change_document_privacy_form = $("#change_document_privacy_form");
-        change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
-        change_document_privacy_form.find("#update_value").val(1);
-
-        let confirm_modal = document.querySelector("#confirm_to_private");
-        var instance = M.Modal.getInstance(confirm_modal);
-
-        displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
-        instance.open();
     });
 
     appearEmptyDocumentation();
@@ -96,8 +41,17 @@ $(document).ready(async function(){
         .on("click", ".change_privacy_yes_btn", submitChangeDocumentPrivacy)
         .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
         .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy)
+        .on("click", ".document_block", redirectToDocumentView)
+        .on("click", ".invite_collaborators_btn", function(event){
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            let invite_modal = document.querySelector("#modal1");
+            var instance = M.Modal.getInstance(invite_modal);
+            instance.open();
+        })
         .on("blur", ".document_title", (event) => {
-            $(this).closest(".edit_title_form").trigger("submit");
+            /** Check if empty title; Revert to old title if empty */
+            $(event.target).closest(".edit_title_form").trigger("submit");
         })
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
         .on("click", ".duplicate_icon", duplicateDocumentation)
@@ -108,6 +62,46 @@ $(document).ready(async function(){
         .on("click", "#archive_confirm", submitArchive)
         .on("click", "#remove_confirm", submitRemoveDocumentation)
         .on("submit", "#reorder_documentations_form", submitReorderDocumentations)
+        .on("click", ".access_btn", async function(event){
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            let confirm_modal = document.querySelector("#confirm_to_public");
+            var instance = M.Modal.getInstance(confirm_modal);
+            await displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
+            instance.open();
+    
+            let change_document_privacy_form = $("#change_document_privacy_form");
+            change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
+            change_document_privacy_form.find("#update_value").val(0);    
+        })
+        .on("click", ".set_to_public_icon", async function(event){
+            event.stopImmediatePropagation();
+            event.preventDefault();
+    
+            let change_document_privacy_form = $("#change_document_privacy_form");
+            change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
+            change_document_privacy_form.find("#update_value").val(0);
+    
+            let confirm_modal = document.querySelector("#confirm_to_public");
+            var instance = M.Modal.getInstance(confirm_modal);
+            await displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
+    
+            instance.open();
+        })
+        .on("click", ".set_to_private_icon", async function(event){
+            event.stopImmediatePropagation();
+            event.preventDefault();
+    
+            let change_document_privacy_form = $("#change_document_privacy_form");
+            change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
+            change_document_privacy_form.find("#update_value").val(1);
+    
+            let confirm_modal = document.querySelector("#confirm_to_private");
+            var instance = M.Modal.getInstance(confirm_modal);
+    
+            await displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
+            instance.open();
+        });
         
 });
 
@@ -183,6 +177,7 @@ function toggleEditDocumentationTitle(event){
     let document_block = edit_title_btn.closest(".document_block");
     let document_title = document_block.find(".document_details .document_title");
     let end = document_title.val().length;
+    document_block.removeClass("error");
 
     document_title[0].removeAttribute("readonly");
     document_title[0].setSelectionRange(end, end);
@@ -427,8 +422,6 @@ function submitRemoveDocumentation(event){
     let remove_modal = document.querySelector("#confirm_to_remove");
     var instance = M.Modal.getInstance(remove_modal);
     instance.close();
-
-    displayModalDocumentationTitle(remove_modal, $(this).closest(".document_block"));
 
     return false;
 }
