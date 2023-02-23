@@ -685,6 +685,16 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
   width: 10px;
 }
+.sortable-ghost {
+  background: #b5c4e4 !important;
+  border: none !important;
+  box-shadow: 0 0 6px #b5c4e4 !important;
+}
+.sortable-ghost *,
+.sortable-ghost::after,
+.sortable-ghost::before {
+  visibility: hidden !important;
+}
 .animated_blinkBorder {
   animation-name: blinkBorder;
 }
@@ -739,6 +749,23 @@ body::-webkit-scrollbar-thumb {
 }
 .error {
   border: 1px solid #da4d4d !important;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+#select_section_form {
+  display: none !important;
+}
+.header_mobile {
+  background: url("https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/v88_logo.svg") no-repeat center left;
+}
+.header_mobile .user_profile {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+}
+.header_mobile a {
+  display: none !important;
 }
 .container {
   background-color: #ffffff;
