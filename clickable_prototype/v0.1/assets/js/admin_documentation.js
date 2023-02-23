@@ -51,6 +51,11 @@ $(document).ready(async function(){
     $(".set_to_public_icon").on("click", function(event){
         event.stopImmediatePropagation();
         event.preventDefault();
+
+        let change_document_privacy_form = $("#change_document_privacy_form");
+        change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
+        change_document_privacy_form.find("#update_value").val(0);
+
         let confirm_modal = document.querySelector("#confirm_to_public");
         var instance = M.Modal.getInstance(confirm_modal);
 
@@ -61,6 +66,11 @@ $(document).ready(async function(){
     $(".set_to_private_icon").on("click", function(event){
         event.stopImmediatePropagation();
         event.preventDefault();
+
+        let change_document_privacy_form = $("#change_document_privacy_form");
+        change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
+        change_document_privacy_form.find("#update_value").val(1);
+
         let confirm_modal = document.querySelector("#confirm_to_private");
         var instance = M.Modal.getInstance(confirm_modal);
 
@@ -225,11 +235,14 @@ function onSubmitDuplicateForm(event){
             let documentation = $(`#document_${post_data.result.documentation_id}`);
             documentation.addClass("animate__animated animate__fadeIn");
             documentation.on("animationend", () => {
-                documentation.removeClass("animate__animated", "animate__fadeIn");
+                documentation.removeClass("animate__animated animate__fadeIn");
             });
 
             $(".remove_btn").on("click", setRemoveDocumentationValue);
             initializeMaterializeDropdown();
+        }
+        else {
+            alert(post_data.error);
         }
 
         post_form[0].reset();
@@ -282,7 +295,9 @@ function appearArchivedDocumentations(event){
 function setDocumentPrivacyValues(event){
     const documentation         = event.target;
     const documentation_id      = documentation.getAttribute("data-document_id");
+    console.log('documentation_id', documentation_id)
     const documentation_privacy = documentation.getAttribute("data-document_privacy");
+    console.log('documentation_privacy', documentation_privacy)
 
     /* Set form values */
     let change_document_privacy_form = $("#change_document_privacy_form");
