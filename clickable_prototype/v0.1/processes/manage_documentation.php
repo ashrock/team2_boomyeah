@@ -63,12 +63,14 @@
                     $response_data["status"] = true;
                     $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
                     
-                    if(!$documentations_count){
+                    if(($_POST["remove_is_archived"] == "{$_NO}" && !$documentations_count) || ($_POST["remove_is_archived"] == "{$_YES}" && $_POST["archived_documentations"] == "0")){
                         $message = ($_POST["remove_is_archived"] == "{$_NO}") ? "You have no documentations yet." : "You have no archived documentations yet.";
 
                         $response_data["result"]["is_archived"]            = $_POST["remove_is_archived"];
                         $response_data["result"]["no_documentations_html"] = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
                     }
+
+                    
                 } 
                 else {
                     $response_data["error"] = "You are not allowed to do this action!";
