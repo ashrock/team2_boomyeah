@@ -39,9 +39,9 @@
     <div id="invite_modal"><?php include_once("../partials/invite_modal.php"); ?></div>
     <div id="wrapper">
         <div class="container">
-            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="add_documentation_form" method="POST">
+            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="add_documentation_form" method="POST" autocomplete="off">
                 <div class="group_add_documentation input-field">
-                    <input id="input_add_documentation" type="text" class="validate" name="document_title" autofocus>
+                    <input id="input_add_documentation" type="text" class="validate" name="document_title" autofocus autocomplete="nope">
                     <input type="hidden" name="action" value="create_documentation">
                     <label for="input_add_documentation">Add Documentation</label>
                 </div>
