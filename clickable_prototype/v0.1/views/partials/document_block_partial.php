@@ -1,11 +1,11 @@
 <div id="document_<?= $id ?>" class="document_block">
-    <form action="../../processes/manage_documentation.php" method="POST" class="document_details edit_title_form">
-        <input type="text" name="update_value" value="<?= $title ?>" id="" class="document_title" readonly="">
+    <form action="../../processes/manage_documentation.php" method="POST" class="document_details edit_title_form" autocomplete="off">
+        <input type="text" name="update_value" value="<?= $title ?>" class="document_title" readonly="" autocomplete="nope">
         <input type="hidden" name="action" value="update_documentation">
         <input type="hidden" name="update_type" value="title">
         <input type="hidden" name="documentation_id" value="<?= $id ?>">
         <?php if($is_private){ ?>
-            <button class="invite_collaborators_btn modal-trigger <?= ($is_archived) ? 'archived_disabled' : '' ?>" href="#modal1">&nbsp;<?= $cache_collaborators_count ?></button>
+            <button type="button" class="invite_collaborators_btn modal-trigger <?= ($is_archived) ? 'archived_disabled' : '' ?>" tabindex="-1">&nbsp;<?= $cache_collaborators_count ?></button>
         <?php } ?>
     </form>
     <div class="document_controls">
