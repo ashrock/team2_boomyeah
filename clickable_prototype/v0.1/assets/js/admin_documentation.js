@@ -135,8 +135,9 @@ function onSubmitAddDocumentationForm(event){
         $.post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
                 /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
-                alert("Documentation added succesfully!");
-                $("#add_documentation_form")[0].reset();
+                alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
+                // $("#add_documentation_form")[0].reset();
+                location.reload();
             }
             else{
                 alert(response_data.error);
@@ -144,6 +145,14 @@ function onSubmitAddDocumentationForm(event){
         }, "json");
         
         return;
+    }
+    else{
+        let add_documentation_input = $(".group_add_documentation");
+
+        add_documentation_input.addClass("input_error").addClass("animate__animated animate__headShake");
+        add_documentation_input.on("animationend", () => {
+            add_documentation_input.removeClass("animate__animated animate__headShake");
+        });
     }
 }
 
