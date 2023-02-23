@@ -78,22 +78,7 @@ $(document).ready(async function(){
         instance.open();
     });
 
-    $("#duplicate_documentation_form").on("submit", onSubmitDuplicateForm);
-    $("#change_document_privacy_form").on("submit", onSubmitChangePrivacy);
     appearEmptyDocumentation();
-
-    $(".duplicate_icon").on("click", duplicateDocumentation);
-
-    $(".active_docs_btn").on("click", appearActiveDocumentation);
-    $(".archived_docs_btn").on("click", appearArchivedDocumentations);
-    
-    $("#archive_confirm").on("click", submitArchive);
-    $("#remove_confirm").on("click", submitRemoveDocumentation);
-    $("#remove_invited_user_confirm").on("click", submitRemoveInvitedUser);
-    $("#add_invite_btn").on("click", addPeopleWithAccess);
-
-    $(".invited_user_role").on("change", setRoleChangeAction);
-    $("#reorder_documentations_form").on("submit", submitReorderDocumentations);
 
     /* run functions from invite_modal.js */
     initChipsInstance();
@@ -110,10 +95,20 @@ $(document).ready(async function(){
         .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
         .on("click", ".change_privacy_yes_btn", submitChangeDocumentPrivacy)
         .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
+        .on("click", "#change_document_privacy_form", onSubmitChangePrivacy)
         .on("blur", ".document_title", (event) => {
             $(this).closest(".edit_title_form").trigger("submit");
         })
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
+        .on("click", ".duplicate_icon", duplicateDocumentation)
+        .on("click", "#duplicate_documentation_form", onSubmitDuplicateForm)
+        .on("click", ".active_docs_btn", appearActiveDocumentation)
+        .on("click", ".archived_docs_btn", appearArchivedDocumentations)
+        .on("click", ".archived_docs_btn", appearArchivedDocumentations)
+        .on("click", "#archive_confirm", submitArchive)
+        .on("click", "#remove_confirm", submitRemoveDocumentation)
+        .on("click", "#reorder_documentations_form", submitReorderDocumentations)
+        
 });
 
 async function displayModalDocumentationTitle(confirm_modal, document_block){
@@ -233,12 +228,11 @@ function onSubmitDuplicateForm(event){
             $(`#document_${document_id}`).after(post_data.result.html);
 
             let documentation = $(`#document_${post_data.result.documentation_id}`);
-            documentation.addClass("animate__animated animate__fadeIn");
+            documentation.addClass("animate__animated animate__fadeIn animate__slower");
             documentation.on("animationend", () => {
-                documentation.removeClass("animate__animated animate__fadeIn");
+                documentation.removeClass("animate__animated animate__fadeIn animate__slower");
             });
 
-            $(".remove_btn").on("click", setRemoveDocumentationValue);
             initializeMaterializeDropdown();
         }
         else {
@@ -387,7 +381,7 @@ function setRemoveDocumentationValue(event){
 
     let remove_modal = document.querySelector("#confirm_to_remove");
     var instance = M.Modal.getInstance(remove_modal);
-    displayModalDocumentationTitle($(remove_modal), $(this).closest(".document_block"));
+    displayModalDocumentationTitle($("#confirm_to_remove"), $(this).closest(".document_block"));
     instance.open();
 }
 
