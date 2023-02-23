@@ -224,11 +224,14 @@ function onSubmitDuplicateForm(event){
             let documentation = $(`#document_${post_data.result.documentation_id}`);
             documentation.addClass("animate__animated animate__fadeIn");
             documentation.on("animationend", () => {
-                documentation.removeClass("animate__animated", "animate__fadeIn");
+                documentation.removeClass("animate__animated animate__fadeIn");
             });
 
             $(".remove_btn").on("click", setRemoveDocumentationValue);
             initializeMaterializeDropdown();
+        }
+        else {
+            alert(post_data.error);
         }
 
         post_form[0].reset();
