@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     appearEmptyDocumentation();
 
     $(".duplicate_icon").on("click", duplicateDocumentation);
-    $(".document_title").on("blur", onChangeDocumentationTitle);
 
     $(".active_docs_btn").on("click", appearActiveDocumentation);
     $(".archived_docs_btn").on("click", appearArchivedDocumentations);
@@ -100,7 +99,10 @@ $(document).ready(function(){
         .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
         .on("click", ".change_privacy_yes_btn", submitChangeDocumentPrivacy)
         .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
-        .on("blur", ".document_title", onChangeDocumentationTitle)
+        .on("blur", ".document_title", (event) => {
+            $(this).closest(".edit_title_form").trigger("submit");
+        })
+        .on("submit", ".edit_title_form", onChangeDocumentationTitle)
 });
 
 function submitInvite(event){
@@ -163,7 +165,7 @@ function toggleEditDocumentationTitle(event){
     let end = document_title.val().length;
 
     document_title[0].removeAttribute("readonly");
-    document_title[0].setSelectionRange(0, end);
+    document_title[0].setSelectionRange(end, end);
     
     setTimeout(() => {
         document_title[0].focus();
@@ -172,19 +174,23 @@ function toggleEditDocumentationTitle(event){
 
 function onChangeDocumentationTitle(event){
     event.preventDefault();
-
-    let document_title = event.target;
-    document_title.setAttribute("readonly", "");
-
-    let document_title_input = $(this);
-    let edit_doc_title_form = document_title_input.closest(".edit_title_form");
-
+    let edit_doc_title_form = $(this);
+    let document_title_input = edit_doc_title_form.find(".document_title");
+    let parent_document_block = edit_doc_title_form.closest(".document_block");
+    parent_document_block.removeClass("error");
+    
     if(document_title_input.val()){
+        document_title_input.attr("readonly", "");
+
         /** Use AJAX to generate new documentation */
         $.post(edit_doc_title_form.attr("action"), edit_doc_title_form.serialize(), (response_data) => {
             if(response_data.status){
                 /* TODO: Improve UX after success updating of title. Add animation. */
-                edit_doc_title_form.parent().addClass("animate__animated animate__fadeIn").removeClass("error");
+                parent_document_block.addClass("animate__animated animated_blinkBorder").removeClass("error");
+                
+                setTimeout(() => {
+                    parent_document_block.removeClass("animate__animated animated_blinkBorder");
+                }, 480);
             }
             else{
                 /* TODO: Improve UX after updating empty title. Add animation red border. */
@@ -193,8 +199,7 @@ function onChangeDocumentationTitle(event){
         }, "json");
     }
     else{
-        alert("Please add documentation title");
-        edit_doc_title_form.parent().addClass("error");
+        parent_document_block.addClass("error");
     }
     return;
 }

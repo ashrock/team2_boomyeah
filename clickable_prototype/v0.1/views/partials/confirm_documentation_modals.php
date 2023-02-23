@@ -3,7 +3,7 @@
     <div id="confirm_to_public" class="modal">
         <div class="modal-content">
             <h4>Confirmation</h4>
-            <p>Are you sure you want to change this documentation to Public?</p>
+            <p>Are you sure you want to change `<span class="documentation_title"></span>` documentation to Public?</p>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
@@ -15,7 +15,7 @@
     <div id="confirm_to_private" class="modal">
         <div class="modal-content">
             <h4>Confirmation</h4>
-            <p>Are you sure you want to change this documentation to Private?</p>
+            <p>Are you sure you want to change `<span class="documentation_title"></span>` documentation to Private?</p>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
@@ -27,7 +27,7 @@
     <div id="confirm_to_archive" class="modal">
         <div class="modal-content">
             <h4>Confirmation</h4>
-            <p>Are you sure you want to move this documentation to Archive?</p>
+            <p>Are you sure you want to move `<span class="documentation_title"></span>` documentation to Archive?</p>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
@@ -39,7 +39,7 @@
     <div id="confirm_to_remove" class="modal">
         <div class="modal-content">
             <h4>Confirmation</h4>
-            <p>Are you sure you want to remove this documentation?</p>
+            <p>Are you sure you want to remove `<span class="documentation_title"></span>` documentation?</p>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
