@@ -97,35 +97,36 @@ textarea{
             align-items: center;
             display: flex;
             justify-content: space-between;
-            a{
-                background: @by_white;
-                border-radius: 40px;
-                border: 1px solid @by_border;
-                font: 14px/20px @readex_medium;
-                margin: 0 16px;
-                padding: 10px 54px 10px 24px;
-                position: relative;
-                text-decoration: none;
-                &::after{
-                    background: url('../../assets/images/header_sprite.svg') no-repeat;
-                    background-position: 1px 0px;
-                    content: '';
-                    display: inline;
-                    height: 24px;
-                    position: absolute;
-                    right: 20px;
-                    top: 8px;
-                    width: 24px;
-                }
-
-            }
             .user_settings{
-                button{
+                #logout{
                     background: url("../images/header_sprite.svg") no-repeat;
                     background-position: -40px 0px;
                     border: none;
-                    height: 28px;
+                    color: transparent;
+                    cursor: pointer;
+                    display: inline-block;
+                    height: 29px;
+                    transform: translate(8px, -10px);
                     width: 28px;
+                }
+                #dropdown_logout{
+                    height: 40px;
+                    overflow: hidden;
+                    li{
+                        background: @by_archived_bg;
+                        border-radius: 8px;
+                        .log_out_btn{
+                            color: @by_gray;
+                            font: 12px/16px @readex_regular;
+                            padding: 12px 0;
+                            position: relative;
+                            text-align: center;
+                            z-index: 9999;
+                        }
+                        &:hover{
+                            background: @by_hover;
+                        }
+                    }
                 }
             }
         }
@@ -736,6 +737,15 @@ body::-webkit-scrollbar-thumb {
     background-color: @by_lightgray;
     border-radius: 10px;
     width: 10px;
+}
+.sortable-ghost{
+    background: @by_off_gray !important;
+    border: none !important;
+    box-shadow: 0 0 6px @by_off_gray !important;
+    
+    *, &::after, &::before {
+        visibility: hidden !important;
+    }
 }
 .animated_blinkBorder{
     animation-name: blinkBorder;
