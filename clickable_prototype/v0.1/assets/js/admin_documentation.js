@@ -367,10 +367,10 @@ function setRemoveDocumentationValue(event){
     event.stopImmediatePropagation();
 
     const documentation    = $(this);
-    const documentation_id = documentation.data("document_id");
 
     /* Set form values */
-    $("#remove_documentation_form #remove_documentation_id").val(documentation_id);
+    $("#remove_documentation_form #remove_documentation_id").val(documentation.data("document_id"));
+    $("#remove_documentation_form #remove_is_archived").val(documentation.data("is_archived"));
 
     let remove_modal = document.querySelector("#confirm_to_remove");
     var instance = M.Modal.getInstance(remove_modal);
@@ -384,12 +384,20 @@ function submitRemoveDocumentation(event){
     let form = $("#remove_documentation_form");
 
     $.post(form.attr("action"), form.serialize(), (response_data) => {
-        let documentation = $(`#document_${response_data.result.documentation_id}`);
+        if(response_data.status){
+            let documentation = $(`#document_${response_data.result.documentation_id}`);
+    
+            documentation.addClass("animate__animated animate__fadeOut");
+            documentation.on("animationend", () => {
+                documentation.remove();
+            });
 
-        documentation.addClass("animate__animated animate__fadeOut");
-        documentation.on("animationend", () => {
-            documentation.remove();
-        });
+            if(response_data.result.hasOwnProperty("no_documentations_html")){
+                let documentations_div = (response_data.result.is_archived === "0") ? "#documentations" : "#archived_documents";
+
+                $(documentations_div).html(response_data.result.no_documentations_html);
+            }
+        }
 
     }, "json");
 

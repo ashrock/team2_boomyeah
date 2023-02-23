@@ -31,11 +31,13 @@
                 <?php } else{ ?>
                     <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="<?= $id ?>" data-document_privacy="public">Set to Private</a></li>
                 <?php } ?>
+                <li class="divider" tabindex="-1"></li>
+                <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="<?= $id ?>" data-documentation_action="remove" data-is_archived="0">Remove</a></li>
             <?php }else{ ?>
                 <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="<?= $id ?>" data-documentation_action="unarchive">Unarchive</a></li>
+                <li class="divider" tabindex="-1"></li>
+                <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="<?= $id ?>" data-documentation_action="remove" data-is_archived="1">Remove</a></li>
             <?php } ?>
-            <li class="divider" tabindex="-1"></li>
-            <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="<?= $id ?>" data-documentation_action="remove">Remove</a></li>
         </ul>
     </div>
 </div>
