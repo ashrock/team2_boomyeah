@@ -396,7 +396,7 @@ function setRemoveDocumentationValue(event){
 
     let remove_modal = document.querySelector("#confirm_to_remove");
     var instance = M.Modal.getInstance(remove_modal);
-    displayModalDocumentationTitle($("#confirm_to_remove"), $(this).closest(".document_block"));
+    displayModalDocumentationTitle($(remove_modal), $(this).closest(".document_block"));
     instance.open();
 }
 
