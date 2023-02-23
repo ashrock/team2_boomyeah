@@ -135,8 +135,9 @@ function onSubmitAddDocumentationForm(event){
         $.post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
                 /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
-                alert("Documentation added succesfully!");
-                $("#add_documentation_form")[0].reset();
+                alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
+                // $("#add_documentation_form")[0].reset();
+                location.reload();
             }
             else{
                 alert(response_data.error);
@@ -144,6 +145,14 @@ function onSubmitAddDocumentationForm(event){
         }, "json");
         
         return;
+    }
+    else{
+        let add_documentation_input = $(".group_add_documentation");
+
+        add_documentation_input.addClass("input_error").addClass("animate__animated animate__headShake");
+        add_documentation_input.on("animationend", () => {
+            add_documentation_input.removeClass("animate__animated animate__headShake");
+        });
     }
 }
 
@@ -216,6 +225,11 @@ function onChangeDocumentationTitle(event){
     }
     else{
         parent_document_block.addClass("error");
+
+        parent_document_block.addClass("input_error").addClass("animate__animated animate__headShake");
+        parent_document_block.on("animationend", () => {
+            parent_document_block.removeClass("animate__animated animate__headShake");
+        });
     }
     return;
 }
@@ -295,9 +309,8 @@ function appearArchivedDocumentations(event){
 function setDocumentPrivacyValues(event){
     const documentation         = event.target;
     const documentation_id      = documentation.getAttribute("data-document_id");
-    console.log('documentation_id', documentation_id)
     const documentation_privacy = documentation.getAttribute("data-document_privacy");
-    console.log('documentation_privacy', documentation_privacy)
+    $("#confirm_to_public").find(".documentation_title").text( $(this).closest(".document_block").find(".document_title").val() );
 
     /* Set form values */
     let change_document_privacy_form = $("#change_document_privacy_form");
@@ -316,10 +329,12 @@ function onSubmitChangePrivacy(event){
         if(post_data.status){
             /* TODO: Improve UX after success updating. Add animation to indication the replace with the updated . */
             $(`#document_${post_data.result.documentation_id}`).replaceWith(post_data.result.html);
-
+            $(`#document_${post_data.result.documentation_id}`).addClass("animate__animated animated_blinkBorder").removeClass("error");
+                
             setTimeout(() => {
+                $(`#document_${post_data.result.documentation_id}`).removeClass("animate__animated animated_blinkBorder");
                 initializeMaterializeDropdown();
-            }, 148);
+            }, 1280);
         }
 
         post_form[0].reset();
