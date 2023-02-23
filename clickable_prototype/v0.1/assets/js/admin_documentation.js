@@ -95,19 +95,19 @@ $(document).ready(async function(){
         .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
         .on("click", ".change_privacy_yes_btn", submitChangeDocumentPrivacy)
         .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
-        .on("click", "#change_document_privacy_form", onSubmitChangePrivacy)
+        .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy)
         .on("blur", ".document_title", (event) => {
             $(this).closest(".edit_title_form").trigger("submit");
         })
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
         .on("click", ".duplicate_icon", duplicateDocumentation)
-        .on("click", "#duplicate_documentation_form", onSubmitDuplicateForm)
+        .on("submit", "#duplicate_documentation_form", onSubmitDuplicateForm)
         .on("click", ".active_docs_btn", appearActiveDocumentation)
         .on("click", ".archived_docs_btn", appearArchivedDocumentations)
         .on("click", ".archived_docs_btn", appearArchivedDocumentations)
         .on("click", "#archive_confirm", submitArchive)
         .on("click", "#remove_confirm", submitRemoveDocumentation)
-        .on("click", "#reorder_documentations_form", submitReorderDocumentations)
+        .on("submit", "#reorder_documentations_form", submitReorderDocumentations)
         
 });
 
