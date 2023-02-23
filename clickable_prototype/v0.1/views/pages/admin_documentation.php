@@ -34,9 +34,9 @@
 
 <body>
     <!--- Add #main_navigation --->
-    <div id="main_navigation"><?= include_once("../partials/main_navigation.php") ?></div>
+    <div id="main_navigation"><?php include_once("../partials/main_navigation.php"); ?></div>
     <!--- Add #invite_modal --->
-    <div id="invite_modal"><?= include_once("../partials/invite_modal.php") ?></div>
+    <div id="invite_modal"><?php include_once("../partials/invite_modal.php"); ?></div>
     <div id="wrapper">
         <div class="container">
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="add_documentation_form" method="POST">

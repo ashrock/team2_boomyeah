@@ -745,9 +745,13 @@ body::-webkit-scrollbar-thumb {
 #select_section_form {
   display: none !important;
 }
-.header_mobile img {
+.header_mobile {
+  background: url("https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/v88_logo.svg") no-repeat center left;
+}
+.header_mobile .user_profile {
   position: absolute;
   right: 10px;
+  top: 6px;
 }
 .header_mobile a {
   display: none !important;
