@@ -4,6 +4,11 @@ let select = document.querySelectorAll('select');
 let dropdown = M.FormSelect.init(select);
 let search_timeout = null;
 
+const elem = document.querySelectorAll('.dropdown-action');
+M.Dropdown.init(elem, {
+    coverTrigger: false
+});
+
 $(document).on("ready", () => {
     $("#search_documentation_field").on("keydown", onSearchDocumentation);
     $("#search_section_field").on("keyup", onSearchSection);
