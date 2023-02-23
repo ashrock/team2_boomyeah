@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", async () => {
+$(document).ready(async function(){
+    
     let modal = document.querySelectorAll('.modal');
     let instances = M.Modal.init(modal);
 
@@ -39,6 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         event.preventDefault();
         let confirm_modal = document.querySelector("#confirm_to_public");
         var instance = M.Modal.getInstance(confirm_modal);
+        displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
         instance.open();
 
         let change_document_privacy_form = $("#change_document_privacy_form");
@@ -46,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         change_document_privacy_form.find("#update_value").val(0);    
     });
     
-    $(".set_to_public_icon ").on("click", function(event){
+    $(".set_to_public_icon").on("click", function(event){
         event.stopImmediatePropagation();
         event.preventDefault();
 
@@ -56,6 +58,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         let confirm_modal = document.querySelector("#confirm_to_public");
         var instance = M.Modal.getInstance(confirm_modal);
+
+        displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
         instance.open();
     });
 
@@ -69,9 +73,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         let confirm_modal = document.querySelector("#confirm_to_private");
         var instance = M.Modal.getInstance(confirm_modal);
+
+        displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
         instance.open();
     });
-    
+
     $("#duplicate_documentation_form").on("submit", onSubmitDuplicateForm);
     $("#change_document_privacy_form").on("submit", onSubmitChangePrivacy);
     appearEmptyDocumentation();
@@ -96,11 +102,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     M.Dropdown.init($("#docs_view_btn")[0]);
 
-    $(".set_privacy_btn").on("click", setDocumentPrivacyValues);
-});
-
-$(document).ready(function(){
-    
     $("body")
         .on("submit", "#add_documentation_form", onSubmitAddDocumentationForm)
         .on("submit", "#get_documentations_form", getDocumentations)
@@ -114,6 +115,11 @@ $(document).ready(function(){
         })
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
 });
+
+async function displayModalDocumentationTitle(confirm_modal, document_block){
+    let document_title = await document_block.find(".document_title").val();
+    confirm_modal.find(".documentation_title").text(document_title);
+}
 
 function submitInvite(event){
     event.preventDefault();
@@ -335,8 +341,10 @@ function setArchiveValue(event){
     let document_id     = archive_button.attr("data-document_id");
     let document_action = archive_button.attr("data-documentation_action");
     let is_archived     = (document_action == "archive");
-
-    $("#confirm_to_archive").find("p").text( (is_archived) ? "Are you sure you want to move this documentation to Archive?" : "Are you sure you want to Unarchive this documentation?");
+    let document_block = archive_button.closest(".document_block");
+    let document_title = document_block.find(".document_title").val();
+    let confirmation_text = (is_archived) ? "Are you sure you want to move `"+ document_title +"` documentation to Archive?" : "Are you sure you want to Unarchive `"+ document_title +"` documentation?";
+    $("#confirm_to_archive").find("p").text( confirmation_text );
     
     /* Set form values */
     let archive_document_form = $("#archive_form");
@@ -372,13 +380,14 @@ function setRemoveDocumentationValue(event){
     event.stopImmediatePropagation();
 
     const documentation    = $(this);
-    const documentation_id = documentation.data("document_id");
 
     /* Set form values */
-    $("#remove_documentation_form #remove_documentation_id").val(documentation_id);
+    $("#remove_documentation_form #remove_documentation_id").val(documentation.data("document_id"));
+    $("#remove_documentation_form #remove_is_archived").val(documentation.data("is_archived"));
 
     let remove_modal = document.querySelector("#confirm_to_remove");
     var instance = M.Modal.getInstance(remove_modal);
+    displayModalDocumentationTitle($(remove_modal), $(this).closest(".document_block"));
     instance.open();
 }
 
@@ -389,18 +398,28 @@ function submitRemoveDocumentation(event){
     let form = $("#remove_documentation_form");
 
     $.post(form.attr("action"), form.serialize(), (response_data) => {
-        let documentation = $(`#document_${response_data.result.documentation_id}`);
+        if(response_data.status){
+            let documentation = $(`#document_${response_data.result.documentation_id}`);
+    
+            documentation.addClass("animate__animated animate__fadeOut");
+            documentation.on("animationend", () => {
+                documentation.remove();
+            });
 
-        documentation.addClass("animate__animated animate__fadeOut");
-        documentation.on("animationend", () => {
-            documentation.remove();
-        });
+            if(response_data.result.hasOwnProperty("no_documentations_html")){
+                let documentations_div = (response_data.result.is_archived === "0") ? "#documentations" : "#archived_documents";
+
+                $(documentations_div).html(response_data.result.no_documentations_html);
+            }
+        }
 
     }, "json");
 
     let remove_modal = document.querySelector("#confirm_to_remove");
     var instance = M.Modal.getInstance(remove_modal);
     instance.close();
+
+    displayModalDocumentationTitle(remove_modal, $(this).closest(".document_block"));
 
     return false;
 }
