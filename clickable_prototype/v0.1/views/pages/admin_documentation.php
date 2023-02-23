@@ -66,24 +66,17 @@
                         ORDER BY FIELD (id, {$documentations_order});
                     ");
 
-                    for($documentations_index = 0; $documentations_index < count($documentations); $documentations_index++){
-                        load_view("../partials/document_block_partial.php", $documentations[$documentations_index]);
+                    if(count($documentations)){
+                        for($documentations_index = 0; $documentations_index < count($documentations); $documentations_index++){
+                            load_view("../partials/document_block_partial.php", $documentations[$documentations_index]);
+                        }
+                    }
+                    else {
+                        load_view("../partials/no_documentations_partial.php", array("message" => "You have no documentations yet."));
                     }
                 ?>
-                <!-- <div class="no_documents hidden">
-                    <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
-                        alt="Empty Content Illustration">
-                    <p>You have no documentations yet</p>
-                </div> -->
             </div>
-            <div id="archived_documents" class="hidden">
-                <!-- Print HTML returned by BE -->
-                <div class="no_archived_documents hidden">
-                    <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
-                        alt="Empty Content Illustration">
-                    <p>You have no archived documentations yet</p>
-                </div>
-            </div>
+            <div id="archived_documents" class="hidden"></div>
         </div>
     </div>
     <form id="get_documentations_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
@@ -97,6 +90,7 @@
     <form id="remove_documentation_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
         <input type="hidden" name="action" value="remove_documentation">
         <input type="hidden" id="remove_documentation_id" name="remove_documentation_id">
+        <input type="hidden" id="remove_is_archived" name="remove_is_archived">
     </form>
     <form id="reorder_documentations_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
         <input type="hidden" name="action" value="reorder_documentations">

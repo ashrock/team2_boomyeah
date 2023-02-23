@@ -26,9 +26,15 @@
                 // Run MySQL query
                 $get_documentations = fetch_all($get_documentations_query);
 
-                // Generate HTML
-                for($documentations_index = 0; $documentations_index < count($get_documentations); $documentations_index++){
-                    $get_documentations_html .= get_include_contents("../views/partials/document_block_partial.php", $get_documentations[$documentations_index]);
+                if(count($get_documentations)){
+                    // Generate HTML
+                    for($documentations_index = 0; $documentations_index < count($get_documentations); $documentations_index++){
+                        $get_documentations_html .= get_include_contents("../views/partials/document_block_partial.php", $get_documentations[$documentations_index]);
+                    }
+                }
+                else{
+                    $message = ($_POST["is_archived"] == "{$_NO}") ? "You have no documentations yet." : "You have no archived documentations yet.";
+                    $get_documentations_html = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
                 }
     
                 $response_data["status"] = true;
@@ -48,13 +54,21 @@
                     
                     if($documentation_index !== FALSE){
                         unset($documentations_order[$documentation_index]);
+                        $documentations_count = count($documentations_order);
 
-                        $documentations_order = implode(",", $documentations_order);
+                        $documentations_order = ($documentations_count) ? implode(",", $documentations_order) : "";
                         run_mysql_query("UPDATE workspaces SET documentations_order = '{$documentations_order}' WHERE id = {$_SESSION["workspace_id"]};");
                     }
 
                     $response_data["status"] = true;
                     $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
+                    
+                    if(!$documentations_count){
+                        $message = ($_POST["remove_is_archived"] == "{$_NO}") ? "You have no documentations yet." : "You have no archived documentations yet.";
+
+                        $response_data["result"]["is_archived"]            = $_POST["remove_is_archived"];
+                        $response_data["result"]["no_documentations_html"] = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
+                    }
                 } 
                 else {
                     $response_data["error"] = "You are not allowed to do this action!";
