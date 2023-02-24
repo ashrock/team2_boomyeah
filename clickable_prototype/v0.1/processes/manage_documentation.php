@@ -138,6 +138,8 @@
                                     }
 
                                     $update_workspace = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
+
+                                    // TODO: Add checker whether we need to generate HTML for displaying that there are no more documentations (active/archived)
                                 }
                             }
                         }
