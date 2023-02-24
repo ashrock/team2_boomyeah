@@ -383,7 +383,7 @@ function submitArchive(event){
 function setRemoveDocumentationValue(event){
     event.stopImmediatePropagation();
 
-    const documentation    = $(this);
+    const documentation = $(this);
 
     /* Set form values */
     $("#remove_documentation_form #remove_documentation_id").val(documentation.data("document_id"));
@@ -399,9 +399,14 @@ function submitRemoveDocumentation(event){
     event.stopImmediatePropagation();
     event.preventDefault();
 
-    let form = $("#remove_documentation_form");
+    let form      = $("#remove_documentation_form");
+    let form_data = form.serialize(); 
+    
+    if($("#remove_documentation_form #remove_is_archived").val() == "1"){
+        form_data += `&archived_documentations=${$("#archived_documents .document_block").length - 1}`;
+    } 
 
-    $.post(form.attr("action"), form.serialize(), (response_data) => {
+    $.post(form.attr("action"), form_data, (response_data) => {
         if(response_data.status){
             let documentation = $(`#document_${response_data.result.documentation_id}`);
     

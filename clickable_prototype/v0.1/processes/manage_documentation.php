@@ -63,7 +63,7 @@
                     $response_data["status"] = true;
                     $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
                     
-                    if(!$documentations_count){
+                    if(($_POST["remove_is_archived"] == "{$_NO}" && !$documentations_count) || ($_POST["remove_is_archived"] == "{$_YES}" && $_POST["archived_documentations"] == "0")){
                         $message = ($_POST["remove_is_archived"] == "{$_NO}") ? "You have no documentations yet." : "You have no archived documentations yet.";
 
                         $response_data["result"]["is_archived"]            = $_POST["remove_is_archived"];
