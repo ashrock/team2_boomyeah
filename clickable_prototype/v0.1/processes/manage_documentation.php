@@ -117,6 +117,7 @@
                                 $response_data["status"] = true;
                                 $response_data["result"]["documentation_id"] = $updated_document["id"];
                                 $response_data["result"]["update_type"] = $_POST["update_type"];
+                                $response_data["result"]["is_archived"] = $update_value;
 
                                 if($_POST["update_type"] == "is_private"){
                                     $response_data["result"]["html"] = get_include_contents("../views/partials/document_block_partial.php", $updated_document);
@@ -129,9 +130,10 @@
                                     if($_POST["update_value"] == $_YES){
                                         if (($key = array_search($_POST["documentation_id"], $documentation_order_array)) !== false) {
                                             unset($documentation_order_array[$key]);
+                                            $documentations_count = count($documentation_order_array);
                                         }
 
-                                        $new_documents_order = implode(",", $documentation_order_array);
+                                        $new_documents_order = ($documentations_count) ? implode(",", $documentation_order_array) : "";
                                     }
                                     else {
                                         $new_documents_order = (strlen($workspace["documentations_order"])) ? $workspace["documentations_order"].','. $_POST["documentation_id"] : $_POST["documentation_id"];
@@ -139,7 +141,12 @@
 
                                     $update_workspace = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
 
-                                    // TODO: Add checker whether we need to generate HTML for displaying that there are no more documentations (active/archived)
+                                    if(($update_value == "{$_NO}" && $_POST["archived_documentations"] == "0") || ($update_value == "{$_YES}" && !$documentations_count)){
+                                        $message = ($update_value == "{$_NO}") ? "You have no archived documentations yet." : "You have no documentations yet.";
+                
+                                        $response_data["result"]["is_archived"]            = $update_value;
+                                        $response_data["result"]["no_documentations_html"] = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
+                                    }
                                 }
                             }
                         }
