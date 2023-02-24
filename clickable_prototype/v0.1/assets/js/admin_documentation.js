@@ -62,48 +62,29 @@ $(document).ready(async function(){
         .on("click", "#archive_confirm", submitArchive)
         .on("click", "#remove_confirm", submitRemoveDocumentation)
         .on("submit", "#reorder_documentations_form", submitReorderDocumentations)
-        .on("click", ".access_btn", async function(event){
+        .on("click", ".set_to_public_icon, .access_btn", async function(event){
             event.stopImmediatePropagation();
             event.preventDefault();
-            let confirm_modal = document.querySelector("#confirm_to_public");
-            var instance = M.Modal.getInstance(confirm_modal);
-            await displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
-            instance.open();
-    
-            let change_document_privacy_form = $("#change_document_privacy_form");
-            change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
-            change_document_privacy_form.find("#update_value").val(0);    
-        })
-        .on("click", ".set_to_public_icon", async function(event){
-            event.stopImmediatePropagation();
-            event.preventDefault();
-    
-            let change_document_privacy_form = $("#change_document_privacy_form");
-            change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
-            change_document_privacy_form.find("#update_value").val(0);
-    
-            let confirm_modal = document.querySelector("#confirm_to_public");
-            var instance = M.Modal.getInstance(confirm_modal);
-            await displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
-    
-            instance.open();
+            showConfirmPrivacyModal( $(this).attr("data-document_id"), 0, "#confirm_to_public", $(this).closest(".document_block"));
         })
         .on("click", ".set_to_private_icon", async function(event){
             event.stopImmediatePropagation();
             event.preventDefault();
-    
-            let change_document_privacy_form = $("#change_document_privacy_form");
-            change_document_privacy_form.find("#documentation_id").val($(this).attr("data-document_id"));
-            change_document_privacy_form.find("#update_value").val(1);
-    
-            let confirm_modal = document.querySelector("#confirm_to_private");
-            var instance = M.Modal.getInstance(confirm_modal);
-    
-            await displayModalDocumentationTitle($(confirm_modal), $(this).closest(".document_block"));
-            instance.open();
+            showConfirmPrivacyModal($(this).attr("data-document_id"), 1, "#confirm_to_private", $(this).closest(".document_block"));
         });
-        
 });
+
+async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type = "#confirm_to_private", document_block){
+    let change_document_privacy_form = $("#change_document_privacy_form");
+    change_document_privacy_form.find("#documentation_id").val(document_id);
+    change_document_privacy_form.find("#update_value").val(update_value);
+
+    let confirm_modal = document.querySelector(modal_type);
+    var instance = M.Modal.getInstance(confirm_modal);
+
+    await displayModalDocumentationTitle($(confirm_modal), document_block);
+    instance.open();
+}
 
 async function displayModalDocumentationTitle(confirm_modal, document_block){
     let document_title = await document_block.find(".document_title").val();
