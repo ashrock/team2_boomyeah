@@ -348,9 +348,14 @@ function setArchiveValue(event){
 }
 
 function submitArchive(event){
-    let archive_document_form = $("#archive_form");
+    let archive_document_form      = $("#archive_form");
+    let archive_document_form_data = archive_document_form.serialize();
 
-    $.post(archive_document_form.attr("action"), archive_document_form.serialize(), (response_data) => {
+    if($("#archive_form #update_value").val() == "0"){
+        archive_document_form_data += `&archived_documentations=${$("#archived_documents .document_block").length - 1}`;
+    }
+
+    $.post(archive_document_form.attr("action"), archive_document_form_data, (response_data) => {
         if(response_data.status){
             /* TODO: Improve UX after success updating. Add animation to remove the archived document from the list. */
             let documentation = $(`#document_${response_data.result.documentation_id}`);
@@ -360,7 +365,12 @@ function submitArchive(event){
                 documentation.remove();
             });
 
-            appearEmptyDocumentation();
+            // appearEmptyDocumentation();
+            if(response_data.result.hasOwnProperty("no_documentations_html")){
+                let documentations_div = (response_data.result.is_archived === "1") ? "#documentations" : "#archived_documents";
+    
+                $(documentations_div).html(response_data.result.no_documentations_html);
+            }
         }
         else{
             /* TODO: Improve UX after error. Add animation red border. */
