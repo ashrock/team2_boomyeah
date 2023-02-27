@@ -3,8 +3,8 @@ $(document).ready(async function(){
     let modal = document.querySelectorAll('.modal');
     let instances = M.Modal.init(modal);
 
-    const invite_form = document.querySelector("#invite_form");
-    invite_form.addEventListener("submit", submitInvite);
+    let invite_form = document.querySelector("#invite_form");
+    invite_form && invite_form.addEventListener("submit", submitInvite);
 
     Sortable.create(document.querySelector("#documentations"), {
         onEnd: () => {
