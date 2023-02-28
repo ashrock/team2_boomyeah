@@ -54,9 +54,10 @@ class Users extends CI_Controller {
 						$_SESSION["user_level_id"] = $register_user["result"]["user_info"]["user_level_id"];
 						$_SESSION["first_name"]    = $register_user["result"]["user_info"]["first_name"];
 						$_SESSION["last_name"]     = $register_user["result"]["user_info"]["last_name"];
+						$_SESSION["user_initials"] = $register_user["result"]["user_info"]["first_name"][0] . $register_user["result"]["user_info"]["last_name"][0];
 						$_SESSION["email"]         = $register_user["result"]["user_info"]["email"];
 	
-						redirect(($register_user["result"]["user_info"]["user_level_id"] == USER_LEVEL["ADMIN"]) ? "admin_documentations" : "user_documentations");
+						redirect(($register_user["result"]["user_info"]["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
 					}
 				}
 			}
@@ -67,7 +68,7 @@ class Users extends CI_Controller {
 		}
 		else{
 			// Redirect User to documentations page depending on User level
-			redirect(($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) ? "admin_documentations" : "user_documentations");
+			redirect(($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
 		}
 	}
 
