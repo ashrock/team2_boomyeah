@@ -48,7 +48,7 @@
             <li><a href="#!">Engineering</a></li>
         </ul>
         <form action="#" id="select_section_form" method="POST">
-            <div class="input-field select dropdown-trigger">
+            <div class="input-field select">
                 <select class='dropdown-content'>
                     <option value="employee_handbook">Employee Handbook</option>
                     <option value="about_company">About Company</option>
