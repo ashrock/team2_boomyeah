@@ -48,29 +48,24 @@
                 <h1 id="doc_title">Employee Handbook</h1>
                 <!-- Switch -->     
                 <div class="switch switch_btn">
-                    <label>
+                    <label for="set_privacy_switch">
                         <span class="toggle_text">Public</span>
-                        <input class="toggle_switch" type="checkbox">
+                        <input class="toggle_switch" type="checkbox" id="set_privacy_switch">
                         <span class="lever"></span>
                     </label>
                 </div>
-                <a id="invite_collaborator_btn" class="waves-effect waves-light btn modal-trigger hidden" href="#modal1">13 Collaborators</a>
+                <a id="invite_collaborator_btn" class="waves-effect waves-light btn modal-trigger hidden" href="#invite_collaborator_modal">13 Collaborators</a>
             </div>
             <p class="doc_text_content" contenteditable="true" data-placeholder="Add Description"></p>
-            <form action="#" id="section_form" method="post">
+            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
+                <input type="hidden" name="action" value="create_section">
                 <div class="group_add_section input-field">
-                    <input id="input_add_section" type="text" class="validate" autofocus>
+                    <input name="section_title" id="input_add_section" type="text" class="section_title validate" autofocus>
                     <label for="input_add_section">Add Section</label>
                 </div>
             </form>
             <div class="section_header">
                 <h2>Sections</h2>
-                <button class="sort_btn dropdown-trigger" data-target="sort_list">Sort by</button>
-                <!-- Dropdown Structure -->
-                <ul id="sort_list" class="dropdown-content sort_dropdown">
-                    <li><a href="#!" class="sort_by" data-sort-by="az">A-Z</a></li>
-                    <li><a href="#!" class="sort_by" data-sort-by="za">Z-A</a></li>
-                </ul>
             </div>
             <div class="section_container" id="section_container">
                 <?php
@@ -96,18 +91,6 @@
             </div>
         </div>
     </div>
-    <div id="confirmation_modal_remove_invited_user">
-        <div id="confirm_to_remove_invited_user" class="modal">
-            <div class="modal-content">
-                <h4>Confirmation</h4>
-                <p>Are you sure you want to remove access for this user?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
-                <a href="#!" id="remove_invited_user_confirm" class="modal-close waves-effect btn-flat yes_btn">Yes</a>
-            </div>
-        </div>
-    </div>
     <div id="confirmation_modal_remove">
         <div id="confirm_to_remove" class="modal">
             <div class="modal-content">
@@ -123,9 +106,18 @@
     <form id="remove_section_form" action="#" method="POST" hidden>
         <input type="hidden" id="remove_section_id" name="section_id">
     </form>
-    <form action="remove_invited_user_form" action="#" method="POST" hidden>
-        <input type="hidden" id="invited_user_id" name="invited_user_id">
+    <form id="update_section_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
+        <input type="hidden" name="section_id" class="section_id" value="">
+        <input type="hidden" name="action" value="update_section">
+        <input type="hidden" name="update_type" class="update_type" value="">
+        <input type="hidden" name="update_value" class="update_value" value="">
     </form>
+    <form id="duplicate_section_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
+        <input type="hidden" name="section_id" class="section_id" value="">
+        <input type="hidden" name="action" value="duplicate_section">
+    </form>
+    <?php include_once("../partials/confirm_invite_modals.php"); ?>
+
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_documentation/admin_edit_documentation_fe.js") ?>"></script>

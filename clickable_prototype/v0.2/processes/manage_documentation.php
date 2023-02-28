@@ -223,6 +223,53 @@
 
                 $response_data["status"] = true;
             }
+            case "create_section" : {
+                $section_data = array(
+                    "id" => time(),
+                    "documentation_id" => time(),
+                    "user_id" => time(),
+                    "title" => $_POST["section_title"],
+                    "description" => "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
+                );
+
+                $response_data["status"] = true;
+                $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $section_data);
+                break;
+            }
+            case "update_section" : {
+                $section_data = array(
+                    "documentation_id" => 1,
+                    "user_id" => 1,
+                    "title" => "",
+                    "description" => ""
+                );
+
+                $section_data["id"] = $_POST["section_id"];
+                $section_data[$_POST["update_type"]] = $_POST["update_value"];
+
+                $response_data["status"] = true;
+                $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $section_data);
+                break;
+            }
+            case "duplicate_section" : {
+                $section_data = array(
+                    "id" => time(),
+                    "section_id" => time(),
+                    "user_id" => 1,
+                    "title" => "Copy of Section ". time(),
+                    "description" => "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
+                );
+
+                $response_data["status"] = true;
+                $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $section_data);
+                $response_data["result"]["section_id"] = $section_data["id"];
+                break;
+            }
+            case "remove_section" : {
+                $response_data["status"] = true;
+                $response_data["result"]["section_id"] = $_POST["section_id"];
+                break;
+            }
         }
     }
 

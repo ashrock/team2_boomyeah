@@ -49,6 +49,15 @@ function ux(selector) {
         },
         replaceWith: (html_content) => {
             self.replaceWith(stringToHtmlContent(html_content));
+            return ux(self);
+        },
+        append: (html_content) => {
+            self.append(stringToHtmlContent(html_content));
+            return ux(self);
+        },
+        prepend: (html_content) => {
+            self.prepend(stringToHtmlContent(html_content));
+            return ux(self);
         },
         html: (html_content = null) =>{
             if(html_content){

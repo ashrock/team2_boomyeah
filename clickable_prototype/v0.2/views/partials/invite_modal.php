@@ -1,6 +1,6 @@
 <div id="invite_modal_container">
     <div class="invite_wrapper">
-        <div id="modal1" class="modal">
+        <div id="invite_collaborator_modal" class="modal">
             <div class="modal-content">
                 <h2>Invite Collaborators</h2>
                 <p>Collaborators will be able to access your private documentations.</p>
