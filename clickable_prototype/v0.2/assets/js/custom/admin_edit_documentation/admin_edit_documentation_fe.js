@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", async () => {
     ux("body")
         .on("click", ".edit_title_icon", editSectionTitle)
-        .on("click", ".section_details .section_title", (event) => {
+        .on("click", ".section_block .section_title", (event) => {
             event.stopImmediatePropagation();
             ux(event.target).closest(".section_block").removeClass("error");
         })
-        .on("blur", ".section_details .section_title", disableEditSectionTitle)
+        .on("blur", ".section_block .section_title", disableEditSectionTitle)
         .on("click", ".duplicate_icon", duplicateSection)
         .on("click", ".remove_icon", setRemoveSectionBlock)
         .on("click", "#remove_confirm", confirmRemoveSectionBlock)
@@ -47,14 +47,26 @@ function editSectionTitle(event){
     const edit_btn = event.target;
     const section_blk = ux(edit_btn.closest(".section_block"));
     const section_title = ux(section_blk.find(".section_title")).self();
-    const end = section_title.self().value.length;
+    const end = section_title.self().innerText.length;
 
-    section_title.self().removeAttribute("readonly");
-    section_title.self().setSelectionRange(end, end);
+    section_title.self().setAttribute("contenteditable", "true");
+    selectElementText(section_title.self());
 
     setTimeout(() => {
         section_title.self().focus();
-    }, 0);
+    });
+}
+
+function disableEditSectionTitle(event){
+    let section_title = event.target;
+    let section_block = ux(section_title.closest(".section_block"));
+    let section_id = section_block.find(".section_id").val();
+
+    if(section_title.innerText.length){
+        updateSectionFormSubmit(section_id, "title", section_title.innerText, true);
+    } else {
+        section_block.addClass("error");
+    }
 }
 
 function updateSectionFormSubmit(section_id, update_type, update_value, submit_form = false){
@@ -65,18 +77,6 @@ function updateSectionFormSubmit(section_id, update_type, update_value, submit_f
 
     if(submit_form){
         update_section_form.trigger("submit");
-    }
-}
-
-function disableEditSectionTitle(event){
-    let section_title = event.target;
-    let section_block = ux(section_title.closest(".section_block"));
-    let section_id = section_block.find(".section_id").val();
-
-    if(section_title.value.length){
-        updateSectionFormSubmit(section_id, "title", section_title.value, true);
-    } else {
-        section_block.addClass("error");
     }
 }
 
@@ -150,6 +150,7 @@ function showMaterializeDropdown(event){
     instance.open();
 }
 
+/** TODO: Rework this function */
 function onChangeDocumentationPrivacy(event){
     let toggle_switch = event.target;
     let switch_btn = ux(".switch_btn .toggle_text").self();

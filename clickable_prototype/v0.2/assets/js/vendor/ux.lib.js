@@ -230,3 +230,22 @@ function addAnimation(element, animation, timeout = 480){
 function removeAnimation(element, animation){
     ux(element).removeClass("animate__animated").removeClass(animation);
 }
+
+function selectElementText(el, win) {
+    win = win || window;
+    let doc = win.document, sel, range;
+
+    if (win.getSelection && doc.createRange) {
+        sel = win.getSelection();
+        range = doc.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else if (doc.body.createTextRange) {
+        range = doc.body.createTextRange();
+        range.moveToElementText(el);
+        range.collapse(false);
+        range.select();
+    }
+}
