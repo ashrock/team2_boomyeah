@@ -63,8 +63,7 @@
     <input type="hidden" name="documentation_id" class="documentation_id" value="">
     <input type="hidden" name="action" value="update_documentation">
     <input type="hidden" name="update_type" value="is_private">
-    <input type="hidden" name="update_value" class="update_value" value=""> 
-
+    <input type="hidden" name="update_value" class="update_value" value="">
 </form>
 <form id="archive_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
     <input type="hidden" name="documentation_id" class="documentation_id" value="">

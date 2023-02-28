@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("click", ".invite_collaborators_btn", function(event){
             event.stopImmediatePropagation();
             event.preventDefault();
-            let invite_modal = document.querySelector("#modal1");
+            let invite_modal = document.querySelector("#invite_collaborator_modal");
             M.Modal.getInstance(invite_modal).open();
         })
         .on("click", ".set_to_public_icon, .access_btn", async function(event){
