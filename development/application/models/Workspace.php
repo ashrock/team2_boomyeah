@@ -10,7 +10,7 @@
 
                 if($get_documentations_order->num_rows()){
                     $response_data["status"] = true;
-                    $response_data["result"] = $get_documentations_order->row();
+                    $response_data["result"] = $get_documentations_order->result_array()[0];
                 }
                 else{
                     throw new Exception("Error getting documentations order!");
