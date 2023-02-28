@@ -5,6 +5,9 @@ class Documentations extends CI_Controller {
 	function __construct() {
         parent::__construct();
 
+		$this->load->model("Workspace");
+		$this->load->model("Documentation");
+
 		// Check for User session
 		if(!isset($_SESSION["user_id"])){
 			redirect(base_url());
