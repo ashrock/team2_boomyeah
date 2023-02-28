@@ -1,10 +1,4 @@
 <?php
-    // Sample admin session
-    $_SESSION["user_id"]       = 1;
-    $_SESSION["user_level_id"] = 9;
-    $_SESSION["workspace_id"]  = 1;
-    // END
-
     include_once("application/views/view_helper.php");
     #include_once("../../config/connection.php");
     #include_once("../../config/constants.php");
@@ -59,11 +53,11 @@
                 <?php
                     if(count($all_documentations)){
                         for($documentations_index = 0; $documentations_index < count($all_documentations); $documentations_index++){
-                            load_view("application/views/partials/document_block_partial.php", $all_documentations[$documentations_index]);
+                            $this->load->view("partials/document_block_partial.php", $all_documentations[$documentations_index]);
                         }
                     }
                     else {
-                        load_view("application/views/partials/no_documentations_partial.php", array("message" => "You have no documentations yet."));
+                        $this->load->view("partials/no_documentations_partial.php", array("message" => "You have no documentations yet."));
                     }
                 ?>
             </div>
