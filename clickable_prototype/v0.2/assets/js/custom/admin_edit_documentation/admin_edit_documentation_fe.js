@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", async () => {
     ux("body")
         .on("click", ".edit_title_icon", editSectionTitle)
-        .on("click", ".section_block .section_title", (event) => {
+        .on("click", ".section_block .section_title.editable", (event) => {
             event.stopImmediatePropagation();
             ux(event.target).closest(".section_block").removeClass("error");
         })
-        .on("blur", ".section_block .section_title", disableEditSectionTitle)
+        .on("blur", ".section_block .section_title.editable", disableEditSectionTitle)
         .on("click", ".duplicate_icon", duplicateSection)
         .on("click", ".remove_icon", setRemoveSectionBlock)
         .on("click", "#remove_confirm", confirmRemoveSectionBlock)
@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
         ;
 
-    Sortable.create(document.querySelector(".section_container"));
+    Sortable.create(document.querySelector(".section_container"), {
+        handle: ".drag_handle"
+    });
     
     initializeMaterializeTooltip();
     appearEmptySection();
@@ -46,9 +48,10 @@ function editSectionTitle(event){
 
     const edit_btn = event.target;
     const section_blk = ux(edit_btn.closest(".section_block"));
-    const section_title = ux(section_blk.find(".section_title")).self();
-    const end = section_title.self().innerText.length;
+    const section_title = section_blk.find(".section_title");
+    section_blk.removeClass("error");
 
+    section_title.addClass("editable");
     section_title.self().setAttribute("contenteditable", "true");
     selectElementText(section_title.self());
 
@@ -112,7 +115,7 @@ function redirectToEditSection(event){
         event.target.classList.contains("more_action_list") ||
         event.target.classList.contains("remove_icon") ||
         event.target.classList.contains("remove_btn") || 
-        event.target.classList.contains("section_title") || 
+        event.target.classList.contains("drag_handle") || 
         event.target.closest("li")){
         return;
     }
