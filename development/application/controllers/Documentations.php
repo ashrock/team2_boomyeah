@@ -55,10 +55,10 @@ class Documentations extends CI_Controller {
 		$get_documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
 
 		$get_documentations_params = array(
-			"user_id"              => $_SESSION["user_id"],
-			"workspace_id"         => $_SESSION["workspace_id"],
-			"user_level_id"        => $_SESSION["user_level_id"],
-			"documentations_order" => $get_documentations_order["result"]["documentations_order"],
+			"user_id"                 => $_SESSION["user_id"],
+			"workspace_id"            => $_SESSION["workspace_id"],
+			"user_level_id"           => $_SESSION["user_level_id"],
+			"documentation_ids_order" => $get_documentations_order["result"]["documentation_ids_order"],
 		);
 
 		return $get_documentations_params;

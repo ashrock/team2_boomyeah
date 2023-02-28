@@ -19,7 +19,7 @@
                 $get_documentations = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count
                     FROM documentations
                     WHERE workspace_id = ? AND {$where_conditions}
-                    ORDER BY FIELD (id, {$params["documentations_order"]});", $bind_params
+                    ORDER BY FIELD (id, {$params["documentation_ids_order"]});", $bind_params
                 );
 
                 if($get_documentations->num_rows()){
