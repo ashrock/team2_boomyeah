@@ -1,10 +1,4 @@
 <?php
-    // Sample admin session
-    $_SESSION["user_id"]       = 1;
-    $_SESSION["user_level_id"] = 9;
-    $_SESSION["workspace_id"]  = 1;
-    // END
-
     include_once("application/views/view_helper.php");
     #include_once("../../config/connection.php");
     #include_once("../../config/constants.php");
@@ -20,19 +14,21 @@
     <meta name="description" content="A great way to describe your documentation tool">
     <title>Boom Yeah | Admin Documentation Page</title>
     <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/global.css">
-    <link rel="stylesheet" href="assets/css/admin_documentation.css">
+    <link rel="stylesheet" href="<?= add_file("assets/css/global.css") ?>">
+    <link rel="stylesheet" href="<?= add_file("assets/css/admin_documentation.css") ?>">
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <script src="assets/js/vendor/jquery-3.6.3.min.js"></script>
-    <script src="assets/js/vendor/Sortable.min.js"></script>
+    <script src="<?= add_file("assets/js/vendor/jquery-3.6.3.min.js") ?>"></script>
+    <script src="<?= add_file("assets/js/vendor/ux.lib.js") ?>"></script>
+    <script src="<?= add_file("assets/js/vendor/Sortable.min.js") ?>"></script>
 </head>
 
 <body>
     <!--- Add #main_navigation --->
-    <div id="main_navigation"><?php # include_once("../partials/main_navigation.php"); ?></div>
+    <!-- <div id="main_navigation"><?php # include_once("../partials/main_navigation.php"); ?></div> -->
+    <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php"); ?></div>
     <!--- Add #invite_modal --->
     <div id="invite_modal"><?php # include_once("../partials/invite_modal.php"); ?></div>
     <div id="wrapper">
@@ -57,11 +53,11 @@
                 <?php
                     if(count($all_documentations)){
                         for($documentations_index = 0; $documentations_index < count($all_documentations); $documentations_index++){
-                            load_view("application/views/partials/document_block_partial.php", $all_documentations[$documentations_index]);
+                            $this->load->view("partials/document_block_partial.php", $all_documentations[$documentations_index]);
                         }
                     }
                     else {
-                        load_view("application/views/partials/no_documentations_partial.php", array("message" => "You have no documentations yet."));
+                        $this->load->view("partials/no_documentations_partial.php", array("message" => "You have no documentations yet."));
                     }
                 ?>
             </div>
@@ -74,8 +70,8 @@
     </form>
     <form action="processes/manage_documentation.php" id="duplicate_documentation_form" method="POST">
         <input type="hidden" name="action" value="duplicate_documentation">
-        <input type="hidden" class="documentation_id" name="documentation_id">
     </form>
+    <input type="hidden" class="documentation_id" name="documentation_id">
     <form id="remove_documentation_form" action="processes/manage_documentation.php" method="POST">
         <input type="hidden" name="action" value="remove_documentation">
         <input type="hidden" id="remove_documentation_id" name="remove_documentation_id">
@@ -88,10 +84,10 @@
     <?php #include_once("../partials/confirm_documentation_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="assets/js/main_navigation.js"></script>
-    <script src="assets/js/admin_documentation.js"></script>
-    <script src="assets/js/invite_modal.js"></script>
-    <script src="assets/js/hotkeys.js"></script>
+    <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
+    <script src="<?= add_file("assets/js/admin_documentation.js") ?>"></script>
+    <script src="<?= add_file("assets/js/invite_modal.js") ?>"></script>
+    <script src="<?= add_file("assets/js/hotkeys.js") ?>"></script>
 </body>
 
 </html>
