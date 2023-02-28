@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
     ux("body")
-        .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
         .on("click", ".edit_title_icon", editSectionTitle)
         .on("click", ".section_details .section_title", (event) => {
             event.stopImmediatePropagation();
@@ -9,8 +8,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("blur", ".section_details .section_title", disableEditSectionTitle)
         .on("click", ".duplicate_icon", duplicateSection)
         .on("click", ".remove_icon", setRemoveSectionBlock)
-        .on("click", "#remove_confirm", removeSectionBlock)
+        .on("click", "#remove_confirm", confirmRemoveSectionBlock)
         .on("click", ".section_block", redirectToEditSection)
+        .on("click", ".sort_by", sort_sections)
+        .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
         ;
 
     Sortable.create(document.querySelector(".section_container"));
@@ -26,15 +27,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             addSearchEmailResult(element);
         }
     });
-    
+
     let modal_instances = document.querySelectorAll('.modal');
     M.Modal.init(modal_instances);
     
     ux("#add_invite_btn").on("click", addPeopleWithAccess);
     ux("#remove_invited_user_confirm").onEach("click", submitRemoveInvitedUser);
     ux(".invited_user_role").onEach("change", setRoleChangeAction);
-
-    ux(".sort_by").onEach("click", sort_sections);
 
     /* run functions from invite_modal.js */
     initChipsInstance();
@@ -93,20 +92,19 @@ function duplicateSection(event){
     return;
 }
 
+function setRemoveSectionBlock(event) {
+    const section    = event.target;
+    const section_id = section.getAttribute("data-section_id");
+    
+    document.getElementById("remove_section_id").value = section_id;
+    let remove_modal = document.querySelector("#confirm_to_remove");
+    var instance = M.Modal.getInstance(remove_modal);
+    instance.open();
+}
 
-function getNewSectionId(event){
-    let sections = document.querySelectorAll("#section_container .section_block");
-    let largest_id = 1;
-
-    sections.forEach(section => {
-        let section_id = parseInt(section.id.split("_")[1]);
-
-        if(section_id > largest_id){
-            largest_id = section_id;
-        }
-    });
-
-    return largest_id + 1;
+function confirmRemoveSectionBlock(event){
+    event.stopImmediatePropagation();
+    ux("#remove_section_form").trigger("submit");
 }
 
 function redirectToEditSection(event){
@@ -122,46 +120,6 @@ function redirectToEditSection(event){
     location.href = "admin_edit_section.html";
 }
 
-function onChangeDocumentationPrivacy(event){
-    let toggle_switch = event.target;
-    let switch_btn = ux(".switch_btn .toggle_text").self();
-    let invite_collaborator_btn = ux("#invite_collaborator_btn");
-    
-    if(toggle_switch.checked){
-        switch_btn.innerText = "Private"
-        invite_collaborator_btn.removeClass("hidden");
-        ux(toggle_switch).attr("checked", "");
-    } 
-    else {
-        toggle_switch.removeAttribute("checked", "");
-        invite_collaborator_btn.addClass("hidden");
-        switch_btn.innerText = "Public";
-    } 
-}
-
-function setRemoveSectionBlock(event) {
-    let remove_modal = document.querySelector("#confirm_to_remove");
-    var instance = M.Modal.getInstance(remove_modal);
-    instance.open();
-    
-    const section    = event.target;
-    const section_id = section.getAttribute("data-document_id");
-
-    document.getElementById("remove_section_id").value = section_id;
-}
-
-function removeSectionBlock(event){
-    /* This is just for clickable prototype. Will replace all when form is submitted to the backend */
-    const section_id = document.getElementById("remove_section_id").value;
-
-    ux(`#section_${section_id}`).self().className += " animate__animated animate__fadeOut";
-    ux(`#section_${section_id}`).self().addEventListener("animationend", () => {
-        ux(`#section_${section_id}`).self().remove();
-    });
-
-    appearEmptySection();
-}
-
 function initializeMaterializeTooltip(){
     const elems = document.querySelectorAll('.tooltipped');
     M.Tooltip.init(elems, {
@@ -170,17 +128,14 @@ function initializeMaterializeTooltip(){
 }
 
 function appearEmptySection(){
-    let section_count = ux(".section_container").self().children.length;
+    let section_count = ux("#section_container").findAll(".section_block").length;
 
-    if(section_count <= 1){
-        ux(".no_sections").removeClass("hidden");
-    }else{
-        ux(".no_sections").addClass("hidden");
-    }
+    ux(".no_sections").conditionalClass("hidden", (section_count > 0));
 }
 
 function initializeMaterializeDropdown(dropdown = null){
     const dropdown_elements = (dropdown) ? dropdown : document.querySelectorAll('.dropdown-trigger');
+    
     if(dropdown_elements){
         M.Dropdown.init(dropdown_elements, {
             coverTrigger: false
@@ -193,6 +148,27 @@ function showMaterializeDropdown(event){
     const dropdown_content = event.target.closest(".section_controls").querySelector(".dropdown-trigger");
     const instance = M.Dropdown.getInstance(dropdown_content);
     instance.open();
+}
+
+function onChangeDocumentationPrivacy(event){
+    let toggle_switch = event.target;
+    let switch_btn = ux(".switch_btn .toggle_text").self();
+    let invite_collaborator_btn = ux("#invite_collaborator_btn");
+    let is_private = (toggle_switch.checked) ? 1 : 0;
+
+    if(toggle_switch.checked){
+        switch_btn.innerText = "Private"
+        invite_collaborator_btn.removeClass("hidden");
+        ux(toggle_switch).attr("checked", "");
+    } 
+    else {
+        toggle_switch.removeAttribute("checked", "");
+        invite_collaborator_btn.addClass("hidden");
+        switch_btn.innerText = "Public";
+    } 
+
+    ux("#change_document_privacy_form .update_value").val(is_private);
+    ux("#change_document_privacy_form").trigger("submit");
 }
 
 function sort_sections(event){

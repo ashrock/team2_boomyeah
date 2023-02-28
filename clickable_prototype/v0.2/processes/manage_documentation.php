@@ -223,6 +223,12 @@
 
                 $response_data["status"] = true;
             }
+            case "update_documentation_privacy": {
+                $response_data["status"] = true;
+                $response_data["is_private"] = ((bool) $_POST["update_value"]);
+
+                break;
+            }
             case "create_section" : {
                 $section_data = array(
                     "id" => time(),

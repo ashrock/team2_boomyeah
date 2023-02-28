@@ -10,6 +10,9 @@
     include_once("../view_helper.php");  
     include_once("../../config/connection.php");
     include_once("../../config/constants.php");
+
+    /** TODO: Backend should provide the $document_id */
+    $document_id = time();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -103,8 +106,9 @@
             </div>
         </div>
     </div>
-    <form id="remove_section_form" action="#" method="POST" hidden>
-        <input type="hidden" id="remove_section_id" name="section_id">
+    <form id="remove_section_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
+        <input type="hidden" name="action" value="remove_section">
+        <input type="hidden" id="remove_section_id" name="section_id" class="section_id">
     </form>
     <form id="update_section_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
         <input type="hidden" name="section_id" class="section_id" value="">
@@ -115,6 +119,12 @@
     <form id="duplicate_section_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
         <input type="hidden" name="section_id" class="section_id" value="">
         <input type="hidden" name="action" value="duplicate_section">
+    </form>
+    <form id="change_document_privacy_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
+        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $document_id ?>">
+        <input type="hidden" name="action" value="update_documentation_privacy">
+        <input type="hidden" name="update_type" value="is_private">
+        <input type="hidden" name="update_value" class="update_value" value="">
     </form>
     <?php include_once("../partials/confirm_invite_modals.php"); ?>
 
