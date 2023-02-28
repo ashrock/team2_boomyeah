@@ -24,6 +24,7 @@
         <div class="user_profile">
             <div class="user_settings">
                 <p><?= $user_initials ?></p>
+                <!-- <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/user_profile.png" alt="user_profile"> -->
                 <a href="#" class="dropdown-action" id="logout" data-target='dropdown_logout'>logout</a>
                 <ul id='dropdown_logout' class='dropdown-content'>
                   <li><a href="<?= base_url(); ?>logout" class="log_out_btn">Log out</a></li>
