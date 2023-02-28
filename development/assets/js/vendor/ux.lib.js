@@ -1,13 +1,57 @@
-function ux(selector){
+const FORM_SUBMIT_EVENT = new Event("submit", { bubbles: true });
+const UX_EVENTS = {
+    "submit": FORM_SUBMIT_EVENT
+}
+
+function ux(selector) {
     let self = (typeof selector === "string") ? document.querySelector(selector) : selector;
-    
+
     return {
         ...self,
+        post: async (action, post_data, callback, format = "json") =>{
+            fetch(action, {
+                    method: "POST",
+                    body: post_data,
+                })
+                .then((response) => response.json())
+                .then((result) => {
+                    callback(result);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        },
+        serialize: () => {
+            if(self.tagName === "FORM"){
+                let form_data = new FormData(self);
+                let content = [];
+
+                for (const [key, value] of form_data) {
+                    content.push(`${key}=${value}`);
+                }
+                
+                return form_data;
+            }
+        },
         html: () =>{
             return self;
         },
-        on: (event, handler) => {
-            self.addEventListener(event, handler);
+        trigger: (event) => {
+            if(UX_EVENTS.hasOwnProperty(event)){
+                self.dispatchEvent(UX_EVENTS[event]);
+            }
+        },
+        on: (event, ...args) => {
+            let handler = args[0];
+            let event_selector = selector;
+            
+            if(typeof args[0] === "string"){
+                event_selector = args[0];
+                handler = args[1];
+            }
+
+            delegateEvent(event, document, event_selector, handler);
+            return ux(self);
         },
         onEach: (event, handler) =>{
             let elements = document.querySelectorAll(selector);
@@ -46,6 +90,13 @@ function ux(selector){
 
             return self.innerText;
         },
+        val: (text_value) => {
+            if(text_value){
+                self.value = text_value;
+            }
+
+            return self.value;
+        },
         attr: (attribute, attr_value = null) =>{
             if(attr_value){
                 self.setAttribute(attribute, attr_value);
@@ -77,13 +128,33 @@ function autoExpand (field) {
 		parseFloat(computed.paddingBottom);
 
 	field.style.height = height + 'px';
+    
+}
+function onSubmission(){
 
+    document.addEventListener('onsubmit', function (event) {
+        console.log(event)
+    }, false);
 }
 
 document.addEventListener('input', function (event) {
 	if (event.target.tagName.toLowerCase() !== 'textarea' || event.target.classList.contains("materialize-textarea")) return;
 	autoExpand(event.target);
 }, false);
+
+function hasClass(elem, className) {
+    return elem.classList.contains(className);
+}
+
+function delegateEvent(event_type, ancestor_element, target_element_selector, listener_function){
+    ancestor_element.addEventListener(event_type, function(event){
+        if (event.target && event.target.matches && event.target.matches(target_element_selector)){
+            (listener_function)(event);
+
+            return false;
+        }
+    }, false);
+}
 
 function addAnimation(element, animation, timeout = 480){
     ux(element).addClass("animate__animated").addClass(animation);
