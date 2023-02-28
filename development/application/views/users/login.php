@@ -7,6 +7,7 @@
     <title>BoomYEAH Login</title>
     <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="assets/css/login.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <div id="login_wrapper">
@@ -15,7 +16,7 @@
                 <div class="login_documentation">
                     <h1>Boom<span>YEAH</span></h1>
                     <p>Your Team's Documentation Tool</p>
-                    <a href="" class="login_btn">Log In with Google</a>
+                    <a href="<?= $google_login_url ?>" class="login_btn">Log In with Google</a>
                 </div>
             </div>
         </div>
