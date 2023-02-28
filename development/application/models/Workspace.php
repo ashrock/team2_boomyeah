@@ -6,11 +6,11 @@
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $get_documentations_order = $this->db->query("SELECT documentations_order FROM workspaces WHERE id = ?;", $workspace_id);
+                $get_documentations_order = $this->db->query("SELECT documentation_ids_order FROM workspaces WHERE id = ?;", $workspace_id);
 
                 if($get_documentations_order->num_rows()){
                     $response_data["status"] = true;
-                    $response_data["result"] = $get_documentations_order->row();
+                    $response_data["result"] = $get_documentations_order->result_array()[0];
                 }
                 else{
                     throw new Exception("Error getting documentations order!");
