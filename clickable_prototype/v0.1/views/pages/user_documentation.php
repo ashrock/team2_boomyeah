@@ -10,6 +10,14 @@
     include_once("../view_helper.php");  
     include_once("../../config/connection.php");
     include_once("../../config/constants.php");
+
+    // Load initial data
+    $documentation_data = [];
+    $initial_data_file = "../../assets/json/documentation_data.json";
+    if (file_exists($initial_data_file)) {
+        $data = file_get_contents($initial_data_file);
+        $documentation_data = json_decode($data, true);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,35 +40,33 @@
 </head>
 <body>
     <!--- Add #main_navigation --->
-    
     <div id="main_navigation"><?php include_once("../partials/main_navigation.php"); ?></div>
     <div class="user">
         <div class="container" id="user_doc">
             <button id="docs_view_btn" class="dropdown-trigger" data-target="docs_view_list">Documentations</button>
             <div id="documentations">
                 <?php
-                    $documentations_order = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
-                    $documentations_order = $documentations_order["documentations_order"];
-
-                    $documentations = fetch_all("SELECT id, title, is_private, cache_collaborators_count
-                        FROM documentations
-                        WHERE workspace_id = {$_SESSION["workspace_id"]} AND (is_private = 0 OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = {$_SESSION["user_id"]} )) AND is_archived = {$_NO}
-                        ORDER BY FIELD (id, {$documentations_order});
-                    ");
-
-                    for($documentations_index = 0; $documentations_index < count($documentations); $documentations_index++){ ?>
+                    if(count($documentation_data["fetch_user_data"])){
+                        foreach($documentation_data["fetch_user_data"] as $fetch_user_data){
+                    ?>
                         <div class="document_block mobile_block">
                             <div class="document_details">
-                                <h2><?= $documentations[$documentations_index]["title"] ?></h2>
-                                <?php if($documentations[$documentations_index]["is_private"]){ ?>
-                                    <button class="invite_collaborators_btn"><?= $documentations[$documentations_index]["cache_collaborators_count"] ?></button> 
+                                <h2><?= $fetch_user_data["title"] ?></h2>
+                                <?php if($fetch_user_data["is_private"]){ ?>
+                                    <button class="invite_collaborators_btn"><?= $fetch_user_data["cache_collaborators_count"] ?></button> 
                                 <?php  } ?>
                             </div>
-                            <?php if($documentations[$documentations_index]["is_private"]){ ?>
+                            <?php if($fetch_user_data["is_private"]){ ?>
                                 <div class="document_controls"><button class="access_btn"></button></div>
                             <?php  } ?>
                         </div>
-                <?php } ?>
+                    <?php
+                        }
+                    }
+                    else {
+                        load_view("../partials/no_documentations_partial.php", array("message" => "You have no documentations yet."));
+                    }
+                ?> 
             </div>
         </div>
     </div>

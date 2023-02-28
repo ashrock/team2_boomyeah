@@ -106,8 +106,12 @@ function onSubmitAddDocumentationForm(event){
             if(response_data.status){
                 /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
                 alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
-                // $("#add_documentation_form")[0].reset();
-                location.reload();
+                $("#add_documentation_form")[0].reset();
+                //location.reload();
+                
+                let documentations_div = $("#get_documentations_form #is_archived").val() == "1" ? "#archived_documents" : "#documentations";
+                $(documentations_div).html(response_data.result.html);
+                initializeMaterializeDropdown();
             }
             else{
                 alert(response_data.error);
@@ -222,7 +226,7 @@ function onSubmitDuplicateForm(event){
             documentation.on("animationend", () => {
                 documentation.removeClass("animate__animated animate__fadeIn animate__slower");
             });
-
+          
             initializeMaterializeDropdown();
         }
         else {
