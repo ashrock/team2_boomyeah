@@ -27,7 +27,6 @@
 
 <body>
     <!--- Add #main_navigation --->
-    <!-- <div id="main_navigation"><?php # include_once("../partials/main_navigation.php"); ?></div> -->
     <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php"); ?></div>
     <!--- Add #invite_modal --->
     <div id="invite_modal"><?php # include_once("../partials/invite_modal.php"); ?></div>
@@ -64,8 +63,7 @@
             <div id="archived_documents" class="hidden"></div>
         </div>
     </div>
-    <form id="get_documentations_form" action="processes/manage_documentation.php" method="POST">
-        <input type="hidden" name="action" value="get_documentations">
+    <form id="get_documentations_form" action="/docs/get_documentations" method="POST">
         <input type="hidden" id="is_archived" name="is_archived">
     </form>
     <form action="processes/manage_documentation.php" id="duplicate_documentation_form" method="POST">
