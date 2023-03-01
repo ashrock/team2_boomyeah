@@ -304,6 +304,12 @@ textarea{
             height: 652px;
             max-width: 465px;
             overflow: hidden;
+            
+            &.open{
+                display: flex !important;
+                flex-direction: column;
+
+            }
             .modal-content{
                 position: relative;
                 border: 1px solid @by_lightgray;
@@ -619,16 +625,20 @@ textarea{
                 }
 
             }
+            .column_placeholder{
+                flex-grow: 1;
+            }
             .cta_done{
-                bottom: 13px;
-                position: absolute;
-                right: 18px;
+                height: auto !important;
+                padding: 24px;
                 a{
                     border-radius: 20px;
                     border: 1px solid @by_primary;
                     color: @by_primary;
+                    margin: 0px;
                     padding: 8px 16px;
                     font: 16px/19px @readex_regular;
+                    text-transform: initial !important;
                 }
             }
         }

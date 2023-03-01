@@ -27,6 +27,7 @@
                     </div>
                 </div>
             </form>
+            <div class="column_placeholder"></div>
             <div class="modal-footer cta_done">
                 <a href="#!" class="modal-close waves-effect btn-flat">Done</a>
             </div>
