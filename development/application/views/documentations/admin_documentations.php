@@ -66,12 +66,10 @@
     <form id="get_documentations_form" action="/docs/get" method="POST">
         <input type="hidden" id="is_archived" name="is_archived">
     </form>
-    <form id="duplicate_documentation_form" action="processes/manage_documentation.php" method="POST">
+    <form id="duplicate_documentation_form" action="/docs/duplicate" method="POST">
         <input type="hidden" class="documentation_id" name="documentation_id">
-        <input type="hidden" name="action" value="duplicate_documentation">
     </form>
     <form id="remove_documentation_form" action="/docs/remove" method="POST">
-        <input type="hidden" name="action" value="remove_documentation">
         <input type="hidden" id="remove_documentation_id" name="remove_documentation_id">
         <input type="hidden" id="remove_is_archived" name="remove_is_archived">
     </form>

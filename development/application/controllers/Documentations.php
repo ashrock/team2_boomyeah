@@ -91,6 +91,8 @@ class Documentations extends CI_Controller {
 		$response_data = array("status" => false, "result" => array(), "error" => null);
 
 		try {
+			$this->load->model("Workspace");
+
 			if(isset($_POST["document_title"])){
 				$response_data = $this->Documentation->addDocumentations(array(
 					"user_id"      => $_SESSION["user_id"],
@@ -126,6 +128,20 @@ class Documentations extends CI_Controller {
 			else{
 				$response_data["error"] = "Document id and update_type are required";
 			}
+		}
+		catch (Exception $e) {
+			$response_data["error"] = $e->getMessage();
+		}
+
+		echo json_encode($response_data);
+	}
+
+	public function duplicateDocumentation(){
+		$response_data = array("status" => false, "result" => array(), "error" => null);
+		
+		try {
+			$this->load->model("Workspace");
+			$response_data = $this->Documentation->duplicateDocumentation($_POST["documentation_id"]);
 		}
 		catch (Exception $e) {
 			$response_data["error"] = $e->getMessage();
