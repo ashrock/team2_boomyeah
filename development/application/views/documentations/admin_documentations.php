@@ -43,9 +43,9 @@
             <div class="section_header">
                 <button id="docs_view_btn" class="dropdown-trigger" data-target="docs_view_list">Documentations</button>
                 <ul id='docs_view_list' class='dropdown-content'>
-                    <li><a href="#!" class="active_docs_btn">Documentations</a></li>
+                    <li><a href="#!" class="switch_view_btn" data-is_archived="0">Documentations</a></li>
                     <li class="divider" tabindex="-1"></li>
-                    <li><a href="#!" class="archived_docs_btn">Archived</a></li>
+                    <li><a href="#!" class="switch_view_btn" data-is_archived="1">Archived</a></li>
                 </ul>
             </div>
             <div id="documentations">
@@ -63,14 +63,14 @@
             <div id="archived_documents" class="hidden"></div>
         </div>
     </div>
-    <form id="get_documentations_form" action="/docs/get_documentations" method="POST">
+    <form id="get_documentations_form" action="/docs/get" method="POST">
         <input type="hidden" id="is_archived" name="is_archived">
     </form>
-    <form action="processes/manage_documentation.php" id="duplicate_documentation_form" method="POST">
+    <form id="duplicate_documentation_form" action="processes/manage_documentation.php" method="POST">
+        <input type="hidden" class="documentation_id" name="documentation_id">
         <input type="hidden" name="action" value="duplicate_documentation">
     </form>
-    <input type="hidden" class="documentation_id" name="documentation_id">
-    <form id="remove_documentation_form" action="processes/manage_documentation.php" method="POST">
+    <form id="remove_documentation_form" action="/docs/remove" method="POST">
         <input type="hidden" name="action" value="remove_documentation">
         <input type="hidden" id="remove_documentation_id" name="remove_documentation_id">
         <input type="hidden" id="remove_is_archived" name="remove_is_archived">
@@ -79,7 +79,7 @@
         <input type="hidden" name="action" value="reorder_documentations">
         <input type="hidden" id="documentations_order" name="documentations_order">
     </form>
-    <?php #include_once("../partials/confirm_documentation_modals.php"); ?>
+    <?php $this->load->view("partials/confirm_documentation_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>

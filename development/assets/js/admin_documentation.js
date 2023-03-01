@@ -70,12 +70,16 @@
 // });
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Initialize MaterializeCSS features
+    /* Initialize MaterializeCSS features */
     M.Dropdown.init($("#docs_view_btn")[0]);
+    initializeMaterializeDropdown();
+
+    let modal = document.querySelectorAll('.modal');
+    let instances = M.Modal.init(modal);
 
     ux("body")
         .on("blur", ".document_title", (event) => {
-            /** Check if empty title; Revert to old title if empty */
+            /* Check if empty title; Revert to old title if empty */
             ux((event.target).closest(".edit_title_form")).trigger("submit");
         })
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
@@ -85,11 +89,17 @@ document.addEventListener("DOMContentLoaded", () => {
             event.stopImmediatePropagation();
             event.preventDefault();
             
-            // showConfirmPrivacyModal($(this).attr("data-document_id"), 1, "#confirm_to_private", $(this).closest(".document_block"));
+            /* showConfirmPrivacyModal($(this).attr("data-document_id"), 1, "#confirm_to_private", $(this).closest(".document_block")); */
         })
-        .on("click", ".active_docs_btn", appearActiveDocumentation)
-        .on("click", ".archived_docs_btn", appearArchivedDocumentations)
+        /* Switch Active/Archive view */
+        .on("click", ".switch_view_btn", switchDocumentationView)
         .on("submit", "#get_documentations_form", getDocumentations)
+        .on("submit", "#add_documentation_form", submitAddDocumentation)
+        .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
+        .on("click", ".archive_btn", setArchiveValue)
+        /* Remove documentation */
+        .on("click", ".remove_btn", setRemoveDocumentationValue)
+        .on("click", "#remove_confirm", submitRemoveDocumentation)
 });
 
 function onSubmitDuplicateForm(event){
@@ -154,18 +164,17 @@ function submitInvite(event){
     event.preventDefault();
 }
 
-function onSubmitAddDocumentationForm(event){
+function submitAddDocumentation(event){
     event.preventDefault();
-    let add_document_form = $(this);
+    let add_document_form = ux("#add_documentation_form");
     const input_document_title = $("#input_add_documentation").val();
 
     if(input_document_title){
         /** Use AJAX to generate new documentation */
-        $.post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
+        add_document_form.post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
                 /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
                 alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
-                // $("#add_documentation_form")[0].reset();
                 location.reload();
             }
             else{
@@ -265,23 +274,16 @@ function onChangeDocumentationTitle(event){
     return;
 }
 
-function appearActiveDocumentation(event){
-    switchDocumentationView(event.target, false);
-}
+function switchDocumentationView(event){
+    let switch_view_btn = event.target;
+    let container       = $(switch_view_btn).closest(".container");
+    let docs_view_btn   = $(container).find("#docs_view_btn")[0];
+    let form            = ux("#get_documentations_form");
+    let is_archived     = parseInt(switch_view_btn.dataset.is_archived);
+    let active_div      = is_archived ? ux("#archived_documents") : ux("#documentations");
+    let hidden_div      = is_archived ? ux("#documentations"): ux("#archived_documents");
 
-function appearArchivedDocumentations(event){
-    switchDocumentationView(event.target, true);
-}
-
-function switchDocumentationView(target_elem, is_archived){
-    let archived_docs_btn = target_elem;
-    let container         = $(archived_docs_btn).closest(".container");
-    let docs_view_btn     = $(container).find("#docs_view_btn")[0];
-    let form              = ux("#get_documentations_form");
-    let active_div        = is_archived ? ux("#archived_documents") : ux("#documentations");
-    let hidden_div        = is_archived ? ux("#documentations"): ux("#archived_documents");
-
-    docs_view_btn.innerText = archived_docs_btn.innerText;
+    docs_view_btn.innerText = switch_view_btn.innerText;
     active_div.removeClass("hidden");
     hidden_div.addClass("hidden");
 
@@ -389,50 +391,57 @@ function submitArchive(event){
 function setRemoveDocumentationValue(event){
     event.stopImmediatePropagation();
 
-    const documentation = $(this);
+    const documentation = event.target;
+    let document_id     = documentation.dataset.document_id;
+    let form            = ux("#remove_documentation_form");
+    let document_block  = ux(`#document_${document_id}`);
 
     /* Set form values */
-    $("#remove_documentation_form #remove_documentation_id").val(documentation.data("document_id"));
-    $("#remove_documentation_form #remove_is_archived").val(documentation.data("is_archived"));
+    form.find("#remove_documentation_id").val(document_id);
+    form.find("#remove_is_archived").val(documentation.dataset.is_archived);
 
-    let remove_modal = document.querySelector("#confirm_to_remove");
-    var instance = M.Modal.getInstance(remove_modal);
-    displayModalDocumentationTitle($(remove_modal), $(this).closest(".document_block"));
-    instance.open();
+    /* Add title to modal */
+    ux("#confirm_to_remove").find(".documentation_title").text(document_block.find(".document_title").val());
 }
 
 function submitRemoveDocumentation(event){
     event.stopImmediatePropagation();
     event.preventDefault();
 
-    let form      = $("#remove_documentation_form");
+    let form      = ux("#remove_documentation_form");
     let form_data = form.serialize(); 
     
-    if($("#remove_documentation_form #remove_is_archived").val() == "1"){
-        form_data += `&archived_documentations=${$("#archived_documents .document_block").length - 1}`;
-    } 
+    if(form.find("#remove_is_archived").val() == "1"){
+        form_data.append("archived_documentations", ux("#archived_documents").findAll(".document_block").length - 1);
+    }
 
-    $.post(form.attr("action"), form_data, (response_data) => {
-        if(response_data.status){
-            let documentation = $(`#document_${response_data.result.documentation_id}`);
+    // $.post(form.attr("action"), form_data, (response_data) => {
+    //     if(response_data.status){
+    //         let documentation = $(`#document_${response_data.result.documentation_id}`);
     
-            documentation.addClass("animate__animated animate__fadeOut");
-            documentation.on("animationend", () => {
-                documentation.remove();
+    //         documentation.addClass("animate__animated animate__fadeOut");
+    //         documentation.on("animationend", () => {
+    //             documentation.remove();
 
-                if(response_data.result.hasOwnProperty("no_documentations_html")){
-                    let documentations_div = (response_data.result.is_archived === "0") ? "#documentations" : "#archived_documents";
+    //             if(response_data.result.hasOwnProperty("no_documentations_html")){
+    //                 let documentations_div = (response_data.result.is_archived === "0") ? "#documentations" : "#archived_documents";
     
-                    $(documentations_div).html(response_data.result.no_documentations_html);
-                }
-            });
-        }
+    //                 $(documentations_div).html(response_data.result.no_documentations_html);
+    //             }
+    //         });
+    //     }
 
-    }, "json");
+    // }, "json");
 
-    let remove_modal = document.querySelector("#confirm_to_remove");
-    var instance = M.Modal.getInstance(remove_modal);
-    instance.close();
+    // let remove_modal = document.querySelector("#confirm_to_remove");
+    // var instance = M.Modal.getInstance(remove_modal);
+    // instance.close();
+
+    // return false;
+
+    form.post(form.attr("action"), form_data, (response_data) => {
+        console.log(response_data);
+    });
 
     return false;
 }
@@ -461,6 +470,8 @@ function getDocumentations(event){
         else{
             /* TODO: Design for displaying error */
         }
+
+        initializeMaterializeDropdown();
     });
 
     return false;
