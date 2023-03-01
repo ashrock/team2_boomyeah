@@ -30,7 +30,7 @@
                     <?php if($is_private){ ?>
                         <li><a href="#confirm_to_public" class="set_to_public_icon modal-trigger set_privacy_btn" data-document_id="<?= $id ?>" data-document_privacy="private">Set to Public</a></li>
                     <?php } else{ ?>
-                        <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger set_privacy_btn" data-document_id="<?= $id ?>" data-document_privacy="public">Set to Private</a></li>
+                        <li><a href="#confirm_to_private" class="set_to_private_icon modal-trigger" data-document_id="<?= $id ?>" data-document_privacy="public">Set to Private</a></li>
                     <?php } ?>
                     <li class="divider" tabindex="-1"></li>
                     <li><a href="#confirm_to_remove" class="remove_icon modal-trigger remove_btn" data-document_id="<?= $id ?>" data-documentation_action="remove" data-is_archived="0">Remove</a></li>
