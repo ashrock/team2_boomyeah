@@ -23,7 +23,6 @@
                 );
 
                 if($get_documentations->num_rows()){
-                    $response_data["status"] = true;
                     $response_data["result"] = $get_documentations->result_array();
                 }
                 
@@ -125,5 +124,23 @@
 
             return $response_data;
         }
+
+        public function deleteDocumentation($documentation_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $documentation_id);
+
+                if($this->db->affected_rows()){
+                    $response_data["status"] = true;
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+                    
     }
 ?>

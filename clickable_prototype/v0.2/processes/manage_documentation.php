@@ -276,6 +276,22 @@
                 $response_data["result"]["section_id"] = $_POST["section_id"];
                 break;
             }
+            case "add_collaborators" : {
+                $response_data["status"] = true;
+                $collaborators_html = "";
+                $collaborator_emails = explode(",", $_POST["collaborator_emails"] );
+
+                foreach($collaborator_emails as $collaborator_email){
+                    $collaborator_data = array(
+                        "collaborator_email" => $collaborator_email,
+                        "id" => time()
+                    );
+                    $collaborators_html .= get_include_contents("../views/partials/invited_user_partial.php", $collaborator_data);
+                }
+                $response_data["result"]["html"] = $collaborators_html;
+
+                break;
+            }
         }
     }
 

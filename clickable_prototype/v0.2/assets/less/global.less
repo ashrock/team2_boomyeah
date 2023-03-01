@@ -328,12 +328,14 @@ textarea{
             .invite_collab{
                 padding: 24px;
                 .row{
-                    .input-field{
+                    .collaborator_row{
                         max-width: 417px;
                         padding: 0px;
                         position: relative;
                         width: 100%;
-                        .chips{
+                        display: flex;
+                        align-items: center;
+                        .collaborator_chips{
                             align-items: center;
                             background-color: @by_bg;
                             border-bottom: 1px solid @by_primary;
@@ -342,6 +344,8 @@ textarea{
                             display: flex;
                             flex-wrap: wrap;
                             padding-left: 10px;
+                            flex-grow: 1;
+                            width: initial !important;
                             &.invalid{
                                 border-bottom: 1px solid @by_error !important;
                             }
@@ -351,23 +355,31 @@ textarea{
                             }
                             i{
                                 color: transparent;
+                                height: 27px;
+                                margin-left: 4px;
                                 position: relative;
+                                width: 12px;
+
                                 &::after{
                                     background: url("../../assets/images/modal_sprite.svg") no-repeat;
-                                    background-position: -70px 2px;
+                                    background-position: -70px 0px;
                                     content: '';
                                     display: block;
-                                    height: 28px;
+                                    height: inherit;
                                     position: absolute;
-                                    right: -12px;
+                                    right: 0px;
                                     top: 4px;
-                                    width: 28px;
+                                    width: inherit;
                                 }
                             }
-                            input{
+                            .email_address{
                                 border: none;
                                 box-shadow: none;
-                                height: auto;
+                                color: #18181B;
+                                font: 16px/27px @readex_regular;
+                                height: 27px;
+                                margin: 0px;
+                                padding-bottom: 5px !important;
                                 z-index: 999;
                                 &.input, &.valid, &.invalid{
                                     border-bottom: none !important;
@@ -381,12 +393,15 @@ textarea{
                             .chip{
                                 background: transparent;
                                 border: 1px solid @by_icon;
+                                border-radius: 8px;
                                 color: @by_black;
+                                height: 27px;
+                                line-height: 25px;
                             }
                             &.input-field{
                                 background: @by_bg;
                                 border-radius: 8px 8px 5px 5px;
-                                padding: 8px;
+                                padding: 12px 14px 7px;
                             }
                         }
                         label{
@@ -399,7 +414,10 @@ textarea{
                                 top: 30px !important;
                             }
                         }
-                        .users {
+                        .row_placeholder{
+                            flex-grow: 1;
+                        }
+                        .users, .add_collaborator_btn {
                             background: url("../../assets/images/modal_sprite.svg") no-repeat;
                             background-position: 1px 0px;
                             border: none;
@@ -407,9 +425,8 @@ textarea{
                             cursor: pointer;
                             display: block;
                             height: 20px;
-                            position: absolute;
-                            right: 15px;
                             width: 20px;
+                            justify-self: flex-end;
                         }
                         #add_invite{
                             border-radius: 8px;
