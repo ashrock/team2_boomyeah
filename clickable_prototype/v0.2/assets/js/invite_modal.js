@@ -4,9 +4,9 @@ let invite_instance = null;
 let role_instance   = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
-    
+    let modal = document.querySelectorAll('.invite_modal');
+    M.Modal.init(modal);
     initializeMaterializeTooltip();
-    appearEmptySection();
     initializeMaterializeDropdown();
 
     document.addEventListener("click", (event) => {
@@ -20,15 +20,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     ux("body")
         .on("click", "#add_invite_btn", addPeopleWithAccess)
         .on("click", "#remove_invited_user_confirm",submitRemoveInvitedUser)
-        .on("change", ".invited_user_role",setRoleChangeAction)
+        .on("click", ".invite_collaborators_btn", function(event){
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            let document_id = ux(event.target).data("document_id");
+            let get_collaborators_form = ux("#get_collaborators_form");
+            get_collaborators_form.find(".document_id").val(document_id);
+            get_collaborators_form.trigger("submit");
+        })
+        .on("change", ".invited_user_role", setRoleChangeAction)
         .on("submit", "#add_collaborators_form", onSubmitAddCollaboratorsForm)
+        .on("submit", "#get_collaborators_form", onSubmitGetCollaboratorsForm)
 
     /* run functions from invite_modal.js */
     initializeCollaboratorChipsInstance();
     // initRoleDropdown();
     initSelect();
 
-    ux("#invite_collaborator_btn").trigger("click");
+    setTimeout(() => {
+        ux(ux("body").findAll(".invite_collaborators_btn")[0]).trigger("click");
+        
+    }, 1000);
 })
 
 function initSelect(dropdown_selector = "select"){
@@ -63,27 +75,10 @@ function addEmail(email){
     invited_emails.push(email);
 }
 
-function getNewInvitedUserId(event){
-    let invited_users = document.querySelectorAll(".invited_user");
-    let largest_id = 1;
-
-    invited_users.forEach(invited_user => {
-        if(invited_user.id){
-            let invited_user_id = parseInt(invited_user.id.split("_")[2]);
-            
-            if(invited_user_id > largest_id){
-                largest_id = invited_user_id + 1;
-            }
-        }
-    });
-
-    return largest_id;
-}
 
 function addPeopleWithAccess(event){
     event.stopPropagation();
     
-    let new_invited_user_id = getNewInvitedUserId();
     if(invited_emails.length > 0){
         let add_collaborators_form = ux("#add_collaborators_form");
         add_collaborators_form.find(".collaborator_emails").val(invited_emails.join(","));
@@ -92,6 +87,30 @@ function addPeopleWithAccess(event){
 
     invited_emails = [];
     initializeCollaboratorChipsInstance();
+}
+
+function onSubmitGetCollaboratorsForm(event){
+    event.preventDefault();
+    let post_form = ux(event.target);
+
+    ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
+        if(response_data.status){
+            await ux("#invited_users_wrapper").html(response_data.result.html);
+            
+            ux("#invited_users_wrapper").findAll(".added_collaborator").forEach(dropdown_element => {
+                M.FormSelect.init(dropdown_element);
+                ux(dropdown_element).removeClass("added_collaborator");
+            });
+
+            /** TODO: Get people with access content */
+            let invite_modal = document.querySelector("#invite_collaborator_modal");
+            M.Modal.getInstance(invite_modal).open();
+        } else {
+
+        }
+    }, "json");
+
+    return false;
 }
 
 function onSubmitAddCollaboratorsForm(event){
@@ -132,11 +151,11 @@ function setRoleChangeAction(event){
 
 function submitRemoveInvitedUser(event){
     const invited_user_id      = ux("#invited_user_id").val();
-    const invited_user_element = ux(`#invited_user_${invited_user_id}`).self();
+    const invited_user_element = ux(`#invited_user_${invited_user_id}`);
 
-    invited_user_element.className += " animate__animated animate__fadeOut";
+    invited_user_element.addClass(" animate__animated animate__fadeOut");
         
-    invited_user_element.addEventListener("animationend", () => {
+    invited_user_element.on("animationend", () => {
         invited_user_element.remove();
     }, false);
 }

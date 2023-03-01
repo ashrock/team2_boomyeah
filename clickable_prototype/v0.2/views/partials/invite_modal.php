@@ -1,6 +1,6 @@
 <div id="invite_modal_container">
     <div class="invite_wrapper">
-        <div id="invite_collaborator_modal" class="modal">
+        <div id="invite_collaborator_modal" class="invite_modal modal">
             <div class="modal-content">
                 <h2>Invite Collaborators</h2>
                 <p>Collaborators will be able to access your private documentations.</p>
@@ -63,4 +63,8 @@
 <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="add_collaborators_form" method="POST">
     <input type="hidden" name="action" value="add_collaborators">
     <input type="hidden" name="collaborator_emails" class="collaborator_emails">
+</form>
+<form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="get_collaborators_form" method="POST">
+    <input type="hidden" name="action" value="get_collaborators">
+    <input type="hidden" name="document_id" class="document_id">
 </form>

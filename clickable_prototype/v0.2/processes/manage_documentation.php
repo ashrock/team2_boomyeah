@@ -276,6 +276,29 @@
                 $response_data["result"]["section_id"] = $_POST["section_id"];
                 break;
             }
+            case "get_collaborators" : {
+                $response_data["status"] = true;
+                $collaborators_html = "";
+                $collaborator_emails = array(
+                    "ecaccam@village88.com",
+                    "jganggangan@village88.com",
+                    "jabengona@village88.com",
+                    "kei.kishimoto@village88.com",
+                );
+
+                foreach($collaborator_emails as $collaborator_key => $collaborator_email){
+                    $collaborator_data = array(
+                        "collaborator_email" => $collaborator_email,
+                        "id" => time(),
+                        "is_owner" => ($collaborator_key == 0),
+                        "collaborator_level_id" => ((time() + rand()) % 2 == 0) ? 1 : 2
+                    );
+                    $collaborators_html .= get_include_contents("../views/partials/invited_user_partial.php", $collaborator_data);
+                }
+                $response_data["result"]["html"] = $collaborators_html;
+
+                break;
+            }
             case "add_collaborators" : {
                 $response_data["status"] = true;
                 $collaborators_html = "";
@@ -284,7 +307,9 @@
                 foreach($collaborator_emails as $collaborator_email){
                     $collaborator_data = array(
                         "collaborator_email" => $collaborator_email,
-                        "id" => time()
+                        "id" => time(),
+                        "is_owner" => FALSE,
+                        "collaborator_level_id" => 1
                     );
                     $collaborators_html .= get_include_contents("../views/partials/invited_user_partial.php", $collaborator_data);
                 }
