@@ -160,7 +160,7 @@ function onSubmitAddDocumentationForm(event){
                 initializeMaterializeDropdown();
             }
             else{
-                alert(response_data.error);
+                alert(response_data.error); 
             }
         }, "json");
         
