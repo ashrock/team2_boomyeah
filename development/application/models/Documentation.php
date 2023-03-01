@@ -136,42 +136,50 @@
 
             try {
                 $this->db->trans_start();
-                $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $params["remove_documentation_id"]);
 
-                if($this->db->affected_rows()){
-                    /* Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table */
-					$documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
+                $delete_collaborators = $this->Collaborator->deleteCollaborators(array("documentation_id" => $params["remove_documentation_id"]));
 
-					if($documentations_order["status"]){
-						$documentations_order = explode(",", $documentations_order["result"]["documentation_ids_order"]);
-						$documentation_index  = array_search($params["remove_documentation_id"], $documentations_order);
-						
-						if($documentation_index !== FALSE){
-							unset($documentations_order[$documentation_index]);
-							$documentations_count = count($documentations_order);
-	
-							$documentations_order = ($documentations_count) ? implode(",", $documentations_order) : "";
-							$update_workpsace = $this->Workspace->updateDocumentationsIdsOrder(array("documentations_order" => $documentations_order, "workspace_id" => $_SESSION["workspace_id"]));
-
-							if(!$update_workpsace["status"]){
-								throw new Exception($update_workpsace["error"]);
-							}
-						}
-
-                        if(($params["remove_is_archived"] == FALSE_VALUE && !$documentations_count) || ($params["remove_is_archived"] == TRUE_VALUE && $params["archived_documentations"] == "0")){
-                            $message = ($params["remove_is_archived"] == FALSE_VALUE) ? "You have no documentations yet." : "You have no archived documentations yet.";
+                if($delete_collaborators["status"]){
+                    $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $params["remove_documentation_id"]);
     
-                            $response_data["result"]["is_archived"]            = $params["remove_is_archived"];
-                            $response_data["result"]["no_documentations_html"] = $this->load->view('partials/no_documentations_partial.php', array('message' => $message), true);
+                    if($this->db->affected_rows()){
+                        /* Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table */
+                        $documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
+    
+                        if($documentations_order["status"]){
+                            $documentations_order = explode(",", $documentations_order["result"]["documentation_ids_order"]);
+                            $documentation_index  = array_search($params["remove_documentation_id"], $documentations_order);
+                            
+                            if($documentation_index !== FALSE){
+                                unset($documentations_order[$documentation_index]);
+                                $documentations_count = count($documentations_order);
+        
+                                $documentations_order = ($documentations_count) ? implode(",", $documentations_order) : "";
+                                $update_workpsace = $this->Workspace->updateDocumentationsIdsOrder(array("documentations_order" => $documentations_order, "workspace_id" => $_SESSION["workspace_id"]));
+    
+                                if(!$update_workpsace["status"]){
+                                    throw new Exception($update_workpsace["error"]);
+                                }
+                            }
+    
+                            if(($params["remove_is_archived"] == FALSE_VALUE && !$documentations_count) || ($params["remove_is_archived"] == TRUE_VALUE && $params["archived_documentations"] == "0")){
+                                $message = ($params["remove_is_archived"] == FALSE_VALUE) ? "You have no documentations yet." : "You have no archived documentations yet.";
+        
+                                $response_data["result"]["is_archived"]            = $params["remove_is_archived"];
+                                $response_data["result"]["no_documentations_html"] = $this->load->view('partials/no_documentations_partial.php', array('message' => $message), true);
+                            }
+                            
+                            $response_data["status"] = true;
+                            $response_data["result"]["documentation_id"] = $params["remove_documentation_id"];
+                            $this->db->trans_complete();
                         }
-                        
-						$response_data["status"] = true;
-                        $response_data["result"]["documentation_id"] = $params["remove_documentation_id"];
-						$this->db->trans_complete();
-					}
-					else{
-						throw new Exception($documentations_order["error"]);
-					}
+                        else{
+                            throw new Exception($documentations_order["error"]);
+                        }
+                    }
+                }
+                else{
+                    throw new Exception($delete_collaborators["error"]);
                 }
             }
             catch (Exception $e) {

@@ -5,7 +5,6 @@ class Documentations extends CI_Controller {
 	function __construct() {
         parent::__construct();
 
-		$this->load->model("Workspace");
 		$this->load->model("Documentation");
 
 		// Check for User session
@@ -139,6 +138,9 @@ class Documentations extends CI_Controller {
 		$response_data = array("status" => false, "result" => array(), "error" => null);
 
 		try {
+			$this->load->model("Workspace");
+			$this->load->model("Collaborator");
+
 			if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
 				$response_data = $this->Documentation->deleteDocumentation($_POST);
 			}
@@ -155,6 +157,7 @@ class Documentations extends CI_Controller {
 
 	// Private functions
 	private function setGetDocumentationsParams($params = null){
+		$this->load->model("Workspace");
 		$get_documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
 
 		$get_documentations_params = array(
