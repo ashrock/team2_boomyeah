@@ -56,6 +56,12 @@ $route['logout'] = 'users/logout';
 
 /* Admin Documentation Routes */
 $route['docs/edit'] = 'documentations/adminDocumentations';
+$route['docs/get_documentations'] = 'documentations/getDocumentations';
+
+
+$route['docs/add']['POST'] = 'documentations/addDocumentations';
+$route['docs/update']['POST'] = 'documentations/updateDocumentations';
+
 
 /* User Documentation Routes */
 $route['docs'] = 'documentations/userDocumentations';
