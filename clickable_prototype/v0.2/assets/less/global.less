@@ -427,6 +427,11 @@ textarea{
                             height: 20px;
                             width: 20px;
                             justify-self: flex-end;
+
+                            &.disabled, &:disabled{
+                                opacity: 0.5;
+                                pointer-events: none !important;
+                            }
                         }
                         #add_invite{
                             border-radius: 8px;

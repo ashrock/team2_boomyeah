@@ -176,7 +176,7 @@ function stringToHtmlContent (html_content){
     let template = document.createElement('template');
     html_content = html_content.trim(); // Never return a text node of whitespace as the result
     template.innerHTML = html_content;
-    return template.content.firstChild;
+    return template.content;
 }
 /*!
  * Automatically expand a textarea as the user types
@@ -266,4 +266,20 @@ function validateEmail(email) {
     let is_email = email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/gi);
 
     return is_email;
+}
+
+function initializeMaterializeTooltip(){
+    const elems = document.querySelectorAll('.tooltipped');
+    M.Tooltip.init(elems, {
+        position: "top"
+    });
+}
+
+function initializeMaterializeDropdown(){
+    let dropdown_elements = document.querySelectorAll('.more_action_btn');
+    M.Dropdown.init(dropdown_elements, {
+        alignment: 'left',
+        coverTrigger: false,
+        constrainWidth: false
+    });
 }

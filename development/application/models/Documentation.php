@@ -10,6 +10,7 @@
 
                 $where_conditions = "is_archived = ? ";
                 $bind_params      = array($params["workspace_id"], $params["is_archived"]);
+                $order_by_clause  = "";
 
                 if($params["user_level_id"] == USER_LEVEL["USER"]){
                     $where_conditions .= "AND (is_private = ?  OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = ?)) ";
@@ -17,6 +18,11 @@
                 }
                 
                 $documentation_order = ($params["is_archived"] || $params["documentation_ids_order"] == null) ? "" : "ORDER BY FIELD (id, {$params["documentation_ids_order"]})";
+
+                /* Add ORDER BY if documentation_ids_order is no null or empty */
+                if($params["documentation_ids_order"]){
+                    $order_by_clause = "ORDER BY FIELD (id, {$params["documentation_ids_order"]})";
+                }
 
                 $get_documentations = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count
                     FROM documentations
@@ -125,17 +131,59 @@
             return $response_data;
         }
 
-        public function deleteDocumentation($documentation_id){
+        public function deleteDocumentation($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $documentation_id);
+                $this->db->trans_start();
 
-                if($this->db->affected_rows()){
-                    $response_data["status"] = true;
+                $delete_collaborators = $this->Collaborator->deleteCollaborators(array("documentation_id" => $params["remove_documentation_id"]));
+
+                if($delete_collaborators["status"]){
+                    $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $params["remove_documentation_id"]);
+    
+                    if($this->db->affected_rows()){
+                        /* Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table */
+                        $documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
+    
+                        if($documentations_order["status"]){
+                            $documentations_order = explode(",", $documentations_order["result"]["documentation_ids_order"]);
+                            $documentation_index  = array_search($params["remove_documentation_id"], $documentations_order);
+                            
+                            if($documentation_index !== FALSE){
+                                unset($documentations_order[$documentation_index]);
+                                $documentations_count = count($documentations_order);
+        
+                                $documentations_order = ($documentations_count) ? implode(",", $documentations_order) : "";
+                                $update_workpsace = $this->Workspace->updateDocumentationsIdsOrder(array("documentations_order" => $documentations_order, "workspace_id" => $_SESSION["workspace_id"]));
+    
+                                if(!$update_workpsace["status"]){
+                                    throw new Exception($update_workpsace["error"]);
+                                }
+                            }
+    
+                            if(($params["remove_is_archived"] == FALSE_VALUE && !$documentations_count) || ($params["remove_is_archived"] == TRUE_VALUE && $params["archived_documentations"] == "0")){
+                                $message = ($params["remove_is_archived"] == FALSE_VALUE) ? "You have no documentations yet." : "You have no archived documentations yet.";
+        
+                                $response_data["result"]["is_archived"]            = $params["remove_is_archived"];
+                                $response_data["result"]["no_documentations_html"] = $this->load->view('partials/no_documentations_partial.php', array('message' => $message), true);
+                            }
+                            
+                            $response_data["status"] = true;
+                            $response_data["result"]["documentation_id"] = $params["remove_documentation_id"];
+                            $this->db->trans_complete();
+                        }
+                        else{
+                            throw new Exception($documentations_order["error"]);
+                        }
+                    }
+                }
+                else{
+                    throw new Exception($delete_collaborators["error"]);
                 }
             }
             catch (Exception $e) {
+			    $this->db->trans_rollback();
                 $response_data["error"] = $e->getMessage();
             }
 
