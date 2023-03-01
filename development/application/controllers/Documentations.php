@@ -88,6 +88,28 @@ class Documentations extends CI_Controller {
 		echo json_encode($response_data);
 	}
 
+	public function addDocumentations(){
+		$response_data = array("status" => true, "result" => array(), "error" => null);
+
+		try {
+			if(isset($_POST["document_title"])){
+				$response_data = $this->Documentation->addDocumentations(array(
+					"user_id"      => $_SESSION["user_id"],
+					"workspace_id" => $_SESSION["workspace_id"],
+					"title"		   => $_POST["document_title"]
+				));
+			}
+			else{
+				$response_data["error"] = "Document title is required";
+			}
+		}
+		catch (Exception $e) {
+			$response_data["error"] = $e->getMessage();
+		}
+
+		echo json_encode($response_data);
+	}
+
 	// Private functions
 	private function setGetDocumentationsParams($params = null){
 		$get_documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
