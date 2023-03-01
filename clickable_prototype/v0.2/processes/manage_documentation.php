@@ -307,7 +307,7 @@
                 foreach($collaborator_emails as $collaborator_email){
                     $collaborator_data = array(
                         "collaborator_email" => $collaborator_email,
-                        "id" => time(),
+                        "id" => (time() + rand()),
                         "is_owner" => FALSE,
                         "collaborator_level_id" => 1
                     );

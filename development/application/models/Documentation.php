@@ -16,6 +16,8 @@
                     $where_conditions .= "AND (is_private = ?  OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = ?)) ";
                     array_push($bind_params, TRUE_VALUE, $_SESSION["user_id"]);
                 }
+                
+                $documentation_order = ($params["is_archived"] || $params["documentation_ids_order"] == null) ? "" : "ORDER BY FIELD (id, {$params["documentation_ids_order"]})";
 
                 /* Add ORDER BY if documentation_ids_order is no null or empty */
                 if($params["documentation_ids_order"]){
@@ -25,7 +27,7 @@
                 $get_documentations = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count
                     FROM documentations
                     WHERE workspace_id = ? AND {$where_conditions}
-                    {$order_by_clause};", $bind_params
+                    $documentation_order", $bind_params
                 );
 
                 if($get_documentations->num_rows()){
@@ -73,7 +75,7 @@
         }
 
         public function updateDocumentations($params){
-            $response_data = array("status" => false, "result" => [], "error" => null);
+            $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 $document = $this->db->query("SELECT id FROM documentations WHERE id = ?", $params["documentation_id"])->row();
@@ -86,40 +88,38 @@
                             $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->row();
 
                             $response_data["status"] = true;
-                            $response_data["result"] = array(
-                                "documentation_id" => $updated_document->{'id'},
-                                "update_type" => $params["update_type"],
-                            );
+                            $response_data["result"]["documentation_id"] = $updated_document->{'id'};
+                            $response_data["result"]["update_type"]      = $params["update_type"];
 
-                            // if($params["update_type"] == "is_private"){
-                            //     $response_data["result"]["html"] = get_include_contents("../views/partials/document_block_partial.php", $updated_document);
-                            // }
-                            // elseif($_POST["update_type"] == "is_archived" ){
-                            //     $workspace = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]}");
-                            //     $documentation_order_array = explode(",", $workspace["documentations_order"]);
-                            //     $new_documents_order = NULL;
+                            if($params["update_type"] == "is_private"){
+                                $response_data["result"]["updated_document"] = $updated_document;
+                            }
+                            elseif($params["update_type"] == "is_archived" ){
+                                $workspace = $this->db->query("SELECT documentation_ids_order FROM workspaces WHERE id = ?", $params["workspace_id"])->row();
+                                $documentation_order_array = explode(",", $workspace->{"documentation_ids_order"});
+                                $new_documents_order = NULL;
+                                $documentations_count = 0;
 
-                            //     if($_POST["update_value"] == $_YES){
-                            //         if (($key = array_search($_POST["documentation_id"], $documentation_order_array)) !== false) {
-                            //             unset($documentation_order_array[$key]);
-                            //             $documentations_count = count($documentation_order_array);
-                            //         }
+                                if($params["update_value"] == YES){
+                                    if (($key = array_search($params["documentation_id"], $documentation_order_array)) !== false) {
+                                        unset($documentation_order_array[$key]);
+                                        $documentations_count = count($documentation_order_array);
+                                    }
 
-                            //         $new_documents_order = ($documentations_count) ? implode(",", $documentation_order_array) : "";
-                            //     }
-                            //     else {
-                            //         $new_documents_order = (strlen($workspace["documentations_order"])) ? $workspace["documentations_order"].','. $_POST["documentation_id"] : $_POST["documentation_id"];
-                            //     }
+                                    $new_documents_order = ($documentations_count) ? implode(",", $documentation_order_array) : "";
+                                }
+                                else {
+                                    $new_documents_order  = ($workspace->{"documentation_ids_order"}) ? $workspace->{"documentation_ids_order"}.','. $params["documentation_id"] : $params["documentation_id"];
+                                    $documentations_count = count($this->db->query("SELECT id FROM documentations WHERE is_archived = ?", YES)->result_array());
+                                }
 
-                            //     $update_workspace = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
-
-                            //     if(($update_value == "{$_NO}" && $_POST["archived_documentations"] == "0") || ($update_value == "{$_YES}" && !$documentations_count)){
-                            //         $message = ($update_value == "{$_NO}") ? "You have no archived documentations yet." : "You have no documentations yet.";
-            
-                            //         $response_data["result"]["is_archived"]            = $update_value;
-                            //         $response_data["result"]["no_documentations_html"] = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
-                            //     }
-                            // }
+                                $update_workspace = $this->db->query("UPDATE workspaces SET documentation_ids_order = ? WHERE id = ?", array($new_documents_order, $params["workspace_id"]));
+                                
+                                if($update_workspace){
+                                    $response_data["result"]["message"] = ($params["update_value"] == NO) ? "You have no archived documentations yet." : "You have no documentations yet.";
+                                    $response_data["result"]["documentations_count"] = $documentations_count;
+                                }
+                            }
                         }
                     }
                 }
@@ -136,42 +136,50 @@
 
             try {
                 $this->db->trans_start();
-                $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $params["remove_documentation_id"]);
 
-                if($this->db->affected_rows()){
-                    /* Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table */
-					$documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
+                $delete_collaborators = $this->Collaborator->deleteCollaborators(array("documentation_id" => $params["remove_documentation_id"]));
 
-					if($documentations_order["status"]){
-						$documentations_order = explode(",", $documentations_order["result"]["documentation_ids_order"]);
-						$documentation_index  = array_search($params["remove_documentation_id"], $documentations_order);
-						
-						if($documentation_index !== FALSE){
-							unset($documentations_order[$documentation_index]);
-							$documentations_count = count($documentations_order);
-	
-							$documentations_order = ($documentations_count) ? implode(",", $documentations_order) : "";
-							$update_workpsace = $this->Workspace->updateDocumentationsIdsOrder(array("documentations_order" => $documentations_order, "workspace_id" => $_SESSION["workspace_id"]));
-
-							if(!$update_workpsace["status"]){
-								throw new Exception($update_workpsace["error"]);
-							}
-						}
-
-                        if(($params["remove_is_archived"] == FALSE_VALUE && !$documentations_count) || ($params["remove_is_archived"] == TRUE_VALUE && $params["archived_documentations"] == "0")){
-                            $message = ($params["remove_is_archived"] == FALSE_VALUE) ? "You have no documentations yet." : "You have no archived documentations yet.";
+                if($delete_collaborators["status"]){
+                    $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $params["remove_documentation_id"]);
     
-                            $response_data["result"]["is_archived"]            = $params["remove_is_archived"];
-                            $response_data["result"]["no_documentations_html"] = $this->load->view('partials/no_documentations_partial.php', array('message' => $message), true);
+                    if($this->db->affected_rows()){
+                        /* Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table */
+                        $documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
+    
+                        if($documentations_order["status"]){
+                            $documentations_order = explode(",", $documentations_order["result"]["documentation_ids_order"]);
+                            $documentation_index  = array_search($params["remove_documentation_id"], $documentations_order);
+                            
+                            if($documentation_index !== FALSE){
+                                unset($documentations_order[$documentation_index]);
+                                $documentations_count = count($documentations_order);
+        
+                                $documentations_order = ($documentations_count) ? implode(",", $documentations_order) : "";
+                                $update_workpsace = $this->Workspace->updateDocumentationsIdsOrder(array("documentations_order" => $documentations_order, "workspace_id" => $_SESSION["workspace_id"]));
+    
+                                if(!$update_workpsace["status"]){
+                                    throw new Exception($update_workpsace["error"]);
+                                }
+                            }
+    
+                            if(($params["remove_is_archived"] == FALSE_VALUE && !$documentations_count) || ($params["remove_is_archived"] == TRUE_VALUE && $params["archived_documentations"] == "0")){
+                                $message = ($params["remove_is_archived"] == FALSE_VALUE) ? "You have no documentations yet." : "You have no archived documentations yet.";
+        
+                                $response_data["result"]["is_archived"]            = $params["remove_is_archived"];
+                                $response_data["result"]["no_documentations_html"] = $this->load->view('partials/no_documentations_partial.php', array('message' => $message), true);
+                            }
+                            
+                            $response_data["status"] = true;
+                            $response_data["result"]["documentation_id"] = $params["remove_documentation_id"];
+                            $this->db->trans_complete();
                         }
-                        
-						$response_data["status"] = true;
-                        $response_data["result"]["documentation_id"] = $params["remove_documentation_id"];
-						$this->db->trans_complete();
-					}
-					else{
-						throw new Exception($documentations_order["error"]);
-					}
+                        else{
+                            throw new Exception($documentations_order["error"]);
+                        }
+                    }
+                }
+                else{
+                    throw new Exception($delete_collaborators["error"]);
                 }
             }
             catch (Exception $e) {
