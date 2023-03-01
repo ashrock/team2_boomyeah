@@ -88,3 +88,6 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 defined('USER_LEVEL') OR define('USER_LEVEL', array("ADMIN" => 9, "USER" => 1));
 defined('TRUE_VALUE') OR define('TRUE_VALUE', 1);
 defined('FALSE_VALUE') OR define('FALSE_VALUE', 0);
+defined('ZERO_VALUE') OR define('ZERO_VALUE', 0);
+defined('YES') OR define('YES', 1);
+defined('NO') OR define('NO', 0);
