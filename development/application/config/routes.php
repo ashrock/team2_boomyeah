@@ -61,6 +61,11 @@ $route['docs/edit']['GET'] = 'documentations/adminDocumentations';
 $route['docs/get']['POST']    = 'documentations/getDocumentations';
 $route['docs/remove']['POST'] = 'documentations/removeDocumentation';
 
+
+$route['docs/add']['POST'] = 'documentations/addDocumentations';
+$route['docs/update']['POST'] = 'documentations/updateDocumentations';
+
+
 /* User Documentation Routes */
 $route['docs'] = 'documentations/userDocumentations';
 

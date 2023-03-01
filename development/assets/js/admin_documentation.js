@@ -94,6 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
         /* Switch Active/Archive view */
         .on("click", ".switch_view_btn", switchDocumentationView)
         .on("submit", "#get_documentations_form", getDocumentations)
+        .on("submit", "#add_documentation_form", submitAddDocumentation)
+        .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
+        .on("click", ".archive_btn", setArchiveValue)
         /* Remove documentation */
         .on("click", ".remove_btn", setRemoveDocumentationValue)
         .on("click", "#remove_confirm", submitRemoveDocumentation)
@@ -161,18 +164,17 @@ function submitInvite(event){
     event.preventDefault();
 }
 
-function onSubmitAddDocumentationForm(event){
+function submitAddDocumentation(event){
     event.preventDefault();
-    let add_document_form = $(this);
+    let add_document_form = ux("#add_documentation_form");
     const input_document_title = $("#input_add_documentation").val();
 
     if(input_document_title){
         /** Use AJAX to generate new documentation */
-        $.post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
+        add_document_form.post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
                 /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
                 alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
-                // $("#add_documentation_form")[0].reset();
                 location.reload();
             }
             else{
