@@ -176,7 +176,7 @@ function stringToHtmlContent (html_content){
     let template = document.createElement('template');
     html_content = html_content.trim(); // Never return a text node of whitespace as the result
     template.innerHTML = html_content;
-    return template.content.firstChild;
+    return template.content;
 }
 /*!
  * Automatically expand a textarea as the user types

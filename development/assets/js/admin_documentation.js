@@ -89,17 +89,27 @@ document.addEventListener("DOMContentLoaded", () => {
             event.stopImmediatePropagation();
             event.preventDefault();
             
-            /* showConfirmPrivacyModal($(this).attr("data-document_id"), 1, "#confirm_to_private", $(this).closest(".document_block")); */
+            let document_id = ux(event.target).attr("data-document_id");
+            showConfirmPrivacyModal(document_id, 1, "#confirm_to_private"); 
         })
         /* Switch Active/Archive view */
         .on("click", ".switch_view_btn", switchDocumentationView)
         .on("submit", "#get_documentations_form", getDocumentations)
         .on("submit", "#add_documentation_form", submitAddDocumentation)
         .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
-        .on("click", ".archive_btn", setArchiveValue)
+
+        /* Archive & Unarchive of documentation */
+        .on("click", ".archive_btn", setArchiveDocumentationValue)
+        .on("click", "#archive_confirm", submitArchiveDocumentation)
+
         /* Remove documentation */
         .on("click", ".remove_btn", setRemoveDocumentationValue)
         .on("click", "#remove_confirm", submitRemoveDocumentation)
+
+        /* Setting of Privacy*/
+        .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
+        .on("submit", "#change_document_privacy_form", submitChangePrivacy)
+        .on("click", ".change_privacy_yes_btn", submitChangePrivacy)
 });
 
 function onSubmitDuplicateForm(event){
@@ -137,21 +147,18 @@ function duplicateDocumentation(event){
     duplicate_form.trigger("submit");
 }
 
-async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type = "#confirm_to_private", document_block){
+async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type = "#confirm_to_private"){
     let change_document_privacy_form = $("#change_document_privacy_form");
+
     change_document_privacy_form.find("#documentation_id").val(document_id);
     change_document_privacy_form.find("#update_value").val(update_value);
+
 
     let confirm_modal = document.querySelector(modal_type);
     var instance = M.Modal.getInstance(confirm_modal);
 
-    await displayModalDocumentationTitle($(confirm_modal), document_block);
+    ux(confirm_modal).find(".documentation_title").text(ux("#document_" + document_id).find(".document_title").val())
     instance.open();
-}
-
-async function displayModalDocumentationTitle(confirm_modal, document_block){
-    let document_title = await document_block.find(".document_title").val();
-    confirm_modal.find(".documentation_title").text(document_title);
 }
 
 function submitInvite(event){
@@ -291,7 +298,7 @@ function setDocumentPrivacyValues(event){
     const documentation         = event.target;
     const documentation_id      = documentation.getAttribute("data-document_id");
     const documentation_privacy = documentation.getAttribute("data-document_privacy");
-    $("#confirm_to_public").find(".documentation_title").text( $(this).closest(".document_block").find(".document_title").val() );
+    $("#confirm_to_public").find(".documentation_title").text(  $(`#document_${documentation_id}`).find(".document_title").val() );
 
     /* Set form values */
     let change_document_privacy_form = $("#change_document_privacy_form");
@@ -300,45 +307,32 @@ function setDocumentPrivacyValues(event){
     change_document_privacy_form.find("#update_value").val( (documentation_privacy == "public") ? 1 : 0 );
 }
 
-function onSubmitChangePrivacy(event){
-    event.stopImmediatePropagation();
-    event.preventDefault();
-    let post_form = $(this);
+function submitChangePrivacy(event){
+    let privacy_form = ux("#change_document_privacy_form");
     
     /** Use AJAX to change documentation privacy */
-    $.post(post_form.attr("action"), post_form.serialize(), (post_data) => {
-        if(post_data.status){
+    privacy_form.post(privacy_form.attr("action"), privacy_form.serialize(), (response_data) => {
+        if(response_data.status){
             /* TODO: Improve UX after success updating. Add animation to indication the replace with the updated . */
-            $(`#document_${post_data.result.documentation_id}`).replaceWith(post_data.result.html);
-            $(`#document_${post_data.result.documentation_id}`).addClass("animate__animated animated_blinkBorder").removeClass("error");
+            $(`#document_${response_data.result.documentation_id}`).replaceWith(response_data.result.html);
+            $(`#document_${response_data.result.documentation_id}`).addClass("animate__animated animated_blinkBorder").removeClass("error");
                 
             setTimeout(() => {
-                $(`#document_${post_data.result.documentation_id}`).removeClass("animate__animated animated_blinkBorder");
+                $(`#document_${response_data.result.documentation_id}`).removeClass("animate__animated animated_blinkBorder");
                 initializeMaterializeDropdown();
             }, 1280);
         }
-
-        post_form[0].reset();
     }, "json");
 
     return false;
 }
 
-function submitChangeDocumentPrivacy(event){
-    event.preventDefault();
+function setArchiveDocumentationValue(event){
+    let archive_button  = event.target;
+    let document_id     = ux(archive_button).attr("data-document_id");
+    let document_title  = ux(`#document_${document_id}`).find(".document_title").val();
 
-    $("#change_document_privacy_form").trigger("submit");
-
-    return;
-}
-
-function setArchiveValue(event){
-    let archive_button  = $(this);
-    let document_id     = archive_button.attr("data-document_id");
-    let document_action = archive_button.attr("data-documentation_action");
-    let is_archived     = (document_action == "archive");
-    let document_block = archive_button.closest(".document_block");
-    let document_title = document_block.find(".document_title").val();
+    let is_archived     = (ux(archive_button).attr("data-documentation_action") == "archive");
     let confirmation_text = (is_archived) ? "Are you sure you want to move `"+ document_title +"` documentation to Archive?" : "Are you sure you want to Unarchive `"+ document_title +"` documentation?";
     $("#confirm_to_archive").find("p").text( confirmation_text );
     
@@ -348,15 +342,10 @@ function setArchiveValue(event){
     archive_document_form.find("#update_value").val( (is_archived) ? 1 : 0 );
 }
 
-function submitArchive(event){
-    let archive_document_form      = $("#archive_form");
-    let archive_document_form_data = archive_document_form.serialize();
+function submitArchiveDocumentation(event){
+    let archive_document_form = ux("#archive_form");
 
-    if($("#archive_form #update_value").val() == "0"){
-        archive_document_form_data += `&archived_documentations=${$("#archived_documents .document_block").length - 1}`;
-    }
-
-    $.post(archive_document_form.attr("action"), archive_document_form_data, (response_data) => {
+    archive_document_form.post(archive_document_form.attr("action"), archive_document_form.serialize(), (response_data) => {
         if(response_data.status){
             /* TODO: Improve UX after success updating. Add animation to remove the archived document from the list. */
             let documentation = $(`#document_${response_data.result.documentation_id}`);
