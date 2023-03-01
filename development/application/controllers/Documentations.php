@@ -114,18 +114,30 @@ class Documentations extends CI_Controller {
 		$response_data = array("status" => false, "result" => array(), "error" => null);
 
 		try {
-			if(isset($_POST["update_type"]) && isset($_POST["documentation_id"])){
+			if(isset($_POST["documentation_id"])){
 
-				$response_data = $this->Documentation->updateDocumentations(array(
+				$update_documentation = $this->Documentation->updateDocumentations(array(
 					"user_id"     	   => $_SESSION["user_id"],
 					"workspace_id" 	   => $_SESSION["workspace_id"],
 					"documentation_id" => $_POST["documentation_id"],
 					"update_type" 	   => $_POST["update_type"],
 					"update_value"     => $_POST["update_value"]
 				));
+
+				if($_POST["update_type"] == "is_private"){
+					$update_documentation["result"]["html"] = $this->load->view("partials/document_block_partial.php", $update_documentation["result"]["updated_document"], true);
+				}
+				elseif($_POST["update_type"] == "is_archived"){
+					if(!$update_documentation["result"]["documentations_count"]){
+						$update_documentation["result"]["is_archived"] = $_POST["update_value"];
+						$update_documentation["result"]["no_documentations_html"] = $this->load->view("partials/no_documentations_partial.php", array("message" => $update_documentation["result"]["message"]), true);
+					}
+				}
+
+				$response_data = $update_documentation;
 			}
 			else{
-				$response_data["error"] = "Document id and update_type are required";
+				$response_data["error"] = "Document id is required";
 			}
 		}
 		catch (Exception $e) {
@@ -202,9 +214,9 @@ class Documentations extends CI_Controller {
 			"workspace_id"            => $_SESSION["workspace_id"],
 			"user_level_id"           => $_SESSION["user_level_id"],
 			"is_archived"             => isset($params["is_archived"]) ? $params["is_archived"] : FALSE_VALUE,
-			"documentation_ids_order" => $get_documentations_order["result"]["documentation_ids_order"],
+			"documentation_ids_order" => $get_documentations_order["result"]["documentation_ids_order"] 
 		);
-
+		
 		return $get_documentations_params;
 	}
 }
