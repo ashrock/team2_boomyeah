@@ -267,3 +267,19 @@ function validateEmail(email) {
 
     return is_email;
 }
+
+function initializeMaterializeTooltip(){
+    const elems = document.querySelectorAll('.tooltipped');
+    M.Tooltip.init(elems, {
+        position: "top"
+    });
+}
+
+function initializeMaterializeDropdown(){
+    let dropdown_elements = document.querySelectorAll('.more_action_btn');
+    M.Dropdown.init(dropdown_elements, {
+        alignment: 'left',
+        coverTrigger: false,
+        constrainWidth: false
+    });
+}
