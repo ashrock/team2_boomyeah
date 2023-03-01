@@ -13,7 +13,7 @@
     <meta name="author" content="UX Team 2">
     <meta name="description" content="A great way to describe your documentation tool">
     <title>Boom Yeah | Admin Documentation Page</title>
-    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= add_file("assets/images/favicon.ico") ?>" type="image/x-icon">
     <link rel="stylesheet" href="<?= add_file("assets/css/global.css") ?>">
     <link rel="stylesheet" href="<?= add_file("assets/css/admin_documentation.css") ?>">
     <!--Import Google Icon Font-->
