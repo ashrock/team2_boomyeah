@@ -98,6 +98,7 @@
         <input type="hidden" id="documentations_order" name="documentations_order">
     </form>
     <?php include_once("../partials/confirm_documentation_modals.php"); ?>
+    <?php include_once("../partials/confirm_invite_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
     <script src="<?= add_file("assets/js/invite_modal.js") ?>"></script>
