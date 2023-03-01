@@ -13,7 +13,27 @@
                     $response_data["result"] = $get_documentations_order->result_array()[0];
                 }
                 else{
-                    throw new Exception("Error getting documentations order!");
+                    throw new Exception("Error getting documentations ids order!");
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        public function updateDocumentationsIdsOrder($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $update_workspace = $this->db->query("UPDATE workspaces SET documentation_ids_order = ? WHERE id = ?;", $params);
+
+                if($this->db->affected_rows()){
+                    $response_data["status"] = true;
+                }
+                else{
+                    throw new Exception("Error updating documentation ids order!");
                 }
             }
             catch (Exception $e) {

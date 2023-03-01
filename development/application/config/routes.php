@@ -54,9 +54,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'users';
 $route['logout'] = 'users/logout';
 
-/* Admin Documentation Routes */
-$route['docs/edit'] = 'documentations/adminDocumentations';
-$route['docs/get_documentations'] = 'documentations/getDocumentations';
+/* GET | Admin Documentation Routes */
+$route['docs/edit']['GET'] = 'documentations/adminDocumentations';
+
+/* POST | Admin Documentation Routes */
+$route['docs/get']['POST']    = 'documentations/getDocumentations';
+$route['docs/remove']['POST'] = 'documentations/removeDocumentation';
 
 /* User Documentation Routes */
 $route['docs'] = 'documentations/userDocumentations';
