@@ -1,19 +1,55 @@
-var valid_email = true;
-var invited_emails = [];
+let valid_email = true;
+let invited_emails = [];
+let invite_instance = null;
+let role_instance   = null;
 
-var invite_instance = null;
-var role_instance   = null;
+document.addEventListener("DOMContentLoaded", async () => {
+    
+    initializeMaterializeTooltip();
+    appearEmptySection();
+    initializeMaterializeDropdown();
+
+    document.addEventListener("click", (event) => {
+        let element = event.target.closest(".add_invite_result");
+        
+        if(element){
+            addSearchEmailResult(element);
+        }
+    });
+
+    ux("body")
+        .on("click", "#add_invite_btn", addPeopleWithAccess)
+        .on("click", "#remove_invited_user_confirm",submitRemoveInvitedUser)
+        .on("change", ".invited_user_role",setRoleChangeAction)
+
+    /* run functions from invite_modal.js */
+    initializeCollaboratorChipsInstance();
+    // initRoleDropdown();
+    initSelect();
+
+    ux("#invite_collaborator_btn").trigger("click");
+})
 
 function initSelect(){
-    var select_instance = M.FormSelect.init(document.querySelectorAll('select'));
+    M.FormSelect.init(document.querySelectorAll('select'));
 }
 
-function initChipsInstance(){
-    var invite_instance = M.Chips.init(document.querySelector(".chips"), {
+function initializeCollaboratorChipsInstance(){
+    let collaborator_chips = document.querySelector(".collaborator_chips");
+    M.Chips.init(collaborator_chips, {
         placeholder: "Enter email address",
         secondaryPlaceholder: "Enter email address",
-        onChipAdd: (e, email) => {
-            addEmail(email.innerText.split("close")[0]);
+        onChipAdd: (element, email) => {
+            let collaborator_email = email.innerText.split("close")[0];
+            
+            if(validateEmail(collaborator_email)){
+                addEmail(collaborator_email);
+            } else {
+                email.remove();
+                setTimeout(() => {
+                    ux(".collaborator_email_address").val(collaborator_email);
+                });
+            }
         }
     });
 }
@@ -95,7 +131,7 @@ function addPeopleWithAccess(event){
     }
 
     invited_emails = [];
-    initChipsInstance();
+    initializeCollaboratorChipsInstance();
 }
 
 function setRoleChangeAction(event){

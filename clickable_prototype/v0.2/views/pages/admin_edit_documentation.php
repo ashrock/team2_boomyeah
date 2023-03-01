@@ -13,6 +13,11 @@
 
     /** TODO: Backend should provide the $document_id */
     $document_id = time();
+    $document_data = array(
+        "document_id" => $document_id,
+        "document_title" => "Employee Handbook",
+        "is_private" => TRUE
+    );
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,20 +49,20 @@
         <div class="container">
             <ul id="breadcrumb_list">
                 <li class="breadcrumb_item"><a href="admin_documentation.html">Documentation</a></li>
-                <li class="breadcrumb_item active">Employee Handbook</li>
+                <li class="breadcrumb_item active"><?= $document_data["document_title"] ?></li>
             </ul>
             <div class="divider"></div>
             <div id="doc_title_access">
-                <h1 id="doc_title">Employee Handbook</h1>
+                <h1 id="doc_title"><?= $document_data["document_title"] ?></h1>
                 <!-- Switch -->     
                 <div class="switch switch_btn">
                     <label for="set_privacy_switch">
-                        <span class="toggle_text">Public</span>
-                        <input class="toggle_switch" type="checkbox" id="set_privacy_switch">
+                        <span class="toggle_text"><?= $document_data["is_private"] ? "Private" : "Public" ?></span>
+                        <input class="toggle_switch" type="checkbox" id="set_privacy_switch" <?= $document_data["is_private"] ? "checked='checked'" : "" ?>>
                         <span class="lever"></span>
                     </label>
                 </div>
-                <a id="invite_collaborator_btn" class="waves-effect waves-light btn modal-trigger hidden" href="#invite_collaborator_modal">13 Collaborators</a>
+                <a id="invite_collaborator_btn" class="waves-effect waves-light btn modal-trigger <?= $document_data["is_private"] ? "" : "hidden" ?>" href="#invite_collaborator_modal">13 Collaborators</a>
             </div>
             <p class="doc_text_content" contenteditable="true" data-placeholder="Add Description"></p>
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
@@ -121,7 +126,7 @@
         <input type="hidden" name="action" value="duplicate_section">
     </form>
     <form id="change_document_privacy_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
-        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $document_id ?>">
+        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $document_data["document_id"] ?>">
         <input type="hidden" name="action" value="update_documentation_privacy">
         <input type="hidden" name="update_type" value="is_private">
         <input type="hidden" name="update_value" class="update_value" value="">
