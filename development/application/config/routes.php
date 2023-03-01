@@ -55,10 +55,10 @@ $route['default_controller'] = 'users';
 $route['logout'] = 'users/logout';
 
 /* Admin Documentation Routes */
-$route['admin_documentations'] = 'documentations/adminDocumentations';
+$route['docs/edit'] = 'documentations/adminDocumentations';
 
 /* User Documentation Routes */
-$route['user_documentations'] = 'documentations/userDocumentations';
+$route['docs'] = 'documentations/userDocumentations';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

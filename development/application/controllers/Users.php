@@ -31,7 +31,7 @@ class Users extends CI_Controller {
 			$google_client = new Google_Client();
 			$google_client->setClientId("499626512701-5phs7ak08faatl5g2f9n1o4qsva5hbhq.apps.googleusercontent.com");
 			$google_client->setClientSecret("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");
-			$google_client->setRedirectUri("http://localhost:8888/development/");
+			$google_client->setRedirectUri("http://localhost:8888/");
 			$google_client->addScope("profile email");
 
 			if(isset($_GET["code"])){
@@ -50,13 +50,14 @@ class Users extends CI_Controller {
 						$_SESSION["workspace_id"]  = 1;
 						
 						// Set user session
-						$_SESSION["user_id"]       = $register_user["result"]["user_info"]["id"];
-						$_SESSION["user_level_id"] = $register_user["result"]["user_info"]["user_level_id"];
-						$_SESSION["first_name"]    = $register_user["result"]["user_info"]["first_name"];
-						$_SESSION["last_name"]     = $register_user["result"]["user_info"]["last_name"];
-						$_SESSION["email"]         = $register_user["result"]["user_info"]["email"];
+						$_SESSION["user_id"]          = $register_user["result"]["user_info"]["id"];
+						$_SESSION["user_level_id"]    = $register_user["result"]["user_info"]["user_level_id"];
+						$_SESSION["first_name"]       = $register_user["result"]["user_info"]["first_name"];
+						$_SESSION["last_name"]        = $register_user["result"]["user_info"]["last_name"];
+						$_SESSION["email"]            = $register_user["result"]["user_info"]["email"];
+						$_SESSION["user_profile_pic"] = $userinfo["picture"];
 	
-						redirect(($register_user["result"]["user_info"]["user_level_id"] == USER_LEVEL["ADMIN"]) ? "admin_documentations" : "user_documentations");
+						redirect(($register_user["result"]["user_info"]["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
 					}
 				}
 			}
@@ -67,7 +68,7 @@ class Users extends CI_Controller {
 		}
 		else{
 			// Redirect User to documentations page depending on User level
-			redirect(($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) ? "admin_documentations" : "user_documentations");
+			redirect(($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
 		}
 	}
 
