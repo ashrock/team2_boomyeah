@@ -18,7 +18,7 @@
                 </div>
                 <div id="with_access_div">
                     <h2 class="access">People with access</h2>
-                    <div class="invited_users_wrapper">
+                    <div id="invited_users_wrapper" class="invited_users_wrapper">
                         <div class="invited_user">
                             <div class="invited_user_info">
                                 <p>kbtonel1@village88.com</p>
@@ -60,3 +60,7 @@
         </div>
     </div>
 </div>
+<form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="add_collaborators_form" method="POST">
+    <input type="hidden" name="action" value="add_collaborators">
+    <input type="hidden" name="collaborator_emails" class="collaborator_emails">
+</form>
