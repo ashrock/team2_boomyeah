@@ -1,6 +1,19 @@
 // out: false
 @import url(./variables.less);
 
+div::-webkit-scrollbar {
+    background-color: @by_bg;
+    border-radius: 10px;
+    width: 10px;
+    display: revert;
+}
+
+div::-webkit-scrollbar-thumb {
+    background-color: @by_lightgray;
+    border-radius: 10px;
+    width: 10px;
+}
+
 .invited_users_wrapper{
     max-height: 250px;
     overflow-x: hidden;
@@ -17,12 +30,12 @@
                         display: flex;
                         min-height: 48px;
                         border-bottom: 1px solid #E2E8F0;
+
                         &:first-child{
                             border-top: 1px solid #E2E8F0;
 
                         }
                         p, select {
-                            color: #A1A1AA !important;
                             font: 12px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
                             margin-left: auto;
 

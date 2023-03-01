@@ -58,12 +58,12 @@ $route['logout'] = 'users/logout';
 $route['docs/edit']['GET'] = 'documentations/adminDocumentations';
 
 /* POST | Admin Documentation Routes */
-$route['docs/get']['POST']    = 'documentations/getDocumentations';
-$route['docs/remove']['POST'] = 'documentations/removeDocumentation';
-
-
-$route['docs/add']['POST'] = 'documentations/addDocumentations';
-$route['docs/update']['POST'] = 'documentations/updateDocumentations';
+$route['docs/get']['POST']       = 'documentations/getDocumentations';
+$route['docs/add']['POST']       = 'documentations/addDocumentations';
+$route['docs/update']['POST']    = 'documentations/updateDocumentations';
+$route['docs/duplicate']['POST'] = 'documentations/duplicateDocumentation';
+$route['docs/remove']['POST']    = 'documentations/removeDocumentation';
+$route['docs/reorder']['POST']   = 'workspaces/updateWorkspace';
 
 
 /* User Documentation Routes */

@@ -52,7 +52,7 @@
     <div id="wrapper">
         <div class="container">
             <ul id="breadcrumb_list">
-                <li class="breadcrumb_item"><a href="admin_documentation.html">Documentation</a></li>
+                <li class="breadcrumb_item"><a href="admin_documentation.php">Documentation</a></li>
                 <li class="breadcrumb_item active"><?= $document_data["document_title"] ?></li>
             </ul>
             <div class="divider"></div>
