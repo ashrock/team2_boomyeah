@@ -23,10 +23,10 @@
         <a href="./admin_documentation.html"><img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/global_logo.svg" class="global_logo" alt="global_logo"></a>
         <div class="user_profile">
             <div class="user_settings">
-                <img src="<?= $_SESSION["picture"]; ?>" alt="user_profile">
+                <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/user_profile.png" alt="user_profile">
                 <a href="#" class="dropdown-action" id="logout" data-target='dropdown_logout'>logout</a>
                 <ul id='dropdown_logout' class='dropdown-content'>
-                  <li><a href="<?= base_url(); ?>logout" class="log_out_btn">Log out</a></li>
+                  <li><a href="./login.php" class="log_out_btn">Log out</a></li>
                 </ul>
             </div>
         </div>
@@ -48,7 +48,7 @@
             <li><a href="#!">Engineering</a></li>
         </ul>
         <form action="#" id="select_section_form" method="POST">
-            <div class="input-field select dropdown-trigger">
+            <div class="input-field select">
                 <select class='dropdown-content'>
                     <option value="employee_handbook">Employee Handbook</option>
                     <option value="about_company">About Company</option>
