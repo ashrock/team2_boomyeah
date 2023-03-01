@@ -214,7 +214,7 @@
                 break;
             }
             case "reorder_documentations": {
-
+                //reorder the arrangement of the array based on the string $_POST['documentations_order']
                 $documentations_order = explode(",", $_POST['documentations_order']);
                 $reordered_documentations_array = array();
                 foreach ($documentations_order as $order) {
@@ -226,8 +226,11 @@
                     }
                 }
                 $documentation_data["fetch_admin_data"] = $reordered_documentations_array;
+
+                //update json file
                 file_put_contents($documentation_data_file, json_encode($documentation_data));
                 
+                //AJAX response
                 $response_data["status"] = true;
             }
         }
