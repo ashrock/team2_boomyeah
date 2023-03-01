@@ -1,12 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {    
-    let modal = document.querySelectorAll('.modal');
+    let modal = document.querySelectorAll('.modal:not(.invite_modal)');
     M.Modal.init(modal);
-
-    const invite_form = document.querySelector("#invite_form");
-    
-    if(invite_form){
-        invite_form.addEventListener("submit", submitInvite);
-    }
 
     Sortable.create(document.querySelector("#documentations"), {
         onEnd: () => {
@@ -26,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* run functions from invite_modal.js */
-    initChipsInstance();
+    initializeCollaboratorChipsInstance();
     initSelect();
     initializeMaterializeDropdown();
 
@@ -40,12 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("click", ".duplicate_icon", duplicateDocumentation)
         .on("click", ".archive_btn", setArchiveDocumentationValue)
         .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
-        .on("click", ".invite_collaborators_btn", function(event){
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            let invite_modal = document.querySelector("#invite_collaborator_modal");
-            M.Modal.getInstance(invite_modal).open();
-        })
         .on("click", ".set_to_public_icon, .access_btn", async function(event){
             event.stopImmediatePropagation();
             event.preventDefault();
@@ -92,15 +80,6 @@ function displayModalDocumentationTitle(confirm_modal, document_block){
 
 function submitInvite(event){
     event.preventDefault();
-}
-
-function initializeMaterializeDropdown(){
-    let dropdown_elements = document.querySelectorAll('.more_action_btn');
-    M.Dropdown.init(dropdown_elements, {
-        alignment: 'left',
-        coverTrigger: false,
-        constrainWidth: false
-    });
 }
 
 function appearEmptyDocumentation(){

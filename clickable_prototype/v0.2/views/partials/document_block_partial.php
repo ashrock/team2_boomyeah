@@ -5,7 +5,7 @@
         <input type="hidden" name="update_type" value="title">
         <input type="hidden" name="documentation_id" value="<?= $id ?>">
         <?php if($is_private){ ?>
-            <button type="button" class="invite_collaborators_btn modal-trigger <?= ($is_archived) ? 'archived_disabled' : '' ?>" tabindex="-1">&nbsp;<?= $cache_collaborators_count ?></button>
+            <button type="button" class="invite_collaborators_btn <?= ($is_archived) ? 'archived_disabled' : '' ?>" data-document_id="<?= $id ?>" tabindex="-1">&nbsp;<?= $cache_collaborators_count ?></button>
         <?php } ?>
     </form>
     <div class="document_controls">

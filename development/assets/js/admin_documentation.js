@@ -440,7 +440,18 @@ function submitRemoveDocumentation(event){
     // return false;
 
     form.post(form.attr("action"), form_data, (response_data) => {
-        console.log(response_data);
+        if(response_data.status){
+            document.getElementById(`document_${response_data.result.documentation_id}`).remove();
+            // addAnimation(documentation, "animate__animated animate__fadeOut");
+            // documentation.on("animationend", () => {
+            //     documentation.remove();
+
+            if(response_data.result.hasOwnProperty("no_documentations_html")){
+                let documentations_div = (response_data.result.is_archived == "0") ? "documentations" : "archived_documents";
+                document.getElementById(documentations_div).innerHTML = response_data.result.no_documentations_html;
+            }
+            // });
+        }
     });
 
     return false;
@@ -463,9 +474,8 @@ function getDocumentations(event){
 
     form.post(form.attr("action"), form.serialize(), (response_data) => {
         if(response_data.status){
-            let documentations_div = response_data.result.is_archived == "1" ? "#archived_documents" : "#documentations";
-
-            $(documentations_div).html(response_data.result.html);
+            let documentations_div = response_data.result.is_archived == "1" ? "archived_documents" : "documentations";
+            document.getElementById(documentations_div).innerHTML = response_data.result.html;
         }
         else{
             /* TODO: Design for displaying error */
