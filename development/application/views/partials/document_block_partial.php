@@ -1,6 +1,6 @@
 <?php if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){ ?>
     <div id="document_<?= $id ?>" class="document_block">
-        <form action="../../processes/manage_documentation.php" method="POST" class="document_details edit_title_form" autocomplete="off">
+        <form action="/docs/update" method="POST" class="document_details edit_title_form" autocomplete="off">
             <input type="text" name="update_value" value="<?= $title ?>" class="document_title" readonly="" autocomplete="nope">
             <input type="hidden" name="action" value="update_documentation">
             <input type="hidden" name="update_type" value="title">

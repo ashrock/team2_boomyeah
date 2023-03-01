@@ -89,7 +89,7 @@ class Documentations extends CI_Controller {
 	}
 
 	public function addDocumentations(){
-		$response_data = array("status" => true, "result" => array(), "error" => null);
+		$response_data = array("status" => false, "result" => array(), "error" => null);
 
 		try {
 			if(isset($_POST["document_title"])){
@@ -101,6 +101,31 @@ class Documentations extends CI_Controller {
 			}
 			else{
 				$response_data["error"] = "Document title is required";
+			}
+		}
+		catch (Exception $e) {
+			$response_data["error"] = $e->getMessage();
+		}
+
+		echo json_encode($response_data);
+	}
+
+	public function updateDocumentations(){
+		$response_data = array("status" => false, "result" => array(), "error" => null);
+
+		try {
+			if(isset($_POST["update_type"]) && isset($_POST["documentation_id"])){
+
+				$response_data = $this->Documentation->updateDocumentations(array(
+					"user_id"     	   => $_SESSION["user_id"],
+					"workspace_id" 	   => $_SESSION["workspace_id"],
+					"documentation_id" => $_POST["documentation_id"],
+					"update_type" 	   => $_POST["update_type"],
+					"update_value"     => $_POST["update_value"]
+				));
+			}
+			else{
+				$response_data["error"] = "Document id and update_type are required";
 			}
 		}
 		catch (Exception $e) {

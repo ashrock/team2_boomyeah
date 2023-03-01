@@ -72,6 +72,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Initialize MaterializeCSS features
     M.Dropdown.init($("#docs_view_btn")[0]);
+    initializeMaterializeDropdown();
 
     ux("body")
         .on("blur", ".document_title", (event) => {
@@ -90,6 +91,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("click", ".active_docs_btn", appearActiveDocumentation)
         .on("click", ".archived_docs_btn", appearArchivedDocumentations)
         .on("submit", "#get_documentations_form", getDocumentations)
+        .on("submit", "#add_documentation_form", submitAddDocumentation)
+        .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
+        .on("click", ".archive_btn", setArchiveValue)
 });
 
 function onSubmitDuplicateForm(event){
@@ -154,18 +158,17 @@ function submitInvite(event){
     event.preventDefault();
 }
 
-function onSubmitAddDocumentationForm(event){
+function submitAddDocumentation(event){
     event.preventDefault();
-    let add_document_form = $(this);
+    let add_document_form = ux("#add_documentation_form");
     const input_document_title = $("#input_add_documentation").val();
 
     if(input_document_title){
         /** Use AJAX to generate new documentation */
-        $.post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
+        add_document_form.post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
                 /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
                 alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
-                // $("#add_documentation_form")[0].reset();
                 location.reload();
             }
             else{
