@@ -154,7 +154,7 @@ function onSubmitAddDocumentationForm(event){
                 alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
                 $("#add_documentation_form")[0].reset();
                 //location.reload();
-                
+            
                 let documentations_div = $("#add_documentation_form #is_archived").val() == "1" ? "#archived_documents" : "#documentations";
                 $(documentations_div).html(response_data.result.html);
                 initializeMaterializeDropdown();
@@ -164,7 +164,7 @@ function onSubmitAddDocumentationForm(event){
             }
         }, "json");
         
-        return;
+        return false;
     }
     else{
         let add_documentation_input = $(".group_add_documentation");

@@ -93,27 +93,16 @@
                         "cache_collaborators_count" => $_ZERO_VALUE
                     );
                     
-                    $get_documentations_html  = "";
-
-                    //manipulating the initial data
-                    $filtered_documentations = [];
-                    if($_POST["is_archived"] == "{$_NO}") {
-                        $filtered_documentations = array_filter($documentation_data["fetch_admin_data"], function($data) {
-                            return $data["is_archived"] == 0;
-                        });
-                    }
-                    else {
-                        $filtered_documentations = array_filter($documentation_data["fetch_admin_data"], function($data) {
-                            return $data["is_archived"] == 1;
-                        });
-                    }
-    
+                    // Generate HTML for the updated documentation data
+                    $get_documentations_html = "";
+                    $filtered_documentations = array_filter($documentation_data["fetch_admin_data"], function($data) {
+                        return $data["is_archived"] == 0;
+                    });
                     if(count($filtered_documentations)){
                         foreach ($filtered_documentations as $fetch_admin_data) {
                             $get_documentations_html .= get_include_contents("../views/partials/document_block_partial.php", $fetch_admin_data);
                         }
                     }
-                
                     array_push($documentation_data["fetch_admin_data"], $new_data);
                     //save the data to the json file
                     file_put_contents($documentation_data_file, json_encode($documentation_data));
@@ -121,23 +110,6 @@
                     $response_data["status"] = true;
                     $response_data["result"]["document_id"] = $new_data;
                     $response_data["result"]["html"] = $get_documentations_html;
-
-                    // $insert_document_record = run_mysql_query("
-                    //     INSERT INTO documentations (user_id, workspace_id, title, is_archived, is_private, cache_collaborators_count, created_at, updated_at) 
-                    //     VALUES ({$_SESSION["user_id"]}, {$_SESSION["workspace_id"]}, '{$document_title}', {$_NO}, {$_YES}, {$_ZERO_VALUE}, NOW(), NOW())
-                    // ");
-
-                    // if($insert_document_record != $_ZERO_VALUE){
-                    //     $workspace = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
-                    //     $new_documents_order = (strlen($workspace["documentations_order"])) ? $workspace["documentations_order"].','. $insert_document_record : $insert_document_record;
-
-                    //     $update_workspace_docs_order = run_mysql_query("UPDATE workspaces SET documentations_order = '{$new_documents_order}' WHERE id = {$_SESSION["workspace_id"]}");
-
-                    //     if($update_workspace_docs_order){
-                    //         $response_data["status"] = true;
-                    //         $response_data["result"]["document_id"] = $insert_document_record;
-                    //     }
-                    // }
                 }
                 else{
                     $response_data["error"] = "Document title is required!";
