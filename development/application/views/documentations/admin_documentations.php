@@ -73,8 +73,7 @@
         <input type="hidden" id="remove_documentation_id" name="remove_documentation_id">
         <input type="hidden" id="remove_is_archived" name="remove_is_archived">
     </form>
-    <form id="reorder_documentations_form" action="processes/manage_documentation.php" method="POST">
-        <input type="hidden" name="action" value="reorder_documentations">
+    <form id="reorder_documentations_form" action="/docs/reorder" method="POST">
         <input type="hidden" id="documentations_order" name="documentations_order">
     </form>
     <?php $this->load->view("partials/confirm_documentation_modals.php"); ?>

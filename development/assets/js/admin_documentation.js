@@ -77,6 +77,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let modal = document.querySelectorAll('.modal');
     let instances = M.Modal.init(modal);
 
+    Sortable.create(document.querySelector("#documentations"), {
+        onEnd: () => {
+            updateDocumentationsOrder(document.querySelector("#documentations"));
+        }
+    });
+
     ux("body")
         .on("blur", ".document_title", (event) => {
             /* Check if empty title; Revert to old title if empty */
@@ -110,6 +116,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
         .on("submit", "#change_document_privacy_form", submitChangePrivacy)
         .on("click", ".change_privacy_yes_btn", submitChangePrivacy)
+
+        /* Reorder Documentations */
+        .on("submit", "#reorder_documentations_form", submitReorderDocumentations)
 });
 
 function onSubmitDuplicateForm(event){
@@ -472,6 +481,7 @@ function getDocumentations(event){
 
 function updateDocumentationsOrder(documentations){
     let documentation_children = documentations.children;
+    let form = ux("#reorder_documentations_form");
     var new_documentations_order = "";
 
     /* Get documentation_id from documentation_children */
@@ -480,19 +490,19 @@ function updateDocumentationsOrder(documentations){
     }
 
     /* Update form value and submit form */
-    $("#reorder_documentations_form #documentations_order").val(new_documentations_order);
-    $("#reorder_documentations_form").submit();
+    form.find("#documentations_order").val(new_documentations_order);
+    form.trigger("submit");
 }
 
 function submitReorderDocumentations(event){
     event.preventDefault();
-    let form = $(this);
+    let form = ux("#reorder_documentations_form");
 
-    $.post(form.attr("action"), form.serialize(), (response_data) => {
+    form.post(form.attr("action"), form.serialize(), (response_data) => {
         if(!response_data.status){
             alert("An error occured while reordering documentations!");
         }
-    }, "json");
+    });
 
     return false;
 }
