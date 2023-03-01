@@ -5,12 +5,9 @@
     include_once("./partial_helper.php");
 
     // Load initial data
-    $documentation_data = [];
+
     $documentation_data_file = "../assets/json/documentation_data.json";
-    if (file_exists($documentation_data_file)) {
-        $data = file_get_contents($documentation_data_file);
-        $documentation_data = json_decode($data, true);
-    }
+    $documentation_data = load_json_file($documentation_data_file);
 
     if(isset($_POST["action"])){
         $response_data = array("status" => false, "result" => [], "error"  => null);

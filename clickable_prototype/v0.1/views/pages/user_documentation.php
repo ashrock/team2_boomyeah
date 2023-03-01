@@ -12,12 +12,8 @@
     include_once("../../config/constants.php");
 
     // Load initial data
-    $documentation_data = [];
-    $initial_data_file = "../../assets/json/documentation_data.json";
-    if (file_exists($initial_data_file)) {
-        $data = file_get_contents($initial_data_file);
-        $documentation_data = json_decode($data, true);
-    }
+    $documentation_data_file = "../../assets/json/documentation_data.json";
+    $documentation_data = load_json_file($documentation_data_file);
 ?>
 <!DOCTYPE html>
 <html lang="en">
