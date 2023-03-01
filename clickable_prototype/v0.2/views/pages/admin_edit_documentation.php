@@ -62,7 +62,7 @@
                         <span class="lever"></span>
                     </label>
                 </div>
-                <a id="invite_collaborator_btn" class="waves-effect waves-light btn modal-trigger <?= $document_data["is_private"] ? "" : "hidden" ?>" href="#invite_collaborator_modal">13 Collaborators</a>
+                <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : "hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["document_id"] ?>">13 Collaborators</a>
             </div>
             <p class="doc_text_content" contenteditable="true" data-placeholder="Add Description"></p>
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
