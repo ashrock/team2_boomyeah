@@ -50,7 +50,7 @@
             }
             case "remove_documentation": {
                 if($_SESSION["user_level_id"] == $_USER_LEVEL["admin"]){
-
+                    //remove the data base on the specified id
                     foreach ($documentation_data["fetch_admin_data"] as $key => $data) {
                         if ($data["id"] == $_POST["remove_documentation_id"]) {
                             unset($documentation_data["fetch_admin_data"][$key]);
@@ -58,12 +58,15 @@
                         }
                     }
 
+                    //update the data to the json file
+                    file_put_contents($documentation_data_file, json_encode($documentation_data));
+
+                    //get the number of documentations
                     $count_documentations = count(array_filter($documentation_data['fetch_admin_data'], function ($obj) {
                         return $obj['is_archived'] == 0;
                     }));
 
-                    file_put_contents($documentation_data_file, json_encode($documentation_data));
-
+                    //determine if going to display the no documentations or archived
                     if(($_POST["remove_is_archived"] == "{$_NO}" && $count_documentations == 0) || ($_POST["remove_is_archived"] == "{$_YES}" && $_POST["archived_documentations"] == "0")){
                         $message = ($_POST["remove_is_archived"] == "{$_NO}") ? "You have no documentations yet." : "You have no archived documentations yet.";
 
@@ -71,6 +74,7 @@
                         $response_data["result"]["no_documentations_html"] = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
                     }
 
+                    //AJAX response
                     $response_data["status"]                     = true;
                     $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
 
@@ -83,30 +87,28 @@
             }
             case "create_documentation": {
                 if(isset($_POST["document_title"])){
+                    //Manipulate the received data
                     $document_title = escape_this_string($_POST["document_title"]);
-                 
                     $new_data = array(
-                        "id" => count($documentation_data["fetch_admin_data"]) + 1,
-                        "title" => $document_title,
-                        "is_private" => $_YES,
-                        "is_archived" =>  $_NO,
+                        "id"                        => count($documentation_data["fetch_admin_data"]) + 1,
+                        "title"                     => $document_title,
+                        "is_private"                => $_YES,
+                        "is_archived"               =>  $_NO,
                         "cache_collaborators_count" => $_ZERO_VALUE
                     );
-                    
-                    // Generate HTML for the updated documentation data
-                    $get_documentations_html = "";
-                    $filtered_documentations = array_filter($documentation_data["fetch_admin_data"], function($data) {
-                        return $data["is_archived"] == 0;
-                    });
-                    if(count($filtered_documentations)){
-                        foreach ($filtered_documentations as $fetch_admin_data) {
-                            $get_documentations_html .= get_include_contents("../views/partials/document_block_partial.php", $fetch_admin_data);
-                        }
-                    }
+
+                    //update the data to the json file
                     array_push($documentation_data["fetch_admin_data"], $new_data);
-                    //save the data to the json file
                     file_put_contents($documentation_data_file, json_encode($documentation_data));
 
+                    // Generate HTML for the updated documentation data
+                    $get_documentations_html = "";
+                    //pass the data to the jquery so that it updates the DOM
+                    foreach($documentation_data["fetch_admin_data"] as $fetch_admin_data){
+                        $get_documentations_html .= get_include_contents("../views/partials/document_block_partial.php", $fetch_admin_data);
+                    }
+
+                    //AJAX response
                     $response_data["status"] = true;
                     $response_data["result"]["document_id"] = $new_data;
                     $response_data["result"]["html"] = $get_documentations_html;
@@ -160,8 +162,9 @@
                         }
                     }
 
+                    //update the data to the json file
                     file_put_contents($documentation_data_file, json_encode($documentation_data));
-
+                    //AJAX response
                     $response_data["status"] = true;
                     $response_data["result"]["documentation_id"] = $_POST["documentation_id"];
                     $response_data["result"]["update_type"] = $_POST["update_type"];
@@ -177,11 +180,13 @@
             case "duplicate_documentation": {
                 $documentation_id = $_POST['documentation_id'];
 
-                $to_be_duplicated_block = array_filter($documentation_data["fetch_admin_data"], function($item) use ($documentationId) {
+                //find the document data to be duplicated base on its id
+                $to_be_duplicated_block = array_filter($documentation_data["fetch_admin_data"], function($item) use ($documentation_id) {
                     return $item["id"] == $documentation_id;
                 });
                 
                 if (!empty($to_be_duplicated_block)) {
+                    //constructing the data to be duplicated
                     $to_be_duplicated_block     = array_values($to_be_duplicated_block)[0];
                     $new_document_id            = count($documentation_data["fetch_admin_data"]) + 1;
                     $new_title                  = "Copy of " . $to_be_duplicated_block["title"];
@@ -190,10 +195,14 @@
                         "title"                 => $new_title
                     ]);
 
+                    //pass the data to the jquery so that it updates the DOM
                     $documentation_html = get_include_contents("../views/partials/document_block_partial.php", $new_document_data);
+                   
+                    //update json file
                     array_push($documentation_data["fetch_admin_data"], $new_document_data);
                     file_put_contents($documentation_data_file, json_encode($documentation_data));
 
+                    //AJAX response
                     $response_data["status"] = true;
                     $response_data["result"]["documentation_id"] = $new_document_id;
                     $response_data["result"]["html"] = $documentation_html;
