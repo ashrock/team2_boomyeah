@@ -1,11 +1,22 @@
-const FORM_SUBMIT_EVENT = new Event("submit", { bubbles: true });
-const INPUT_BLUR_EVENT = new Event("blur", { bubbles: true });
+const REGULAR_EXPRESSIONS = {
+    all_number_letters_with_uppercase   : /\w\S*/g,
+    all_numbers_letters                 : /[^0-9a-z_\-]/i,
+    allowed_file_formats                : /(\.jpg|\.png)$/i,
+    email_format                        : /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.){1,2}[a-zA-Z]{2,}))$/, /* will also check if there is a .com on the email */
+    email_format_v2                     : /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+    lesser_greater_than                 : /(>|<)/gi,
+    name_format                         : /[@%^&!"\\\*\.,\-\:?\/\'=`{}()+_\]\|\[\><~;$#0-9]/,
+    youtube_embed                       : /(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/,
+    password_format                     : /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/
+};
+
 const CUSTOM_EVENTS = {
     "blur" : "focusout"
 }
 const UX_EVENTS = {
-    "submit": FORM_SUBMIT_EVENT,
-    "blur": INPUT_BLUR_EVENT,
+    "submit": new Event("submit", { bubbles: true }),
+    "blur": new Event("blur", { bubbles: true }),
+    "click": new Event("click", { bubbles: true }),
 }
 
 function ux(selector) {
@@ -68,9 +79,10 @@ function ux(selector) {
             return self;
         },
         trigger: (event) => {
-            if(UX_EVENTS.hasOwnProperty(event)){
-                self.dispatchEvent(UX_EVENTS[event]);
-            }
+            let triggered_event = new Event(event, { bubbles: true });
+            self.dispatchEvent(triggered_event);
+
+            return ux(self);
         },
         remove: () => {
             self.remove();
@@ -248,4 +260,10 @@ function selectElementText(el, win) {
         range.collapse(false);
         range.select();
     }
+}
+
+function validateEmail(email) {
+    let is_email = email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/gi);
+
+    return is_email;
 }
