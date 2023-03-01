@@ -1,3 +1,28 @@
+<?php
+    session_start();
+
+    // Sample admin session
+    $_SESSION["user_id"]       = 1;
+    $_SESSION["user_level_id"] = 9;
+    $_SESSION["workspace_id"]  = 1;
+    // END
+
+    include_once("../view_helper.php");  
+    include_once("../../config/connection.php");
+    include_once("../../config/constants.php");
+
+    /** TODO: Backend should provide the $document_id */
+    $document_id = time();
+    $document_data = array(
+        "document_id" => $document_id,
+        "document_title" => "Employee Handbook",
+        "is_private" => TRUE
+    );
+
+    //load initial data from json file
+    $section_data_file_path = "../../assets/json/sections_data.json";
+    $sections_data = load_json_file($section_data_file_path);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +32,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="UX Team 2">
     <meta name="description" content="A great way to describe your documentation tool">
-    <title>Boom Yeah | Admin Edit Documentation Page</title>
-    <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../../assets/css/global.css">
-    <link rel="stylesheet" href="../../assets/css/user_view_documentation.css">
+    <title>Boom Yeah | User View Documentation Page</title>
+    <link rel="shortcut icon" href="<?= add_file("assets/images/favicon.ico") ?>" type="image/x-icon">
+    <link rel="stylesheet" href="<?= add_file("assets/css/global.css") ?>">
+    <link rel="stylesheet" href="<?= add_file("assets/css/user_view_documentation.css") ?>">
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">

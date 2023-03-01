@@ -18,6 +18,10 @@
         "document_title" => "Employee Handbook",
         "is_private" => TRUE
     );
+
+    //load initial data from json file
+    $section_data_file_path = "../../assets/json/sections_data.json";
+    $sections_data = load_json_file($section_data_file_path);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,19 +81,15 @@
             </div>
             <div class="section_container" id="section_container">
                 <?php
-                    $dummy_section_data = array(
-                        "id" => 1,
-                        "documentation_id" => 1,
-                        "user_id" => 1,
-                        "title" => "Thirty-One Million",
-                        "description" => "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
-                    );
-
-                    $sections_data = array( $dummy_section_data, $dummy_section_data );
-                    
-                    foreach($sections_data as $section_data){
-                        load_view("../partials/section_block_partial.php", $section_data);
+                    if(count($sections_data["fetch_section_admin_data"])){
+                        foreach($sections_data["fetch_section_admin_data"] as $section_data){
+                            load_view("../partials/section_block_partial.php", $section_data);
+                        }
                     }
+                    else{
+                        
+                    }
+
                 ?>
             </div>
             <div class="no_sections hidden">
