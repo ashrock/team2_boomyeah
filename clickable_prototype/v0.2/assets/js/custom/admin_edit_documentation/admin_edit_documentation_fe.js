@@ -20,6 +20,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let modal_instances = document.querySelectorAll('.modal');
     M.Modal.init(modal_instances);
+
+    appearEmptySection();
 });
 
 function editSectionTitle(event){
@@ -100,13 +102,6 @@ function redirectToEditSection(event){
     }
     
     location.href = "admin_edit_section.html";
-}
-
-function initializeMaterializeTooltip(){
-    const elems = document.querySelectorAll('.tooltipped');
-    M.Tooltip.init(elems, {
-        position: "top"
-    });
 }
 
 function appearEmptySection(){
