@@ -41,9 +41,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     initializeCollaboratorChipsInstance();
     // initRoleDropdown();
     initSelect();
+});
 
-    ux(ux("body").findAll(".invite_collaborators_btn")[0]).trigger("click");
-})
+function checkAddedCollaboratorEmails(){
+    let add_invite_btn = ux("#add_invite_btn");
+    let collaborator_count = ux(".collaborator_chips").findAll(".chip").length;
+    add_invite_btn.conditionalClass("disabled", !collaborator_count);
+}
 
 function initSelect(dropdown_selector = "select"){
     M.FormSelect.init(document.querySelectorAll(dropdown_selector));
@@ -65,8 +69,13 @@ function initializeCollaboratorChipsInstance(){
                     ux(".collaborator_email_address").val(collaborator_email);
                 });
             }
+        },
+        onChipDelete: () => {
+            checkAddedCollaboratorEmails();
         }
     });
+
+    checkAddedCollaboratorEmails();
 }
 
 function initRoleDropdown(){
@@ -74,7 +83,8 @@ function initRoleDropdown(){
 }
 
 function addEmail(email){
-    invited_emails.push(email);
+    invited_emails.push(email.trim());
+    checkAddedCollaboratorEmails();
 }
 
 
@@ -120,6 +130,8 @@ function onSubmitAddCollaboratorsForm(event){
     let post_form = ux(event.target);
 
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
+        checkAddedCollaboratorEmails();
+        
         if(response_data.status){
             await ux("#invited_users_wrapper").append(response_data.result.html);
             
@@ -171,7 +183,6 @@ function onSubmitUpdateInvitedUser(event){
             
             setTimeout(() => {
                 ux(collaborator_id).findAll(".added_collaborator").forEach(dropdown_element => {
-                    console.log("dropdown_element", dropdown_element)
                     M.FormSelect.init(dropdown_element);
                     ux(dropdown_element).removeClass("added_collaborator");
                 });
