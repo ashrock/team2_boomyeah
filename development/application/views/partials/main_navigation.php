@@ -23,7 +23,7 @@
         <a href="./admin_documentation.html"><img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/global_logo.svg" class="global_logo" alt="global_logo"></a>
         <div class="user_profile">
             <div class="user_settings">
-                <img src="<?= $_SESSION["picture"]; ?>" alt="user_profile">
+                <img src="<?= $_SESSION["user_profile_pic"]; ?>" alt="user_profile">
                 <a href="#" class="dropdown-action" id="logout" data-target='dropdown_logout'>logout</a>
                 <ul id='dropdown_logout' class='dropdown-content'>
                   <li><a href="<?= base_url(); ?>logout" class="log_out_btn">Log out</a></li>
