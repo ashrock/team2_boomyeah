@@ -53,6 +53,7 @@
                 <div class="group_add_documentation input-field">
                     <input id="input_add_documentation" type="text" class="validate" name="document_title" autofocus autocomplete="nope">
                     <input type="hidden" name="action" value="create_documentation">
+                    <input type="hidden" id="is_archived" name="is_archived">
                     <label for="input_add_documentation">Add Documentation</label>
                 </div>
                 <span id="save_status" hidden>Saving...</span>
@@ -75,6 +76,9 @@
                         foreach ($filtered_documentations as $fetch_admin_data) {
                             load_view("../partials/document_block_partial.php", $fetch_admin_data);
                         }
+                    }
+                    else {
+                        load_view("../partials/no_documentations_partial.php", array("message" => "You have no documentations yet."));
                     }
                 ?>
             </div>

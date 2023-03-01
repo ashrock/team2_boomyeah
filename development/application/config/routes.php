@@ -52,9 +52,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /* User Routes */
 $route['default_controller'] = 'users';
+$route['logout'] = 'users/logout';
 
-/* Documentation Routes */
-$route['admin_documentations'] = 'documentations/admin_documentations';
+/* Admin Documentation Routes */
+$route['docs/edit'] = 'documentations/adminDocumentations';
+
+/* User Documentation Routes */
+$route['docs'] = 'documentations/userDocumentations';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
