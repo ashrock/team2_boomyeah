@@ -17,30 +17,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     Sortable.create(document.querySelector(".section_container"), {
         handle: ".drag_handle"
     });
-    
-    initializeMaterializeTooltip();
-    appearEmptySection();
-    initializeMaterializeDropdown();
-
-    document.addEventListener("click", (event) => {
-        let element = event.target.closest(".add_invite_result");
-        
-        if(element){
-            addSearchEmailResult(element);
-        }
-    });
 
     let modal_instances = document.querySelectorAll('.modal');
     M.Modal.init(modal_instances);
-    
-    ux("#add_invite_btn").on("click", addPeopleWithAccess);
-    ux("#remove_invited_user_confirm").onEach("click", submitRemoveInvitedUser);
-    ux(".invited_user_role").onEach("change", setRoleChangeAction);
-
-    /* run functions from invite_modal.js */
-    initChipsInstance();
-    // initRoleDropdown();
-    initSelect();
 });
 
 function editSectionTitle(event){
@@ -159,16 +138,13 @@ function onChangeDocumentationPrivacy(event){
     let switch_btn = ux(".switch_btn .toggle_text").self();
     let invite_collaborator_btn = ux("#invite_collaborator_btn");
     let is_private = (toggle_switch.checked) ? 1 : 0;
+    invite_collaborator_btn.conditionalClass("hidden", !toggle_switch.checked);
+    switch_btn.innerText = (toggle_switch.checked) ? "Private" : "Public";
 
     if(toggle_switch.checked){
-        switch_btn.innerText = "Private"
-        invite_collaborator_btn.removeClass("hidden");
         ux(toggle_switch).attr("checked", "");
-    } 
-    else {
+    } else {
         toggle_switch.removeAttribute("checked", "");
-        invite_collaborator_btn.addClass("hidden");
-        switch_btn.innerText = "Public";
     } 
 
     ux("#change_document_privacy_form .update_value").val(is_private);
