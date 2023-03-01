@@ -9,7 +9,7 @@
                 // ! Binding an array value encloses it in a parenthesis which causes an error
 
                 $where_conditions = "is_archived = ? ";
-                $bind_params      = array($params["workspace_id"], FALSE_VALUE);
+                $bind_params      = array($params["workspace_id"], $params["is_archived"]);
 
                 if($params["user_level_id"] == USER_LEVEL["USER"]){
                     $where_conditions .= "AND (is_private = ?  OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = ?)) ";
@@ -26,9 +26,8 @@
                     $response_data["status"] = true;
                     $response_data["result"] = $get_documentations->result_array();
                 }
-                else{
-                    throw new Exception("Error getting all documentations!");
-                }
+                
+                $response_data["status"] = true;
             }
             catch (Exception $e) {
                 $response_data["error"] = $e->getMessage();
