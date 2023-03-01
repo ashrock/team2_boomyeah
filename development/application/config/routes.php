@@ -60,6 +60,7 @@ $route['docs/get_documentations'] = 'documentations/getDocumentations';
 
 
 $route['docs/add']['POST'] = 'documentations/addDocumentations';
+$route['docs/update']['POST'] = 'documentations/updateDocumentations';
 
 
 /* User Documentation Routes */
