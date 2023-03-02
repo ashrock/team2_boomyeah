@@ -187,6 +187,7 @@
                     if($duplicate_documentation["status"]){
                         $response_data["status"]                     = true;
                         $response_data["result"]["documentation_id"] = $documentation_id;
+                        $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
                         $response_data["result"]["html"]             = $this->load->view(
                             "partials/document_block_partial.php",
                             array(
