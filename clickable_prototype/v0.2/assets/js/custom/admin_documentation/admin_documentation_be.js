@@ -24,10 +24,9 @@ function onSubmitAddDocumentationForm(event){
         /** Use AJAX to generate new documentation */
         ux().post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
-                /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
-                alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
+                /* Redirect in admin edit document page. */
                 ux("#add_documentation_form").self().reset();
-                location.reload();
+                location.href = "admin_edit_documentation.php?document_title="+ encodeURI(input_document_title);
             }
             else{
                 alert(response_data.error);

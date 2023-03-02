@@ -56,8 +56,8 @@ function initSelect(dropdown_selector = "select"){
 function initializeCollaboratorChipsInstance(){
     let collaborator_chips = document.querySelector(".collaborator_chips");
     M.Chips.init(collaborator_chips, {
-        placeholder: "Enter email address",
-        secondaryPlaceholder: "Enter email address",
+        placeholder: "Email address",
+        secondaryPlaceholder: "Type email address",
         onChipAdd: (element, email) => {
             let collaborator_email = email.innerText.split("close")[0];
             
