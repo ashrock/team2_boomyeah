@@ -29,7 +29,7 @@
             try {
                 $update_workspace = $this->db->query("UPDATE workspaces SET documentation_ids_order = ? WHERE id = ?;", $params);
 
-                if($this->db->affected_rows()){
+                if($update_workspace){
                     $response_data["status"] = true;
                 }
                 else{
