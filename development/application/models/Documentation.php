@@ -33,7 +33,7 @@
 
                 if($params["user_level_id"] == USER_LEVEL["USER"]){
                     $where_conditions .= "AND (is_private = ?  OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = ?)) ";
-                    array_push($bind_params, TRUE_VALUE, $_SESSION["user_id"]);
+                    array_push($bind_params, FALSE_VALUE, $_SESSION["user_id"]);
                 }
                 
                 $documentation_order = ($params["is_archived"] || $params["documentation_ids_order"] == null) ? "" : "ORDER BY FIELD (id, {$params["documentation_ids_order"]})";
