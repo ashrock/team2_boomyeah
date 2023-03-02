@@ -6,16 +6,23 @@ document.addEventListener("DOMContentLoaded", async () => {
             ux(event.target).closest(".section_block").removeClass("error");
         })
         .on("blur", ".section_block .section_title.editable", disableEditSectionTitle)
+        .on("blur", "#document_description", (event) => {
+            let update_value = event.target.innerText;
+            updateDocumentationData("document_description", encodeURI(update_value));
+        })
         .on("click", ".duplicate_icon", duplicateSection)
         .on("click", ".remove_icon", setRemoveSectionBlock)
         .on("click", "#remove_confirm", confirmRemoveSectionBlock)
         .on("click", ".section_block", redirectToEditSection)
-        .on("click", ".sort_by", sort_sections)
+        .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
         ;
 
     Sortable.create(document.querySelector(".section_container"), {
-        handle: ".drag_handle"
+        handle: ".drag_handle",
+        onEnd: () => {
+            updateSectionsOrder(document.querySelector("#section_container"));
+        }
     });
 
     let modal_instances = document.querySelectorAll('.modal');
@@ -23,6 +30,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     appearEmptySection();
 });
+
+function updateDocumentationData(update_type, update_value){
+    let udpate_documentation_form = ux("#udpate_documentation_form");
+    udpate_documentation_form.find(".update_type").val(update_type);
+    udpate_documentation_form.find(".update_value").val(update_value);
+    udpate_documentation_form.trigger("submit");
+}
+
+function updateSectionsOrder(section_container){
+    let section_blocks = ux(section_container).findAll(".section_block");
+    let section_id_order = [];
+    
+    section_blocks.forEach(section_block => {
+        section_id_order.push(ux(section_block).find(".section_id").val());
+    });
+
+    ux("#reorder_sections_form #sections_order").val(section_id_order.join(","));
+    ux("#reorder_sections_form").trigger("submit");
+}
 
 function editSectionTitle(event){
     event.stopImmediatePropagation();
@@ -146,7 +172,7 @@ function onChangeDocumentationPrivacy(event){
     ux("#change_document_privacy_form").trigger("submit");
 }
 
-function sort_sections(event){
+function sortSections(event){
     let sort_by = ux(event.target).attr("data-sort-by");
     let section_lists = document.getElementById('section_container');
     let section_list_nodes = section_lists.childNodes;

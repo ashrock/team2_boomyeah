@@ -10,12 +10,14 @@
     include_once("../view_helper.php");  
     include_once("../../config/connection.php");
     include_once("../../config/constants.php");
-
+    $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Employee Handbook";
+    
     /** TODO: Backend should provide the $document_id */
-    $document_id = time();
+    $document_id = time() + rand();
     $document_data = array(
         "document_id" => $document_id,
-        "document_title" => "Employee Handbook",
+        "document_title" => $document_title,
+        "document_description" => "Software undergoes beta testing shortly before it’s released. Beta is Latin for “still doesn’t work”. (Anonymous) Most software today is very much like an Egyptian pyramid with millions of bricks piled on top of each other, with no structural integrity, but just done by brute force and thousands of slaves. (Alan Kay) There’s an old story about the person who wished his computer were as easy to use as his telephone. That wish has come true, since I no longer know how to use my telephone. (Bjarne Stroustrup) Writing code has a place in the human hierarchy worth somewhere above grave robbing and beneath managing. (Gerald Weinberg)",
         "is_private" => TRUE
     );
 
@@ -68,7 +70,7 @@
                 </div>
                 <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : "hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["document_id"] ?>">13 Collaborators</a>
             </div>
-            <p class="doc_text_content" contenteditable="true" data-placeholder="Add Description"></p>
+            <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["document_description"] ?></p>
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
                 <input type="hidden" name="action" value="create_section">
                 <div class="group_add_section input-field">
@@ -129,6 +131,16 @@
         <input type="hidden" name="action" value="update_documentation_privacy">
         <input type="hidden" name="update_type" value="is_private">
         <input type="hidden" name="update_value" class="update_value" value="">
+    </form>
+    <form id="udpate_documentation_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
+        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $document_data["document_id"] ?>">
+        <input type="hidden" name="action" value="update_documentation_data">
+        <input type="hidden" name="update_type" class="update_type" value="">
+        <input type="hidden" name="update_value" class="update_value" value="">
+    </form>
+    <form id="reorder_sections_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
+        <input type="hidden" name="action" value="reorder_sections">
+        <input type="hidden" id="sections_order" name="sections_order">
     </form>
     <?php include_once("../partials/confirm_invite_modals.php"); ?>
 
