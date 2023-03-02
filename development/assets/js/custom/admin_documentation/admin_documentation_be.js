@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function(){
         .on("submit", "#get_documentations_form", getDocumentations)
         .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy)
         .on("submit", "#reorder_documentations_form", submitReorderDocumentations)
-        .on("click", "#archive_confirm", submitArchive)
+        .on("click", "#archive_confirm", submitArchiveDocumentation)
         .on("click", "#remove_confirm", submitRemoveDocumentation)
         .on("click", ".change_privacy_yes_btn", submitChangeDocumentPrivacy)
         .on("blur", ".document_title", (event) => {
@@ -24,9 +24,10 @@ function onSubmitAddDocumentationForm(event){
         /** Use AJAX to generate new documentation */
         ux().post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
-                /* Redirect in admin edit document page. */
+                /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
+                alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
                 ux("#add_documentation_form").self().reset();
-                location.href = "admin_edit_documentation.php?document_title="+ encodeURI(input_document_title);
+                location.reload();
             }
             else{
                 alert(response_data.error);
@@ -128,18 +129,13 @@ function onSubmitDuplicateForm(event){
     return false;  
 }
 
-function submitArchive(event){
-    let archive_document_form      = ux("#archive_form");
-    let archive_document_form_data = archive_document_form.serialize();
+function submitArchiveDocumentation(event){
+    let archive_document_form = ux("#archive_form");
 
-    if(ux("#archive_form .update_value").val() == "0"){
-        archive_document_form_data.append("archived_documentations", `${ux("#archived_documents").findAll(".document_block").length - 1}`);
-    }
-
-    ux().post(archive_document_form.attr("action"), archive_document_form_data, (response_data) => {
+    archive_document_form.post(archive_document_form.attr("action"), archive_document_form.serialize(), (response_data) => {
         if(response_data.status){
             /* TODO: Improve UX after success updating. Add animation to remove the archived document from the list. */
-            let documentation = ux(`#document_${response_data.result.documentation_id}`);
+            let documentation = $(`#document_${response_data.result.documentation_id}`);
 
             documentation.addClass("animate__animated animate__fadeOut");
             documentation.on("animationend", () => {
@@ -229,15 +225,31 @@ function submitRemoveDocumentation(event){
     return false;
 }
 
+function updateDocumentationsOrder(documentations){
+    let documentation_children = documentations.children;
+    let form = ux("#reorder_documentations_form");
+    var new_documentations_order = "";
+
+    /* Get documentation_id from documentation_children */
+    for(let index=0; index < documentation_children.length; index++){
+        new_documentations_order += (index == (documentation_children.length - 1)) ? `${documentation_children[index].id.split("_")[1]}` : `${documentation_children[index].id.split("_")[1]},`;
+    }
+
+    /* Update form value and submit form */
+    form.find("#documentations_order").val(new_documentations_order);
+    form.trigger("submit");
+}
+
 function submitReorderDocumentations(event){
     event.preventDefault();
-    let reorder_form = ux(event.target);
+    let form = ux("#reorder_documentations_form");
 
-    ux().post(reorder_form.attr("action"), reorder_form.serialize(), (response_data) => {
+    form.post(form.attr("action"), form.serialize(), (response_data) => {
+        console.log(response_data);
         if(!response_data.status){
             alert("An error occured while reordering documentations!");
         }
-    }, "json");
+    });
 
     return false;
 }
