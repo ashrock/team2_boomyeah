@@ -20,8 +20,8 @@
     );
 
     //load initial data from json file
-    $section_data_file_path = "../../assets/json/sections_data.json";
-    $sections_data = load_json_file($section_data_file_path);
+    $sections_data_file_path = "../../assets/json/sections_data.json";
+    $sections_data = load_json_file($sections_data_file_path);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,8 +39,8 @@
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <script src="../../assets/js/vendor/html_loader.lib.js"></script>
-    <script src="../../assets/js/vendor/ux.lib.js"></script>
+    <script src="<?= add_file("assets/js/vendor/html_loader.lib.js") ?>"></script>
+    <script src="<?= add_file("assets/js/vendor/ux.lib.js") ?>"></script>
 </head>
 <body>
     <!--- Add #main_navigation --->
@@ -70,60 +70,22 @@
                 </ul>
             </div>
             <div class="section_container" id="section_container">
-                <div class="section_block">
-                    <div class="section_details">
-                        <input type="text" name="section_title" value="About Company" id="" class="section_title tooltipped" data-tooltip="About Company">
-                    </div>
-                    <div class="section_controls">
-                        <span>4 Tabs</span>
-                    </div>
-                </div>
-                <div class="section_block">
-                    <div class="section_details">
-                        <input type="text" name="section_title" value="Terms of Employment" id="" class="section_title tooltipped" data-tooltip="Terms of Employment">
-                    </div>
-                    <div class="section_controls">
-                        <span>17 Tabs</span>
-                    </div>
-                </div>
-                <div class="section_block">
-                    <div class="section_details">
-                        <input type="text" name="section_title" value="General Policies & Procedures" id="" class="section_title tooltipped" data-tooltip="General Policies & Procedures">
-                    </div>
-                    <div class="section_controls">
-                        <span>18 Tabs</span>
-                    </div>
-                </div>
-                <div class="section_block">
-                    <div class="section_details">
-                        <input type="text" name="section_title" value="Compensation & Benefits" id="" class="section_title tooltipped" data-tooltip="Compensation & Benefits">
-                    </div>
-                    <div class="section_controls">
-                        <span>9 Tabs</span>
-                    </div>
-                </div>
-                <div class="section_block">
-                    <div class="section_details">
-                        <input type="text" name="section_title" value="Career & Personnel Development" id="" class="section_title tooltipped" data-tooltip="Career & Personnel Development">
-                    </div>
-                    <div class="section_controls">
-                        <span>13 Tabs</span>
-                    </div>
-                </div>
-                <div class="section_block">
-                    <div class="section_details">
-                        <input type="text" name="section_title" value="Important Notes" id="" class="section_title tooltipped" data-tooltip="Important Notes">
-                    </div>
-                    <div class="section_controls">
-                        <span>19 Tabs</span>
-                    </div>
-                </div>
+                <?php 
+                    if(count($sections_data["fetch_section_user_data"])){
+                        foreach($sections_data["fetch_section_user_data"] as $section_data){
+                            load_view("../partials/section_block_partial.php", $section_data);
+                        }
+                    }
+                    else{
+                        //display if no sections
+                    }
+                ?>
             </div>
         </div>
     </div>
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script type="module" src="../../assets/js/hotkeys.js"></script>
-    <script type="module" src="../../assets/js/user_view_documentation.js"></script>
+    <script src="<?= add_file("assets/js/hotkeys.js") ?>"></script>
+    <script src="<?= add_file("assets/js/user_view_documentation.js") ?>"></script>
 </body>
 </html> 

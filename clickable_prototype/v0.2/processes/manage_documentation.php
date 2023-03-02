@@ -4,6 +4,10 @@
     include_once("../config/constants.php");
     include_once("./partial_helper.php");
 
+    //load the initial data from the json file
+    $sections_data_file_path = "../assets/json/sections_data.json";
+    $sections_data = load_json_file($sections_data_file_path);
+
     if(isset($_POST["action"])){
         $response_data = array("status" => false, "result" => [], "error"  => null);
 
@@ -230,7 +234,8 @@
                 break;
             }
             case "create_section" : {
-                $section_data = array(
+           
+                $new_section_data = array(
                     "id" => time(),
                     "documentation_id" => time(),
                     "user_id" => time(),
@@ -238,6 +243,13 @@
                     "description" => "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
                 );
 
+                array_push($sections_data["fetch_section_admin_data"], $new_section_data);
+                //file_put_contents($sections_data_file_path, json_encode($sections_data));
+
+                $get_sections_html = "";
+                foreach($sections_data["fetch_section_admin_data"] as $section_data){
+                    $get_sections_html .= get_include_contents("../views/partials/section_block_partial.php", $section_data);
+                }
                 $response_data["status"] = true;
                 $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $section_data);
                 break;

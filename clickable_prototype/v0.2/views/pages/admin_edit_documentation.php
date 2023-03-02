@@ -87,9 +87,8 @@
                         }
                     }
                     else{
-                        
+                        //display if no sections
                     }
-
                 ?>
             </div>
             <div class="no_sections hidden">
