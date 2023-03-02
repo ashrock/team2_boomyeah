@@ -29,7 +29,7 @@
     <!--- Add #main_navigation --->
     <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php"); ?></div>
     <!--- Add #invite_modal --->
-    <div id="invite_modal"><?php # include_once("../partials/invite_modal.php"); ?></div>
+    <div id="invite_modal"><?php $this->load->view("partials/invite_modal.php"); ?></div>
     <div id="wrapper">
         <div class="container">
             <form action="/docs/add" id="add_documentation_form" method="POST" autocomplete="off">
@@ -80,8 +80,9 @@
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
-    <script src="<?= add_file("assets/js/admin_documentation.js") ?>"></script>
     <script src="<?= add_file("assets/js/invite_modal.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/admin_documentation/admin_documentation_fe.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/admin_documentation/admin_documentation_be.js") ?>"></script>
     <script src="<?= add_file("assets/js/hotkeys.js") ?>"></script>
 </body>
 

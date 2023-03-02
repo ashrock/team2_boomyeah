@@ -126,19 +126,23 @@ function onSubmitDuplicateForm(event){
     event.stopImmediatePropagation();
     
     let duplicate_form   = ux("#duplicate_documentation_form");
-    let documentation_id = duplicate_form.find(".documentation_id").val();
 
     duplicate_form.post(duplicate_form.attr("action"), duplicate_form.serialize(), (response_data) => {
-        console.log(response_data);
-
         if(response_data.status){
             // Append duplicated documentation
-            let documentation     = document.getElementById(`document_${response_data.result.documentation_id}`);
-            let duplicate_element = response_data.result.html;
-
+            let documentation           = document.getElementById(`document_${response_data.result.documentation_id}`);
+            let duplicate_element       = response_data.result.html;
+            
             documentation.insertAdjacentHTML('afterend', duplicate_element);
+            let duplicate_documentation = document.getElementById(`document_${response_data.result.duplicate_id}`);
+
+            addAnimation(duplicate_documentation, "animate__fadeIn");
 
             initializeMaterializeDropdown();
+        }
+        else{
+            /* TODO: Use error handling prepare by FE */
+            alert("Failed to duplicate documentation.");
         }
     });
 
@@ -407,42 +411,24 @@ function submitRemoveDocumentation(event){
         form_data.append("archived_documentations", ux("#archived_documents").findAll(".document_block").length - 1);
     }
 
-    // $.post(form.attr("action"), form_data, (response_data) => {
-    //     if(response_data.status){
-    //         let documentation = $(`#document_${response_data.result.documentation_id}`);
-    
-    //         documentation.addClass("animate__animated animate__fadeOut");
-    //         documentation.on("animationend", () => {
-    //             documentation.remove();
-
-    //             if(response_data.result.hasOwnProperty("no_documentations_html")){
-    //                 let documentations_div = (response_data.result.is_archived === "0") ? "#documentations" : "#archived_documents";
-    
-    //                 $(documentations_div).html(response_data.result.no_documentations_html);
-    //             }
-    //         });
-    //     }
-
-    // }, "json");
-
-    // let remove_modal = document.querySelector("#confirm_to_remove");
-    // var instance = M.Modal.getInstance(remove_modal);
-    // instance.close();
-
-    // return false;
-
     form.post(form.attr("action"), form_data, (response_data) => {
         if(response_data.status){
-            document.getElementById(`document_${response_data.result.documentation_id}`).remove();
-            // addAnimation(documentation, "animate__animated animate__fadeOut");
-            // documentation.on("animationend", () => {
-            //     documentation.remove();
+            let documentation = document.getElementById(`document_${response_data.result.documentation_id}`);
 
-            if(response_data.result.hasOwnProperty("no_documentations_html")){
-                let documentations_div = (response_data.result.is_archived == "0") ? "documentations" : "archived_documents";
-                document.getElementById(documentations_div).innerHTML = response_data.result.no_documentations_html;
-            }
-            // });
+            addAnimation(documentation, "animate__fadeOut");
+            documentation.addEventListener("animationend", () => {
+                documentation.remove();
+
+                /* Check if we need to display no documentations message */
+                if(response_data.result.hasOwnProperty("no_documentations_html")){
+                    let documentations_div = (response_data.result.is_archived == "0") ? "documentations" : "archived_documents";
+                    document.getElementById(documentations_div).innerHTML = response_data.result.no_documentations_html;
+                }
+            });
+        }
+        else{
+            /* TODO: Use error handling prepare by FE */
+            alert("Failed to remove documentation.");
         }
     });
 
@@ -499,6 +485,7 @@ function submitReorderDocumentations(event){
     let form = ux("#reorder_documentations_form");
 
     form.post(form.attr("action"), form.serialize(), (response_data) => {
+        console.log(response_data);
         if(!response_data.status){
             alert("An error occured while reordering documentations!");
         }
