@@ -8,23 +8,15 @@ class Users extends CI_Controller {
 		$this->load->model("User");
 	}
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/userguide3/general/urls.html
-	 */
+	# DOCU: This function will render the login page. It will also handle the data returned by Google API. It will Create/Fetch User's data and redirect them
+	# to the Admin/User Documentation page
+	# Triggered by: (GET) /
+	# Optionals: Data returned by Google; $_SESSION["user_id", "user_level_id"]
+	# Returns: login.php
+	# Last updated at: Feb. 28, 2023
+	# Owner: Jovic
 	public function index(){
-		// Proceed to Google API if there is no session
+		# Proceed to Google API if there is no session
 		if(!isset($_SESSION["user_id"])){
 			include_once APPPATH . "libraries/vendor/autoload.php";
 
@@ -42,14 +34,14 @@ class Users extends CI_Controller {
 					$google_service = new Google_Service_Oauth2($google_client);
 					$userinfo = $google_service->userinfo->get();
 
-					// Create/Fetch User's account
+					# Create/Fetch User's account
 					$register_user = $this->User->loginUser($userinfo);
 
 					if($register_user["status"]){
-						// Sample admin session
+						# Sample admin session
 						$_SESSION["workspace_id"]  = 1;
 						
-						// Set user session
+						# Set user session
 						$_SESSION["user_id"]          = $register_user["result"]["user_info"]["id"];
 						$_SESSION["user_level_id"]    = $register_user["result"]["user_info"]["user_level_id"];
 						$_SESSION["first_name"]       = $register_user["result"]["user_info"]["first_name"];
@@ -62,12 +54,12 @@ class Users extends CI_Controller {
 				}
 			}
 			else{
-				// Create Auth URL for user login
+				# Create Auth URL for user login
 				$this->load->view('users/login', array("google_login_url" => $google_client->createAuthUrl()));
 			}
 		}
 		else{
-			// Redirect User to documentations page depending on User level
+			# Redirect User to documentations page depending on User level
 			redirect(($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
 		}
 	}
@@ -78,3 +70,4 @@ class Users extends CI_Controller {
 		redirect(base_url());
 	}
 }
+?>
