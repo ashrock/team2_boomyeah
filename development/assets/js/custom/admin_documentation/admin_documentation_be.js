@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function(){
         .on("submit", "#get_documentations_form", getDocumentations)
         .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy)
         .on("submit", "#reorder_documentations_form", submitReorderDocumentations)
-        .on("click", "#archive_confirm", submitArchive)
+        .on("click", "#archive_confirm", submitArchiveDocumentation)
         .on("click", "#remove_confirm", submitRemoveDocumentation)
         .on("click", ".change_privacy_yes_btn", submitChangeDocumentPrivacy)
         .on("blur", ".document_title", (event) => {
@@ -129,18 +129,13 @@ function onSubmitDuplicateForm(event){
     return false;  
 }
 
-function submitArchive(event){
-    let archive_document_form      = ux("#archive_form");
-    let archive_document_form_data = archive_document_form.serialize();
+function submitArchiveDocumentation(event){
+    let archive_document_form = ux("#archive_form");
 
-    if(ux("#archive_form .update_value").val() == "0"){
-        archive_document_form_data.append("archived_documentations", `${ux("#archived_documents").findAll(".document_block").length - 1}`);
-    }
-
-    ux().post(archive_document_form.attr("action"), archive_document_form_data, (response_data) => {
+    archive_document_form.post(archive_document_form.attr("action"), archive_document_form.serialize(), (response_data) => {
         if(response_data.status){
             /* TODO: Improve UX after success updating. Add animation to remove the archived document from the list. */
-            let documentation = ux(`#document_${response_data.result.documentation_id}`);
+            let documentation = $(`#document_${response_data.result.documentation_id}`);
 
             documentation.addClass("animate__animated animate__fadeOut");
             documentation.on("animationend", () => {
