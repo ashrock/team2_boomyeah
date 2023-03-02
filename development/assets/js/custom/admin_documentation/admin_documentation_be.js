@@ -1,19 +1,94 @@
 document.addEventListener("DOMContentLoaded", function(){
     ux("body")
-        .on("submit", "#add_documentation_form", onSubmitAddDocumentationForm)
-        .on("submit", "#get_documentations_form", getDocumentations)
-        .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy)
-        .on("submit", "#reorder_documentations_form", submitReorderDocumentations)
-        .on("click", "#archive_confirm", submitArchiveDocumentation)
-        .on("click", "#remove_confirm", submitRemoveDocumentation)
-        .on("click", ".change_privacy_yes_btn", submitChangeDocumentPrivacy)
         .on("blur", ".document_title", (event) => {
-            /** Check if empty title; Revert to old title if empty */
-            ux(event.target.closest(".edit_title_form")).trigger("submit");
+            /* Check if empty title; Revert to old title if empty */
+            ux((event.target).closest(".edit_title_form")).trigger("submit");
         })
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
         .on("submit", "#duplicate_documentation_form", onSubmitDuplicateForm)
+        .on("click", ".duplicate_icon", duplicateDocumentation)
+        .on("click", ".set_to_private_icon", async function(event){
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            
+            let document_id = ux(event.target).attr("data-document_id");
+            showConfirmPrivacyModal(document_id, 1, "#confirm_to_private"); 
+        })
+        /* Switch Active/Archive view */
+        .on("click", ".switch_view_btn", switchDocumentationView)
+        .on("submit", "#get_documentations_form", getDocumentations)
+        .on("submit", "#add_documentation_form", onSubmitAddDocumentationForm)
+        .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
+
+        /* Archive & Unarchive of documentation */
+        .on("click", ".archive_btn", setArchiveDocumentationValue)
+        .on("click", "#archive_confirm", submitArchiveDocumentation)
+
+        /* Remove documentation */
+        .on("click", ".remove_btn", setRemoveDocumentationValue)
+        .on("click", "#remove_confirm", submitRemoveDocumentation)
+
+        /* Setting of Privacy*/
+        .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
+        .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy)
+        .on("click", ".change_privacy_yes_btn", onSubmitChangePrivacy)
+
+        /* Reorder Documentations */
+        .on("submit", "#reorder_documentations_form", submitReorderDocumentations)
 });
+
+function onSubmitDuplicateForm(event){
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    
+    let duplicate_form   = ux("#duplicate_documentation_form");
+
+    duplicate_form.post(duplicate_form.attr("action"), duplicate_form.serialize(), (response_data) => {
+        if(response_data.status){
+            // Append duplicated documentation
+            let documentation           = document.getElementById(`document_${response_data.result.documentation_id}`);
+            let duplicate_element       = response_data.result.html;
+            
+            documentation.insertAdjacentHTML('afterend', duplicate_element);
+            let duplicate_documentation = document.getElementById(`document_${response_data.result.duplicate_id}`);
+
+            addAnimation(duplicate_documentation, "animate__fadeIn");
+
+            initializeMaterializeDropdown();
+        }
+        else{
+            /* TODO: Use error handling prepare by FE */
+            alert("Failed to duplicate documentation.");
+        }
+    });
+
+    return false;
+}
+
+function duplicateDocumentation(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+
+    let documentation  = event.target;
+    let document_id    = documentation.dataset.document_id;
+    let duplicate_form = ux("#duplicate_documentation_form");
+    duplicate_form.find(".documentation_id").val(document_id);
+    duplicate_form.trigger("submit");
+}
+
+async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type = "#confirm_to_private"){
+    let change_document_privacy_form = $("#change_document_privacy_form");
+
+    change_document_privacy_form.find("#documentation_id").val(document_id);
+    change_document_privacy_form.find("#update_value").val(update_value);
+
+
+    let confirm_modal = document.querySelector(modal_type);
+    var instance = M.Modal.getInstance(confirm_modal);
+
+    ux(confirm_modal).find(".documentation_title").text(ux("#document_" + document_id).find(".document_title").val())
+    instance.open();
+}
 
 function onSubmitAddDocumentationForm(event){
     event.preventDefault();
@@ -24,10 +99,9 @@ function onSubmitAddDocumentationForm(event){
         /** Use AJAX to generate new documentation */
         ux().post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
-                /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
-                alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
+                /* Redirect in admin edit document page. */
                 ux("#add_documentation_form").self().reset();
-                location.reload();
+                location.href = "admin_edit_documentation.php?document_title="+ encodeURI(input_document_title);
             }
             else{
                 alert(response_data.error);
@@ -46,34 +120,44 @@ function onSubmitAddDocumentationForm(event){
     }
 }
 
-function getDocumentations(event){
-    event.preventDefault();
-    let fetch_documents_form = ux(event.target);
+function initializeMaterializeDropdown(){
+    let elems = document.querySelectorAll('.more_action_btn');
+    M.Dropdown.init(elems, {
+        alignment: 'left',
+        coverTrigger: false,
+        constrainWidth: false
+    });
+}
+
+function toggleEditDocumentationTitle(event){
+    event.stopImmediatePropagation();
+    let edit_title_btn = $(event.target);
+    let document_block = edit_title_btn.closest(".document_block");
+    let document_title = document_block.find(".document_details .document_title");
+    let end = document_title.val().length;
+    document_block.removeClass("error");
+
+    document_title[0].removeAttribute("readonly");
+    document_title[0].setSelectionRange(end, end);
     
-    ux().post(fetch_documents_form.attr("action"), fetch_documents_form.serialize(), (response_data) => {
-        let documentations_div = ux("#get_documentations_form #is_archived").val() == "1" ? "#archived_documents" : "#documentations";
-
-        ux(documentations_div).html(response_data.result.html);
-
-        // $(".remove_btn").on("click", setRemoveDocumentationValue);
-        initializeMaterializeDropdown();
-    }, "json");
-
-    return false;
+    setTimeout(() => {
+        document_title[0].focus();
+    });
 }
 
 function onChangeDocumentationTitle(event){
     event.preventDefault();
-    let edit_doc_title_form = ux(event.target);
+    let edit_doc_title_form = $(event.target);
     let document_title_input = edit_doc_title_form.find(".document_title");
     let parent_document_block = edit_doc_title_form.closest(".document_block");
     parent_document_block.removeClass("error");
     
     if(document_title_input.val()){
         document_title_input.attr("readonly", "");
+        let edit_title_form = ux(event.target);
 
         /** Use AJAX to generate new documentation */
-        ux().post(edit_doc_title_form.attr("action"), edit_doc_title_form.serialize(), (response_data) => {
+        ux().post(edit_title_form.attr("action"), edit_title_form.serialize(), (response_data) => {
             if(response_data.status){
                 /* TODO: Improve UX after success updating of title. Add animation. */
                 parent_document_block.addClass("animate__animated animated_blinkBorder").removeClass("error");
@@ -99,34 +183,71 @@ function onChangeDocumentationTitle(event){
     return;
 }
 
-function onSubmitDuplicateForm(event){
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    let post_form = ux(event.target);
-    let document_id = post_form.find(".documentation_id").val();
+function switchDocumentationView(event){
+    let switch_view_btn = event.target;
+    let container       = $(switch_view_btn).closest(".container");
+    let docs_view_btn   = $(container).find("#docs_view_btn")[0];
+    let form            = ux("#get_documentations_form");
+    let is_archived     = parseInt(switch_view_btn.dataset.is_archived);
+    let active_div      = is_archived ? ux("#archived_documents") : ux("#documentations");
+    let hidden_div      = is_archived ? ux("#documentations"): ux("#archived_documents");
 
-    /** Use AJAX to generate new documentation */
-    ux().post(post_form.attr("action"), post_form.serialize(), (post_data) => {
-        if(post_data.status){
-            // Append duplicated documentation
-            ux(`#document_${document_id}`).after(post_data.result.html);
+    docs_view_btn.innerText = switch_view_btn.innerText;
+    active_div.removeClass("hidden");
+    hidden_div.addClass("hidden");
 
-            let documentation = ux(`#document_${post_data.result.documentation_id}`);
-            documentation.addClass("animate__animated animate__fadeIn animate__slower");
-            documentation.on("animationend", () => {
-                documentation.removeClass("animate__animated animate__fadeIn animate__slower");
-            });
+    /* Update form value */
+    form.find("#is_archived").val(is_archived ? "1" : "0");
+    form.trigger("submit");
+}
 
-            initializeMaterializeDropdown();
+/* Will set values needed for changing a documentation's privacy. Values will be used after clicking 'Yes' on the modal */
+function setDocumentPrivacyValues(event){
+    const documentation         = event.target;
+    const documentation_id      = documentation.getAttribute("data-document_id");
+    const documentation_privacy = documentation.getAttribute("data-document_privacy");
+    $("#confirm_to_public").find(".documentation_title").text(  $(`#document_${documentation_id}`).find(".document_title").val() );
+
+    /* Set form values */
+    let change_document_privacy_form = $("#change_document_privacy_form");
+    
+    change_document_privacy_form.find("#documentation_id").val(documentation_id);
+    change_document_privacy_form.find("#update_value").val( (documentation_privacy == "public") ? 1 : 0 );
+}
+
+function onSubmitChangePrivacy(event){
+    let privacy_form = ux("#change_document_privacy_form");
+    
+    /** Use AJAX to change documentation privacy */
+    privacy_form.post(privacy_form.attr("action"), privacy_form.serialize(), (response_data) => {
+        if(response_data.status){
+            /* TODO: Improve UX after success updating. Add animation to indication the replace with the updated . */
+            $(`#document_${response_data.result.documentation_id}`).replaceWith(response_data.result.html);
+            $(`#document_${response_data.result.documentation_id}`).addClass("animate__animated animated_blinkBorder").removeClass("error");
+                
+            setTimeout(() => {
+                $(`#document_${response_data.result.documentation_id}`).removeClass("animate__animated animated_blinkBorder");
+                initializeMaterializeDropdown();
+            }, 1280);
         }
-        else {
-            alert(post_data.error);
-        }
-
-        post_form.self().reset();
     }, "json");
 
-    return false;  
+    return false;
+}
+
+function setArchiveDocumentationValue(event){
+    let archive_button  = event.target;
+    let document_id     = ux(archive_button).attr("data-document_id");
+    let document_title  = ux(`#document_${document_id}`).find(".document_title").val();
+
+    let is_archived     = (ux(archive_button).attr("data-documentation_action") == "archive");
+    let confirmation_text = (is_archived) ? "Are you sure you want to move `"+ document_title +"` documentation to Archive?" : "Are you sure you want to Unarchive `"+ document_title +"` documentation?";
+    $("#confirm_to_archive").find("p").text( confirmation_text );
+    
+    /* Set form values */
+    let archive_document_form = $("#archive_form");
+    archive_document_form.find("#documentation_id").val(document_id);
+    archive_document_form.find("#update_value").val( (is_archived) ? 1 : 0 );
 }
 
 function submitArchiveDocumentation(event){
@@ -158,69 +279,72 @@ function submitArchiveDocumentation(event){
     return;
 }
 
-function submitChangeDocumentPrivacy(event){
-    event.preventDefault();
-
-    ux("#change_document_privacy_form").trigger("submit");
-    return;
-}
-
-function onSubmitChangePrivacy(event){
+function setRemoveDocumentationValue(event){
     event.stopImmediatePropagation();
-    event.preventDefault();
-    let post_form = ux(event.target);
-    
-    /** Use AJAX to change documentation privacy */
-    ux().post(post_form.attr("action"), post_form.serialize(), (post_data) => {
-        if(post_data.status){
-            /* TODO: Improve UX after success updating. Add animation to indication the replace with the updated . */
-            ux(`#document_${post_data.result.documentation_id}`).replaceWith(post_data.result.html);
-            ux(`#document_${post_data.result.documentation_id}`).addClass("animate__animated animated_blinkBorder").removeClass("error");
-                
-            setTimeout(() => {
-                ux(`#document_${post_data.result.documentation_id}`).removeClass("animate__animated animated_blinkBorder");
-                initializeMaterializeDropdown();
-            }, 1280);
-        }
 
-        post_form.self().reset();
-    }, "json");
+    const documentation = event.target;
+    let document_id     = documentation.dataset.document_id;
+    let form            = ux("#remove_documentation_form");
+    let document_block  = ux(`#document_${document_id}`);
 
-    return false;
+    /* Set form values */
+    form.find("#remove_documentation_id").val(document_id);
+    form.find("#remove_is_archived").val(documentation.dataset.is_archived);
+
+    /* Add title to modal */
+    ux("#confirm_to_remove").find(".documentation_title").text(document_block.find(".document_title").val());
 }
 
 function submitRemoveDocumentation(event){
     event.stopImmediatePropagation();
     event.preventDefault();
 
-    let remove_form = ux("#remove_documentation_form");
-    let form_data   = remove_form.serialize(); 
+    let form      = ux("#remove_documentation_form");
+    let form_data = form.serialize(); 
     
-    if(ux("#remove_documentation_form #remove_is_archived").val() == "1"){
-        form_data.append("archived_documentations", `${ ux("#archived_documents").findAll(".document_block").length - 1}`);
-    } 
+    if(form.find("#remove_is_archived").val() == "1"){
+        form_data.append("archived_documentations", ux("#archived_documents").findAll(".document_block").length - 1);
+    }
 
-    ux().post(remove_form.attr("action"), form_data, (response_data) => {
+    form.post(form.attr("action"), form_data, (response_data) => {
         if(response_data.status){
-            let documentation = ux(`#document_${response_data.result.documentation_id}`);
-    
-            documentation.addClass("animate__animated animate__fadeOut");
-            documentation.on("animationend", () => {
+            let documentation = document.getElementById(`document_${response_data.result.documentation_id}`);
+
+            addAnimation(documentation, "animate__fadeOut");
+            documentation.addEventListener("animationend", () => {
                 documentation.remove();
 
+                /* Check if we need to display no documentations message */
                 if(response_data.result.hasOwnProperty("no_documentations_html")){
-                    let documentations_div = (response_data.result.is_archived === "0") ? "#documentations" : "#archived_documents";
-    
-                    ux(documentations_div).html(response_data.result.no_documentations_html);
+                    let documentations_div = (response_data.result.is_archived == "0") ? "documentations" : "archived_documents";
+                    document.getElementById(documentations_div).innerHTML = response_data.result.no_documentations_html;
                 }
             });
         }
+        else{
+            /* TODO: Use error handling prepare by FE */
+            alert("Failed to remove documentation.");
+        }
+    });
 
-    }, "json");
+    return false;
+}
 
-    let remove_modal = document.querySelector("#confirm_to_remove");
-    var instance = M.Modal.getInstance(remove_modal);
-    instance.close();
+function getDocumentations(event){
+    event.preventDefault();
+    let form = ux("#get_documentations_form");
+
+    form.post(form.attr("action"), form.serialize(), (response_data) => {
+        if(response_data.status){
+            let documentations_div = response_data.result.is_archived == "1" ? "archived_documents" : "documentations";
+            document.getElementById(documentations_div).innerHTML = response_data.result.html;
+        }
+        else{
+            /* TODO: Design for displaying error */
+        }
+
+        initializeMaterializeDropdown();
+    });
 
     return false;
 }
