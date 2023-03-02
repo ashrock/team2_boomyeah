@@ -2,6 +2,25 @@
     defined('BASEPATH') OR exit('No direct script access allowed');
 
     class Documentation extends CI_Model {
+        public function getDocumentation($documentation_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $get_documentation = $this->db->query("SELECT id, title, description, section_ids_order, is_archived, is_private FROM documentations WHERE id = ?;", $documentation_id);
+
+                if($get_documentation->num_rows()){
+                    $response_data["result"] = $get_documentation->result_array()[0];
+                }
+
+                $response_data["status"] = true;
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
         public function getDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -56,8 +75,23 @@
                 $new_documentation_id = $this->db->insert_id($insert_document_record);
 
                 if($new_documentation_id > ZERO_VALUE){
-                    $workspace = $this->db->query("SELECT documentation_ids_order FROM workspaces WHERE id = ?", $params["workspace_id"])->row();
-                    $new_documents_order = (strlen($workspace->{'documentation_ids_order'})) ? $workspace->{'documentation_ids_order'}.','. $new_documentation_id : $new_documentation_id;
+                    $workspace = $this->Workspace->getDocumentationsOrder($params["workspace_id"]);
+                    
+                    if(!isset($params["is_duplicate"])){
+                        $new_documents_order = (strlen($workspace["result"]["documentation_ids_order"])) ? $workspace["result"]["documentation_ids_order"].','. $new_documentation_id : $new_documentation_id;
+                    }
+                    else{
+                        $new_documents_order = explode(",", $workspace["result"]["documentation_ids_order"]);
+    
+                        for($document_index=0; $document_index < count($new_documents_order); $document_index++){
+                            if($params["documentation_id"] == (int)$new_documents_order[$document_index]){
+                                array_splice($new_documents_order, $document_index + 1, 0, "{$new_documentation_id}");
+                            }
+                        }
+        
+                        // Convert array to comma-separated string and update new_documents_order of new_documents_order
+                        $new_documents_order = implode(",", $new_documents_order);
+                    }
 
                     $update_workspace_docs_order = $this->db->query("UPDATE workspaces SET documentation_ids_order = ? WHERE id = ?", array( $new_documents_order, $params["workspace_id"]));
 
@@ -131,6 +165,55 @@
             return $response_data;
         }
 
+        public function duplicateDocumentation($documentation_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $this->db->trans_start();
+                $get_documentation = $this->getDocumentation($documentation_id);
+
+                if($get_documentation["status"]){
+                    $duplicate_title  = "Copy of {$get_documentation['result']['title']}";
+
+                    // Create new documentation
+                    $duplicate_documentation = $this->addDocumentations(array(
+                        "is_duplicate"     => true,
+                        "documentation_id" => $documentation_id,
+                        "user_id"          => $_SESSION["user_id"],
+                        "workspace_id"     => $_SESSION["workspace_id"],
+                        "title"		       => $duplicate_title
+                    ));;
+
+                    if($duplicate_documentation["status"]){
+                        $response_data["status"]                     = true;
+                        $response_data["result"]["documentation_id"] = $documentation_id;
+                        $response_data["result"]["html"]             = $this->load->view(
+                            "partials/document_block_partial.php",
+                            array(
+                                "id"                        => $duplicate_documentation["result"]["documentation_id"],
+                                "title"                     => $duplicate_title,
+                                "is_private"                => TRUE_VALUE,
+                                "is_archived"               => FALSE_VALUE,
+                                "cache_collaborators_count" => ZERO_VALUE
+                            ), 
+                            true
+                        );
+                    }
+                    else{
+                        throw new Exception($duplicate_documentation["error"]);
+                    }
+
+                    $this->db->trans_complete();
+                }
+            }
+            catch (Exception $e) {
+			    $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
         public function deleteDocumentation($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -148,6 +231,7 @@
     
                         if($documentations_order["status"]){
                             $documentations_order = explode(",", $documentations_order["result"]["documentation_ids_order"]);
+                            $documentations_count = count($documentations_order);
                             $documentation_index  = array_search($params["remove_documentation_id"], $documentations_order);
                             
                             if($documentation_index !== FALSE){

@@ -77,6 +77,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let modal = document.querySelectorAll('.modal');
     let instances = M.Modal.init(modal);
 
+    Sortable.create(document.querySelector("#documentations"), {
+        onEnd: () => {
+            updateDocumentationsOrder(document.querySelector("#documentations"));
+        }
+    });
+
     ux("body")
         .on("blur", ".document_title", (event) => {
             /* Check if empty title; Revert to old title if empty */
@@ -110,47 +116,44 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
         .on("submit", "#change_document_privacy_form", submitChangePrivacy)
         .on("click", ".change_privacy_yes_btn", submitChangePrivacy)
+
+        /* Reorder Documentations */
+        .on("submit", "#reorder_documentations_form", submitReorderDocumentations)
 });
 
 function onSubmitDuplicateForm(event){
     event.preventDefault();
     event.stopImmediatePropagation();
-    let post_form = $(event.target);
-    let document_id = post_form.find(".documentation_id").val();
+    
+    let duplicate_form   = ux("#duplicate_documentation_form");
+    let documentation_id = duplicate_form.find(".documentation_id").val();
 
-    /** Use AJAX to generate new documentation */
-    $.post(post_form.attr("action"), post_form.serialize(), (post_data) => {
-        if(post_data.status){
+    duplicate_form.post(duplicate_form.attr("action"), duplicate_form.serialize(), (response_data) => {
+        console.log(response_data);
+
+        if(response_data.status){
             // Append duplicated documentation
-            $(`#document_${document_id}`).after(post_data.result.html);
+            let documentation     = document.getElementById(`document_${response_data.result.documentation_id}`);
+            let duplicate_element = response_data.result.html;
 
-            let documentation = $(`#document_${post_data.result.documentation_id}`);
-            documentation.addClass("animate__animated animate__fadeIn animate__slower");
-            documentation.on("animationend", () => {
-                documentation.removeClass("animate__animated animate__fadeIn animate__slower");
-            });
+            documentation.insertAdjacentHTML('afterend', duplicate_element);
 
             initializeMaterializeDropdown();
         }
-        else {
-            alert(post_data.error);
-        }
+    });
 
-        post_form[0].reset();
-    }, "json");
-
-    return false;  
+    return false;
 }
 
 function duplicateDocumentation(event){
     event.stopImmediatePropagation();
     event.preventDefault();
 
-    let document_id = $(event.target).data("document_id");
+    let documentation  = event.target;
+    let document_id    = documentation.dataset.document_id;
     let duplicate_form = ux("#duplicate_documentation_form");
     duplicate_form.find(".documentation_id").val(document_id);
     duplicate_form.trigger("submit");
-    return false;
 }
 
 async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type = "#confirm_to_private"){
@@ -478,6 +481,7 @@ function getDocumentations(event){
 
 function updateDocumentationsOrder(documentations){
     let documentation_children = documentations.children;
+    let form = ux("#reorder_documentations_form");
     var new_documentations_order = "";
 
     /* Get documentation_id from documentation_children */
@@ -486,19 +490,19 @@ function updateDocumentationsOrder(documentations){
     }
 
     /* Update form value and submit form */
-    $("#reorder_documentations_form #documentations_order").val(new_documentations_order);
-    $("#reorder_documentations_form").submit();
+    form.find("#documentations_order").val(new_documentations_order);
+    form.trigger("submit");
 }
 
 function submitReorderDocumentations(event){
     event.preventDefault();
-    let form = $(this);
+    let form = ux("#reorder_documentations_form");
 
-    $.post(form.attr("action"), form.serialize(), (response_data) => {
+    form.post(form.attr("action"), form.serialize(), (response_data) => {
         if(!response_data.status){
             alert("An error occured while reordering documentations!");
         }
-    }, "json");
+    });
 
     return false;
 }
