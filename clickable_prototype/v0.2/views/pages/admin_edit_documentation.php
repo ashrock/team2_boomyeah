@@ -20,6 +20,10 @@
         "document_description" => "Software undergoes beta testing shortly before it’s released. Beta is Latin for “still doesn’t work”. (Anonymous) Most software today is very much like an Egyptian pyramid with millions of bricks piled on top of each other, with no structural integrity, but just done by brute force and thousands of slaves. (Alan Kay) There’s an old story about the person who wished his computer were as easy to use as his telephone. That wish has come true, since I no longer know how to use my telephone. (Bjarne Stroustrup) Writing code has a place in the human hierarchy worth somewhere above grave robbing and beneath managing. (Gerald Weinberg)",
         "is_private" => TRUE
     );
+
+    //load initial data from json file
+    $section_data_file_path = "../../assets/json/sections_data.json";
+    $sections_data = load_json_file($section_data_file_path);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,20 +83,13 @@
             </div>
             <div class="section_container" id="section_container">
                 <?php
-                    $sections_data = array();
-                    for($index = 1; $index <= 4; $index++){
-                        $dummy_section_data = array(
-                            "id" => time() + $index,
-                            "documentation_id" => 1,
-                            "user_id" => 1,
-                            "title" => "Thirty-One Million supercalifragilisticexpialidocious",
-                            "description" => "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
-                        );
-                        array_push($sections_data, $dummy_section_data);
+                    if(count($sections_data["fetch_section_admin_data"])){
+                        foreach($sections_data["fetch_section_admin_data"] as $section_data){
+                            load_view("../partials/section_block_partial.php", $section_data);
+                        }
                     }
-                    
-                    foreach($sections_data as $section_data){
-                        load_view("../partials/section_block_partial.php", $section_data);
+                    else{
+                        //display if no sections
                     }
                 ?>
             </div>
