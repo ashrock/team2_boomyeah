@@ -4,8 +4,37 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("submit", "#update_section_form", onSubmitUpdateSectionForm)
         .on("submit", "#duplicate_section_form", onSubmitDuplicateSectionForm)
         .on("submit", "#remove_section_form", onSubmitRemoveSectionForm)
-        .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy);
+        .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy)
+        .on("submit", "#reorder_sections_form", submitReorderSections)
+        .on("submit", "#udpate_documentation_form", submitUpdateDocumentationData)
+        ;
 });
+
+function submitUpdateDocumentationData(event){
+    event.preventDefault();
+    let post_form = ux(event.target);
+
+    ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+        if(!response_data.status){
+            alert("An error occured while updating documentation data!");
+        }
+    }, "json");
+
+    return false;
+}
+
+function submitReorderSections(event){
+    event.preventDefault();
+    let reorder_form = ux(event.target);
+
+    ux().post(reorder_form.attr("action"), reorder_form.serialize(), (response_data) => {
+        if(!response_data.status){
+            alert("An error occured while reordering sections!");
+        }
+    }, "json");
+
+    return false;
+}
 
 function onSubmitChangePrivacy(event){
     event.stopImmediatePropagation();
