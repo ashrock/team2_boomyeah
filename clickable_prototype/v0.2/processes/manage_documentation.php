@@ -229,6 +229,11 @@
 
                 break;
             }
+            case "update_documentation_data": {
+                $response_data["status"] = true;
+
+                break;
+            }
             case "create_section" : {
                 $section_data = array(
                     "id" => time(),
@@ -284,6 +289,10 @@
                     "jganggangan@village88.com",
                     "jabengona@village88.com",
                     "kei.kishimoto@village88.com",
+                    "eesquilon@village88.com",
+                    "hnocos@village88.com",
+                    "ifuncion@village88.com",
+                    "vince.gurtiza@village88.com"
                 );
 
                 foreach($collaborator_emails as $collaborator_key => $collaborator_email){
@@ -336,6 +345,12 @@
             case "remove_collaborator" : {
                 $response_data["status"] = true;
                 $response_data["result"]["invited_user_id"] = $_POST["invited_user_id"];
+                break;
+            }
+            case "reorder_sections" : {
+                $response_data["status"] = true;
+                $sections_order = $_POST["sections_order"];
+                $response_data["result"]["sections_order"] = $sections_order;
                 break;
             }
         }
