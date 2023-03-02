@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function(){
         /* Switch Active/Archive view */
         .on("click", ".switch_view_btn", switchDocumentationView)
         .on("submit", "#get_documentations_form", getDocumentations)
-        .on("submit", "#add_documentation_form", submitAddDocumentation)
+        .on("submit", "#add_documentation_form", onSubmitAddDocumentationForm)
         .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
 
         /* Archive & Unarchive of documentation */
@@ -30,8 +30,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
         /* Setting of Privacy*/
         .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
-        .on("submit", "#change_document_privacy_form", submitChangePrivacy)
-        .on("click", ".change_privacy_yes_btn", submitChangePrivacy)
+        .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy)
+        .on("click", ".change_privacy_yes_btn", onSubmitChangePrivacy)
 
         /* Reorder Documentations */
         .on("submit", "#reorder_documentations_form", submitReorderDocumentations)
@@ -90,18 +90,18 @@ async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type
     instance.open();
 }
 
-function submitAddDocumentation(event){
+function onSubmitAddDocumentationForm(event){
     event.preventDefault();
-    let add_document_form = ux("#add_documentation_form");
-    const input_document_title = $("#input_add_documentation").val();
+    let add_document_form = ux(event.target);
+    const input_document_title = ux("#input_add_documentation").val();
 
     if(input_document_title){
         /** Use AJAX to generate new documentation */
-        add_document_form.post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
+        ux().post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
-                /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
-                alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
-                location.reload();
+                /* Redirect in admin edit document page. */
+                ux("#add_documentation_form").self().reset();
+                location.href = "admin_edit_documentation.php?document_title="+ encodeURI(input_document_title);
             }
             else{
                 alert(response_data.error);
@@ -111,7 +111,7 @@ function submitAddDocumentation(event){
         return;
     }
     else{
-        let add_documentation_input = $(".group_add_documentation");
+        let add_documentation_input = ux(".group_add_documentation");
 
         add_documentation_input.addClass("input_error").addClass("animate__animated animate__headShake");
         add_documentation_input.on("animationend", () => {
@@ -215,7 +215,7 @@ function setDocumentPrivacyValues(event){
     change_document_privacy_form.find("#update_value").val( (documentation_privacy == "public") ? 1 : 0 );
 }
 
-function submitChangePrivacy(event){
+function onSubmitChangePrivacy(event){
     let privacy_form = ux("#change_document_privacy_form");
     
     /** Use AJAX to change documentation privacy */
