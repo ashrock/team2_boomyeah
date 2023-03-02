@@ -11,12 +11,14 @@ const REGULAR_EXPRESSIONS = {
 };
 
 const CUSTOM_EVENTS = {
-    "blur" : "focusout"
+    "blur" : "focusout",
+    "focus" : "focusin"
 }
 const UX_EVENTS = {
     "submit": new Event("submit", { bubbles: true }),
     "blur": new Event("blur", { bubbles: true }),
     "click": new Event("click", { bubbles: true }),
+    "focus": new Event("focus", { bubbles: true }),
 }
 
 function ux(selector) {
