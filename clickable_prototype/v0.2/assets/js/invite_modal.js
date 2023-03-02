@@ -117,12 +117,29 @@ function onSubmitGetCollaboratorsForm(event){
             /** TODO: Get people with access content */
             let invite_modal = document.querySelector("#invite_collaborator_modal");
             M.Modal.getInstance(invite_modal).open();
+            
+            setTimeout(() => {
+                initializeInviteEmailField();   
+            }, 480);
         } else {
 
         }
     }, "json");
 
     return false;
+}
+
+function initializeInviteEmailField(){
+    ux("body")
+        .on("focus", ".collaborator_email_address", function(event){
+            event.stopImmediatePropagation();
+            ux(".collaborator_chips").addClass("focused");
+        })
+        .on("blur", ".collaborator_email_address", function(event){
+            event.stopImmediatePropagation();
+            ux(".collaborator_chips").removeClass("focused");
+        });
+
 }
 
 function onSubmitAddCollaboratorsForm(event){
