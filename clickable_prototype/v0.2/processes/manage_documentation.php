@@ -4,6 +4,10 @@
     include_once("../config/constants.php");
     include_once("./partial_helper.php");
 
+    //load the initial data from the json file
+    $sections_data_file_path = "../assets/json/sections_data.json";
+    $sections_data = load_json_file($sections_data_file_path);
+
     if(isset($_POST["action"])){
         $response_data = array("status" => false, "result" => [], "error"  => null);
 
@@ -235,7 +239,7 @@
                 break;
             }
             case "create_section" : {
-                $section_data = array(
+                $new_section_data = array(
                     "id" => time(),
                     "documentation_id" => time(),
                     "user_id" => time(),
@@ -243,40 +247,77 @@
                     "description" => "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
                 );
 
+                array_unshift($sections_data["fetch_section_admin_data"], $new_section_data);
+                file_put_contents($sections_data_file_path, json_encode($sections_data));
+ 
                 $response_data["status"] = true;
-                $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $section_data);
+                $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $new_section_data);
                 break;
             }
             case "update_section" : {
-                $section_data = array(
-                    "documentation_id" => 1,
-                    "user_id" => 1,
-                    "title" => "",
-                    "description" => ""
-                );
-
-                $section_data["id"] = $_POST["section_id"];
-                $section_data[$_POST["update_type"]] = $_POST["update_value"];
-
-                $response_data["status"] = true;
-                $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $section_data);
+                $updated_section_data = [];
+                foreach($sections_data["fetch_section_admin_data"] as &$section_data){
+                    if($section_data["id"] == $_POST["section_id"]){
+                        $section_data["title"] = $_POST["update_value"];
+                        $updated_section_data = $section_data;
+                        break;
+                    }
+                }  
+             
+                if($updated_section_data) {
+                    // do something with the updated section
+                    file_put_contents($sections_data_file_path, json_encode($sections_data));
+                    $section_data["id"] = $_POST["section_id"];
+                    $section_data[$_POST["update_type"]] = $_POST["update_value"];
+                
+                    $response_data["status"] = true;
+                    $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $updated_section_data);
+                } 
+                else {
+                    // handle the case where no matching section is found
+                    $response_data["error"] = "There's no record found.";
+                }
                 break;
             }
             case "duplicate_section" : {
-                $section_data = array(
-                    "id" => time(),
-                    "section_id" => time(),
-                    "user_id" => 1,
-                    "title" => "Copy of Section ". time(),
-                    "description" => "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
-                );
-
-                $response_data["status"] = true;
-                $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $section_data);
-                $response_data["result"]["section_id"] = $section_data["id"];
+                $duplicated_section_data = [];
+                $section_index = 0;
+                foreach($sections_data["fetch_section_admin_data"] as &$section_data){
+                    if($section_data["id"] == $_POST["section_id"]){
+                        $new_section_data = [
+                            "id" => time(),
+                            "title" => "Copy of " . $section_data["title"]
+                        ];
+                        array_splice($sections_data["fetch_section_admin_data"], $section_index + 1, 0, [$new_section_data]);
+                        $duplicated_section_data = $new_section_data;
+                        break;
+                    }
+                    $section_index++;
+                }
+                
+                if($duplicated_section_data){
+                    file_put_contents($sections_data_file_path, json_encode($sections_data));
+                    $response_data["status"] = true;
+                    $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $duplicated_section_data);
+                    $response_data["result"]["section_id"] = $duplicated_section_data["id"];
+                }
+                else{
+                    $response_data["error"] = "There's no record found.";
+                }
+      
                 break;
             }
             case "remove_section" : {
+
+                foreach($sections_data["fetch_section_admin_data"] as $key => $section_data){
+                    if($section_data["id"] == $_POST["section_id"]){
+                        unset($sections_data["fetch_section_admin_data"][$key]);
+                        break;
+                    }
+                }
+
+                file_put_contents($sections_data_file_path, json_encode($sections_data));
+
                 $response_data["status"] = true;
                 $response_data["result"]["section_id"] = $_POST["section_id"];
                 break;
