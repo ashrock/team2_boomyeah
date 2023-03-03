@@ -69,6 +69,13 @@
             return $response_data;
         }
 
+        # DOCU: This function will create/duplicate documentations and update documentation_ids_order of Workspace
+        # Triggered by: (POST) docs/add, docs/duplicate
+        # Requires: $params { user_id, workspace_id, title }
+        # Optionals: $params { is_duplicate, documentation_id }
+        # Returns: { status: true/false, result: { documentation_id }, error: null }
+        # Last updated at: March 1, 2023
+        # Owner: Erick, Updated by: Jovic
         public function addDocumentations($params){
             $response_data = array("status" => false, "result" => [], "error" => null);
 
@@ -88,6 +95,7 @@
                         $new_documents_order = (strlen($workspace["result"]["documentation_ids_order"])) ? $workspace["result"]["documentation_ids_order"].','. $new_documentation_id : $new_documentation_id;
                     }
                     else{
+                        # Add documentation_id of duplicated record to Workspace's documentation_ids_order
                         $new_documents_order = explode(",", $workspace["result"]["documentation_ids_order"]);
     
                         for($document_index=0; $document_index < count($new_documents_order); $document_index++){
@@ -96,7 +104,7 @@
                             }
                         }
         
-                        // Convert array to comma-separated string and update new_documents_order of new_documents_order
+                        # Convert array to comma-separated string and update new_documents_order of new_documents_order
                         $new_documents_order = implode(",", $new_documents_order);
                     }
 
@@ -115,6 +123,12 @@
             return $response_data;
         }
 
+        # DOCU: This function will update a documentation depending on what update_type is given
+        # Triggered by: (POST) docs/update
+        # Requires: $params { update_type, update_value, documentation_id }
+        # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
+        # Last updated at: March 1, 2023
+        # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -136,6 +150,7 @@
                                 $response_data["result"]["updated_document"] = $updated_document;
                             }
                             elseif($params["update_type"] == "is_archived" ){
+                                # Remove documentation_id from documentation_ids_order
                                 $workspace = $this->db->query("SELECT documentation_ids_order FROM workspaces WHERE id = ?", $params["workspace_id"])->row();
                                 $documentation_order_array = explode(",", $workspace->{"documentation_ids_order"});
                                 $new_documents_order = NULL;
@@ -171,7 +186,7 @@
 
             return $response_data;
         }
-        
+
         # DOCU: This function will duplicate a documentation
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]

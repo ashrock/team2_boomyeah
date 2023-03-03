@@ -89,6 +89,12 @@
 			echo json_encode($response_data);
 		}
 
+		# DOCU: This function will call addDocumentations() from Documentations Model
+		# Triggered by: (POST) docs/add
+		# Requires: $_POST["document_title"]
+		# Returns: { status: true/false, result: { documentationd_id}, error: null }
+		# Last updated at: Feb. 28, 2023
+		# Owner: Erick
 		public function addDocumentations(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -113,6 +119,12 @@
 			echo json_encode($response_data);
 		}
 
+		# DOCU: This function will call updateDocumentations() from Documentations Model.
+		# Triggered by: (POST) docs/update
+		# Requires: $_POST["documentation_id", "update_type", "update_value"]; $_SESSION["user_id", "workspace_id"]
+		# Returns: { status: true/false, result: { documentations_count, is_archived, html, no_documentations_html }, error: null }
+		# Last updated at: Feb. 28, 2023
+		# Owner: Erick
 		public function updateDocumentations(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -128,9 +140,11 @@
 					));
 
 					if($_POST["update_type"] == "is_private"){
+						# Generate updated HTML for documentation
 						$update_documentation["result"]["html"] = $this->load->view("partials/document_block_partial.php", array("all_documentations" => $update_documentation["result"]["updated_document"]), true);
 					}
 					elseif($_POST["update_type"] == "is_archived"){
+						# Generate HTML for displaying that there are no documentations
 						if(!$update_documentation["result"]["documentations_count"]){
 							$update_documentation["result"]["is_archived"] = $_POST["update_value"];
 							$update_documentation["result"]["no_documentations_html"] = $this->load->view("partials/no_documentations_partial.php", array("message" => $update_documentation["result"]["message"]), true);
