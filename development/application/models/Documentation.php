@@ -2,6 +2,12 @@
     defined('BASEPATH') OR exit('No direct script access allowed');
 
     class Documentation extends CI_Model {
+        # DOCU: This function will get documentation based on documentation id
+        # Triggered by: (POST) docs/duplicate
+        # Requires: $documentationd_id
+        # Returns: { status: true/false, result: documentation record (Array), error: null }
+        # Last updated at: March 1, 2023
+        # Owner: Jovic
         public function getDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -21,27 +27,28 @@
             return $response_data;
         }
 
+        # DOCU: This function will get documentations of current workspace.
+        # Triggered by: (GET) docs/edit, docs; (POST) docs/get
+        # Requires: $params { workspace_id, is_archived, user_level_id }, $_SESSION["user_id"]
+        # Optionals: $params { documentation_ids_order }, $_SESSION["user_id"]
+        # Returns: { status: true/false, result: documentations record (Array), error: null }
+        # Last updated at: Feb. 27, 2023
+        # Owner: Jovic
         public function getDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 // ! Binding an array value encloses it in a parenthesis which causes an error
-
                 $where_conditions = "is_archived = ? ";
                 $bind_params      = array($params["workspace_id"], $params["is_archived"]);
-                $order_by_clause  = "";
 
                 if($params["user_level_id"] == USER_LEVEL["USER"]){
                     $where_conditions .= "AND (is_private = ?  OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = ?)) ";
                     array_push($bind_params, FALSE_VALUE, $_SESSION["user_id"]);
                 }
                 
+                # Only add ORDER BY clause to query if viewing active documentations
                 $documentation_order = ($params["is_archived"] || $params["documentation_ids_order"] == null) ? "" : "ORDER BY FIELD (id, {$params["documentation_ids_order"]})";
-
-                /* Add ORDER BY if documentation_ids_order is no null or empty */
-                if($params["documentation_ids_order"]){
-                    $order_by_clause = "ORDER BY FIELD (id, {$params["documentation_ids_order"]})";
-                }
 
                 $get_documentations = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count
                     FROM documentations
@@ -62,6 +69,13 @@
             return $response_data;
         }
 
+        # DOCU: This function will create/duplicate documentations and update documentation_ids_order of Workspace
+        # Triggered by: (POST) docs/add, docs/duplicate
+        # Requires: $params { user_id, workspace_id, title }
+        # Optionals: $params { is_duplicate, documentation_id }
+        # Returns: { status: true/false, result: { documentation_id }, error: null }
+        # Last updated at: March 1, 2023
+        # Owner: Erick, Updated by: Jovic
         public function addDocumentations($params){
             $response_data = array("status" => false, "result" => [], "error" => null);
 
@@ -81,6 +95,7 @@
                         $new_documents_order = (strlen($workspace["result"]["documentation_ids_order"])) ? $workspace["result"]["documentation_ids_order"].','. $new_documentation_id : $new_documentation_id;
                     }
                     else{
+                        # Add documentation_id of duplicated record to Workspace's documentation_ids_order
                         $new_documents_order = explode(",", $workspace["result"]["documentation_ids_order"]);
     
                         for($document_index=0; $document_index < count($new_documents_order); $document_index++){
@@ -89,7 +104,7 @@
                             }
                         }
         
-                        // Convert array to comma-separated string and update new_documents_order of new_documents_order
+                        # Convert array to comma-separated string and update new_documents_order of new_documents_order
                         $new_documents_order = implode(",", $new_documents_order);
                     }
 
@@ -108,6 +123,12 @@
             return $response_data;
         }
 
+        # DOCU: This function will update a documentation depending on what update_type is given
+        # Triggered by: (POST) docs/update
+        # Requires: $params { update_type, update_value, documentation_id }
+        # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
+        # Last updated at: March 1, 2023
+        # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -119,16 +140,17 @@
                         $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ? WHERE id = ?", array($params["update_value"], $params["documentation_id"]) );
                       
                         if($update_document){
-                            $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->row();
+                            $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->result_array();
 
                             $response_data["status"] = true;
-                            $response_data["result"]["documentation_id"] = $updated_document->{'id'};
+                            $response_data["result"]["documentation_id"] = $updated_document[0]['id'];
                             $response_data["result"]["update_type"]      = $params["update_type"];
 
                             if($params["update_type"] == "is_private"){
                                 $response_data["result"]["updated_document"] = $updated_document;
                             }
                             elseif($params["update_type"] == "is_archived" ){
+                                # Remove documentation_id from documentation_ids_order
                                 $workspace = $this->db->query("SELECT documentation_ids_order FROM workspaces WHERE id = ?", $params["workspace_id"])->row();
                                 $documentation_order_array = explode(",", $workspace->{"documentation_ids_order"});
                                 $new_documents_order = NULL;
@@ -165,6 +187,12 @@
             return $response_data;
         }
 
+        # DOCU: This function will duplicate a documentation
+        # Triggered by: (POST) docs/duplicate
+        # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]
+        # Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
+        # Last updated at: March 1, 2023
+        # Owner: Jovic
         public function duplicateDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -175,7 +203,7 @@
                 if($get_documentation["status"]){
                     $duplicate_title  = "Copy of {$get_documentation['result']['title']}";
 
-                    // Create new documentation
+                    # Create new documentation
                     $duplicate_documentation = $this->addDocumentations(array(
                         "is_duplicate"     => true,
                         "documentation_id" => $documentation_id,
@@ -185,18 +213,20 @@
                     ));;
 
                     if($duplicate_documentation["status"]){
+                        # TODO: Also create sections, modules, and tabs
+
                         $response_data["status"]                     = true;
                         $response_data["result"]["documentation_id"] = $documentation_id;
                         $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
                         $response_data["result"]["html"]             = $this->load->view(
                             "partials/document_block_partial.php",
-                            array(
+                            array( "all_documentations" => [array(
                                 "id"                        => $duplicate_documentation["result"]["documentation_id"],
                                 "title"                     => $duplicate_title,
                                 "is_private"                => TRUE_VALUE,
                                 "is_archived"               => FALSE_VALUE,
                                 "cache_collaborators_count" => ZERO_VALUE
-                            ), 
+                            )]), 
                             true
                         );
                     }
@@ -215,22 +245,32 @@
             return $response_data;
         }
 
+        # DOCU: This function will delete a documentation
+        # Triggered by: (POST) docs/remove
+        # Requires: $params { remove_documentation_id, remove_is_archive }, $_SESSION["workspace_id"]
+        # Returns: { status: true/false, result: { documentation_id }, error: null }
+        # Last updated at: March 1, 2023
+        # Owner: Jovic
         public function deleteDocumentation($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 $this->db->trans_start();
 
+                # Delete collaborators of remove_documentation_id
                 $delete_collaborators = $this->Collaborator->deleteCollaborators(array("documentation_id" => $params["remove_documentation_id"]));
+
+                # TODO: Also delete records from tables with documentation_id foreign key.
 
                 if($delete_collaborators["status"]){
                     $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $params["remove_documentation_id"]);
     
                     if($this->db->affected_rows()){
-                        /* Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table */
+                        # Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table
                         $documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
     
                         if($documentations_order["status"]){
+                            # Remove remove_documentation_id from documentation_ids_order and update workspace record
                             $documentations_order = explode(",", $documentations_order["result"]["documentation_ids_order"]);
                             $documentations_count = count($documentations_order);
                             $documentation_index  = array_search($params["remove_documentation_id"], $documentations_order);
@@ -247,6 +287,7 @@
                                 }
                             }
     
+                            # Generate HTML for no documentations message
                             if(($params["remove_is_archived"] == FALSE_VALUE && !$documentations_count) || ($params["remove_is_archived"] == TRUE_VALUE && $params["archived_documentations"] == "0")){
                                 $message = ($params["remove_is_archived"] == FALSE_VALUE) ? "You have no documentations yet." : "You have no archived documentations yet.";
         
