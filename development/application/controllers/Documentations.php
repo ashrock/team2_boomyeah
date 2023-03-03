@@ -61,13 +61,10 @@
 
 				if($all_documentations["status"]){
 					if(count($all_documentations["result"])){
-						$response_data["result"]["html"] = "";
 
 						# TODO: Refactor document_block_partial to accept an array and perform loop inside it instead of calling document_block_partial multiple times.
 						# Rendering the partial can also be moved to getDocumentations() in Documentation Model.
-						for($documentations_index = 0; $documentations_index < count($all_documentations["result"]); $documentations_index++){
-							$response_data["result"]["html"] .= $this->load->view("partials/document_block_partial.php", $all_documentations["result"][$documentations_index], true);
-						}
+						$response_data["result"]["html"] = $this->load->view("partials/document_block_partial.php", array("all_documentations" => $all_documentations["result"]), true);
 					}
 					else{
 						$response_data["result"]["html"] = $this->load->view(
@@ -131,7 +128,7 @@
 					));
 
 					if($_POST["update_type"] == "is_private"){
-						$update_documentation["result"]["html"] = $this->load->view("partials/document_block_partial.php", $update_documentation["result"]["updated_document"], true);
+						$update_documentation["result"]["html"] = $this->load->view("partials/document_block_partial.php", array("all_documentations" => $update_documentation["result"]["updated_document"]), true);
 					}
 					elseif($_POST["update_type"] == "is_archived"){
 						if(!$update_documentation["result"]["documentations_count"]){

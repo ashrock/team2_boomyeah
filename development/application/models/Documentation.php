@@ -126,10 +126,10 @@
                         $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ? WHERE id = ?", array($params["update_value"], $params["documentation_id"]) );
                       
                         if($update_document){
-                            $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->row();
+                            $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->result_array();
 
                             $response_data["status"] = true;
-                            $response_data["result"]["documentation_id"] = $updated_document->{'id'};
+                            $response_data["result"]["documentation_id"] = $updated_document[0]['id'];
                             $response_data["result"]["update_type"]      = $params["update_type"];
 
                             if($params["update_type"] == "is_private"){
@@ -171,7 +171,7 @@
 
             return $response_data;
         }
-
+        
         # DOCU: This function will duplicate a documentation
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]
@@ -205,13 +205,13 @@
                         $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
                         $response_data["result"]["html"]             = $this->load->view(
                             "partials/document_block_partial.php",
-                            array(
+                            array( "all_documentations" => [array(
                                 "id"                        => $duplicate_documentation["result"]["documentation_id"],
                                 "title"                     => $duplicate_title,
                                 "is_private"                => TRUE_VALUE,
                                 "is_archived"               => FALSE_VALUE,
                                 "cache_collaborators_count" => ZERO_VALUE
-                            ), 
+                            )]), 
                             true
                         );
                     }
