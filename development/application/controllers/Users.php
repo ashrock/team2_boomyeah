@@ -19,10 +19,11 @@ class Users extends CI_Controller {
 		# Proceed to Google API if there is no session
 		if(!isset($_SESSION["user_id"])){
 			include_once APPPATH . "libraries/vendor/autoload.php";
-
+			
+			$this->config->load("api_config");
 			$google_client = new Google_Client();
-			$google_client->setClientId("499626512701-5phs7ak08faatl5g2f9n1o4qsva5hbhq.apps.googleusercontent.com");
-			$google_client->setClientSecret("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");
+			$google_client->setClientId($this->config->item("client_id"));
+			$google_client->setClientSecret($this->config->item("client_secret"));
 			$google_client->setRedirectUri("http://localhost:8888/");
 			$google_client->addScope("profile email");
 
