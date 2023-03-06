@@ -101,7 +101,8 @@ function onSubmitAddDocumentationForm(event){
             if(response_data.status){
                 /* Redirect in admin edit document page. */
                 ux("#add_documentation_form").self().reset();
-                location.href = "admin_edit_documentation.php?document_title="+ encodeURI(input_document_title);
+                // location.href = "admin_edit_documentation.php?document_title="+ encodeURI(input_document_title);
+                location.href = `/docs/${response_data.result.documentation_id}/edit`;
             }
             else{
                 alert(response_data.error);
