@@ -251,7 +251,7 @@
                     "description"      => "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
                 );
 
-                array_unshift($sections_data["fetch_section_admin_data"], $new_section_data);
+                array_push($sections_data["fetch_section_admin_data"], $new_section_data);
                 file_put_contents($sections_data_file_path, json_encode($sections_data));
  
                 $response_data["status"] = true;
