@@ -211,6 +211,27 @@
 			echo json_encode($response_data);
 		}
 
+		public function getDocumentation($document_id){
+			$documentation = $this->Documentation->getDocumentation($document_id);
+			
+			# Only allow admin to view this page
+			if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
+				if($documentation["result"]){
+					# Fetch sections
+					$sections = array();
+
+					$this->load->view('documentations/admin_edit_documentation', array("documentation" => $documentation["result"], "sections" => $sections));
+				}
+				else{
+					# Confirm if we need to show error or just redirect back to dashboard
+					echo "Documentation doesn't exist";
+				}
+			}
+			else{
+				redirect("/docs");
+			}
+		}
+
 		# DOCU: This function will call getDocumentationsOrder from Workspace Model and prepare params needed when fetching documentations.
 		# Triggered by: adminDocumentations(), userDocumentations(), getDocumentations()
 		# Requires: $_SESSION["workspace_id", "user_id", "user_level_id"]
