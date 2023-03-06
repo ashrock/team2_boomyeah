@@ -74,16 +74,21 @@
         # Requires: $params { user_id, workspace_id, title }
         # Optionals: $params { is_duplicate, documentation_id }
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 1, 2023
+        # Last updated at: March 6, 2023
         # Owner: Erick, Updated by: Jovic
         public function addDocumentations($params){
             $response_data = array("status" => false, "result" => [], "error" => null);
 
             try {
+                # Finalize bind params
+                $description       = isset($params["description"]) ? $params["description"] : NULL;
+                $section_ids_order = isset($params["section_ids_order"]) ? $params["section_ids_order"] : NULL;
+                $is_private        = isset($params["is_private"]) ? $params["is_private"] : NO;
+
                 $insert_document_record = $this->db->query("
-                    INSERT INTO documentations (user_id, workspace_id, title, is_archived, is_private, cache_collaborators_count, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())",
-                    array($params["user_id"], $params["workspace_id"], $params["title"], NO, YES, ZERO_VALUE)
+                    INSERT INTO documentations (user_id, workspace_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count, created_at, updated_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+                    array($params["user_id"], $params["workspace_id"], $params["title"], $description, $section_ids_order, NO, $is_private, ZERO_VALUE)
                 );
 
                 $new_documentation_id = $this->db->insert_id($insert_document_record);
@@ -191,7 +196,7 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]
         # Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-        # Last updated at: March 1, 2023
+        # Last updated at: March 6, 2023
         # Owner: Jovic
         public function duplicateDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -205,12 +210,15 @@
 
                     # Create new documentation
                     $duplicate_documentation = $this->addDocumentations(array(
-                        "is_duplicate"     => true,
-                        "documentation_id" => $documentation_id,
-                        "user_id"          => $_SESSION["user_id"],
-                        "workspace_id"     => $_SESSION["workspace_id"],
-                        "title"		       => $duplicate_title
-                    ));;
+                        "is_duplicate"      => true,
+                        "documentation_id"  => $documentation_id,
+                        "user_id"           => $_SESSION["user_id"],
+                        "workspace_id"      => $_SESSION["workspace_id"],
+                        "title"		        => $duplicate_title,
+                        "description"       => $get_documentation["result"]["description"],
+                        "is_private"        => $get_documentation["result"]["is_private"],
+                        "section_ids_order" => $get_documentation["result"]["section_ids_order"]
+                    ));
 
                     if($duplicate_documentation["status"]){
                         # TODO: Also create sections, modules, and tabs
@@ -223,7 +231,7 @@
                             array( "all_documentations" => [array(
                                 "id"                        => $duplicate_documentation["result"]["documentation_id"],
                                 "title"                     => $duplicate_title,
-                                "is_private"                => TRUE_VALUE,
+                                "is_private"                => $get_documentation["result"]["is_private"],
                                 "is_archived"               => FALSE_VALUE,
                                 "cache_collaborators_count" => ZERO_VALUE
                             )]), 
