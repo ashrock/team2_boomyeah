@@ -55,7 +55,8 @@ $route['default_controller'] = 'users';
 $route['logout'] = 'users/logout';
 
 /* GET | Admin Documentation Routes */
-$route['docs/edit']['GET'] = 'documentations/adminDocumentations';
+$route['docs/edit']['GET']        = 'documentations/adminDocumentations';
+$route['docs/(:any)/edit']['GET'] = 'documentations/getDocumentation/$1';
 
 /* POST | Admin Documentation Routes */
 $route['docs/get']['POST']       = 'documentations/getDocumentations';
@@ -64,7 +65,6 @@ $route['docs/update']['POST']    = 'documentations/updateDocumentations';
 $route['docs/duplicate']['POST'] = 'documentations/duplicateDocumentation';
 $route['docs/remove']['POST']    = 'documentations/removeDocumentation';
 $route['docs/reorder']['POST']   = 'workspaces/updateWorkspace';
-
 
 /* User Documentation Routes */
 $route['docs'] = 'documentations/userDocumentations';
