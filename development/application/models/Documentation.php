@@ -6,7 +6,7 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentationd_id
         # Returns: { status: true/false, result: documentation record (Array), error: null }
-        # Last updated at: March 1, 2023
+        # Last updated at: March 6, 2023
         # Owner: Jovic
         public function getDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);

@@ -17,46 +17,45 @@
 		# Triggered by: (GET) docs/edit
 		# Requires: $_SESSION["user_level_id"]
 		# Returns: admin_documentations page
-		# Last updated at: Feb. 28, 2023
+		# Last updated at: Mar. 6, 2023
 		# Owner: Jovic
 		public function adminDocumentations(){
-			if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
-				$all_documentations = $this->Documentation->getDocumentations($this->setGetDocumentationsParams());
-		
-				$this->load->view('documentations/admin_documentations', array("all_documentations" => $all_documentations["result"]));
-			}
-			else {
-				echo "SAMPLE 404 PAGE";
-			}
+			# Check if user is allowed to access page
+			$this->isUserAllowed();
+
+			$all_documentations = $this->Documentation->getDocumentations($this->setGetDocumentationsParams());
+	
+			$this->load->view('documentations/admin_documentations', array("all_documentations" => $all_documentations["result"]));
 		}
 
 		# DOCU: This function will call getDocumentations from Documentation Model and render user_documentations View.
 		# Triggered by: (GET) docs
 		# Requires: $_SESSION["user_level_id"]
 		# Returns: user_documentations page
-		# Last updated at: Feb. 28, 2023
+		# Last updated at: Mar. 6, 2023
 		# Owner: Jovic
 		public function userDocumentations(){
-			if($_SESSION["user_level_id"] == USER_LEVEL["USER"]){
-				$all_documentations = $this->Documentation->getDocumentations($this->setGetDocumentationsParams());
+			# Check if user is allowed to access page
+			$this->isUserAllowed(false);
 
-				$this->load->view('documentations/user_documentations', array("all_documentations" => $all_documentations["result"]));
-			}
-			else {
-				echo "SAMPLE 404 PAGE";
-			}
+			$all_documentations = $this->Documentation->getDocumentations($this->setGetDocumentationsParams());
+
+			$this->load->view('documentations/user_documentations', array("all_documentations" => $all_documentations["result"]));
 		}
 
 		# DOCU: This function will call getDocumentations() from Documentations Model and generate document_block_partial.
 		# Triggered by: (POST) docs/get
 		# Requires: $_POST["is_archived"]
 		# Returns: admin_documentations page
-		# Last updated at: Feb. 28, 2023
+		# Last updated at: Mar. 6, 2023
 		# Owner: Jovic
 		public function getDocumentations(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
 
 			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
+
 				$all_documentations = $this->Documentation->getDocumentations($this->setGetDocumentationsParams($_POST));
 
 				if($all_documentations["status"]){
@@ -93,12 +92,14 @@
 		# Triggered by: (POST) docs/add
 		# Requires: $_POST["document_title"]
 		# Returns: { status: true/false, result: { documentationd_id}, error: null }
-		# Last updated at: Feb. 28, 2023
-		# Owner: Erick
+		# Last updated at: Mar. 6, 2023
+		# Owner: Erick, Updated by: Jovic
 		public function addDocumentations(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
 
 			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
 				$this->load->model("Workspace");
 
 				if(isset($_POST["document_title"])){
@@ -123,12 +124,15 @@
 		# Triggered by: (POST) docs/update
 		# Requires: $_POST["documentation_id", "update_type", "update_value"]; $_SESSION["user_id", "workspace_id"]
 		# Returns: { status: true/false, result: { documentations_count, is_archived, html, no_documentations_html }, error: null }
-		# Last updated at: Feb. 28, 2023
-		# Owner: Erick
+		# Last updated at: Mar. 6, 2023
+		# Owner: Erick, Updated by: Jovic
 		public function updateDocumentations(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
 
 			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
+
 				if(isset($_POST["documentation_id"])){
 
 					$update_documentation = $this->Documentation->updateDocumentations(array(
@@ -168,13 +172,16 @@
 		# Triggered by: (POST) docs/duplicate
 		# Requires: $_POST["documentation_id"]
 		# Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-		# Last updated at: March 1, 2023
+		# Last updated at: March 6, 2023
 		# Owner: Jovic
 		public function duplicateDocumentation(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
 			
 			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
 				$this->load->model("Workspace");
+
 				$response_data = $this->Documentation->duplicateDocumentation($_POST["documentation_id"]);
 			}
 			catch (Exception $e) {
@@ -188,12 +195,14 @@
 		# Triggered by: (POST) docs/remove
 		# Requires: $_POST["remove_documentation_id", "remove_is_archive"]
 		# Returns: { status: true/false, result: { documentation_id }, error: null }
-		# Last updated at: March 1, 2023
+		# Last updated at: March 6, 2023
 		# Owner: Jovic
 		public function removeDocumentation(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
 
 			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
 				$this->load->model("Workspace");
 				$this->load->model("Collaborator");
 
@@ -214,21 +223,18 @@
 		public function getDocumentation($document_id){
 			$documentation = $this->Documentation->getDocumentation($document_id);
 			
-			# Only allow admin to view this page
-			if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
-				if($documentation["result"]){
-					# Fetch sections
-					$sections = array();
+			# Check if user is allowed to access page
+			$this->isUserAllowed();
 
-					$this->load->view('documentations/admin_edit_documentation', array("documentation" => $documentation["result"], "sections" => $sections));
-				}
-				else{
-					# Confirm if we need to show error or just redirect back to dashboard
-					echo "Documentation doesn't exist";
-				}
+			if($documentation["result"]){
+				# Fetch sections
+				$sections = array();
+
+				$this->load->view('documentations/admin_edit_documentation', array("documentation" => $documentation["result"], "sections" => $sections));
 			}
 			else{
-				redirect("/docs");
+				# Confirm if we need to show error or just redirect back to dashboard
+				echo "Documentation doesn't exist";
 			}
 		}
 
@@ -252,6 +258,17 @@
 			);
 			
 			return $get_documentations_params;
+		}
+
+		# DOCU: This function will check if user is allowed to visit a page or do an action.
+		# Triggered by: GET and POST functions in Documentations Controller
+		# Requires: $_SESSION["user_level_id"]; $is_admin_page
+		# Last updated at: Mar. 6, 2023
+		# Owner: Jovic
+		private function isUserAllowed($is_admin_page = true){
+			if($is_admin_page && $_SESSION["user_level_id"] == USER_LEVEL["USER"]){
+				redirect("/docs");
+			}
 		}
 	}
 ?>
