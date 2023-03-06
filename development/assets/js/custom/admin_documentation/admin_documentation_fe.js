@@ -180,6 +180,7 @@ async function setRemoveDocumentationValue(event){
 }
 
 function redirectToDocumentView(event){
+    console.log(event);
     if(event.target.classList.contains("set_privacy_btn") || 
         event.target.classList.contains("more_action_btn") || 
         event.target.classList.contains("invite_collaborators_btn") || 
@@ -187,7 +188,8 @@ function redirectToDocumentView(event){
             return;
     }
 
-    location.href = "admin_edit_documentation.php";
+    let document_id = event.target.id.split("_")[1];
+    location.href = `/docs/${document_id}/edit`;
 }
 
 function updateDocumentationsOrder(documentations){
