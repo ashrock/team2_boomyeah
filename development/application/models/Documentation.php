@@ -6,13 +6,13 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentationd_id
         # Returns: { status: true/false, result: documentation record (Array), error: null }
-        # Last updated at: March 1, 2023
+        # Last updated at: March 6, 2023
         # Owner: Jovic
         public function getDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $get_documentation = $this->db->query("SELECT id, title, description, section_ids_order, is_archived, is_private FROM documentations WHERE id = ?;", $documentation_id);
+                $get_documentation = $this->db->query("SELECT id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?;", $documentation_id);
 
                 if($get_documentation->num_rows()){
                     $response_data["result"] = $get_documentation->result_array()[0];
