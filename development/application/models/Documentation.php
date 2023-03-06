@@ -74,12 +74,13 @@
         # Requires: $params { user_id, workspace_id, title }
         # Optionals: $params { is_duplicate, documentation_id }
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 1, 2023
+        # Last updated at: March 6, 2023
         # Owner: Erick, Updated by: Jovic
         public function addDocumentations($params){
             $response_data = array("status" => false, "result" => [], "error" => null);
 
             try {
+                # Finalize bind params
                 $description       = isset($params["description"]) ? $params["description"] : NULL;
                 $section_ids_order = isset($params["section_ids_order"]) ? $params["section_ids_order"] : NULL;
                 $is_private        = isset($params["is_private"]) ? $params["is_private"] : NO;
@@ -195,7 +196,7 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]
         # Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-        # Last updated at: March 1, 2023
+        # Last updated at: March 6, 2023
         # Owner: Jovic
         public function duplicateDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
