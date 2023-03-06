@@ -189,12 +189,13 @@ function switchDocumentationView(event){
     let docs_view_btn   = $(container).find("#docs_view_btn")[0];
     let form            = ux("#get_documentations_form");
     let is_archived     = parseInt(switch_view_btn.dataset.is_archived);
-    let active_div      = is_archived ? ux("#archived_documents") : ux("#documentations");
-    let hidden_div      = is_archived ? ux("#documentations"): ux("#archived_documents");
+    let active_div      = is_archived ? document.getElementById("archived_documents") : document.getElementById("documentations");
+    let hidden_div      = is_archived ? document.getElementById("documentations"): document.getElementById("archived_documents");
 
     docs_view_btn.innerText = switch_view_btn.innerText;
-    active_div.removeClass("hidden");
-    hidden_div.addClass("hidden");
+    active_div.classList.remove("hidden");
+    hidden_div.innerHTML = "";
+    hidden_div.classList.add("hidden");
 
     /* Update form value */
     form.find("#is_archived").val(is_archived ? "1" : "0");
