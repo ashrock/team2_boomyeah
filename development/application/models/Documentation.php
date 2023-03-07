@@ -32,7 +32,7 @@
         # Requires: $params { workspace_id, is_archived, user_level_id }, $_SESSION["user_id"]
         # Optionals: $params { documentation_ids_order }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: documentations record (Array), error: null }
-        # Last updated at: Feb. 27, 2023
+        # Last updated at: Mar. 7, 2023
         # Owner: Jovic
         public function getDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -42,6 +42,7 @@
                 $where_conditions = "is_archived = ? ";
                 $bind_params      = array($params["workspace_id"], $params["is_archived"]);
 
+                # Set conditions and param values when user is not an admin
                 if($params["user_level_id"] == USER_LEVEL["USER"]){
                     $where_conditions .= "AND (is_private = ?  OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = ?)) ";
                     array_push($bind_params, FALSE_VALUE, $_SESSION["user_id"]);
@@ -86,16 +87,18 @@
                 $is_private        = isset($params["is_private"]) ? $params["is_private"] : NO;
 
                 $insert_document_record = $this->db->query("
-                    INSERT INTO documentations (user_id, workspace_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-                    array($params["user_id"], $params["workspace_id"], $params["title"], $description, $section_ids_order, NO, $is_private, ZERO_VALUE)
+                    INSERT INTO documentations (user_id, workspace_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count, updated_by_user_id, created_at, updated_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+                    array($params["user_id"], $params["workspace_id"], $params["title"], $description, $section_ids_order, NO, $is_private, ZERO_VALUE, $_SESSION["user_id"])
                 );
 
                 $new_documentation_id = $this->db->insert_id($insert_document_record);
 
                 if($new_documentation_id > ZERO_VALUE){
+                    $this->load->model("Workspace");
                     $workspace = $this->Workspace->getDocumentationsOrder($params["workspace_id"]);
                     
+                    # Check if action is duplicating
                     if(!isset($params["is_duplicate"])){
                         $new_documents_order = (strlen($workspace["result"]["documentation_ids_order"])) ? $workspace["result"]["documentation_ids_order"].','. $new_documentation_id : $new_documentation_id;
                     }
@@ -132,7 +135,7 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, documentation_id }
         # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
-        # Last updated at: March 1, 2023
+        # Last updated at: March 7, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -140,10 +143,12 @@
             try {
                 $document = $this->db->query("SELECT id FROM documentations WHERE id = ?", $params["documentation_id"])->row();
                 
+                # Check document id if existing
                 if(isset($document->{'id'})){
+                    # Double check if update_type only have this following values: "title", "is_archived", "is_private"
                     if( in_array($params["update_type"], ["title", "is_archived", "is_private"]) ){
-                        $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ? WHERE id = ?", array($params["update_value"], $params["documentation_id"]) );
-                      
+                        $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ? WHERE id = ?", array($params["update_value"], $_SESSION["user_id"], $params["documentation_id"]) );
+                        
                         if($update_document){
                             $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->result_array();
 
@@ -151,9 +156,11 @@
                             $response_data["result"]["documentation_id"] = $updated_document[0]['id'];
                             $response_data["result"]["update_type"]      = $params["update_type"];
 
+                            # Check if changing of privacy of documentation
                             if($params["update_type"] == "is_private"){
                                 $response_data["result"]["updated_document"] = $updated_document;
                             }
+                            # Check if archive / unarchive of documentation
                             elseif($params["update_type"] == "is_archived" ){
                                 # Remove documentation_id from documentation_ids_order
                                 $workspace = $this->db->query("SELECT documentation_ids_order FROM workspaces WHERE id = ?", $params["workspace_id"])->row();
@@ -161,6 +168,7 @@
                                 $new_documents_order = NULL;
                                 $documentations_count = 0;
 
+                                # Process archiving of documentations and remove it from the documentation_ids_order field of workspaces
                                 if($params["update_value"] == YES){
                                     if (($key = array_search($params["documentation_id"], $documentation_order_array)) !== false) {
                                         unset($documentation_order_array[$key]);
@@ -169,11 +177,13 @@
 
                                     $new_documents_order = ($documentations_count) ? implode(",", $documentation_order_array) : "";
                                 }
+                                # Process unarchiving of documentations then add the unarchived documentation id in documentation_ids_order field of workspaces
                                 else {
                                     $new_documents_order  = ($workspace->{"documentation_ids_order"}) ? $workspace->{"documentation_ids_order"}.','. $params["documentation_id"] : $params["documentation_id"];
                                     $documentations_count = count($this->db->query("SELECT id FROM documentations WHERE is_archived = ?", YES)->result_array());
                                 }
 
+                                # Update the new order of documentations
                                 $update_workspace = $this->db->query("UPDATE workspaces SET documentation_ids_order = ? WHERE id = ?", array($new_documents_order, $params["workspace_id"]));
                                 
                                 if($update_workspace){
@@ -202,6 +212,7 @@
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
+                # Start DB transaction
                 $this->db->trans_start();
                 $get_documentation = $this->getDocumentation($documentation_id);
 
@@ -222,7 +233,6 @@
 
                     if($duplicate_documentation["status"]){
                         # TODO: Also create sections, modules, and tabs
-
                         $response_data["status"]                     = true;
                         $response_data["result"]["documentation_id"] = $documentation_id;
                         $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
@@ -242,10 +252,12 @@
                         throw new Exception($duplicate_documentation["error"]);
                     }
 
+                    # Commit changes to DB
                     $this->db->trans_complete();
                 }
             }
             catch (Exception $e) {
+                # Rollback changes when error occurs
 			    $this->db->trans_rollback();
                 $response_data["error"] = $e->getMessage();
             }
@@ -257,15 +269,17 @@
         # Triggered by: (POST) docs/remove
         # Requires: $params { remove_documentation_id, remove_is_archive }, $_SESSION["workspace_id"]
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 1, 2023
+        # Last updated at: March 7, 2023
         # Owner: Jovic
         public function deleteDocumentation($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
+                # Start DB transaction
                 $this->db->trans_start();
 
                 # Delete collaborators of remove_documentation_id
+				$this->load->model("Collaborator");
                 $delete_collaborators = $this->Collaborator->deleteCollaborators(array("documentation_id" => $params["remove_documentation_id"]));
 
                 # TODO: Also delete records from tables with documentation_id foreign key.
@@ -275,6 +289,7 @@
     
                     if($this->db->affected_rows()){
                         # Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table
+                        $this->load->model("Workspace");
                         $documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
     
                         if($documentations_order["status"]){
@@ -305,6 +320,8 @@
                             
                             $response_data["status"] = true;
                             $response_data["result"]["documentation_id"] = $params["remove_documentation_id"];
+
+                            # Commit changes to DB
                             $this->db->trans_complete();
                         }
                         else{
@@ -317,6 +334,7 @@
                 }
             }
             catch (Exception $e) {
+                # Rollback changes when error occurs
 			    $this->db->trans_rollback();
                 $response_data["error"] = $e->getMessage();
             }

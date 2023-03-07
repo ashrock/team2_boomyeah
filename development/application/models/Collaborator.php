@@ -3,7 +3,7 @@
 
     class Collaborator extends CI_Model {
         # DOCU: This function will delete collaborators depending on $params given.
-        # Triggered by: ((POST) docs/remove
+        # Triggered by: (POST) docs/remove
         # Requires: $params (e.g. id, documentation_id, etc.)
         # Returns: { status: true/false, result: array(), error: null }
         # Last updated at: March 6, 2023

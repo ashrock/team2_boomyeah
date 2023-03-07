@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("click", ".archived_docs_btn", appearArchivedDocumentations)
         .on("click", ".document_block", redirectToDocumentView)
         .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
-        .on("click", ".duplicate_icon", duplicateDocumentation)
         .on("click", ".archive_btn", setArchiveDocumentationValue)
         .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
         .on("click", ".set_to_public_icon, .access_btn", async function(event){
@@ -49,17 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     appearEmptyDocumentation();
 });
-
-function duplicateDocumentation(event){
-    event.stopImmediatePropagation();
-    event.preventDefault();
-
-    let document_id = ux(event.target).data("document_id");
-    let duplicate_form = ux("#duplicate_documentation_form");
-    duplicate_form.find(".documentation_id").val(document_id);
-    duplicate_form.trigger("submit");
-    return false;
-}
 
 async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type = "#confirm_to_private", document_block){
     let change_document_privacy_form = ux("#change_document_privacy_form");
@@ -139,29 +127,28 @@ function setDocumentPrivacyValues(event){
     const documentation         = event.target;
     const documentation_id      = documentation.getAttribute("data-document_id");
     const documentation_privacy = documentation.getAttribute("data-document_privacy");
-    ux("#confirm_to_public").find(".documentation_title").text( ux(event.target).closest(".document_block").find(".document_title").val() );
+    $("#confirm_to_public").find(".documentation_title").text(  $(`#document_${documentation_id}`).find(".document_title").val() );
 
     /* Set form values */
-    let change_document_privacy_form = ux("#change_document_privacy_form");
+    let change_document_privacy_form = $("#change_document_privacy_form");
     
-    change_document_privacy_form.find(".documentation_id").val(documentation_id);
-    change_document_privacy_form.find(".update_value").val( (documentation_privacy == "public") ? 1 : 0 );
+    change_document_privacy_form.find("#documentation_id").val(documentation_id);
+    change_document_privacy_form.find("#update_value").val( (documentation_privacy == "public") ? 1 : 0 );
 }
 
 function setArchiveDocumentationValue(event){
-    let archive_button  = ux(event.target);
-    let document_id     = archive_button.attr("data-document_id");
-    let document_action = archive_button.attr("data-documentation_action");
-    let is_archived     = (document_action == "archive");
-    let document_block = archive_button.closest(".document_block");
-    let document_title = document_block.find(".document_title").val();
+    let archive_button  = event.target;
+    let document_id     = ux(archive_button).attr("data-document_id");
+    let document_title  = ux(`#document_${document_id}`).find(".document_title").val();
+
+    let is_archived     = (ux(archive_button).attr("data-documentation_action") == "archive");
     let confirmation_text = (is_archived) ? "Are you sure you want to move `"+ document_title +"` documentation to Archive?" : "Are you sure you want to Unarchive `"+ document_title +"` documentation?";
-    ux("#confirm_to_archive").find("p").text( confirmation_text );
+    $("#confirm_to_archive").find("p").text( confirmation_text );
     
     /* Set form values */
-    let archive_document_form = ux("#archive_form");
-    archive_document_form.find(".documentation_id").val(document_id);
-    archive_document_form.find(".update_value").val( (is_archived) ? 1 : 0 );
+    let archive_document_form = $("#archive_form");
+    archive_document_form.find("#documentation_id").val(document_id);
+    archive_document_form.find("#update_value").val( (is_archived) ? 1 : 0 );
 }
 
 async function setRemoveDocumentationValue(event){

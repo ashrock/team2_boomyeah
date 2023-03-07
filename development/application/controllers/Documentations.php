@@ -88,11 +88,11 @@
 			echo json_encode($response_data);
 		}
 
-		# DOCU: This function will call addDocumentations() from Documentations Model
+		# DOCU: This function will call addDocumentations() from Documentations Model to process adding of new documentation
 		# Triggered by: (POST) docs/add
 		# Requires: $_POST["document_title"]
-		# Returns: { status: true/false, result: { documentationd_id}, error: null }
-		# Last updated at: Mar. 6, 2023
+		# Returns: { status: true/false, result: { documentation_id }, error: null }
+		# Last updated at: Mar. 7, 2023
 		# Owner: Erick, Updated by: Jovic
 		public function addDocumentations(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
@@ -100,7 +100,6 @@
 			try {
 				# Check if user is allowed to do action
 				$this->isUserAllowed();
-				$this->load->model("Workspace");
 
 				if(isset($_POST["document_title"])){
 					$response_data = $this->Documentation->addDocumentations(array(
@@ -120,11 +119,12 @@
 			echo json_encode($response_data);
 		}
 
-		# DOCU: This function will call updateDocumentations() from Documentations Model.
+		# DOCU: This function will call updateDocumentations() from Documentations Model to process updating of documentation fields.
+		# This will require update_type which is the field to be updated and update_value will be the new value
 		# Triggered by: (POST) docs/update
 		# Requires: $_POST["documentation_id", "update_type", "update_value"]; $_SESSION["user_id", "workspace_id"]
 		# Returns: { status: true/false, result: { documentations_count, is_archived, html, no_documentations_html }, error: null }
-		# Last updated at: Mar. 6, 2023
+		# Last updated at: Mar. 7, 2023
 		# Owner: Erick, Updated by: Jovic
 		public function updateDocumentations(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
@@ -134,7 +134,7 @@
 				$this->isUserAllowed();
 
 				if(isset($_POST["documentation_id"])){
-
+					# Process updating of documentation
 					$update_documentation = $this->Documentation->updateDocumentations(array(
 						"user_id"     	   => $_SESSION["user_id"],
 						"workspace_id" 	   => $_SESSION["workspace_id"],
@@ -172,7 +172,7 @@
 		# Triggered by: (POST) docs/duplicate
 		# Requires: $_POST["documentation_id"]
 		# Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-		# Last updated at: March 6, 2023
+		# Last updated at: March 7, 2023
 		# Owner: Jovic
 		public function duplicateDocumentation(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
@@ -180,7 +180,6 @@
 			try {
 				# Check if user is allowed to do action
 				$this->isUserAllowed();
-				$this->load->model("Workspace");
 
 				$response_data = $this->Documentation->duplicateDocumentation($_POST["documentation_id"]);
 			}
@@ -195,7 +194,7 @@
 		# Triggered by: (POST) docs/remove
 		# Requires: $_POST["remove_documentation_id", "remove_is_archive"]
 		# Returns: { status: true/false, result: { documentation_id }, error: null }
-		# Last updated at: March 6, 2023
+		# Last updated at: March 7, 2023
 		# Owner: Jovic
 		public function removeDocumentation(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
@@ -203,8 +202,6 @@
 			try {
 				# Check if user is allowed to do action
 				$this->isUserAllowed();
-				$this->load->model("Workspace");
-				$this->load->model("Collaborator");
 
 				if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
 					$response_data = $this->Documentation->deleteDocumentation($_POST);
@@ -220,17 +217,18 @@
 			echo json_encode($response_data);
 		}
 
-		public function getDocumentation($document_id){
-			$documentation = $this->Documentation->getDocumentation($document_id);
+		public function getDocumentation($documentation_id){
+			$documentation = $this->Documentation->getDocumentation($documentation_id);
 			
 			# Check if user is allowed to access page
 			$this->isUserAllowed();
 
-			if($documentation["result"]){
+			if($documentation["status"] && $documentation["result"]){
 				# Fetch sections
-				$sections = array();
+				$this->load->model("Section");
+				$sections = $this->Section->getSections($documentation_id);
 
-				$this->load->view('documentations/admin_edit_documentation', array("documentation" => $documentation["result"], "sections" => $sections));
+				$this->load->view('documentations/admin_edit_documentation', array("documentation" => $documentation["result"], "sections" => $sections["result"]));
 			}
 			else{
 				# Confirm if we need to show error or just redirect back to dashboard
