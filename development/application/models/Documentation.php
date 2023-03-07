@@ -32,7 +32,7 @@
         # Requires: $params { workspace_id, is_archived, user_level_id }, $_SESSION["user_id"]
         # Optionals: $params { documentation_ids_order }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: documentations record (Array), error: null }
-        # Last updated at: Feb. 27, 2023
+        # Last updated at: Mar. 7, 2023
         # Owner: Jovic
         public function getDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -42,6 +42,7 @@
                 $where_conditions = "is_archived = ? ";
                 $bind_params      = array($params["workspace_id"], $params["is_archived"]);
 
+                # Set conditions and param values when user is not an admin
                 if($params["user_level_id"] == USER_LEVEL["USER"]){
                     $where_conditions .= "AND (is_private = ?  OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = ?)) ";
                     array_push($bind_params, FALSE_VALUE, $_SESSION["user_id"]);
@@ -202,6 +203,7 @@
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
+                # Start DB transaction
                 $this->db->trans_start();
                 $get_documentation = $this->getDocumentation($documentation_id);
 
@@ -222,7 +224,6 @@
 
                     if($duplicate_documentation["status"]){
                         # TODO: Also create sections, modules, and tabs
-
                         $response_data["status"]                     = true;
                         $response_data["result"]["documentation_id"] = $documentation_id;
                         $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
@@ -242,10 +243,12 @@
                         throw new Exception($duplicate_documentation["error"]);
                     }
 
+                    # Commit changes to DB
                     $this->db->trans_complete();
                 }
             }
             catch (Exception $e) {
+                # Rollback changes when error occurs
 			    $this->db->trans_rollback();
                 $response_data["error"] = $e->getMessage();
             }
@@ -257,15 +260,17 @@
         # Triggered by: (POST) docs/remove
         # Requires: $params { remove_documentation_id, remove_is_archive }, $_SESSION["workspace_id"]
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 1, 2023
+        # Last updated at: March 7, 2023
         # Owner: Jovic
         public function deleteDocumentation($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
+                # Start DB transaction
                 $this->db->trans_start();
 
                 # Delete collaborators of remove_documentation_id
+				$this->load->model("Collaborator");
                 $delete_collaborators = $this->Collaborator->deleteCollaborators(array("documentation_id" => $params["remove_documentation_id"]));
 
                 # TODO: Also delete records from tables with documentation_id foreign key.
@@ -275,6 +280,7 @@
     
                     if($this->db->affected_rows()){
                         # Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table
+                        $this->load->model("Workspace");
                         $documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
     
                         if($documentations_order["status"]){
@@ -305,6 +311,8 @@
                             
                             $response_data["status"] = true;
                             $response_data["result"]["documentation_id"] = $params["remove_documentation_id"];
+
+                            # Commit changes to DB
                             $this->db->trans_complete();
                         }
                         else{
@@ -317,6 +325,7 @@
                 }
             }
             catch (Exception $e) {
+                # Rollback changes when error occurs
 			    $this->db->trans_rollback();
                 $response_data["error"] = $e->getMessage();
             }
