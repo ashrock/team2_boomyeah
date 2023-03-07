@@ -149,8 +149,7 @@ function submitArchive(event){
             // appearEmptyDocumentation();
             if(response_data.result.hasOwnProperty("no_documentations_html")){
                 let documentations_div = (response_data.result.is_archived === "1") ? "#documentations" : "#archived_documents";
-    
-                $(documentations_div).html(response_data.result.no_documentations_html);
+                ux(documentations_div).html(response_data.result.no_documentations_html);
             }
         }
         else{
