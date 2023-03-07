@@ -10,6 +10,10 @@
     include_once("../view_helper.php");  
     include_once("../../config/connection.php");
     include_once("../../config/constants.php");
+
+    // Load initial data
+    $documentation_data_file = "../../assets/json/documentation_data.json";
+    $documentation_data = load_json_file($documentation_data_file);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,23 +62,18 @@
             </div>
             <div id="documentations">
                 <?php
-                    $documentations_order = fetch_record("SELECT documentations_order FROM workspaces WHERE id = {$_SESSION["workspace_id"]};");
-                    $documentations_order = $documentations_order["documentations_order"];
-
-                    $documentations = fetch_all("SELECT id, title, is_archived, is_private, cache_collaborators_count
-                        FROM documentations
-                        WHERE workspace_id = {$_SESSION["workspace_id"]} AND is_archived = {$_NO}
-                        ORDER BY FIELD (id, {$documentations_order});
-                    ");
-
-                    if(count($documentations)){
-                        for($documentations_index = 0; $documentations_index < count($documentations); $documentations_index++){
-                            load_view("../partials/document_block_partial.php", $documentations[$documentations_index]);
-                        }
-                    }
-                    else {
-                        load_view("../partials/no_documentations_partial.php", array("message" => "You have no documentations yet."));
-                    }
+                   $filtered_documentations = [];
+                   $filtered_documentations = array_filter($documentation_data["fetch_admin_data"], function($data) {
+                       return $data["is_archived"] == 0;
+                   });
+                   if(count($filtered_documentations)){
+                       foreach ($filtered_documentations as $fetch_admin_data) {
+                           load_view("../partials/document_block_partial.php", $fetch_admin_data);
+                       }
+                   }
+                   else {
+                       load_view("../partials/no_documentations_partial.php", array("message" => "You have no documentations yet."));
+                   }
                 ?>
             </div>
             <div id="archived_documents" class="hidden"></div>
