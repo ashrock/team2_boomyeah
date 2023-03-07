@@ -75,7 +75,7 @@
         # Requires: $params { user_id, workspace_id, title }
         # Optionals: $params { is_duplicate, documentation_id }
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 6, 2023
+        # Last updated at: March 7, 2023
         # Owner: Erick, Updated by: Jovic
         public function addDocumentations($params){
             $response_data = array("status" => false, "result" => [], "error" => null);
@@ -84,7 +84,7 @@
                 # Finalize bind params
                 $description       = isset($params["description"]) ? $params["description"] : NULL;
                 $section_ids_order = isset($params["section_ids_order"]) ? $params["section_ids_order"] : NULL;
-                $is_private        = isset($params["is_private"]) ? $params["is_private"] : NO;
+                $is_private        = isset($params["is_private"]) ? $params["is_private"] : YES;
 
                 $insert_document_record = $this->db->query("
                     INSERT INTO documentations (user_id, workspace_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count, updated_by_user_id, created_at, updated_at) 

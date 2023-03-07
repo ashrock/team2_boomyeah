@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function(){
         /* Remove documentation */
         .on("click", "#remove_confirm", submitRemoveDocumentation)
 
-        /* Setting of Privacy*/
+        /* Change Privacy*/
         .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy)
         .on("click", ".change_privacy_yes_btn", onSubmitChangePrivacy)
 
