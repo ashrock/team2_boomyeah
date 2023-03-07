@@ -18,13 +18,11 @@ document.addEventListener("DOMContentLoaded", function(){
         .on("click", ".switch_view_btn", switchDocumentationView)
         .on("submit", "#get_documentations_form", getDocumentations)
         .on("submit", "#add_documentation_form", onSubmitAddDocumentationForm)
-        .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
 
         /* Archive & Unarchive of documentation */
         .on("click", "#archive_confirm", submitArchiveDocumentation)
 
         /* Remove documentation */
-        .on("click", ".remove_btn", setRemoveDocumentationValue)
         .on("click", "#remove_confirm", submitRemoveDocumentation)
 
         /* Setting of Privacy*/
@@ -125,22 +123,6 @@ function initializeMaterializeDropdown(){
         alignment: 'left',
         coverTrigger: false,
         constrainWidth: false
-    });
-}
-
-function toggleEditDocumentationTitle(event){
-    event.stopImmediatePropagation();
-    let edit_title_btn = $(event.target);
-    let document_block = edit_title_btn.closest(".document_block");
-    let document_title = document_block.find(".document_details .document_title");
-    let end = document_title.val().length;
-    document_block.removeClass("error");
-
-    document_title[0].removeAttribute("readonly");
-    document_title[0].setSelectionRange(end, end);
-    
-    setTimeout(() => {
-        document_title[0].focus();
     });
 }
 
@@ -249,22 +231,6 @@ function submitArchiveDocumentation(event){
     }, "json");
     
     return;
-}
-
-function setRemoveDocumentationValue(event){
-    event.stopImmediatePropagation();
-
-    const documentation = event.target;
-    let document_id     = documentation.dataset.document_id;
-    let form            = ux("#remove_documentation_form");
-    let document_block  = ux(`#document_${document_id}`);
-
-    /* Set form values */
-    form.find("#remove_documentation_id").val(document_id);
-    form.find("#remove_is_archived").val(documentation.dataset.is_archived);
-
-    /* Add title to modal */
-    ux("#confirm_to_remove").find(".documentation_title").text(document_block.find(".document_title").val());
 }
 
 function submitRemoveDocumentation(event){
