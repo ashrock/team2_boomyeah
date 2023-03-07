@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("click", ".archived_docs_btn", appearArchivedDocumentations)
         .on("click", ".document_block", redirectToDocumentView)
         .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
-        .on("click", ".duplicate_icon", duplicateDocumentation)
         .on("click", ".archive_btn", setArchiveDocumentationValue)
         .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
         .on("click", ".set_to_public_icon, .access_btn", async function(event){
@@ -49,17 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     appearEmptyDocumentation();
 });
-
-function duplicateDocumentation(event){
-    event.stopImmediatePropagation();
-    event.preventDefault();
-
-    let document_id = ux(event.target).data("document_id");
-    let duplicate_form = ux("#duplicate_documentation_form");
-    duplicate_form.find(".documentation_id").val(document_id);
-    duplicate_form.trigger("submit");
-    return false;
-}
 
 async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type = "#confirm_to_private", document_block){
     let change_document_privacy_form = ux("#change_document_privacy_form");
