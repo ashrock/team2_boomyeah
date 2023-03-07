@@ -172,7 +172,7 @@
 		# Triggered by: (POST) docs/duplicate
 		# Requires: $_POST["documentation_id"]
 		# Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-		# Last updated at: March 6, 2023
+		# Last updated at: March 7, 2023
 		# Owner: Jovic
 		public function duplicateDocumentation(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
@@ -180,7 +180,6 @@
 			try {
 				# Check if user is allowed to do action
 				$this->isUserAllowed();
-				$this->load->model("Workspace");
 
 				$response_data = $this->Documentation->duplicateDocumentation($_POST["documentation_id"]);
 			}
@@ -195,7 +194,7 @@
 		# Triggered by: (POST) docs/remove
 		# Requires: $_POST["remove_documentation_id", "remove_is_archive"]
 		# Returns: { status: true/false, result: { documentation_id }, error: null }
-		# Last updated at: March 6, 2023
+		# Last updated at: March 7, 2023
 		# Owner: Jovic
 		public function removeDocumentation(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
@@ -203,8 +202,6 @@
 			try {
 				# Check if user is allowed to do action
 				$this->isUserAllowed();
-				$this->load->model("Workspace");
-				$this->load->model("Collaborator");
 
 				if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
 					$response_data = $this->Documentation->deleteDocumentation($_POST);
@@ -226,7 +223,7 @@
 			# Check if user is allowed to access page
 			$this->isUserAllowed();
 
-			if($documentation["result"]){
+			if($documentation["status"] && $documentation["result"]){
 				# Fetch sections
 				$this->load->model("Section");
 				$sections = $this->Section->getSections($documentation_id);
