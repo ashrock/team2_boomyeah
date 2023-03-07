@@ -43,7 +43,7 @@
                         <span class="lever"></span>
                     </label>
                 </div>
-                <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $documentation["is_private"] ? "" : "hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $documentation["id"] ?>"><?= $documentation["cache_collaborators_count"] ?> Collaborators</a>
+                <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn <?= $documentation["is_private"] ? "" : "hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $documentation["id"] ?>"><?= $documentation["cache_collaborators_count"] ?> Collaborators</a>
             </div>
             <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $documentation["description"] ?></p>
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
@@ -58,7 +58,7 @@
             </div>
 <?php if(count($sections)){ ?>
             <div class="section_container" id="section_container">
-                <?php # Load view for sections here ?>
+                <?php $this->load->view("partials/section_block_partial.php", array("all_sections" => $sections)); ?>
             </div>
 <?php } else { ?>
             <div class="no_sections">
@@ -73,7 +73,7 @@
         <div id="confirm_to_remove" class="modal">
             <div class="modal-content">
                 <h4>Confirmation</h4>
-                <p>Are you sure you want to remove this section?</p>
+                <p>Are you sure you want to remove “<span id="section_title"></span>”? This will also remove all the modules and tabs in the section.</p>
             </div>
             <div class="modal-footer">
                 <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
@@ -96,13 +96,13 @@
         <input type="hidden" name="action" value="duplicate_section">
     </form>
     <form id="change_document_privacy_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
-        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $documentation["document_id"] ?>">
+        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $document_data["document_id"] ?>">
         <input type="hidden" name="action" value="update_documentation_privacy">
         <input type="hidden" name="update_type" value="is_private">
         <input type="hidden" name="update_value" class="update_value" value="">
     </form>
     <form id="udpate_documentation_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
-        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $documentation["document_id"] ?>">
+        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $document_data["document_id"] ?>">
         <input type="hidden" name="action" value="update_documentation_data">
         <input type="hidden" name="update_type" class="update_type" value="">
         <input type="hidden" name="update_value" class="update_value" value="">
@@ -112,6 +112,7 @@
         <input type="hidden" id="sections_order" name="sections_order">
     </form>
     <?php $this->load->view("partials/confirm_invite_modals.php"); ?>
+    <?php $this->load->view("partials/confirm_documentation_modals.php"); ?>
 
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
