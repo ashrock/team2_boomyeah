@@ -121,7 +121,7 @@ function onSubmitAddSectionForm(event){
     if(section_title){
         ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
             if(response_data.status){
-                let section_block = await ux("#section_container").prepend(response_data.result.html);
+                let section_block = await ux("#section_container").append(response_data.result.html);
                 initializeMaterializeDropdown(section_block.find(".dropdown-trigger").self());
                 appearEmptySection();
             } else {

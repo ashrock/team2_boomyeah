@@ -63,8 +63,8 @@ function duplicateDocumentation(event){
 
 async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type = "#confirm_to_private", document_block){
     let change_document_privacy_form = ux("#change_document_privacy_form");
-    change_document_privacy_form.find("#documentation_id").val(document_id);
-    change_document_privacy_form.find("#update_value").val(update_value);
+    change_document_privacy_form.find(".documentation_id").val(document_id);
+    change_document_privacy_form.find(".update_value").val(update_value);
 
     let confirm_modal = document.querySelector(modal_type);
     var instance = M.Modal.getInstance(confirm_modal);
@@ -144,8 +144,8 @@ function setDocumentPrivacyValues(event){
     /* Set form values */
     let change_document_privacy_form = ux("#change_document_privacy_form");
     
-    change_document_privacy_form.find("#documentation_id").val(documentation_id);
-    change_document_privacy_form.find("#update_value").val( (documentation_privacy == "public") ? 1 : 0 );
+    change_document_privacy_form.find(".documentation_id").val(documentation_id);
+    change_document_privacy_form.find(".update_value").val( (documentation_privacy == "public") ? 1 : 0 );
 }
 
 function setArchiveDocumentationValue(event){
@@ -160,8 +160,8 @@ function setArchiveDocumentationValue(event){
     
     /* Set form values */
     let archive_document_form = ux("#archive_form");
-    archive_document_form.find("#documentation_id").val(document_id);
-    archive_document_form.find("#update_value").val( (is_archived) ? 1 : 0 );
+    archive_document_form.find(".documentation_id").val(document_id);
+    archive_document_form.find(".update_value").val( (is_archived) ? 1 : 0 );
 }
 
 async function setRemoveDocumentationValue(event){
@@ -180,6 +180,7 @@ async function setRemoveDocumentationValue(event){
 }
 
 function redirectToDocumentView(event){
+    console.log(event);
     if(event.target.classList.contains("set_privacy_btn") || 
         event.target.classList.contains("more_action_btn") || 
         event.target.classList.contains("invite_collaborators_btn") || 
@@ -187,7 +188,8 @@ function redirectToDocumentView(event){
             return;
     }
 
-    location.href = "admin_edit_documentation.php";
+    let document_id = event.target.id.split("_")[1];
+    location.href = `/docs/${document_id}/edit`;
 }
 
 function updateDocumentationsOrder(documentations){

@@ -2,6 +2,12 @@
     defined('BASEPATH') OR exit('No direct script access allowed');
 
     class Workspace extends CI_Model {
+        # DOCU: This function will fetch documentations_ids_order of current Workspace
+        # Triggered by: (GET) docs/edit, docs; (POST) docs/get, docs/add, docs/update, docs/duplicate, docs/remove
+        # Requires: $workspace_id
+        # Returns: { status: true/false, result: documentations_ids_order (String), error: null }
+        # Last updated at: Feb. 27, 2023
+        # Owner: Jovic
         public function getDocumentationsOrder($workspace_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -23,6 +29,12 @@
             return $response_data;
         }
 
+        # DOCU: This function will update documentations_ids_order of current Workspace
+        # Triggered by: (POST) docs/remove
+        # Requires: $params {"documentation_ids_order", "workspace_id"}
+        # Returns: { status: true/false, result: array(), error: null }
+        # Last updated at: March 1, 2023
+        # Owner: Jovic
         public function updateDocumentationsIdsOrder($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
