@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function(){
         .on("click", ".edit_title_icon", toggleEditDocumentationTitle)
 
         /* Archive & Unarchive of documentation */
-        .on("click", ".archive_btn", setArchiveDocumentationValue)
         .on("click", "#archive_confirm", submitArchiveDocumentation)
 
         /* Remove documentation */
@@ -29,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function(){
         .on("click", "#remove_confirm", submitRemoveDocumentation)
 
         /* Setting of Privacy*/
-        .on("click", ".set_privacy_btn", setDocumentPrivacyValues)
         .on("submit", "#change_document_privacy_form", onSubmitChangePrivacy)
         .on("click", ".change_privacy_yes_btn", onSubmitChangePrivacy)
 
@@ -203,19 +201,6 @@ function switchDocumentationView(event){
     form.trigger("submit");
 }
 
-/* Will set values needed for changing a documentation's privacy. Values will be used after clicking 'Yes' on the modal */
-function setDocumentPrivacyValues(event){
-    const documentation         = event.target;
-    const documentation_id      = documentation.getAttribute("data-document_id");
-    const documentation_privacy = documentation.getAttribute("data-document_privacy");
-    $("#confirm_to_public").find(".documentation_title").text(  $(`#document_${documentation_id}`).find(".document_title").val() );
-
-    /* Set form values */
-    let change_document_privacy_form = $("#change_document_privacy_form");
-    
-    change_document_privacy_form.find("#documentation_id").val(documentation_id);
-    change_document_privacy_form.find("#update_value").val( (documentation_privacy == "public") ? 1 : 0 );
-}
 
 function onSubmitChangePrivacy(event){
     let privacy_form = ux("#change_document_privacy_form");
@@ -235,21 +220,6 @@ function onSubmitChangePrivacy(event){
     }, "json");
 
     return false;
-}
-
-function setArchiveDocumentationValue(event){
-    let archive_button  = event.target;
-    let document_id     = ux(archive_button).attr("data-document_id");
-    let document_title  = ux(`#document_${document_id}`).find(".document_title").val();
-
-    let is_archived     = (ux(archive_button).attr("data-documentation_action") == "archive");
-    let confirmation_text = (is_archived) ? "Are you sure you want to move `"+ document_title +"` documentation to Archive?" : "Are you sure you want to Unarchive `"+ document_title +"` documentation?";
-    $("#confirm_to_archive").find("p").text( confirmation_text );
-    
-    /* Set form values */
-    let archive_document_form = $("#archive_form");
-    archive_document_form.find("#documentation_id").val(document_id);
-    archive_document_form.find("#update_value").val( (is_archived) ? 1 : 0 );
 }
 
 function submitArchiveDocumentation(event){
