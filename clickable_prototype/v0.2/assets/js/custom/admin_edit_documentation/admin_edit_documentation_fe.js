@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".section_block", redirectToEditSection)
         .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
+        .on("keydown", ".section_title", (event) => editSectionTitle(event, true))
         ;
 
     Sortable.create(document.querySelector(".section_container"), {
@@ -50,9 +51,8 @@ function updateSectionsOrder(section_container){
     ux("#reorder_sections_form").trigger("submit");
 }
 
-function editSectionTitle(event){
+function editSectionTitle(event, is_key_down_event = false){
     event.stopImmediatePropagation();
-
     const edit_btn = event.target;
     const section_blk = ux(edit_btn.closest(".section_block"));
     const section_title = section_blk.find(".section_title");
@@ -62,10 +62,16 @@ function editSectionTitle(event){
     section_title.self().setAttribute("contenteditable", "true");
     selectElementText(section_title.self());
 
+    if (is_key_down_event && event.keyCode === 13){
+        section_title.self().setAttribute("contenteditable", "false");
+        selectElementText(section_title.self());
+    }
+
     setTimeout(() => {
         section_title.self().focus();
     });
 }
+
 
 function disableEditSectionTitle(event){
     let section_title = event.target;
@@ -105,7 +111,9 @@ function duplicateSection(event){
 function setRemoveSectionBlock(event) {
     const section    = event.target;
     const section_id = section.getAttribute("data-section_id");
-    
+    const section_title = section.getAttribute("data-section_title");
+
+    document.getElementById("section_title").innerText = section_title;
     document.getElementById("remove_section_id").value = section_id;
     let remove_modal = document.querySelector("#confirm_to_remove");
     var instance = M.Modal.getInstance(remove_modal);
@@ -162,14 +170,31 @@ function onChangeDocumentationPrivacy(event){
     invite_collaborator_btn.conditionalClass("hidden", !toggle_switch.checked);
     switch_btn.innerText = (toggle_switch.checked) ? "Private" : "Public";
 
+    const document_title = toggle_switch.closest("#doc_title_access").querySelector("#doc_title").innerText;
+    let modal_type = document.querySelector(toggle_switch.checked? "#confirm_to_private" : "#confirm_to_public");
+
     if(toggle_switch.checked){
         ux(toggle_switch).attr("checked", "");
+        showPrivacyModal(modal_type, document_title);
     } else {
         toggle_switch.removeAttribute("checked", "");
+        showPrivacyModal(modal_type, document_title);
     } 
 
     ux("#change_document_privacy_form .update_value").val(is_private);
     ux("#change_document_privacy_form").trigger("submit");
+}
+
+function showPrivacyModal(modal_type, document_title){
+    M.Modal.getInstance(modal_type);
+    var instance = M.Modal.getInstance(modal_type);
+    ux(modal_type)
+    .on("click", ".no_btn", () => {
+        const checkbox = document.querySelector(".toggle_switch");
+        checkbox.checked = !checkbox.checked;
+    })
+    .find(".documentation_title").text(document_title) ;
+    instance.open();
 }
 
 function sortSections(event){

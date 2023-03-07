@@ -27,12 +27,10 @@
             <div id="documentations">
                 <?php
                     if(count($all_documentations)){
-                        for($documentations_index = 0; $documentations_index < count($all_documentations); $documentations_index++){
-                            $this->load->view("partials/document_block_partial.php", $all_documentations[$documentations_index]);
-                        }
+                        $this->load->view("partials/document_block_partial.php", $all_documentations);
                     }
                     else {
-                        $this->load->view("partials/no_documentations_partial.php", array("message" => "You have no documentations yet."));
+                        $this->load->view("partials/no_documentations_partial.php", array("message" => "There are no documentations yet."));
                     }
                 ?>
             </div>
