@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: boomyeah_v2
 -- ------------------------------------------------------
--- Server version	8.0.32
+-- Server version	5.7.39
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -23,22 +23,21 @@ DROP TABLE IF EXISTS `collaborators`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `collaborators` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `workspace_id` int NOT NULL,
-  `documentation_id` int NOT NULL,
-  `access_level_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `workspace_id` int(11) NOT NULL,
+  `documentation_id` int(11) NOT NULL,
+  `collaborator_level_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_collaborators_users1_idx` (`user_id`),
   KEY `fk_collaborators_workspaces1_idx` (`workspace_id`),
   KEY `fk_collaborators_documentations1_idx` (`documentation_id`),
-  KEY `idx_collaborators_user_id` (`user_id`),
   CONSTRAINT `fk_collaborators_documentations1` FOREIGN KEY (`documentation_id`) REFERENCES `documentations` (`id`),
   CONSTRAINT `fk_collaborators_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `fk_collaborators_workspaces1` FOREIGN KEY (`workspace_id`) REFERENCES `workspaces` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +46,7 @@ CREATE TABLE `collaborators` (
 
 LOCK TABLES `collaborators` WRITE;
 /*!40000 ALTER TABLE `collaborators` DISABLE KEYS */;
-INSERT INTO `collaborators` VALUES (1,2,1,3,2,'2023-02-20 10:43:00','2023-02-20 10:43:00'),(2,3,1,4,2,'2023-02-20 10:43:48','2023-02-20 10:43:48'),(3,4,1,5,2,'2023-02-20 10:44:21','2023-02-20 10:44:21'),(4,5,1,4,2,'2023-02-20 10:44:26','2023-02-20 10:44:26'),(5,3,1,5,2,'2023-02-20 11:23:59','2023-02-20 11:23:59');
+INSERT INTO `collaborators` VALUES (13,5,1,376,1,'2023-03-06 09:59:26','2023-03-06 09:59:26'),(14,5,1,377,1,'2023-03-06 09:59:34','2023-03-06 09:59:34');
 /*!40000 ALTER TABLE `collaborators` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,23 +58,25 @@ DROP TABLE IF EXISTS `documentations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `documentations` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `workspace_id` int NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `workspace_id` int(11) NOT NULL,
   `title` varchar(45) DEFAULT NULL,
   `description` text,
-  `sections_order` varchar(255) DEFAULT NULL,
-  `is_archived` int DEFAULT NULL,
-  `is_private` int DEFAULT NULL,
-  `cache_collaborators_count` int DEFAULT '0',
+  `section_ids_order` varchar(255) DEFAULT NULL,
+  `is_archived` int(11) DEFAULT NULL,
+  `is_private` int(11) DEFAULT NULL,
+  `cache_collaborators_count` int(11) DEFAULT NULL,
+  `updated_by_user_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_documentations_users1_idx` (`user_id`),
   KEY `fk_documentations_workspaces1_idx` (`workspace_id`),
+  KEY `idx_docs_workspace_is_archived` (`workspace_id`,`is_archived`),
   CONSTRAINT `fk_documentations_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `fk_documentations_workspaces1` FOREIGN KEY (`workspace_id`) REFERENCES `workspaces` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=412 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,8 +85,42 @@ CREATE TABLE `documentations` (
 
 LOCK TABLES `documentations` WRITE;
 /*!40000 ALTER TABLE `documentations` DISABLE KEYS */;
-INSERT INTO `documentations` VALUES (1,1,1,'Employee Handbook','This handbook replaces and supersedes all prior employee handbooks regarding employment or HR matters effective January 01, 2021. The policies and practices included in this handbook may be modified at any time. Your department has additional specific procedures for many of the general policies stated in the handbook. You are expected to learn your department\'s procedures and comply with them. You are also expected to conform to the professional standards of your occupation. Please direct any questions to your supervisor, department head, or to the Human Resources Management and Development Office.',NULL,0,1,0,'2023-02-20 10:22:29','2023-02-20 10:22:29'),(2,1,1,'Company Handout','We are excited to share with you some updates on our company\'s recent activities and achievements. As a leading tech company, we are constantly pushing ourselves to innovate and create new products that will make a positive impact on people\'s lives.\n\nOver the past quarter, we have been hard at work on several exciting projects. Our engineering team has made significant progress on a new software platform that will streamline our operations and improve our efficiency. This platform is set to launch next month, and we believe it will have a major impact on our ability to deliver high-quality products and services to our customers.\n\nIn addition, we recently launched a new product that has been met with an overwhelmingly positive response from both our customers and the wider tech community. This product represents the culmination of months of hard work and collaboration across multiple departments, and we are thrilled to see it gaining traction in the market.\n\nAs we move forward, we remain committed to our core values of innovation, excellence, and collaboration. We believe that by staying true to these values, we can continue to push the boundaries of what is possible and create products that make a real difference in the world.\n\nThank you for your hard work and dedication, and we look forward to continuing this journey with all of you.',NULL,0,0,0,'2023-02-20 10:34:13','2023-02-20 10:34:13'),(3,1,1,'Accounting','This documentation contains the guidelines for our accounting department.',NULL,0,1,1,'2023-02-20 10:34:20','2023-02-20 10:34:20'),(4,1,1,'V88 BE Code Guidelines','This documentation contains code guidelines for various programming languages/frameworks including MySQL. Please read these carefully and make sure to apply your learning in the projects you\'ll create.',NULL,0,1,2,'2023-02-20 10:36:50','2023-02-20 10:36:50'),(5,1,1,'V88 FE Code Guidelines','This documentation will contain code guidelines for CSS, LESS, JS, and other CSS/JS frameworks/libraries. Please read these carefully and make sure to apply your learning in the projects you\'ll create.',NULL,0,1,1,'2023-02-20 10:39:02','2023-02-20 10:39:02'),(6,1,1,'Sample Archived Documentation 1','This is just a sample documentation.',NULL,1,0,0,'2023-02-21 08:53:08','2023-02-21 08:53:08'),(7,1,1,'Sample Archived Documentation 2','This is just a sample documentation.',NULL,1,0,0,'2023-02-21 08:53:12','2023-02-21 08:53:12'),(8,1,1,'Sample Archived Documentation 3','This is just a sample documentation.',NULL,1,1,0,'2023-02-21 08:53:16','2023-02-21 08:53:16'),(9,1,1,'Sample Archived Documentation 4','This is just a sample documentation.',NULL,1,1,0,'2023-02-21 08:53:18','2023-02-21 08:53:18'),(10,1,1,'Sample Archived Documentation 5','This is just a sample documentation.',NULL,1,0,0,'2023-02-21 08:53:23','2023-02-21 08:53:23');
+INSERT INTO `documentations` VALUES (375,19,1,'Slicing Pie 2.0',NULL,NULL,0,0,0,NULL,'2023-03-03 15:00:22','2023-03-03 15:00:22'),(376,19,1,'BE Code Guidelines',NULL,NULL,0,1,0,19,'2023-03-03 15:14:28','2023-03-03 15:14:28'),(377,19,1,'BE Code Guidelines (DRAFT)',NULL,NULL,1,1,0,NULL,'2023-03-03 15:14:40','2023-03-03 15:14:40'),(378,19,1,'FE Code Guidelines',NULL,NULL,0,1,0,NULL,'2023-03-06 09:56:48','2023-03-06 09:56:48'),(380,19,1,'Philosopher\'s Stone',NULL,NULL,0,0,0,NULL,'2023-03-06 10:08:59','2023-03-06 10:08:59'),(381,19,1,'Chamber of Secrets',NULL,NULL,0,1,0,NULL,'2023-03-06 10:09:02','2023-03-06 10:09:02'),(382,19,1,'Prisoner of Azkaban',NULL,NULL,0,0,0,NULL,'2023-03-06 10:09:05','2023-03-06 10:09:05'),(383,19,1,'Goblet of Fire',NULL,NULL,0,0,0,NULL,'2023-03-06 10:09:08','2023-03-06 10:09:08'),(384,19,1,'Order of the Phoenix',NULL,NULL,0,0,0,NULL,'2023-03-06 10:09:11','2023-03-06 10:09:11'),(385,19,1,'Half-blood Prince',NULL,NULL,0,1,0,NULL,'2023-03-06 10:10:25','2023-03-06 10:10:25'),(386,19,1,'Deathly Hollows',NULL,NULL,0,1,0,NULL,'2023-03-06 10:11:09','2023-03-06 10:11:09'),(387,19,1,'Fantastic Beasts and Where to Find Them',NULL,NULL,0,0,0,NULL,'2023-03-06 10:24:09','2023-03-06 10:24:09'),(393,19,1,'Sample Documentation with Description','Lorem ipsum dolor sit amet','2,1,3',0,0,0,NULL,'2023-03-06 10:30:53','2023-03-06 10:30:53'),(395,19,1,'Fantastic Beasts: The Crimes of Grindelwald',NULL,NULL,0,0,0,NULL,'2023-03-06 10:36:24','2023-03-06 10:36:24'),(396,19,1,'Fantastic Beast: The Secrets of Dumbledore',NULL,NULL,0,0,0,NULL,'2023-03-06 10:36:34','2023-03-06 10:36:34'),(397,19,1,'The Hobbit: An Unexpected Journey',NULL,NULL,0,0,0,NULL,'2023-03-06 10:37:42','2023-03-06 10:37:42'),(398,19,1,'The Hobbit: The Desolation of Smaug',NULL,NULL,0,0,0,NULL,'2023-03-06 10:37:50','2023-03-06 10:37:50'),(399,19,1,'The Hobbit: The Battle of Five Armies',NULL,NULL,0,0,0,NULL,'2023-03-06 10:38:41','2023-03-06 10:38:41'),(400,19,1,'The Lord of The Rings: The Fellowship of The ',NULL,NULL,0,1,0,NULL,'2023-03-06 10:38:53','2023-03-06 10:38:53'),(401,19,1,'The Lord of The Rings: The Two Towers',NULL,NULL,0,1,0,NULL,'2023-03-06 10:39:11','2023-03-06 10:39:11'),(402,19,1,'The Lord of The Rings: The Return of The King',NULL,NULL,0,0,0,NULL,'2023-03-06 10:40:00','2023-03-06 10:40:00'),(403,19,1,'National Treasures 3',NULL,NULL,1,0,0,NULL,'2023-03-06 10:49:50','2023-03-06 10:49:50'),(409,1,1,'The Wall Assignment (BE)',NULL,NULL,0,1,0,19,'2023-03-06 15:58:21','2023-03-06 15:58:21'),(411,19,1,'The Wall Assignment (FE)',NULL,NULL,0,1,0,19,'2023-03-06 16:01:32','2023-03-06 16:01:32');
 /*!40000 ALTER TABLE `documentations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sections`
+--
+
+DROP TABLE IF EXISTS `sections`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sections` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `documentation_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `description` text,
+  `updated_by_user_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_sections_documentations1_idx` (`documentation_id`),
+  KEY `fk_sections_user_id1_idx` (`user_id`),
+  CONSTRAINT `fk_sections_documentation_id1` FOREIGN KEY (`documentation_id`) REFERENCES `documentations` (`id`),
+  CONSTRAINT `fk_sections_user_id1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sections`
+--
+
+LOCK TABLES `sections` WRITE;
+/*!40000 ALTER TABLE `sections` DISABLE KEYS */;
+INSERT INTO `sections` VALUES (1,393,19,'Sample 1','Sample description',NULL,'2023-03-06 15:40:05','2023-03-06 15:40:05'),(2,393,19,'Sample 2','Sample description',NULL,'2023-03-06 15:40:12','2023-03-06 15:40:12'),(3,393,19,'Sample 5','Sample description',NULL,'2023-03-06 15:40:17','2023-03-06 15:40:17');
+/*!40000 ALTER TABLE `sections` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -96,9 +131,9 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `workspace_id` int NOT NULL,
-  `user_level_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `workspace_id` int(11) NOT NULL,
+  `user_level_id` int(11) DEFAULT NULL,
   `first_name` varchar(45) DEFAULT NULL,
   `last_name` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
@@ -106,8 +141,9 @@ CREATE TABLE `users` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_users_workspaces1_idx` (`workspace_id`),
+  KEY `idx_users_email` (`email`),
   CONSTRAINT `fk_users_workspaces1` FOREIGN KEY (`workspace_id`) REFERENCES `workspaces` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -116,7 +152,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,9,'John','Doe','jdoe@village88.com','2023-02-20 10:18:04','2023-02-20 10:18:04'),(2,1,1,'Jane','Doe','jane.doe@village88.com','2023-02-20 10:40:08','2023-02-20 10:40:08'),(3,1,1,'Tony','Stark','tstark@village88.com','2023-02-20 10:41:00','2023-02-20 10:41:00'),(4,1,1,'Steve','Rogers','srogers@village88.com','2023-02-20 10:41:11','2023-02-20 10:41:11'),(5,1,1,'Stephen','Strange','sstrange@village88.com','2023-02-20 10:41:35','2023-02-20 10:41:35');
+INSERT INTO `users` VALUES (1,1,9,'John','Doe','jdoe@village88.com','2023-02-20 10:18:04','2023-02-20 10:18:04'),(2,1,1,'Jane','Doe','jane.doe@village88.com','2023-02-20 10:40:08','2023-02-20 10:40:08'),(3,1,1,'Tony','Stark','tstark@village88.com','2023-02-20 10:41:00','2023-02-20 10:41:00'),(4,1,1,'Steve','Rogers','srogers@village88.com','2023-02-20 10:41:11','2023-02-20 10:41:11'),(5,1,1,'Stephen','Strange','emailnijovic@gmail.com','2023-02-20 10:41:35','2023-02-20 10:41:35'),(19,1,9,'Jovic','Abengona','jabengona@village88.com','2023-02-27 15:39:08','2023-02-27 15:39:08');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,16 +164,16 @@ DROP TABLE IF EXISTS `workspaces`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `workspaces` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
   `name` varchar(45) DEFAULT NULL,
-  `documentations_order` varchar(255) DEFAULT NULL,
+  `documentation_ids_order` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_workspaces_users_idx` (`user_id`),
   CONSTRAINT `fk_workspaces_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,7 +182,7 @@ CREATE TABLE `workspaces` (
 
 LOCK TABLES `workspaces` WRITE;
 /*!40000 ALTER TABLE `workspaces` DISABLE KEYS */;
-INSERT INTO `workspaces` VALUES (1,1,'village88','2,1,5,4,3','2023-02-20 10:17:46','2023-02-20 10:17:46');
+INSERT INTO `workspaces` VALUES (1,1,'village88','376,378,393,375,380,381,382,383,384,385,386,387,395,396,397,398,399,400,401,402,409,411','2023-02-20 10:17:46','2023-02-20 10:17:46');
 /*!40000 ALTER TABLE `workspaces` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -159,4 +195,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-21 11:48:43
+-- Dump completed on 2023-03-07 10:44:11
