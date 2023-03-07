@@ -95,6 +95,7 @@
                 $new_documentation_id = $this->db->insert_id($insert_document_record);
 
                 if($new_documentation_id > ZERO_VALUE){
+                    $this->load->model("Workspace");
                     $workspace = $this->Workspace->getDocumentationsOrder($params["workspace_id"]);
                     
                     if(!isset($params["is_duplicate"])){
