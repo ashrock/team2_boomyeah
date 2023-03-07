@@ -220,17 +220,18 @@
 			echo json_encode($response_data);
 		}
 
-		public function getDocumentation($document_id){
-			$documentation = $this->Documentation->getDocumentation($document_id);
+		public function getDocumentation($documentation_id){
+			$documentation = $this->Documentation->getDocumentation($documentation_id);
 			
 			# Check if user is allowed to access page
 			$this->isUserAllowed();
 
 			if($documentation["result"]){
 				# Fetch sections
-				$sections = array();
+				$this->load->model("Section");
+				$sections = $this->Section->getSections($documentation_id);
 
-				$this->load->view('documentations/admin_edit_documentation', array("documentation" => $documentation["result"], "sections" => $sections));
+				$this->load->view('documentations/admin_edit_documentation', array("documentation" => $documentation["result"], "sections" => $sections["result"]));
 			}
 			else{
 				# Confirm if we need to show error or just redirect back to dashboard
