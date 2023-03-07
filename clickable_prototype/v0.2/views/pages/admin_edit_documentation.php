@@ -17,7 +17,7 @@
     $document_data = array(
         "document_id" => $document_id,
         "document_title" => $document_title,
-        "document_description" => "Software undergoes beta testing shortly before it’s released. Beta is Latin for “still doesn’t work”. (Anonymous) Most software today is very much like an Egyptian pyramid with millions of bricks piled on top of each other, with no structural integrity, but just done by brute force and thousands of slaves. (Alan Kay) There’s an old story about the person who wished his computer were as easy to use as his telephone. That wish has come true, since I no longer know how to use my telephone. (Bjarne Stroustrup) Writing code has a place in the human hierarchy worth somewhere above grave robbing and beneath managing. (Gerald Weinberg)",
+        "document_description" => "",
         "is_private" => TRUE
     );
 
@@ -68,7 +68,7 @@
                         <span class="lever"></span>
                     </label>
                 </div>
-                <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : "hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["document_id"] ?>">13 Collaborators</a>
+                <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn" href="#invite_collaborator_modal" data-document_id="<?= $document_data["document_id"] ?>">13 Collaborators</a>
             </div>
             <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["document_description"] ?></p>
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
@@ -104,7 +104,7 @@
         <div id="confirm_to_remove" class="modal">
             <div class="modal-content">
                 <h4>Confirmation</h4>
-                <p>Are you sure you want to remove this section?</p>
+                <p>Are you sure you want to remove “<span id="section_title"></span>”? This will also remove all the modules and tabs in the section.</p>
             </div>
             <div class="modal-footer">
                 <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
@@ -143,7 +143,7 @@
         <input type="hidden" id="sections_order" name="sections_order">
     </form>
     <?php include_once("../partials/confirm_invite_modals.php"); ?>
-
+    <?php include_once("../partials/confirm_documentation_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_documentation/admin_edit_documentation_fe.js") ?>"></script>
