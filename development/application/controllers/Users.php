@@ -24,7 +24,7 @@ class Users extends CI_Controller {
 			$google_client = new Google_Client();
 			$google_client->setClientId($this->config->item("client_id"));
 			$google_client->setClientSecret($this->config->item("client_secret"));
-			$google_client->setRedirectUri("http://localhost:8888/");
+			$google_client->setRedirectUri(BASE_URL);
 			$google_client->addScope("profile email");
 
 			if(isset($_GET["code"])){
