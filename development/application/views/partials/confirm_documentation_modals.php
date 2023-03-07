@@ -39,7 +39,7 @@
     <div id="confirm_to_remove" class="modal">
         <div class="modal-content">
             <h4>Confirmation</h4>
-            <p>Are you sure you want to remove `<span class="documentation_title"></span>` documentation?</p>
+            <p>Are you sure you want to remove "<span class="documentation_title"></span>"? This will also remove all of its content.</p>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
@@ -59,18 +59,17 @@
         </div>
     </div>
 </div>
-<form id="change_document_privacy_form" action="/docs/update" method="POST" hidden>
-    <input type="hidden" name="documentation_id" id="documentation_id" value="">
+<form id="change_document_privacy_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
+    <input type="hidden" name="documentation_id" class="documentation_id" value="">
     <input type="hidden" name="action" value="update_documentation">
     <input type="hidden" name="update_type" value="is_private">
-    <input type="hidden" name="update_value" id="update_value" value=""> 
-
+    <input type="hidden" name="update_value" class="update_value" value="">
 </form>
-<form id="archive_form" action="/docs/update" method="POST" hidden>
-    <input type="hidden" name="documentation_id" id="documentation_id" value="">
+<form id="archive_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
+    <input type="hidden" name="documentation_id" class="documentation_id" value="">
     <input type="hidden" name="action" value="update_documentation">
     <input type="hidden" name="update_type" value="is_archived">
-    <input type="hidden" name="update_value" id="update_value" value="">
+    <input type="hidden" name="update_value" class="update_value" value="">
 </form>
 <form action="remove_invited_user_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
     <input type="hidden" id="invited_user_id" name="invited_user_id">

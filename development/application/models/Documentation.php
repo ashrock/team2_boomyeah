@@ -86,9 +86,9 @@
                 $is_private        = isset($params["is_private"]) ? $params["is_private"] : NO;
 
                 $insert_document_record = $this->db->query("
-                    INSERT INTO documentations (user_id, workspace_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-                    array($params["user_id"], $params["workspace_id"], $params["title"], $description, $section_ids_order, NO, $is_private, ZERO_VALUE)
+                    INSERT INTO documentations (user_id, workspace_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count, updated_by_user_id, created_at, updated_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+                    array($params["user_id"], $params["workspace_id"], $params["title"], $description, $section_ids_order, NO, $is_private, ZERO_VALUE, $_SESSION["user_id"])
                 );
 
                 $new_documentation_id = $this->db->insert_id($insert_document_record);
@@ -132,7 +132,7 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, documentation_id }
         # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
-        # Last updated at: March 1, 2023
+        # Last updated at: March 6, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -142,7 +142,7 @@
                 
                 if(isset($document->{'id'})){
                     if( in_array($params["update_type"], ["title", "is_archived", "is_private"]) ){
-                        $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ? WHERE id = ?", array($params["update_value"], $params["documentation_id"]) );
+                        $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ? WHERE id = ?", array($params["update_value"], $_SESSION["user_id"], $params["documentation_id"]) );
                       
                         if($update_document){
                             $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->result_array();
