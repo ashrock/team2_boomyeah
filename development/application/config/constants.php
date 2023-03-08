@@ -83,3 +83,12 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+/* BOOMYEAH V2 CONSTANTS */
+defined('BASE_URL') OR define('BASE_URL', "http://localhost:8888/");
+defined('USER_LEVEL') OR define('USER_LEVEL', array("ADMIN" => 9, "USER" => 1));
+defined('TRUE_VALUE') OR define('TRUE_VALUE', 1);
+defined('FALSE_VALUE') OR define('FALSE_VALUE', 0);
+defined('ZERO_VALUE') OR define('ZERO_VALUE', 0);
+defined('YES') OR define('YES', 1);
+defined('NO') OR define('NO', 0);

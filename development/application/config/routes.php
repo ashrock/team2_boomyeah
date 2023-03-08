@@ -52,9 +52,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /* User Routes */
 $route['default_controller'] = 'users';
+$route['logout'] = 'users/logout';
 
-/* Documentation Routes */
-$route['admin_documentations'] = 'documentations/admin_documentations';
+/* GET | Admin Documentation Routes */
+$route['docs/edit']['GET']        = 'documentations/adminDocumentations';
+$route['docs/(:any)/edit']['GET'] = 'documentations/getDocumentation/$1';
+
+/* POST | Admin Documentation Routes */
+$route['docs/get']['POST']       = 'documentations/getDocumentations';
+$route['docs/add']['POST']       = 'documentations/addDocumentations';
+$route['docs/update']['POST']    = 'documentations/updateDocumentations';
+$route['docs/duplicate']['POST'] = 'documentations/duplicateDocumentation';
+$route['docs/remove']['POST']    = 'documentations/removeDocumentation';
+$route['docs/reorder']['POST']   = 'workspaces/updateWorkspace';
+
+/* POST | Admin Section Routes */
+$route['sections/add']['POST']   = 'sections/addSection';
+
+
+
+/* User Documentation Routes */
+$route['docs'] = 'documentations/userDocumentations';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

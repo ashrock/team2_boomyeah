@@ -60,12 +60,12 @@ $(document).ready(async function(){
             event.preventDefault();
             showConfirmPrivacyModal( $(this).attr("data-document_id"), 0, "#confirm_to_public", $(this).closest(".document_block"));
         })
-        /* .on("click", ".set_to_private_icon", async function(event){
+        .on("click", ".set_to_private_icon", async function(event){
             event.stopImmediatePropagation();
             event.preventDefault();
             showConfirmPrivacyModal($(this).attr("data-document_id"), 1, "#confirm_to_private", $(this).closest(".document_block"));
-        }) */
-        ;
+        });
+        
 });
 document.addEventListener("DOMContentLoaded", () => {
     ux("body")
@@ -76,12 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
         .on("submit", "#duplicate_documentation_form", onSubmitDuplicateForm)
         .on("click", ".duplicate_icon", duplicateDocumentation)
-        .on("click", ".set_to_private_icon", async function(event){
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            
-            // showConfirmPrivacyModal($(this).attr("data-document_id"), 1, "#confirm_to_private", $(this).closest(".document_block"));
-        });
+  
 });
 
 function onSubmitDuplicateForm(event){
@@ -95,7 +90,7 @@ function onSubmitDuplicateForm(event){
         if(post_data.status){
             // Append duplicated documentation
             $(`#document_${document_id}`).after(post_data.result.html);
-
+     
             let documentation = $(`#document_${post_data.result.documentation_id}`);
             documentation.addClass("animate__animated animate__fadeIn animate__slower");
             documentation.on("animationend", () => {
@@ -157,15 +152,19 @@ function onSubmitAddDocumentationForm(event){
             if(response_data.status){
                 /* TODO: Update once the admin edit documentation is added in v2. Change to redirect in admin edit document page. */
                 alert("Documentation added succesfully! Redirecting to the admin edit document page will be added in v0.2.");
-                // $("#add_documentation_form")[0].reset();
-                location.reload();
+                $("#add_documentation_form")[0].reset();
+                //location.reload();
+
+                let documentations_div = $("#add_documentation_form #is_archived").val() == "1" ? "#archived_documents" : "#documentations";
+                $(documentations_div).html(response_data.result.html);
+                initializeMaterializeDropdown();
             }
             else{
-                alert(response_data.error);
+                alert(response_data.error); 
             }
         }, "json");
         
-        return;
+      
     }
     else{
         let add_documentation_input = $(".group_add_documentation");
@@ -175,6 +174,7 @@ function onSubmitAddDocumentationForm(event){
             add_documentation_input.removeClass("animate__animated animate__headShake");
         });
     }
+    return false;
 }
 
 function initializeMaterializeDropdown(){
