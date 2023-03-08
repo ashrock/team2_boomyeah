@@ -107,7 +107,8 @@ function onSubmitGetCollaboratorsForm(event){
 
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            await ux("#invited_users_wrapper").html(response_data.result.html);
+            await ux("#invited_users_wrapper").html(response_data.result.owner);
+            await ux("#invited_users_wrapper").append(response_data.result.html);
             
             ux("#invited_users_wrapper").findAll(".added_collaborator").forEach(dropdown_element => {
                 M.FormSelect.init(dropdown_element);

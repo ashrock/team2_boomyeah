@@ -37,7 +37,7 @@
     <input type="hidden" name="action" value="add_collaborators">
     <input type="hidden" name="collaborator_emails" class="collaborator_emails">
 </form>
-<form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="get_collaborators_form" method="POST">
+<form action="/docs/get_collaborators" id="get_collaborators_form" method="POST">
     <input type="hidden" name="action" value="get_collaborators">
     <input type="hidden" name="document_id" class="document_id">
 </form>
