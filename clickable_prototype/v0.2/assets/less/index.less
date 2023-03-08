@@ -1,46 +1,63 @@
 // out: "../css/index.css", compress: true, sourceMap: false
 @import url(./global.less);
 
+.header{
+    align-items: center;
+    display: flex;
+    padding: 0 30px;
+    width: 100%;
+}
+
 h1{
+    color: #1a54ab;
     font: 20px/24px @readex_medium;
     padding: 10px;
 }
-
+.divider{
+    background-color: @by_black;
+    height: 35px;
+    opacity: 0.3;
+    width: 1px;
+}
 h2, p{
     font: 16px/24px @readex_regular;
     padding: 5px 10px;
 }
 
 span, li{
-    font: 12px/16px @readex_regular;
+    color: #85a8d3;
+    font: 20px/16px @readex_regular;
 }
-ul{
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: 50px auto 20px;
+
+ul {
+    display: grid;
+    grid-gap: 20px; /* gap between grid items */
+    grid-template-columns: repeat(3, 1fr); /* two columns, each taking up equal space */
+    margin: 20px auto 20px;
     padding: 0;
-    width: 1024px;
+    width: 100%;
 }
 li {
     display: flex;
     flex-direction: column;
     list-style: none;
-    margin-left: 10px;
+    margin-left: 30px;
 }
 a{
-    margin: 20px auto 15px;
+    font: 16px/24px @readex_regular;
+    margin: 10px 0 15px 10px;
     text-decoration: none;
 }
-
+a:hover{
+    color: @by_primary;
+}
 .frame_display {
     -moz-transform: scale(0.5);
     -ms-transform: scale(0.5);
     -o-transform: scale(0.5);
     -webkit-transform: scale(0.5);
     height: 600px;
-    margin: -150px 0 -150px 0;
+    margin: -150px -250px;
     pointer-events: none;
     transform: scale(0.5);
     width: 1024px;

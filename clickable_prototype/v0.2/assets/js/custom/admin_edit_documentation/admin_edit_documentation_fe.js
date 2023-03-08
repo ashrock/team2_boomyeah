@@ -1,5 +1,7 @@
+let visible_screen_height = document.documentElement.clientHeight;
 document.addEventListener("DOMContentLoaded", async () => {
     ux("body")
+        
         .on("click", ".edit_title_icon", editSectionTitle)
         .on("click", ".section_block .section_title.editable", (event) => {
             event.stopImmediatePropagation();
@@ -16,9 +18,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".section_block", redirectToEditSection)
         .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
-        .on("keydown", ".section_title .autoheight", (event) => editSectionTitle(event, true))
+        .on("keydown", ".section_block .section_title", (event) => editSectionTitle(event, true))
         ;
 
+    window.addEventListener("resize", () => {
+        visible_screen_height = document.documentElement.clientHeight;
+        setSectionsContentHeight();
+    })
     Sortable.create(document.querySelector(".section_container"), {
         handle: ".drag_handle",
         onEnd: () => {
@@ -30,17 +36,46 @@ document.addEventListener("DOMContentLoaded", async () => {
     M.Modal.init(modal_instances);
 
     appearEmptySection();
-    documentDescriptionModifier();
+    
+    setTimeout(() => {
+        documentDescriptionPlaceholder();
+        setSectionsContentHeight();
+    });
 });
 
-function documentDescriptionModifier(){
-    let document_description = ux("#document_description").self();
-    document_description.removeEventListener("input", function(){});
-    let computed = window.getComputedStyle(document_description);
-    let height = parseFloat(computed.paddingTop) - document_description.scrollHeight - parseFloat(computed.paddingBottom);
-    ux("#document_description").on("input", () =>{
-        // document_description.style.height = "auto";
-        document_description.style.height = height + "px";
+function setSectionsContentHeight(){
+    let screen_height = visible_screen_height;
+    let documentation_header_props = ux(".documentation_header").self().getBoundingClientRect();
+    let documentation_details_props = ux("#documentation_details").self().getBoundingClientRect();
+    let header_offset = documentation_header_props.height;
+    let details_offset = documentation_details_props.height;
+    let is_sections_visible = (header_offset + (screen_height / 3)) < screen_height;
+    let sections_offset = (is_sections_visible) ? details_offset : 0;
+
+    ux("#documentation_details").conditionalClass("fixed", is_sections_visible);
+    ux("#sections_content").self().style.paddingTop = `${sections_offset}px`;
+}
+
+function documentDescriptionPlaceholder(){
+    let document_description = ux("#document_description");
+    document_description.on("input", (event) => {
+        if (!event.target.firstChild) {
+            document_description.append("<p>Add Description</p>");
+        } 
+        else if (event.target.firstChild.nodeName === "P") {
+            document_description.find("p").remove();
+        }
+
+        setSectionsContentHeight();
+    });
+    document_description.on("keydown", (event) =>{
+        setSectionsContentHeight();
+        
+        if(event.keyCode === 13){
+            let update_value = event.target.innerText;
+            updateDocumentationData("document_description", encodeURI(update_value));
+            event.target.blur();
+        }
     })
 }
 
@@ -65,9 +100,9 @@ function updateSectionsOrder(section_container){
 
 function editSectionTitle(event, is_key_down_event = false){
     event.stopImmediatePropagation();
-    const edit_btn = event.target;
-    const section_blk = ux(edit_btn?.closest(".section_block"));
-    const section_title = section_blk?.find(".section_title");
+    let edit_btn = event.target;
+    let section_blk = ux(edit_btn.closest(".section_block"));
+    let section_title = section_blk.find(".section_title");
     section_blk.removeClass("error");
 
     section_title.addClass("editable");
@@ -122,11 +157,10 @@ function duplicateSection(event){
 
 function setRemoveSectionBlock(event) {
     const section    = event.target;
-    const section_id = section.getAttribute("data-section_id");
-    const section_title = section.getAttribute("data-section_title");
-
-    document.getElementById("section_title_to_remove").innerText = section_title;
-    document.getElementById("remove_section_id").value = section_id;
+    let section_id = ux(section).data("section_id");
+    let section_title = ux(section).data("section_title");
+    ux("#section_title_to_remove").text(section_title);
+    ux("#remove_section_id").val(section_id);
     let remove_modal = document.querySelector("#confirm_to_remove");
     var instance = M.Modal.getInstance(remove_modal);
     instance.open();
@@ -181,12 +215,10 @@ function onChangeDocumentationPrivacy(event){
 
     if(toggle_switch.checked){
         ux(toggle_switch).attr("checked", "");
-        showPrivacyModal(modal_type, document_title, toggle_switch);
-    } 
-    else {
+    } else {
         toggle_switch.removeAttribute("checked", "");
-        showPrivacyModal(modal_type, document_title, toggle_switch);
     } 
+    showPrivacyModal(modal_type, document_title, toggle_switch);
 }
 
 function showPrivacyModal(modal_type, document_title, toggle_switch){
@@ -199,20 +231,20 @@ function showPrivacyModal(modal_type, document_title, toggle_switch){
     const initial_checked_value = toggle_switch.checked;
     
     ux(modal_type)
-    .on("click", ".no_btn", () => {
-        if (toggle_switch.checked === initial_checked_value) {
-            toggle_switch.checked = !initial_checked_value;
-        }
-    })
-    .on("click", ".yes_btn", () => {
-        if (toggle_switch.checked !== initial_checked_value) {
-            toggle_switch.checked = initial_checked_value;
-        }
-        switch_btn.innerText = (toggle_switch.checked) ? "Private" : "Public";
-        invite_collaborator_btn.conditionalClass("hidden", !toggle_switch.checked);
-        is_private = (toggle_switch.checked) ? 1 : 0;
-    })
-    .find(".documentation_title").text(document_title) ;
+        .on("click", ".no_btn", () => {
+            if (toggle_switch.checked === initial_checked_value) {
+                toggle_switch.checked = !initial_checked_value;
+            }
+        })
+        .on("click", ".yes_btn", () => {
+            if (toggle_switch.checked !== initial_checked_value) {
+                toggle_switch.checked = initial_checked_value;
+            }
+            switch_btn.innerText = (toggle_switch.checked) ? "Private" : "Public";
+            invite_collaborator_btn.conditionalClass("hidden", !toggle_switch.checked);
+            is_private = (toggle_switch.checked) ? 1 : 0;
+        })
+        .find(".documentation_title").text(document_title) ;
     instance.open();
    
     ux("#change_document_privacy_form .update_value").val(is_private);

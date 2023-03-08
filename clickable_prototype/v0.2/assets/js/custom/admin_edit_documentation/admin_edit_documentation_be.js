@@ -124,13 +124,19 @@ function onSubmitAddSectionForm(event){
                 let section_block = await ux("#section_container").append(response_data.result.html);
                 initializeMaterializeDropdown(section_block.find(".dropdown-trigger").self());
                 addAnimation(`#section_${response_data.section_id}`, "animate__fadeIn animate__slower");
-                ux("#input_add_section").self().blur();
                 appearEmptySection();
+
+                window.scrollTo(0, document.body.scrollHeight);
             } else {
                 post_form.find(".group_add_section").addClass("error")
             }
 
             post_form.self().reset();
+            ux("#input_add_section").self().blur();
+
+            setTimeout(() => {
+                ux("#input_add_section").self().focus();    
+            });
         }, "json");
     }
     
