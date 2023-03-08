@@ -30,8 +30,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     M.Modal.init(modal_instances);
 
     appearEmptySection();
+    documentDescriptionPlaceholder();
 });
-
+function documentDescriptionPlaceholder(){
+    let document_description = ux("#document_description");
+    document_description.on("input", (event) => {
+        if (!event.target.firstChild) {
+            document_description.append("<p>Add Description</p>");
+        } 
+        else if (event.target.firstChild.nodeName === "P") {
+            document_description.find("p").remove();
+        }
+    });
+    document_description.on("keydown", (event) =>{
+        if(event.keyCode === 13){
+            let update_value = event.target.innerText;
+            updateDocumentationData("document_description", encodeURI(update_value));
+            event.target.blur();
+        }
+    })
+    
+    document_description.append("<p>Add Description</p>");
+}
 function updateDocumentationData(update_type, update_value){
     let udpate_documentation_form = ux("#udpate_documentation_form");
     udpate_documentation_form.find(".update_type").val(update_type);
@@ -110,11 +130,14 @@ function duplicateSection(event){
 
 function setRemoveSectionBlock(event) {
     const section    = event.target;
-    const section_id = section.getAttribute("data-section_id");
-    const section_title = section.getAttribute("data-section_title");
-
-    document.getElementById("section_title_to_remove").innerText = section_title;
-    document.getElementById("remove_section_id").value = section_id;
+    /* const section_id = section.getAttribute("data-section_id");
+    const section_title = section.getAttribute("data-section_title"); */
+    let section_id = ux(section).data("section_id");
+    let section_title = ux(section).data("section_title");
+    /* document.getElementById("section_title_to_remove").innerText = section_title;
+    document.getElementById("remove_section_id").value = section_id; */
+    ux("#section_title_to_remove").text(section_title);
+    ux("remove_section_id").val(section_id);
     let remove_modal = document.querySelector("#confirm_to_remove");
     var instance = M.Modal.getInstance(remove_modal);
     instance.open();
@@ -169,12 +192,10 @@ function onChangeDocumentationPrivacy(event){
 
     if(toggle_switch.checked){
         ux(toggle_switch).attr("checked", "");
-        showPrivacyModal(modal_type, document_title, toggle_switch);
-    } 
-    else {
+    } else {
         toggle_switch.removeAttribute("checked", "");
-        showPrivacyModal(modal_type, document_title, toggle_switch);
     } 
+    showPrivacyModal(modal_type, document_title, toggle_switch);
 }
 
 function showPrivacyModal(modal_type, document_title, toggle_switch){
@@ -187,20 +208,20 @@ function showPrivacyModal(modal_type, document_title, toggle_switch){
     const initial_checked_value = toggle_switch.checked;
     
     ux(modal_type)
-    .on("click", ".no_btn", () => {
-        if (toggle_switch.checked === initial_checked_value) {
-            toggle_switch.checked = !initial_checked_value;
-        }
-    })
-    .on("click", ".yes_btn", () => {
-        if (toggle_switch.checked !== initial_checked_value) {
-            toggle_switch.checked = initial_checked_value;
-        }
-        switch_btn.innerText = (toggle_switch.checked) ? "Private" : "Public";
-        invite_collaborator_btn.conditionalClass("hidden", !toggle_switch.checked);
-        is_private = (toggle_switch.checked) ? 1 : 0;
-    })
-    .find(".documentation_title").text(document_title) ;
+        .on("click", ".no_btn", () => {
+            if (toggle_switch.checked === initial_checked_value) {
+                toggle_switch.checked = !initial_checked_value;
+            }
+        })
+        .on("click", ".yes_btn", () => {
+            if (toggle_switch.checked !== initial_checked_value) {
+                toggle_switch.checked = initial_checked_value;
+            }
+            switch_btn.innerText = (toggle_switch.checked) ? "Private" : "Public";
+            invite_collaborator_btn.conditionalClass("hidden", !toggle_switch.checked);
+            is_private = (toggle_switch.checked) ? 1 : 0;
+        })
+        .find(".documentation_title").text(document_title) ;
     instance.open();
    
     ux("#change_document_privacy_form .update_value").val(is_private);
