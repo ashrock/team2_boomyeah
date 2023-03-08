@@ -146,7 +146,7 @@
                 # Check document id if existing
                 if(isset($document->{'id'})){
                     # Double check if update_type only have this following values: "title", "is_archived", "is_private"
-                    if( in_array($params["update_type"], ["title", "is_archived", "is_private"]) ){
+                    if( in_array($params["update_type"], ["title", "is_archived", "is_private", "description"]) ){
                         $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ? WHERE id = ?", array($params["update_value"], $_SESSION["user_id"], $params["documentation_id"]) );
                         
                         if($update_document){
