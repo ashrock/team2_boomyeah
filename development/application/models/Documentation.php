@@ -135,7 +135,7 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, documentation_id }
         # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
-        # Last updated at: March 7, 2023
+        # Last updated at: March 8, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
