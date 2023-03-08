@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".section_block", redirectToEditSection)
         .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
-        .on("keydown", ".section_title", (event) => editSectionTitle(event, true))
+        .on("keydown", ".section_title .autoheight", (event) => editSectionTitle(event, true))
         ;
 
     Sortable.create(document.querySelector(".section_container"), {
@@ -30,28 +30,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     M.Modal.init(modal_instances);
 
     appearEmptySection();
-    documentDescriptionPlaceholder();
+    documentDescriptionModifier();
 });
-function documentDescriptionPlaceholder(){
-    let document_description = ux("#document_description");
-    document_description.on("input", (event) => {
-        if (!event.target.firstChild) {
-            document_description.append("<p>Add Description</p>");
-        } 
-        else if (event.target.firstChild.nodeName === "P") {
-            document_description.find("p").remove();
-        }
-    });
-    document_description.on("keydown", (event) =>{
-        if(event.keyCode === 13){
-            let update_value = event.target.innerText;
-            updateDocumentationData("document_description", encodeURI(update_value));
-            event.target.blur();
-        }
+
+function documentDescriptionModifier(){
+    let document_description = ux("#document_description").self();
+    document_description.removeEventListener("input", function(){});
+    let computed = window.getComputedStyle(document_description);
+    let height = parseFloat(computed.paddingTop) - document_description.scrollHeight - parseFloat(computed.paddingBottom);
+    ux("#document_description").on("input", () =>{
+        // document_description.style.height = "auto";
+        document_description.style.height = height + "px";
     })
-    
-    document_description.append("<p>Add Description</p>");
 }
+
 function updateDocumentationData(update_type, update_value){
     let udpate_documentation_form = ux("#udpate_documentation_form");
     udpate_documentation_form.find(".update_type").val(update_type);

@@ -70,7 +70,7 @@
                 </div>
                 <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn" href="#invite_collaborator_modal" data-document_id="<?= $document_data["document_id"] ?>">13 Collaborators</a>
             </div>
-            <p autofocus class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["document_description"] ?></p>
+            <textarea autofocus class="doc_text_content" id="document_description" contenteditable="true" placeholder="Add Description" data-placeholder="Add Description"><?= $document_data["document_description"] ?></textarea>
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
                 <input type="hidden" name="action" value="create_section">
                 <div class="group_add_section input-field">

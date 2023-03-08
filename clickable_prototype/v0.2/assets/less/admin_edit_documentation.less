@@ -209,6 +209,7 @@ body{
         color: @by_text;
         font: 16px/24px @readex_regular;
         margin: 0 0 34px;
+        min-height: 46px;
         max-width: 893px;
         padding: 10px;
         position: relative;
@@ -531,10 +532,12 @@ body{
 #confirmation_modal_remove .modal,
 #confirmation_modal_remove_invited_user .modal {
   border-radius: 8px;
-  height: 194px;
   max-width: 343px;
   overflow: hidden;
   width: 100%;
+}
+#confirmation_modal_remove .modal{
+    max-height: 233px;
 }
 #confirmation_modal_remove .modal .modal-content,
 #confirmation_modal_remove_invited_user .modal .modal-content {
@@ -553,6 +556,7 @@ body{
 #confirmation_modal_remove .modal .modal-footer,
 #confirmation_modal_remove_invited_user .modal .modal-footer {
   padding: 15px 30px;
+  height: fit-content;
 }
 #confirmation_modal_remove .modal .modal-footer .no_btn,
 #confirmation_modal_remove_invited_user .modal .modal-footer .no_btn {
