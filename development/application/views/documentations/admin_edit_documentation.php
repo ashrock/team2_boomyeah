@@ -95,12 +95,6 @@
         <input type="hidden" name="section_id" class="section_id" value="">
         <input type="hidden" name="action" value="duplicate_section">
     </form>
-    <form id="change_document_privacy_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
-        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $documentation["id"] ?>">
-        <input type="hidden" name="action" value="update_documentation_privacy">
-        <input type="hidden" name="update_type" value="is_private">
-        <input type="hidden" name="update_value" class="update_value" value="">
-    </form>
     <form id="udpate_documentation_form" action="/docs/update" method="POST" hidden>
         <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $documentation["id"] ?>">
         <input type="hidden" name="update_type" class="update_type" value="">

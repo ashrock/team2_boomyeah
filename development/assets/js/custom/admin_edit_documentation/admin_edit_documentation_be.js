@@ -16,7 +16,17 @@ function submitUpdateDocumentationData(event){
 
     ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
         if(!response_data.status){
-            alert("An error occured while updating documentation data!");
+            alert("An error occured while updating documentation!");
+        }
+        else{
+            if(post_form.find(".update_type").val() == "is_private"){
+                let invite_collaborator_btn = ux("#invite_collaborator_btn");
+                let is_private = parseInt(post_form.find(".update_value").val());
+                let switch_btn = ux(".switch_btn .toggle_text").self();
+    
+                switch_btn.innerText = (is_private) ? "Private" : "Public";
+                invite_collaborator_btn.conditionalClass("hidden", !is_private);
+            }
         }
     }, "json");
 
