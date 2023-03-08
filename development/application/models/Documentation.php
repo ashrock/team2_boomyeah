@@ -6,13 +6,13 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentationd_id
         # Returns: { status: true/false, result: documentation record (Array), error: null }
-        # Last updated at: March 6, 2023
+        # Last updated at: March 8, 2023
         # Owner: Jovic
         public function getDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $get_documentation = $this->db->query("SELECT id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?;", $documentation_id);
+                $get_documentation = $this->db->query("SELECT id, user_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?;", $documentation_id);
 
                 if($get_documentation->num_rows()){
                     $response_data["result"] = $get_documentation->result_array()[0];
@@ -341,6 +341,33 @@
 
             return $response_data;
         }
-                    
+
+        # DOCU: This function will get user record of documentation owner
+        # Triggered by: (GET) docs/get_collaborators
+        # Requires: $documentation_id
+        # Returns: { status: true/false, result: user record, error: null }
+        # Last updated at: March 8, 2023
+        # Owner: Jovic
+        public function getDocumentationOwner($documentation_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $documentation = $this->getDocumentation($documentation_id);
+
+                if($documentation["result"]){
+                    $this->load->model("User");
+                    $get_owner = $this->User->getUser($documentation["result"]["user_id"]);
+
+                    if($get_owner["result"]){
+                        $response_data["result"] = $get_owner["result"];
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
     }
 ?>
