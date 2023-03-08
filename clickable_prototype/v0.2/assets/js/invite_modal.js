@@ -14,14 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     initializeMaterializeTooltip();
     initializeMaterializeDropdown();
 
-    document.addEventListener("click", (event) => {
-        // let element = event.target.closest(".add_invite_result");
-        
-        // if(element){
-        //     addSearchEmailResult(element);
-        // }
-    });
-
     ux("body")
         .on("click", "#add_invite_btn", addPeopleWithAccess)
         .on("click", "#remove_invited_user_confirm", confirmRemoveInvitedUser)
@@ -35,9 +27,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             get_collaborators_form.trigger("submit");
         })
         .on("change", ".invited_user_role", setRoleChangeAction)
-        .on("click", ".invited_user_role", (event)=>{
-            console.log("role click", event)
-        })
         .on("submit", "#add_collaborators_form", onSubmitAddCollaboratorsForm)
         .on("submit", "#get_collaborators_form", onSubmitGetCollaboratorsForm)
         .on("submit", "#remove_invited_user_form", onSubmitRemoveInvitedUser)
@@ -194,9 +183,7 @@ function setRoleChangeAction(event, ...args){
             onCancelRemoveCollaborator()
         }
         instance.open();
-    }
-    else{
-        // for changing role to viewer/editor in the backend
+    } else {
         let update_invited_user_form = ux("#update_invited_user_form");
         update_invited_user_form.find(".invited_user_id").val(invited_user_id);
         update_invited_user_form.find(".email").val(collaborator_email);
@@ -265,6 +252,4 @@ function onCancelRemoveCollaborator(event = null){
     });
 
     M.FormSelect.init(invited_user_role.self());
-    setTimeout(() => {
-    });
 }
