@@ -6,13 +6,13 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentationd_id
         # Returns: { status: true/false, result: documentation record (Array), error: null }
-        # Last updated at: March 6, 2023
+        # Last updated at: March 8, 2023
         # Owner: Jovic
         public function getDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $get_documentation = $this->db->query("SELECT id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?;", $documentation_id);
+                $get_documentation = $this->db->query("SELECT id, user_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?;", $documentation_id);
 
                 if($get_documentation->num_rows()){
                     $response_data["result"] = $get_documentation->result_array()[0];
@@ -75,7 +75,7 @@
         # Requires: $params { user_id, workspace_id, title }
         # Optionals: $params { is_duplicate, documentation_id }
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 6, 2023
+        # Last updated at: March 7, 2023
         # Owner: Erick, Updated by: Jovic
         public function addDocumentations($params){
             $response_data = array("status" => false, "result" => [], "error" => null);
@@ -84,7 +84,7 @@
                 # Finalize bind params
                 $description       = isset($params["description"]) ? $params["description"] : NULL;
                 $section_ids_order = isset($params["section_ids_order"]) ? $params["section_ids_order"] : NULL;
-                $is_private        = isset($params["is_private"]) ? $params["is_private"] : NO;
+                $is_private        = isset($params["is_private"]) ? $params["is_private"] : YES;
 
                 $insert_document_record = $this->db->query("
                     INSERT INTO documentations (user_id, workspace_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count, updated_by_user_id, created_at, updated_at) 
@@ -135,7 +135,7 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, documentation_id }
         # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
-        # Last updated at: March 7, 2023
+        # Last updated at: March 8, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -146,8 +146,8 @@
                 # Check document id if existing
                 if(isset($document->{'id'})){
                     # Double check if update_type only have this following values: "title", "is_archived", "is_private"
-                    if( in_array($params["update_type"], ["title", "is_archived", "is_private"]) ){
-                        $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ? WHERE id = ?", array($params["update_value"], $_SESSION["user_id"], $params["documentation_id"]) );
+                    if( in_array($params["update_type"], ["title", "is_archived", "is_private", "description"]) ){
+                        $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?", array($params["update_value"], $_SESSION["user_id"], $params["documentation_id"]) );
                         
                         if($update_document){
                             $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->result_array();
@@ -341,6 +341,33 @@
 
             return $response_data;
         }
-                    
+
+        # DOCU: This function will get user record of documentation owner
+        # Triggered by: (GET) docs/get_collaborators
+        # Requires: $documentation_id
+        # Returns: { status: true/false, result: user record, error: null }
+        # Last updated at: March 8, 2023
+        # Owner: Jovic
+        public function getDocumentationOwner($documentation_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $documentation = $this->getDocumentation($documentation_id);
+
+                if($documentation["result"]){
+                    $this->load->model("User");
+                    $get_owner = $this->User->getUser($documentation["result"]["user_id"]);
+
+                    if($get_owner["result"]){
+                        $response_data["result"] = $get_owner["result"];
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
     }
 ?>
