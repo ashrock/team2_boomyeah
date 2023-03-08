@@ -46,8 +46,8 @@
                 <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn <?= $documentation["is_private"] ? "" : "hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $documentation["id"] ?>"><?= $documentation["cache_collaborators_count"] ?> Collaborators</a>
             </div>
             <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $documentation["description"] ?></p>
-            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
-                <input type="hidden" name="action" value="create_section">
+            <form action="/sections/add" id="section_form" method="post">
+                <input type="hidden" name="documentation_id" value="<?= $documentation["id"] ?>">
                 <div class="group_add_section input-field">
                     <input name="section_title" id="input_add_section" type="text" class="section_title validate" autofocus>
                     <label for="input_add_section">Add Section</label>
