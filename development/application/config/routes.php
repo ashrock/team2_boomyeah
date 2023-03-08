@@ -66,6 +66,11 @@ $route['docs/duplicate']['POST'] = 'documentations/duplicateDocumentation';
 $route['docs/remove']['POST']    = 'documentations/removeDocumentation';
 $route['docs/reorder']['POST']   = 'workspaces/updateWorkspace';
 
+/* POST | Admin Section Routes */
+$route['sections/add']['POST']   = 'sections/addSection';
+
+
+
 /* User Documentation Routes */
 $route['docs'] = 'documentations/userDocumentations';
 
