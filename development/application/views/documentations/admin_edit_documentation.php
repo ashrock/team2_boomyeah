@@ -46,8 +46,8 @@
                 <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn <?= $documentation["is_private"] ? "" : "hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $documentation["id"] ?>"><?= $documentation["cache_collaborators_count"] ?> Collaborators</a>
             </div>
             <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $documentation["description"] ?></p>
-            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
-                <input type="hidden" name="action" value="create_section">
+            <form action="/sections/add" id="section_form" method="post">
+                <input type="hidden" name="documentation_id" value="<?= $documentation["id"] ?>">
                 <div class="group_add_section input-field">
                     <input name="section_title" id="input_add_section" type="text" class="section_title validate" autofocus>
                     <label for="input_add_section">Add Section</label>
@@ -96,14 +96,13 @@
         <input type="hidden" name="action" value="duplicate_section">
     </form>
     <form id="change_document_privacy_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
-        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $document_data["document_id"] ?>">
+        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $documentation["id"] ?>">
         <input type="hidden" name="action" value="update_documentation_privacy">
         <input type="hidden" name="update_type" value="is_private">
         <input type="hidden" name="update_value" class="update_value" value="">
     </form>
-    <form id="udpate_documentation_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" hidden>
-        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $document_data["document_id"] ?>">
-        <input type="hidden" name="action" value="update_documentation_data">
+    <form id="udpate_documentation_form" action="/docs/update" method="POST" hidden>
+        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $documentation["id"] ?>">
         <input type="hidden" name="update_type" class="update_type" value="">
         <input type="hidden" name="update_value" class="update_value" value="">
     </form>
