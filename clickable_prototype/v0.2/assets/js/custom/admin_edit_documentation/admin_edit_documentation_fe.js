@@ -1,5 +1,7 @@
+let visible_screen_height = document.documentElement.clientHeight;
 document.addEventListener("DOMContentLoaded", async () => {
     ux("body")
+        
         .on("click", ".edit_title_icon", editSectionTitle)
         .on("click", ".section_block .section_title.editable", (event) => {
             event.stopImmediatePropagation();
@@ -16,9 +18,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".section_block", redirectToEditSection)
         .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
-        .on("keydown", ".section_title", (event) => editSectionTitle(event, true))
+        .on("keydown", ".section_block .section_title", (event) => editSectionTitle(event, true))
         ;
 
+    window.addEventListener("resize", () => {
+        visible_screen_height = document.documentElement.clientHeight;
+        setSectionsContentHeight();
+    })
     Sortable.create(document.querySelector(".section_container"), {
         handle: ".drag_handle",
         onEnd: () => {
@@ -30,8 +36,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     M.Modal.init(modal_instances);
 
     appearEmptySection();
-    documentDescriptionPlaceholder();
+    
+    setTimeout(() => {
+        documentDescriptionPlaceholder();
+        setSectionsContentHeight();
+    });
 });
+
+function setSectionsContentHeight(){
+    let screen_height = visible_screen_height;
+    let documentation_header_props = ux(".documentation_header").self().getBoundingClientRect();
+    let documentation_details_props = ux("#documentation_details").self().getBoundingClientRect();
+    let header_offset = documentation_header_props.height;
+    let details_offset = documentation_details_props.height;
+    let is_sections_visible = (header_offset + (screen_height / 3)) < screen_height;
+    let sections_offset = (is_sections_visible) ? details_offset : 0;
+
+    ux("#documentation_details").conditionalClass("fixed", is_sections_visible);
+    ux("#sections_content").self().style.paddingTop = `${sections_offset}px`;
+}
+
 function documentDescriptionPlaceholder(){
     let document_description = ux("#document_description");
     document_description.on("input", (event) => {
@@ -41,8 +65,12 @@ function documentDescriptionPlaceholder(){
         else if (event.target.firstChild.nodeName === "P") {
             document_description.find("p").remove();
         }
+
+        setSectionsContentHeight();
     });
     document_description.on("keydown", (event) =>{
+        setSectionsContentHeight();
+        
         if(event.keyCode === 13){
             let update_value = event.target.innerText;
             updateDocumentationData("document_description", encodeURI(update_value));
@@ -73,9 +101,9 @@ function updateSectionsOrder(section_container){
 
 function editSectionTitle(event, is_key_down_event = false){
     event.stopImmediatePropagation();
-    const edit_btn = event.target;
-    const section_blk = ux(edit_btn?.closest(".section_block"));
-    const section_title = section_blk?.find(".section_title");
+    let edit_btn = event.target;
+    let section_blk = ux(edit_btn.closest(".section_block"));
+    let section_title = section_blk.find(".section_title");
     section_blk.removeClass("error");
 
     section_title.addClass("editable");
