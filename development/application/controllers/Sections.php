@@ -27,14 +27,94 @@
 				$this->isUserAllowed();
 
 				if(isset($_POST["section_title"])){
-					$response_data = $this->Section->addSection(array(
-						"documentation_id" => $_POST["documentation_id"],
-						"user_id"          => $_SESSION["user_id"],
-						"title"		       => $_POST["section_title"]
-					));
+					$response_data = $this->Section->addSection($_POST);
 				}
 				else{
 					$response_data["error"] = "Section title is required";
+				}
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+		
+		# DOCU: This function will call addSection() from Section Model to process adding of new section
+		# Triggered by: (POST) sections/add
+		# Requires: $_POST["section_id"], $_POST["update_type"], $_POST["update_value"]
+		# Returns: { status: true/false, result: { html }, error: null }
+		# Last updated at: Mar. 8, 2023
+		# Owner: Erick
+		public function updateSection(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
+
+				if(isset($_POST["section_id"])){
+					# Process updating of documentation
+					$response_data = $this->Section->updateDocumentation($_POST);
+				}
+				else{
+					$response_data["error"] = "Section id is required";
+				}
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+		
+		# DOCU: This function will call duplicateSection() from Section model
+		# Triggered by: (POST) sections/duplicate
+		# Requires: $_POST["section_id"]
+		# Returns: { status: true/false, result: { html }, error: null }
+		# Last updated at: Mar. 8, 2023
+		# Owner: Erick
+		public function duplicateSection(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
+
+				if(isset($_POST["section_id"])){
+					# Process duplicating of section
+					$response_data = $this->Section->duplicateSection($_POST);
+				}
+				else{
+					$response_data["error"] = "Section id is required";
+				}
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+
+        # DOCU: This function will call removeSection() from Section model
+		# Triggered by: (POST) sections/remove
+		# Requires: $_POST["section_id"], $_POST["documentation_id"] 
+		# Returns: { status: true/false, result: { html }, error: null }
+		# Last updated at: Mar. 8, 2023
+		# Owner: Erick
+		public function removeSection(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
+
+				if(isset($_POST["section_id"]) && isset($_POST["documentation_id"])){
+					# Process removing of section
+					$response_data = $this->Section->removeSection($_POST);
+				}
+				else{
+					$response_data["error"] = "Section id and documentation id are required.";
 				}
 			}
 			catch (Exception $e) {

@@ -108,10 +108,9 @@ function onSubmitUpdateSectionForm(event){
     event.preventDefault();
     let post_form = ux(event.target);
     let section_id = post_form.find(".section_id").val();
-
+    
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            await ux(`#section_${section_id}`).replaceWith(response_data.result.html);
             addAnimation(`#section_${section_id}`, "animated_blinkBorder");
             initializeMaterializeDropdown(ux(`#section_${section_id}`).find(".dropdown-trigger").self());
         } else {
