@@ -54,16 +54,16 @@ function initializeCollaboratorChipsInstance(){
     M.Chips.init(collaborator_chips, {
         placeholder: "Email address",
         secondaryPlaceholder: "Type email address",
-        onChipAdd: (element, email) => {
+        onChipAdd: async (element, email) => {
             let collaborator_email = email.innerText.split("close")[0];
-            
+            let chip_instance = M.Chips.getInstance(collaborator_chips);
+            let chips_data = chip_instance.chipsData;
+
             if(validateEmail(collaborator_email)){
                 addEmail(collaborator_email);
             } else {
-                email.remove();
-                setTimeout(() => {
-                    ux(".collaborator_email_address").val(collaborator_email);
-                });
+                await chip_instance.deleteChip(chips_data.length - 1);
+                await ux(".collaborator_email_address").val(collaborator_email);
             }
         },
         onChipDelete: () => {
