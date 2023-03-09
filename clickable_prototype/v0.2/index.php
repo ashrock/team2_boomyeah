@@ -1,6 +1,5 @@
 <?php
-  $dir_path = "./views/pages";
-  $files = scandir($dir_path);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,29 +11,29 @@
         <meta name="author" content="UX Team 2">
         <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
         <meta name="description" content="A great way to describe your documentation tool">
-        <title>Boom Yeah | Team 2</title>
+        <title>Boom Yeah | Team 2 | Clickable Prototype V0.1</title>
         <link rel="stylesheet" href="./assets/css/index.css"/>
     </head>
     <body>
-        <div class="header">
-            <img src="./assets/images/global_logo.svg" class="global_logo" alt="global_logo">
-            <div class="divider"></div>
-            <h1>Team <span>2</span></h1>
+        <div id="wrapper">
+            <div class="context_container v02">
+                <h1>Clickable Prototype v.02 Links</h1>
+                <a href="./views/pages/admin_edit_documentation.php">Admin Edit Document Page</a>
+                <p>
+                    <span> User Stories</span>
+                    (P8) As an admin, I want to be able to create a section so that I can feel fulfilled guiding the team and showing them the information they need to impart.<br/><br/>
+                    (P6) As an admin, I want to be able to manage the sections so that I can easily decide on what to do on the sections.
+                </p>
+                <a href="./views/pages/user_view_documentation.php">User View Document Page</a>
+                <p>
+                    <span>User Stories</span>
+                    (P9) As a user, I want to see all the sections available in the documentation so that I could have an idea on where to start reading.<br/><br/>
+                    (P5) As a user, I want to identify which part of documentation I am currently at so that I won’t feel lost while reading all the content.
+                </p>
+                <h2>Figma Design</h2>
+                <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" class="frame_display" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7sD1iBde0wOo0CjXn01mqU%2FBoomYEAH%3Fnode-id%3D2364%253A124360%26t%3Dh80dXGRUUdtY9p8B-1" allowfullscreen></iframe>
+                <a href="https://tinyurl.com/Roadmap-Spreadsheet-Link">Product Roadmap Spreadsheet Link</a>
+            </div>
         </div>
-        <ul>
-            <?php foreach($files as $file_name) {
-                // Ignore the current and parent directory entries and directories
-                if ($file_name === '.' || $file_name === '..' || is_dir($dir_path . '/' . $file_name)) {
-                    continue;
-                }
-            ?>
-                <li>
-                    <a href="./views/pages/<?= $file_name ?>">
-                        <?= ucwords(str_replace(['.php', '_'], ['', ' '], $file_name)) ?>
-                    </a>
-                    <iframe src="./views/pages/<?= $file_name?>" scrolling="no" frameBorder="0" class="frame_display"></iframe>
-                </li>
-            <?php } ?>
-        </ul>
     </body>
 </html>
