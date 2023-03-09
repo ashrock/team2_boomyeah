@@ -33,9 +33,9 @@
         </div>
     </div>
 </div>
-<form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="add_collaborators_form" method="POST">
-    <input type="hidden" name="action" value="add_collaborators">
+<form action="/docs/add_collaborators" id="add_collaborators_form" method="POST">
     <input type="hidden" name="collaborator_emails" class="collaborator_emails">
+    <input type="hidden" name="document_id" class="document_id">
 </form>
 <form action="/docs/get_collaborators" id="get_collaborators_form" method="POST">
     <input type="hidden" name="action" value="get_collaborators">
