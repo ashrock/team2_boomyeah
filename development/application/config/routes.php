@@ -71,7 +71,10 @@ $route['docs/add_collaborators']['POST'] = 'collaborators/addCollaborators';
 $route['docs/get_collaborators']['POST'] = 'collaborators/getCollaborators';
 
 /* POST | Admin Section Routes */
-$route['sections/add']['POST']   = 'sections/addSection';
+$route['sections/add']['POST']       = 'sections/addSection';
+$route['sections/update']['POST']    = 'sections/updateSection';
+$route['sections/duplicate']['POST'] = 'sections/duplicateSection';
+$route['sections/remove']['POST']    = 'sections/removeSection';
 
 
 

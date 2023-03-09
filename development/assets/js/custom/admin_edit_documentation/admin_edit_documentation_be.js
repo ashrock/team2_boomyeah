@@ -108,10 +108,9 @@ function onSubmitUpdateSectionForm(event){
     event.preventDefault();
     let post_form = ux(event.target);
     let section_id = post_form.find(".section_id").val();
-
+    
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            await ux(`#section_${section_id}`).replaceWith(response_data.result.html);
             addAnimation(`#section_${section_id}`, "animated_blinkBorder");
             initializeMaterializeDropdown(ux(`#section_${section_id}`).find(".dropdown-trigger").self());
         } else {
@@ -133,12 +132,20 @@ function onSubmitAddSectionForm(event){
             if(response_data.status){
                 let section_block = await ux("#section_container").append(response_data.result.html);
                 initializeMaterializeDropdown(section_block.find(".dropdown-trigger").self());
+                addAnimation(`#section_${response_data.section_id}`, "animate__fadeIn animate__slower");
                 appearEmptySection();
+
+                window.scrollTo(0, document.body.scrollHeight);
             } else {
                 post_form.find(".group_add_section").addClass("error")
             }
 
             post_form.self().reset();
+            ux("#input_add_section").self().blur();
+
+            setTimeout(() => {
+                ux("#input_add_section").self().focus();    
+            });
         }, "json");
     }
     
