@@ -47,7 +47,7 @@
                                     <span class="lever"></span>
                                 </label>
                             </div>
-                            <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>"><?= $document_data["cache_collaborators_count"] ?> Collaborators</a>
+                            <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>" data-cache_collaborators_count="<?= $document_data["cache_collaborators_count"] ?>"><?= $document_data["cache_collaborators_count"] + 1 ?> Collaborators</a>
                         </div>
                         <p autofocus class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["description"] ?></p>
                         <form action="/sections/add" id="section_form" method="post">
@@ -64,17 +64,16 @@
                     </div>
                 </div>
                 <div id="sections_content">
-<?php if(count($sections)){ ?>
                     <div class="section_container" id="section_container">
-                <?php $this->load->view("partials/section_block_partial.php", array("all_sections" => $sections)); ?>
+                        <?php if(count($sections)){ ?>
+                            <?php $this->load->view("partials/section_block_partial.php", array("all_sections" => $sections)); ?>
+                        <?php } ?>
                     </div>
-<?php } else { ?>
-                    <div class="no_sections">
+                    <div class="no_sections <?php (!count($sections)) ? "hidden" : "" ?>">
                         <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                             alt="Empty Content Illustration">
                         <p>You have no sections yet</p>
                     </div>
-<?php } ?>
                 </div>
             </div>
         </div>
