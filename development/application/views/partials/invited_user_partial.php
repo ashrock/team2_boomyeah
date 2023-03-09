@@ -6,15 +6,11 @@
             <div class="invited_user_info">
                 <p><?= $collaborator["email"] ?></p>
             </div>
-            <?php if($collaborator["id"] == 1000){?>
-                <p>Owner</p>
-            <?php }else{?>
-                <select name="invited_user_role" class="added_collaborator invited_user_role" data-invited_user_id="<?= $collaborator["id"] ?>" data-collaborator_id="<?= $collaborator["collaborator_id"] ?>">
-                    <option value="viewer" <?= ((int) $collaborator["collaborator_level_id"] === 1) ? "selected" : "" ?>>Viewer</option>
-                    <option value="editor" <?= ((int) $collaborator["collaborator_level_id"] === 2) ? "selected" : "" ?>>Editor</option>
-                    <option value="remove">Remove</option>
-                </select>
-            <?php } ?>
+            <select name="invited_user_role" class="added_collaborator invited_user_role" data-invited_user_id="<?= $collaborator["id"] ?>" data-collaborator_id="<?= $collaborator["collaborator_id"] ?>">
+                <option value="viewer" <?= ((int) $collaborator["collaborator_level_id"] === 1) ? "selected" : "" ?>>Viewer</option>
+                <option value="editor" <?= ((int) $collaborator["collaborator_level_id"] === 2) ? "selected" : "" ?>>Editor</option>
+                <option value="remove">Remove</option>
+            </select>
         </div>
 <?php
     }

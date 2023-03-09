@@ -1,7 +1,8 @@
 let visible_screen_height = document.documentElement.clientHeight;
+
 document.addEventListener("DOMContentLoaded", async () => {
     ux("body")
-        
+
         .on("click", ".edit_title_icon", editSectionTitle)
         .on("click", ".section_block .section_title.editable", (event) => {
             event.stopImmediatePropagation();
@@ -10,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("blur", ".section_block .section_title.editable", disableEditSectionTitle)
         .on("blur", "#document_description", (event) => {
             let update_value = event.target.innerText;
-            updateDocumentationData("document_description", encodeURI(update_value));
+            updateDocumentationData("description", update_value);
         })
         .on("click", ".duplicate_icon", duplicateSection)
         .on("click", ".remove_icon", setRemoveSectionBlock)
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".section_block", redirectToEditSection)
         .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
+        .on("click", ".change_privacy_yes_btn", submitDocumentationPrivacy)
         .on("keydown", ".section_block .section_title", (event) => editSectionTitle(event, true))
         ;
 
@@ -25,6 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         visible_screen_height = document.documentElement.clientHeight;
         setSectionsContentHeight();
     })
+
     Sortable.create(document.querySelector(".section_container"), {
         handle: ".drag_handle",
         onEnd: () => {
@@ -42,6 +45,42 @@ document.addEventListener("DOMContentLoaded", async () => {
         setSectionsContentHeight();
     });
 });
+
+function setSectionsContentHeight(){
+    let screen_height = visible_screen_height;
+    let documentation_header_props = ux(".documentation_header").self().getBoundingClientRect();
+    let documentation_details_props = ux("#documentation_details").self().getBoundingClientRect();
+    let header_offset = documentation_header_props.height;
+    let details_offset = documentation_details_props.height;
+    let is_sections_visible = (header_offset + (screen_height / 3)) < screen_height;
+    let sections_offset = (is_sections_visible) ? details_offset : 0;
+
+    ux("#documentation_details").conditionalClass("fixed", is_sections_visible);
+    ux("#sections_content").self().style.paddingTop = `${sections_offset}px`;
+}
+
+function documentDescriptionPlaceholder(){
+    let document_description = ux("#document_description");
+    document_description.on("input", (event) => {
+        if (!event.target.firstChild) {
+            document_description.append("<p>Add Description</p>");
+        } 
+        else if (event.target.firstChild.nodeName === "P") {
+            document_description.find("p").remove();
+        }
+
+        setSectionsContentHeight();
+    });
+    document_description.on("keydown", (event) =>{
+        setSectionsContentHeight();
+        
+        if(event.keyCode === 13){
+            let update_value = event.target.innerText;
+            updateDocumentationData("document_description", encodeURI(update_value));
+            event.target.blur();
+        }
+    })
+}
 
 function setSectionsContentHeight(){
     let screen_height = visible_screen_height;
@@ -209,46 +248,40 @@ function showMaterializeDropdown(event){
 
 /** TODO: Rework this function */
 function onChangeDocumentationPrivacy(event){
-    let toggle_switch = event.target;
+    let toggle_switch  = event.target;
     let document_title = toggle_switch.closest("#doc_title_access").querySelector("#doc_title").innerText;
-    let modal_type = document.querySelector(toggle_switch.checked? "#confirm_to_private" : "#confirm_to_public");
+    let modal_type     = document.querySelector(toggle_switch.checked? "#confirm_to_private" : "#confirm_to_public");
+    let initial_value  = null;
 
     if(toggle_switch.checked){
         ux(toggle_switch).attr("checked", "");
-    } else {
-        toggle_switch.removeAttribute("checked", "");
+        initial_value = false
     } 
-    showPrivacyModal(modal_type, document_title, toggle_switch);
+    else {
+        toggle_switch.removeAttribute("checked", "");
+        initial_value = true
+    }
+
+    showPrivacyModal(modal_type, document_title, toggle_switch, initial_value);
 }
 
-function showPrivacyModal(modal_type, document_title, toggle_switch){
+function showPrivacyModal(modal_type, document_title, toggle_switch, initial_value){
     M.Modal.getInstance(modal_type);
     var instance = M.Modal.getInstance(modal_type);
-    let invite_collaborator_btn = ux("#invite_collaborator_btn");
-    let switch_btn = ux(".switch_btn .toggle_text").self();
-    let is_private = null;
-    
-    const initial_checked_value = toggle_switch.checked;
     
     ux(modal_type)
-        .on("click", ".no_btn", () => {
-            if (toggle_switch.checked === initial_checked_value) {
-                toggle_switch.checked = !initial_checked_value;
-            }
-        })
-        .on("click", ".yes_btn", () => {
-            if (toggle_switch.checked !== initial_checked_value) {
-                toggle_switch.checked = initial_checked_value;
-            }
-            switch_btn.innerText = (toggle_switch.checked) ? "Private" : "Public";
-            invite_collaborator_btn.conditionalClass("hidden", !toggle_switch.checked);
-            is_private = (toggle_switch.checked) ? 1 : 0;
-        })
-        .find(".documentation_title").text(document_title) ;
+    .on("click", ".no_btn", () => {
+        toggle_switch.checked = initial_value;
+    })
+    .find(".documentation_title").text(document_title) ;
     instance.open();
    
-    ux("#change_document_privacy_form .update_value").val(is_private);
-    ux("#change_document_privacy_form").trigger("submit");
+    ux("#udpate_documentation_form .update_type").val("is_private");
+    ux("#udpate_documentation_form .update_value").val(toggle_switch.checked ? 1 : 0);
+}
+
+function submitDocumentationPrivacy(event){
+    ux("#udpate_documentation_form").trigger("submit");
 }
 
 function sortSections(event){
