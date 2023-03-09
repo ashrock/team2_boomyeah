@@ -1,0 +1,194 @@
+{
+    "documentations" : [
+        { "title" : "Employee Handbook", "is_private": 1, "collaborator_count": 15 },
+        { "title" : "Company Handout", "is_private": 1, "collaborator_count": 1 },
+        { "title" : "Accounting", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Marketing", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Engineering", "is_private": 1, "collaborator_count": 6 },
+        { "title" : "Product Team", "is_private": 1, "collaborator_count": 9 },
+        { "title" : "UI/UX", "is_private": 1, "collaborator_count": 9 },
+        { "title" : "Admissions", "is_private": 1, "collaborator_count": 9 },
+        { "title" : "Trainee", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Instructors", "is_private": 0, "collaborator_count": 0 },
+        { "title" : "Business Leads", "is_private": 1, "collaborator_count": 10 },
+        { "title" : "Intern", "is_private": 0, "collaborator_count": 0 }
+    ],
+    "section_outline" :  {
+        "document_title" : "Employee Handbook",
+        "document_description" : "This handbook replaces and supersedes all prior employee handbooks regarding employment or HR matters effective January 01, 2021. The policies and practices included in this handbook may be modified at any time. Your department has additional specific procedures for many of the general policies stated in the handbook. You are expected to learn your department's procedures and comply with them. You are also expected to conform to the professional standards of your occupation. Please direct any questions to your supervisor, department head, or to the Human Resources Management and Development Office.",
+        "sections" : [
+            "About Company",
+            "Terms of Employment",
+            "General Policies & Procedures",
+            "Compensation & Benefits",
+            "Career & Personnel Development",
+            "Important Notes"
+        ]
+    },
+    "collaborators" : [
+        { "name" : "KB Tonel", "email" : "ktonel@village88.com", "access_right" : "Owner" },
+        { "name" : "Michael Choi", "email" : "mchoi@village88.com", "access_right" : "Editor" },
+        { "name" : "Jhaver Gurtiza", "email" : "jgurtiza@village88.com", "access_right" : "Viewer" },
+        { "name" : "John Supsupin", "email" : "jsupsupin@village88.com", "access_right" : "Viewer" },
+        { "name" : "Jan Dreau Ganggangan", "email" : "jganggangan@village88.com", "access_right" : "Viewer" },
+        { "name" : "Jessie De Leon", "email" : "jdeleon@village88.com", "access_right" : "Viewer" },
+        { "name" : "Jovic Abengona", "email" : "jovicabengona@village88.com", "access_right" : "Viewer" }
+    ],
+    "section_pages" : {
+        "section_title": "About Company",
+        "section_description": "Village 88 Inc. is a US-Delaware corporation which focuses on incubating\ncompanies and providing IT consultancy services to companies in the US. V88 also has a remote branch in San Fernando, La Union,\nPhilippines registered in Securities and Exchange Commission as\n457Avenue Inc.\n\nVillage 88 Inc. was founded in 2011 while 457Avenue Inc. registered\nin the Philippines in 2013. It is the company’s vision to provide world-class IT education to\nbrilliant individuals with less IT-career opportunity due to lack of\nindustry experience or exposure. So far, Village 88, Inc. (V88) has\nproduced 30+ talented software engineers from the Philippines who\nnow worked with the company in incubating and launching\nbusinesses that bring a positive impact to the world.\n\nSince 2011, V88 has incubated Coding Dojo, Hacker Hero, Data\nCompass, and helped start numerous start-ups including Alumnify,\nSpotTrender, MatrixDS, and others.",
+        "pages": {
+            "page_1": [
+                {
+                    "tab_title": "Our Mission & Vision",
+                    "tab_description": "<p>Village 88's vision is to incubate and launch businesses that bring positive impact to the world. Since 2011, Village 88 has incubated Coding Dojo, Data Compass, Focus Tracker, and helped start numerous start-ups including Alumnify, SpotTrender, MatrixDS, and others.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Village88 Over The Years",
+                    "tab_description": "<p>In 2011, a group of computer science graduates from a prestigious university came together to start a small IT startup, focused on developing innovative software solutions for businesses. They named their company 'Village88' and began by offering custom software development services to small and medium-sized enterprises.\n\nAs the company gained more clients, they realized the potential of their technology and began to develop their own software products. In 2012, Village88 launched its first product, a cloud-based project management tool that quickly became popular among small businesses and freelancers.\n\nBy 2013, Village88 had attracted the attention of venture capitalists and secured a significant round of funding. With this funding, they were able to hire a larger team of engineers and expand their product line to include a range of business management software.\n\nIn 2015, Village88 made its first acquisition, a small startup that specialized in developing mobile apps. This move helped Village88 to expand their capabilities and offer a complete software suite to their customers.\n\nAs the company continued to grow, they began to focus on expanding their market reach. In 2017, Village88 opened an office in the United States, which helped them to gain a foothold in the American market. By 2018, Village88 had offices in several countries, and their software was being used by thousands of businesses worldwide.\n\nToday, Village88 is a leading provider of software solutions for businesses of all sizes. They continue to innovate and develop new products to meet the ever-changing needs of their customers. The company has also been recognized for its commitment to sustainability, and has been named one of the fastest-growing tech companies in the industry.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Career Responsibilities",
+                    "tab_description": "<p>Career responsibilities in an IT company can vary depending on the specific role and level of experience. However, some common responsibilities for IT professionals include designing, implementing, and maintaining computer systems and networks, troubleshooting and resolving technical issues, providing technical support and training to end users, and staying up-to-date with the latest technology trends and advancements. Additionally, IT professionals may also be responsible for managing and supervising other IT staff, as well as working closely with other departments within the company to ensure that technology systems are meeting the needs of the business. Overall, the goal of an IT professional is to ensure that the company's technology systems are running smoothly and efficiently, and that they are meeting the needs of the business.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Career Opportunities",
+                    "tab_description": "<p>Village 88 Training is designed to help you level up your coding skills in just 16 weeks and get hired faster by companies of your choice.\n\nThe training program we are offering to the world through Coding Dojo is now offered exclusively to Filipinos for a reasonable price: YOUR COMMITMENT.\n\nSince offering the training in 2020, our alums now work in over 25 companies in the Philippines and internationally and get hired within two months after graduating.</p>",
+                    "is_allow_comments": 0,
+                    "comments": [
+                        {
+                            "name": "Enola Holmes",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "5 mins.",
+                            "comment": "I was very interested in learning about how to develop websites, so I signed up for the coding bootcamp on Village 88. I really enjoyed attending the course and learned a lot during it. All of the material was presented very clearly and it was very easy to understand all of the information that was covered. At the end of the course, I was able to create a fully functional website on my own using the skills that I had learned during the class. I would recommend this bootcamp to anyone interested in learning how to develop websites. It was a great experience and I learned a lot from it.",
+                            "replies": [
+                                {
+                                    "name": "Sherlock Holmes",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "4 mins",
+                                    "comment": "Me too! I learned a lot of things about Ruby! I love using Ruby on Rails!"
+                                },
+                                {
+                                    "name": "Mycroft Holmes",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "3 mins",
+                                    "comment": "I enjoyed the code reviews because I was able to see my mistakes that I often overlook."
+                                },
+                                {
+                                    "name": "Fiora Laurent",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "3 mins",
+                                    "comment": "I'm happy to see your comments about the training. I just enrolled and our training will start next week. I'm so excited!"
+                                },
+                                {
+                                    "name": "Lux Crownguard",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "2 mins",
+                                    "comment": "I loved the MERN Stack course! I learned a lot from it which helped me land my job today!"
+                                },
+                                {
+                                    "name": "Ryze Greybeard",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "2 mins",
+                                    "comment": "PHP is the best of all!"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "James Wood",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "5 mins.",
+                            "comment": "Learning about website development has been a passion of mine for many years.",
+                            "replies": []
+                        },
+                        {
+                            "name": "Jane Doe",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "A day ago",
+                            "comment": "We will hire the right people and develop the world's best training programs.",
+                            "replies": [
+                                {
+                                    "name": "Enola Holmes",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "2 hrs.",
+                                    "comment": "I understood all of the topics very well by the end of the course."
+                                },
+                                {
+                                    "name": "Ben T. Lador",
+                                    "profile_picture_url": "sample_url",
+                                    "datetime": "Just an hour",
+                                    "comment": "highly recommend to anyone"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Ben T. Lador",
+                            "profile_picture_url": "sample_url",
+                            "datetime": "December 31, 2022",
+                            "comment": "The supervisors are amazing! They helped me a lot in improving my skills without spoon-feeding everything.",
+                            "replies": []
+                        }
+                    ]
+                },
+                {
+                    "tab_title": "The Village88 Standard",
+                    "tab_description": "",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "The Team",
+                    "tab_description": "",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Partners",
+                    "tab_description": "",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Testimonials",
+                    "tab_description": "",
+                    "is_allow_comments": 0,
+                    "comments": []
+                }
+            ],
+            "page_2": [
+                {
+                    "tab_title": "Village88 2012",
+                    "tab_description": "<p>Village 88's vision is to incubate and launch businesses that bring positive impact to the world.\n\nSince 2011, Village 88 has incubated Coding Dojo, Data Compass, Focus Tracker, and helped start numerous start-ups including Alumnify, SpotTrender, MatrixDS, and others.\n\nCoding Dojo was founded in 2012. Its first campus opened in Mountain View, CA, U.S.A. Then later campuses were opened in Bellevue Washington, Burbank California, Oakland California, Chicago Illinois, Washington DC, Tulsa Arizona, Dallas Texas, Boise Idaho, and Orange County California. \n\nCoding Dojo offers various coding curriculum to help people learn how to code in a fully immersive setting. Coding Dojo's learn platform, CRM, its website, and various tools were all built by the Village 88 team.\n\nData Compass is an assessment platform where hiring managers can know the Programming IQ of their developer candidates. Data Compass outperforms the market by achieving concurrent criterion validation for its Programming IQ assessment. \n\nIn psychometrics, concurrent criterion validation refers to a comparison between the measure in question and an outcome assessed at the same time. Data Compass completed its concurrent criterion validation study in March 2019.</p>",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Village88 2013",
+                    "tab_description": "",
+                    "is_allow_comments": 0,
+                    "comments": []
+                },
+                {
+                    "tab_title": "Village88 2014",
+                    "tab_description": "",
+                    "is_allow_comments": 0,
+                    "comments": []
+                }
+            ],
+            "page_3": [
+                {
+                    "tab_title": "Focus Tracker",
+                    "tab_description": "",
+                    "is_allow_comments": 0,
+                    "comments": []
+                }
+            ]
+        }
+    }
+}
