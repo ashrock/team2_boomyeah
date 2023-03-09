@@ -34,11 +34,11 @@
                     <div class="documentation_header">
                         <ul id="breadcrumb_list">
                             <li class="breadcrumb_item"><a href="admin_documentation.php">Documentation</a></li>
-                            <li class="breadcrumb_item active"><?= $document_data["document_title"] ?></li>
+                            <li class="breadcrumb_item active"><?= $document_data["title"] ?></li>
                         </ul>
                         <div class="divider"></div>
                         <div id="doc_title_access">
-                            <h1 id="doc_title"><?= $document_data["document_title"] ?></h1>
+                            <h1 id="doc_title"><?= $document_data["title"] ?></h1>
                             <!-- Switch -->     
                             <div class="switch switch_btn">
                                 <label for="set_privacy_switch">
@@ -47,10 +47,11 @@
                                     <span class="lever"></span>
                                 </label>
                             </div>
-                            <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn" href="#invite_collaborator_modal" data-document_id="<?= $document_data["document_id"] ?>">13 Collaborators</a>
+                            <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>">13 Collaborators</a>
                         </div>
-                        <p autofocus class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["document_description"] ?></p>
-                        <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
+                        <p autofocus class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["description"] ?></p>
+                        <form action="/sections/add" id="section_form" method="post">
+                            <input type="hidden" name="documentation_id" value="<?= $document_data["id"] ?>">
                             <input type="hidden" name="action" value="create_section">
                             <div class="group_add_section input-field">
                                 <input name="section_title" id="input_add_section" type="text" class="section_title validate">
@@ -63,23 +64,17 @@
                     </div>
                 </div>
                 <div id="sections_content">
+<?php if(count($sections)){ ?>
                     <div class="section_container" id="section_container">
-                        <?php
-                            if(count($sections_data["fetch_section_admin_data"])){
-                                foreach($sections_data["fetch_section_admin_data"] as $section_data){
-                                    load_view("../partials/section_block_partial.php", $section_data);
-                                }
-                            }
-                            else{
-                                //display if no sections
-                            }
-                        ?>
+                <?php $this->load->view("partials/section_block_partial.php", array("all_sections" => $sections)); ?>
                     </div>
-                    <div class="no_sections hidden">
+<?php } else { ?>
+                    <div class="no_sections">
                         <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                             alt="Empty Content Illustration">
                         <p>You have no sections yet</p>
                     </div>
+<?php } ?>
                 </div>
             </div>
         </div>
@@ -99,7 +94,7 @@
     <form id="remove_section_form" action="/sections/remove" method="POST" hidden>
         <input type="hidden" name="action" value="remove_section">
         <input type="hidden" id="remove_section_id" name="section_id" class="section_id">
-        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $documentation["id"] ?>">
+        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $document_data["id"] ?>">
     </form>
     <form id="update_section_form" action="/sections/update" method="POST" hidden>
         <input type="hidden" name="section_id" class="section_id" value="">
@@ -112,7 +107,7 @@
         <input type="hidden" name="action" value="duplicate_section">
     </form>
     <form id="udpate_documentation_form" action="/docs/update" method="POST" hidden>
-        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $documentation["id"] ?>">
+        <input type="hidden" name="documentation_id" class="documentation_id" value="<?= $document_data["id"] ?>">
         <input type="hidden" name="update_type" class="update_type" value="">
         <input type="hidden" name="update_value" class="update_value" value="">
     </form>

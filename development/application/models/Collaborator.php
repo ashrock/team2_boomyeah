@@ -59,6 +59,12 @@
             return $response_data;
         }
 
+        # DOCU: This function will create collaborator records
+        # Triggered by: (POST) docs/add_collaborators
+        # Requires: $params { document_id, collaborator_emails }
+        # Returns: { status: true/false, result: { html }, error: null }
+        # Last updated at: March 9, 2023
+        # Owner: Jovic
         public function addCollaborators($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -74,7 +80,7 @@
                 # Get documentation collaborators
                 $get_collaborators = $this->getCollaborators(array(
                     "get_type"   => "check_collaborators", 
-                    "get_values" => array("documentation_id" => $_POST["document_id"], "collaborator_emails" => $collaborator_emails)
+                    "get_values" => array("documentation_id" => $params["document_id"], "collaborator_emails" => $collaborator_emails)
                 ));
 
                 if($get_collaborators["status"]){
@@ -105,17 +111,46 @@
                         $existing_emails = json_decode($get_users["result"][0]["user_emails"], false);
 
                         # Remove existing users from collaborator_emails
-                        $new_users = array_diff($collaborator_emails, $existing_emails);
+                        $new_users = ($existing_emails) ? array_diff($collaborator_emails, $existing_emails) : $collaborator_emails;
 
                         # Create user record for emails that doesn't belong to existing users
+                        if($new_users){
+                            $create_users = $this->User->createUsers(array("new_users_email" => $new_users, "collaborator_emails" => $collaborator_emails));
 
+                            if($create_users["status"]){
+                                # Collect ids of new and existing users and create collaborator record
+                                $user_ids              = $create_users["result"]["ids"];
+                                $values_clause         = array();
+                                $collaborator_level_id = COLLABORATOR_LEVEL["VIEWER"];
 
-                        # TODO: Collect id of existing users and newly created users and create collaborator record 
+                                foreach($user_ids as $user_id){
+                                    array_push($values_clause, "({$user_id}, {$_SESSION['workspace_id']}, {$params["document_id"]}, {$collaborator_level_id}, NOW(), NOW())");
+                                }
 
-                        $response_data["result"]["collaborator_emails"] = $collaborator_emails;
-                        $response_data["result"]["existing_emails"]     = $existing_emails;
-                        $response_data["result"]["unique_emails"]       = $new_users;
-                        $response_data["status"] = true;
+                                $values_clause = implode(", ", $values_clause);
+
+                                $create_users = $this->db->query("INSERT INTO collaborators (user_id, workspace_id, documentation_id, collaborator_level_id, created_at, updated_at) VALUES {$values_clause};");
+
+                                if($create_users){
+                                    # Generate html for collaborators
+                                    $get_collaborators = $this->db->query("
+                                        SELECT
+                                            users.id, users.email,
+                                            collaborators.id AS collaborator_id, collaborators.collaborator_level_id
+                                        FROM users
+                                        INNER JOIN collaborators ON collaborators.user_id = users.id
+                                        WHERE users.id IN ?;
+                                    ", array($user_ids));
+
+                                    if($get_collaborators){
+                                        $response_data["status"]         = true;
+                                        $response_data["result"]["html"] = $this->load->view("partials/invited_user_partial.php", array("collaborators" => $get_collaborators->result_array()), true);
+
+			                            $this->db->trans_complete();
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

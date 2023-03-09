@@ -160,7 +160,7 @@ function onSubmitAddCollaboratorsForm(event){
                 ux(dropdown_element).removeClass("added_collaborator");
             });
         } else {
-
+            alert(response_data.error);
         }
     }, "json");
 

@@ -76,8 +76,6 @@ $route['sections/update']['POST']    = 'sections/updateSection';
 $route['sections/duplicate']['POST'] = 'sections/duplicateSection';
 $route['sections/remove']['POST']    = 'sections/removeSection';
 
-
-
 /* User Documentation Routes */
 $route['docs']['GET']        = 'documentations/userDocumentations';
 $route['docs/(:any)']['GET'] = 'documentations/userDocumentation/$1';
