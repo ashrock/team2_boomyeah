@@ -1,6 +1,7 @@
 (
 function(){
     let target_index = 0;
+    let keyup_timeout = null;
     document.addEventListener("DOMContentLoaded", async ()=> {
         if(!ux("#add_page_tabs_btn").self()){
             ux("#prev_page_btn").on("click", ()=> { openSectionTab(-1) })
@@ -14,9 +15,12 @@ function(){
             .on("click", ".section_page_tab .tab_title", (event) =>{
                 openTabLink(event, true);
             })
-            .on("click", ".section_page_tabs .remove_tab_btn", showConfirmaRemoveTab)
+            .on("click", ".section_page_tabs .remove_tab_btn", showConfirmRemoveTab)
             .on("keyup", ".section_page_content .tab_title", (event) => {
                 onUpdateTabTitle(event);
+            })
+            .on("change", ".is_comments_allowed", (event) => {
+                ux(event.target.closest(".update_module_tab_form")).trigger("submit");
             })
 
         let modals = document.querySelectorAll('.modal');
@@ -51,7 +55,12 @@ function(){
         ux(`.page_tab_item[data-tab_id="${tab_id}"] a`).text(tab_title_value);
         
         if(tab_title.value.length > 0){
-            saveTabChanges(section_page_tab);
+            /* saveTabChanges(section_page_tab); */
+            clearTimeout(keyup_timeout);
+
+            keyup_timeout = setTimeout(() => {
+                ux(tab_title.closest(".update_module_tab_form")).trigger("submit");
+            }, 1000);
         }
     }
 
@@ -108,14 +117,16 @@ function(){
         }
     }
 
-    function showConfirmaRemoveTab(event){
+    function showConfirmRemoveTab(event){
         event.stopImmediatePropagation();
         let remove_tab_btn = event.target;
         let tab_item = remove_tab_btn.closest(".page_tab_item");
         let tab_title = tab_item.innerText.substring(0, tab_item.innerText.length - 1);
         let tab_id = ux(tab_item).data("tab_id");
+        let module_id = ux(tab_item).data("module_id");
         let remove_tab_form = ux("#remove_tab_form");
         remove_tab_form.find(".tab_id").val( tab_id.replace("tab_", "") );
+        remove_tab_form.find(".module_id").val( module_id );
         
         let remove_tab_modal = ux("#confirm_remove_tab_modal");
         remove_tab_modal.find(".tab_title").text(tab_title.trim());

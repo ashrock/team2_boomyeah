@@ -55,6 +55,7 @@
                         </div>
                     </div>
                 </div>
+            </form>
                 <div id="section_pages">
                     <?php
                         $module_id = time() + rand();
@@ -75,7 +76,6 @@
                         load_view("../partials/section_page_content_partial.php", $modules_array);
                     ?>
                 </div>
-            </form>
             <form id="add_module_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
                 <input type="hidden" name="action" value="add_module">
                 <button id="add_page_tabs_btn" type="submit">+ Add New</button>

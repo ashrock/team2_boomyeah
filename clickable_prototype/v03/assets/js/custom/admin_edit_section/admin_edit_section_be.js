@@ -7,9 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     ux("body")
-        .on("submit", "#add_module_form", addNewSectionContent)
+        .on("submit", "#add_module_form", addNewModuleContent)
         .on("submit", "#add_module_tab_form", onAddModuleTab)
         .on("submit", "#remove_tab_form", onConfirmRemoveTab)
+        .on("submit", ".update_module_tab_form", onUpdateModuleTab)
         .on("click", ".section_page_tabs .add_page_btn", addNewTab);
 });
     
@@ -32,7 +33,7 @@ function saveTabChanges(section_page_tab){
     }, 480);
 }
 
-function addNewSectionContent(event){
+function addNewModuleContent(event){
     event.preventDefault();
     let section_pages = ux("#section_pages");
     
@@ -47,6 +48,7 @@ function addNewSectionContent(event){
             setTimeout(() => {
                 initializeRedactor(`${ module_id } .section_page_tab .tab_content`);
             });
+
             /* Scroll to bottom */
             window.scrollTo(0, document.body.scrollHeight);
         }
@@ -95,33 +97,60 @@ function addNewTab(event){
     add_module_tab_form.trigger("submit");
 }
 
+function onUpdateModuleTab(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    
+    let post_form = ux(event.target);
+    let section_page_tab = post_form.closest(".section_page_tab");
+    clearTimeout(saving_timeout);
+    M.Toast.dismissAll();
+    
+    saving_timeout = setTimeout(() => {        
+        clearTimeout(toast_timeout);
+        section_page_tab.find(".saving_indicator").addClass("show");
+
+        ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+            section_page_tab.find(".saving_indicator").removeClass("show");
+            let toast_message = (response_data.status) ? "Changes Saved" : "Saving Failed";
+            
+            toast_timeout = setTimeout(() => {
+                M.toast({
+                    html: toast_message,
+                    displayLength: 2800,
+                });
+            }, 800);
+        }, "json");
+    }, 480);
+    
+    
+    return false;
+}
+
 function onConfirmRemoveTab(event){
     event.stopImmediatePropagation();
     event.preventDefault();
     
-    let raw_form_data = new FormData(event.target);
-    let post_data = new Object();
+    let post_form = ux(event.target);
     
-    /** Simulate Form Submission */
-    setTimeout(() => {
-        for (const [key, value] of raw_form_data) {
-            console.log(`${key}: ${value}`);
-            post_data[key] = value;
-        }
+    ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+        if(response_data.status){
         
-        /** Do these after form submission */
-        let tab_item = ux(`.page_tab_item[data-tab_id="tab_${post_data.tab_id}"]`);
-        removeSectionTab(tab_item.self());
-    }, 148);
-
+            /** Do these after form submission */
+            let tab_item = ux(`.page_tab_item[data-tab_id="tab_${response_data.result.tab_id}"]`);
+            removeModuleTab(tab_item.self());
+        }
+    }, "json");
+    
     return false;
 }
     
-function removeSectionTab(tab_item){
+function removeModuleTab(tab_item){
     let section_page_content = tab_item.closest(".section_page_content");
     let section_page_tabs = tab_item.closest(".section_page_tabs");
     let tab_id = ux(tab_item).data("tab_id");
-    
+    let module_id = ux(tab_item).data("module_id");
+    let is_active = ux(tab_item).self().classList.contains("active");
     addAnimation(tab_item, "animate__fadeOut");
     addAnimation(ux(`#${tab_id}`).self(), "animate__fadeOut");
 
@@ -130,10 +159,12 @@ function removeSectionTab(tab_item){
         tab_item.remove();
         
         setTimeout(() => {
-            if(ux(section_page_tabs).findAll(".page_tab_item a").length === 0){
+            if(ux(section_page_tabs).findAll(".page_tab_item").length === 0){
                 section_page_content.remove();
-            }else{
-                ux(section_page_tabs).findAll(".page_tab_item a")[0].click();
+            } else {
+                if(is_active){
+                    ux(section_page_tabs.querySelectorAll(".page_tab_item")[0]).find("a").self().click();
+                }
             }
         });
     }, 148);

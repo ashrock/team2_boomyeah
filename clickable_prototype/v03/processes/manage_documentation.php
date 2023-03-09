@@ -408,7 +408,7 @@
                         array(
                             "id" => $tab_id,
                             "title" => "Tab ". $tab_id ." Module ". $module_id,
-                            "content" => "Sample",
+                            "content" => "Add desciption",
                             "module_id" => $module_id,
                             "is_comments_allowed" => 0
                         )
@@ -444,6 +444,27 @@
                     "html_tab"      => get_include_contents("../views/partials/page_tab_item_partial.php", $view_data),
                     "html_content"  => get_include_contents("../views/partials/section_page_tab_partial.php", $view_data),
                 );
+                break;
+            }
+
+            case "remove_module_tab": {
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "module_id" => $_POST["module_id"],
+                    "tab_id"    => $_POST["tab_id"],
+                );
+
+                /** TODO: if there are no module_tab records, delete the module record   */
+                break;
+            }
+
+            case "update_module_tab": {
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "module_id" => $_POST["module_id"],
+                    "tab_id"    => $_POST["tab_id"],
+                );
+
                 break;
             }
         }
