@@ -124,6 +124,34 @@
 			echo json_encode($response_data);
 		}
 
+        # DOCU: This function will call reOrderSection() from Section model
+		# Triggered by: (POST) sections/reorder
+		# Requires: $_POST["documentation_id"], $_POST["sections_order"]
+		# Returns: { status: true/false, result: {}, error: null }
+		# Last updated at: Mar. 9, 2023
+		# Owner: Erick
+		public function reOrderSection(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
+
+				if(isset($_POST["documentation_id"]) && isset($_POST["sections_order"])){
+					# Process reordering of section
+					$response_data = $this->Section->reOrderSection($_POST);
+				}
+				else{
+					$response_data["error"] = "Documentation id and section order are required.";
+				}
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+
 		# DOCU: This function will check if user is allowed to visit a page or do an action.
 		# Triggered by: GET and POST functions in Documentations Controller
 		# Requires: $_SESSION["user_level_id"]; $is_admin_page

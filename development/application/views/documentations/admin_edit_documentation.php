@@ -82,7 +82,7 @@
         <div id="confirm_to_remove" class="modal">
             <div class="modal-content">
                 <h4>Confirmation</h4>
-                <p>Are you sure you want to remove “<span id="section_title"></span>”? This will also remove all the modules and tabs in the section.</p>
+                <p>Are you sure you want to remove `<span id="section_title_to_remove"></span>`? This will also remove all the modules and tabs in the section.</p>
             </div>
             <div class="modal-footer">
                 <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
@@ -110,9 +110,10 @@
         <input type="hidden" name="update_type" class="update_type" value="">
         <input type="hidden" name="update_value" class="update_value" value="">
     </form>
-    <form id="reorder_sections_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
+    <form id="reorder_sections_form" action="/sections/reorder" method="POST">
         <input type="hidden" name="action" value="reorder_sections">
         <input type="hidden" id="sections_order" name="sections_order">
+        <input type="hidden" id="documentation_id" name="documentation_id" value="<?= $document_data["id"] ?>">
     </form>
     <?php $this->load->view("partials/confirm_invite_modals.php"); ?>
     <?php $this->load->view("partials/confirm_documentation_modals.php"); ?>
