@@ -1,1 +1,83 @@
-{"fetch_section_admin_data":[{"id":1,"documentation_id":1,"user_id":1,"title":"Thirty-One Million","description":""},{"id":2,"documentation_id":2,"user_id":2,"title":"Thirty-Two Million","description":""},{"id":3,"documentation_id":3,"user_id":3,"title":"Thirty-Three Million","description":""},{"id":4,"documentation_id":4,"user_id":4,"title":"Thirty-Four Million","description":""},{"id":5,"documentation_id":5,"user_id":5,"title":"Thirty-Five Million","description":""},{"id":1678258792,"documentation_id":1678258792,"user_id":1678258792,"title":"test","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":1678258970,"documentation_id":1678258970,"user_id":1678258970,"title":"trs","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":1678258981,"documentation_id":1678258981,"user_id":1678258981,"title":"atrst","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":1678263116,"documentation_id":1678263116,"user_id":1678263116,"title":"ads","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":1678263369,"documentation_id":1678263369,"user_id":1678263369,"title":"test","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":1678263435,"documentation_id":1678263435,"user_id":1678263435,"title":"test","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":1678263448,"documentation_id":1678263448,"user_id":1678263448,"title":"new field","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":1678263453,"documentation_id":1678263453,"user_id":1678263453,"title":"test","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":1678263496,"documentation_id":1678263496,"user_id":1678263496,"title":"dasdsa","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":1678263515,"documentation_id":1678263515,"user_id":1678263515,"title":"dasdsa","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":1678263535,"documentation_id":1678263535,"user_id":1678263535,"title":"testing","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."}],"fetch_section_user_data":[{"id":1,"documentation_id":1,"user_id":1,"title":"About Company","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":2,"documentation_id":2,"user_id":2,"title":"Terms of Employment","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":3,"documentation_id":3,"user_id":3,"title":"General Policies & Procedures","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":4,"documentation_id":4,"user_id":4,"title":"Compensation & Benefits","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":5,"documentation_id":5,"user_id":5,"title":"Career & Personal Development","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."},{"id":6,"documentation_id":6,"user_id":6,"title":"Important Notes","description":"The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."}]}
+{
+    "fetch_section_admin_data":[
+        {
+            "id": 1,
+            "documentation_id": 1,
+            "user_id": 1,
+            "title": "Thirty-One Million",
+            "description": ""
+        },
+        {
+            "id": 2,
+            "documentation_id": 2,
+            "user_id": 2,
+            "title": "Thirty-Two Million",
+            "description": ""
+        },
+        {
+            "id": 3,
+            "documentation_id": 3,
+            "user_id": 3,
+            "title": "Thirty-Three Million",
+            "description": ""
+        },
+        {
+            "id": 4,
+            "documentation_id": 4,
+            "user_id": 4,
+            "title": "Thirty-Four Million",
+            "description": ""
+        },
+        {
+            "id": 5,
+            "documentation_id": 5,
+            "user_id": 5,
+            "title": "Thirty-Five Million",
+            "description": ""
+        }
+    ],
+    "fetch_section_user_data":[
+        {
+            "id": 1,
+            "documentation_id": 1,
+            "user_id": 1,
+            "title": "About Company",
+            "description": "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
+        },
+        {
+            "id": 2,
+            "documentation_id": 2,
+            "user_id": 2,
+            "title": "Terms of Employment",
+            "description": "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
+        },
+        {
+            "id": 3,
+            "documentation_id": 3,
+            "user_id": 3,
+            "title": "General Policies & Procedures",
+            "description": "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
+        },
+        {
+            "id": 4,
+            "documentation_id": 4,
+            "user_id": 4,
+            "title": "Compensation & Benefits",
+            "description": "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
+        },
+        {
+            "id": 5,
+            "documentation_id": 5,
+            "user_id": 5,
+             "title": "Career & Personal Development",
+            "description": "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
+        },
+        {
+            "id": 6,
+            "documentation_id": 6,
+            "user_id": 6,
+            "title": "Important Notes",
+            "description": "The difference between set() and append() is that if the specified key already exists, set() will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values."
+        }
+    ]
+}

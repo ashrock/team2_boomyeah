@@ -255,6 +255,7 @@
                 file_put_contents($sections_data_file_path, json_encode($sections_data));
  
                 $response_data["status"] = true;
+                $response_data["section_id"] = $new_section_data["id"];
                 $response_data["result"]["html"] = get_include_contents("../views/partials/section_block_partial.php", $new_section_data);
                 break;
             }

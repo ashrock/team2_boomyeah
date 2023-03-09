@@ -77,9 +77,8 @@ function documentDescriptionPlaceholder(){
             event.target.blur();
         }
     })
-    
-    document_description.append("<p>Add Description</p>");
 }
+
 function updateDocumentationData(update_type, update_value){
     let udpate_documentation_form = ux("#udpate_documentation_form");
     udpate_documentation_form.find(".update_type").val(update_type);
@@ -158,14 +157,10 @@ function duplicateSection(event){
 
 function setRemoveSectionBlock(event) {
     const section    = event.target;
-    /* const section_id = section.getAttribute("data-section_id");
-    const section_title = section.getAttribute("data-section_title"); */
     let section_id = ux(section).data("section_id");
     let section_title = ux(section).data("section_title");
-    /* document.getElementById("section_title_to_remove").innerText = section_title;
-    document.getElementById("remove_section_id").value = section_id; */
     ux("#section_title_to_remove").text(section_title);
-    ux("remove_section_id").val(section_id);
+    ux("#remove_section_id").val(section_id);
     let remove_modal = document.querySelector("#confirm_to_remove");
     var instance = M.Modal.getInstance(remove_modal);
     instance.open();
