@@ -44,6 +44,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="<?= add_file("assets/js/vendor/Sortable.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/vendor/ux.lib.js") ?>"></script>
+    <script src="<?= add_file("assets/js/constants.js") ?>"></script>
 </head>
 <body>
 
@@ -53,50 +54,59 @@
     <div id="invite_modal"><?php include_once("../partials/invite_modal.php"); ?></div>
     <div id="wrapper">
         <div class="container">
-            <ul id="breadcrumb_list">
-                <li class="breadcrumb_item"><a href="admin_documentation.php">Documentation</a></li>
-                <li class="breadcrumb_item active"><?= $document_data["document_title"] ?></li>
-            </ul>
-            <div class="divider"></div>
-            <div id="doc_title_access">
-                <h1 id="doc_title"><?= $document_data["document_title"] ?></h1>
-                <!-- Switch -->     
-                <div class="switch switch_btn">
-                    <label for="set_privacy_switch">
-                        <span class="toggle_text"><?= $document_data["is_private"] ? "Private" : "Public" ?></span>
-                        <input class="toggle_switch" type="checkbox" id="set_privacy_switch" <?= $document_data["is_private"] ? "checked" : "" ?>>
-                        <span class="lever"></span>
-                    </label>
+            <div id="documentations_container">
+                <div id="documentation_details">
+                    <div class="documentation_placeholder"></div>
+                    <div class="documentation_header">
+                        <ul id="breadcrumb_list">
+                            <li class="breadcrumb_item"><a href="admin_documentation.php">Documentation</a></li>
+                            <li class="breadcrumb_item active"><?= $document_data["document_title"] ?></li>
+                        </ul>
+                        <div class="divider"></div>
+                        <div id="doc_title_access">
+                            <h1 id="doc_title"><?= $document_data["document_title"] ?></h1>
+                            <!-- Switch -->     
+                            <div class="switch switch_btn">
+                                <label for="set_privacy_switch">
+                                    <span class="toggle_text"><?= $document_data["is_private"] ? "Private" : "Public" ?></span>
+                                    <input class="toggle_switch" type="checkbox" id="set_privacy_switch" <?= $document_data["is_private"] ? "checked" : "" ?>>
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+                            <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn" href="#invite_collaborator_modal" data-document_id="<?= $document_data["document_id"] ?>">13 Collaborators</a>
+                        </div>
+                        <p autofocus class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["document_description"] ?></p>
+                        <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
+                            <input type="hidden" name="action" value="create_section">
+                            <div class="group_add_section input-field">
+                                <input name="section_title" id="input_add_section" type="text" class="section_title validate">
+                                <label for="input_add_section">Add Section</label>
+                            </div>
+                        </form>
+                        <div class="section_header">
+                            <h2>Sections</h2>
+                        </div>
+                    </div>
                 </div>
-                <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn" href="#invite_collaborator_modal" data-document_id="<?= $document_data["document_id"] ?>">13 Collaborators</a>
-            </div>
-            <p autofocus class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["document_description"] ?></p>
-            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" id="section_form" method="post">
-                <input type="hidden" name="action" value="create_section">
-                <div class="group_add_section input-field">
-                    <input name="section_title" id="input_add_section" type="text" class="section_title validate">
-                    <label for="input_add_section">Add Section</label>
+                <div id="sections_content">
+                    <div class="section_container" id="section_container">
+                        <?php
+                            if(count($sections_data["fetch_section_admin_data"])){
+                                foreach($sections_data["fetch_section_admin_data"] as $section_data){
+                                    load_view("../partials/section_block_partial.php", $section_data);
+                                }
+                            }
+                            else{
+                                //display if no sections
+                            }
+                        ?>
+                    </div>
+                    <div class="no_sections hidden">
+                        <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
+                            alt="Empty Content Illustration">
+                        <p>You have no sections yet</p>
+                    </div>
                 </div>
-            </form>
-            <div class="section_header">
-                <h2>Sections</h2>
-            </div>
-            <div class="section_container" id="section_container">
-                <?php
-                    if(count($sections_data["fetch_section_admin_data"])){
-                        foreach($sections_data["fetch_section_admin_data"] as $section_data){
-                            load_view("../partials/section_block_partial.php", $section_data);
-                        }
-                    }
-                    else{
-                        //display if no sections
-                    }
-                ?>
-            </div>
-            <div class="no_sections hidden">
-                <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
-                    alt="Empty Content Illustration">
-                <p>You have no sections yet</p>
             </div>
         </div>
     </div>
