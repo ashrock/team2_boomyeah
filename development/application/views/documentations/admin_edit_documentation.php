@@ -47,7 +47,7 @@
                                     <span class="lever"></span>
                                 </label>
                             </div>
-                            <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>"><?= $document_data["cache_collaborators_count"] ?> Collaborators</a>
+                            <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>" data-cache_collaborators_count="<?= $document_data["cache_collaborators_count"] ?>"><?= $document_data["cache_collaborators_count"] + 1 ?> Collaborators</a>
                         </div>
                         <p autofocus class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["description"] ?></p>
                         <form action="/sections/add" id="section_form" method="post">

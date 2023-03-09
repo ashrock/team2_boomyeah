@@ -26,11 +26,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".invite_collaborators_btn", function(event){
             event.stopImmediatePropagation();
             event.preventDefault();
-            let document_id = ux(event.target).data("document_id");
-            let get_collaborators_form = ux("#get_collaborators_form");
-            let add_collaborators_form = ux("#add_collaborators_form");
+            let document_id               = ux(event.target).data("document_id");
+            let cache_collaborators_count = ux(event.target).data("cache_collaborators_count");
+            let get_collaborators_form    = ux("#get_collaborators_form");
+            let add_collaborators_form    = ux("#add_collaborators_form");
+
             get_collaborators_form.find(".document_id").val(document_id);
             add_collaborators_form.find(".document_id").val(document_id);
+            add_collaborators_form.find(".cache_collaborators_count").val(cache_collaborators_count);
             get_collaborators_form.trigger("submit");
         })
         .on("change", ".invited_user_role", setRoleChangeAction)
@@ -154,6 +157,12 @@ function onSubmitAddCollaboratorsForm(event){
         
         if(response_data.status){
             await ux("#invited_users_wrapper").append(response_data.result.html);
+
+            let invite_collaborator_btn = document.getElementById("invite_collaborator_btn");
+            let collaborator_count      = parseInt(response_data.result.cache_collaborators_count) + 1;
+
+            invite_collaborator_btn.innerHTML = (`${collaborator_count} Collaborators`);
+            invite_collaborator_btn.dataset.cache_collaborators_count = collaborator_count;
             
             ux("#invited_users_wrapper").findAll(".added_collaborator").forEach(dropdown_element => {
                 M.FormSelect.init(dropdown_element);
