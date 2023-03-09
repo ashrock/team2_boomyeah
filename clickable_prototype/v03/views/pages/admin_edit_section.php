@@ -25,6 +25,7 @@
     <link rel="shortcut icon" href="<?= add_file("assets/images/favicon.ico") ?>" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <link rel="stylesheet" href="<?= add_file("assets/css/vendor/redactorx.min.css") ?>">
     <link rel="stylesheet" href="<?= add_file("assets/css/admin_edit_section.css") ?>">
@@ -36,7 +37,9 @@
     <div id="main_navigation"><?php include_once("../partials/main_navigation.php"); ?></div>
     <div id="wrapper" class="container">
         <div id="edit_section_content">
-            <form action="#" method="POST" id="edit_section_form">
+            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" id="edit_section_form">
+                <input type="hidden" name="action" value="update_section">
+                <input type="hidden" name="section_id" value="section_id" value="">
                 <div id="section_summary">
                     <div class="breadcrumbs">
                         <ul id="breadcrumbs_list">

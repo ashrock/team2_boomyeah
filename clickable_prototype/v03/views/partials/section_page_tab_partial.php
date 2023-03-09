@@ -1,6 +1,10 @@
+<?php
+    /** DOCU: Temp fix for CPT issues when editing module tab details */
+    $base_url = explode("views", $_SERVER["HTTP_REFERER"])[0];
+?>
 <?php foreach($module_tabs_json as $module_tab) { ?>
     <div class="section_page_tab show" id="tab_<?= $module_tab["id"] ?>">
-        <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" class="update_module_tab_form" method="POST">
+        <form action="<?= $base_url ?>processes/manage_documentation.php" class="update_module_tab_form" method="POST">
             <input type="hidden" name="action" value="update_module_tab">
             <input type="hidden" name="module_id" value="<?= $module_tab["module_id"] ?>" class="module_id">
             <input type="hidden" name="tab_id" value="<?= $module_tab["id"] ?>" class="tab_id">

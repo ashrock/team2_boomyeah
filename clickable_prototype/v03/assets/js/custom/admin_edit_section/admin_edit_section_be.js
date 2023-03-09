@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     ux("body")
+        .on("submit", "#edit_section_form", onEditSectionData)
         .on("submit", "#add_module_form", addNewModuleContent)
         .on("submit", "#add_module_tab_form", onAddModuleTab)
         .on("submit", "#remove_tab_form", onConfirmRemoveTab)
@@ -17,6 +18,20 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("submit", ".update_module_tab_form", onUpdateModuleTab)
         .on("click", ".section_page_tabs .add_page_btn", addNewTab);
 });
+
+function onEditSectionData(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    let post_form = ux(event.target);
+    
+    ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+        if(!response_data.status){
+            alert("Error saving module data")
+        }
+    }, "json");
+    
+    return false;
+}
     
 function saveTabChanges(section_page_tab){
     clearTimeout(saving_timeout);
@@ -76,7 +91,7 @@ function onAddModuleTab(event){
             section_page_content.append(response_data.result.html_content);
             section_page_tabs.append(response_data.result.html_tab);
             /** Insert New tab */
-            addAnimation(ux(module_tab_id).self(), "animate__zoomIn");
+            addAnimation(ux(module_tab_id).self(), "animate__fadeIn");
             section_page_tabs.self().append(add_page_tab.self());
             
             setTimeout(() => {
@@ -188,7 +203,7 @@ function removeModuleTab(tab_item){
                 reorderModuleTabs(section_page_tabs);
             }
         });
-    }, 148);
+    }, 248);
 }
     
 function initializeRedactor(selector){

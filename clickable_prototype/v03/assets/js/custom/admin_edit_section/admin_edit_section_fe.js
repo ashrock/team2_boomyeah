@@ -16,6 +16,13 @@ function(){
                 openTabLink(event, true);
             })
             .on("click", ".section_page_tabs .remove_tab_btn", showConfirmRemoveTab)
+            .on("keyup", "#section_short_description", (event) => {
+                clearTimeout(keyup_timeout);
+
+                keyup_timeout = setTimeout(() => {    
+                    ux("#edit_section_form").trigger("submit");
+                }, 800);
+            })
             .on("keyup", ".section_page_content .tab_title", (event) => {
                 onUpdateTabTitle(event);
             })
