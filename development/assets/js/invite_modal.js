@@ -28,7 +28,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             event.preventDefault();
             let document_id = ux(event.target).data("document_id");
             let get_collaborators_form = ux("#get_collaborators_form");
+            let add_collaborators_form = ux("#add_collaborators_form");
             get_collaborators_form.find(".document_id").val(document_id);
+            add_collaborators_form.find(".document_id").val(document_id);
             get_collaborators_form.trigger("submit");
         })
         .on("change", ".invited_user_role", setRoleChangeAction)

@@ -236,6 +236,23 @@
 			}
 		}
 
+		public function userDocumentation($documentation_id){
+			$documentation = $this->Documentation->getDocumentation($documentation_id);
+			
+			if($documentation["status"] && $documentation["result"]){
+				# Fetch sections
+				$this->load->model("Section");
+				$sections = $this->Section->getSections($documentation_id);
+
+				# TODO: FIX LATER
+				$this->load->view('documentations/admin_edit_documentation', array("documentation" => $documentation["result"], "sections" => $sections["result"]));
+			}
+			else{
+				# Confirm if we need to show error or just redirect back to dashboard
+				echo "Documentation doesn't exist";
+			}
+		}
+
 		# DOCU: This function will call getDocumentationsOrder from Workspace Model and prepare params needed when fetching documentations.
 		# Triggered by: adminDocumentations(), userDocumentations(), getDocumentations()
 		# Requires: $_SESSION["workspace_id", "user_id", "user_level_id"]

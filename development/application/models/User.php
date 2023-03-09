@@ -68,5 +68,24 @@
 
             return $response_data;
         }
+
+        public function getUsers($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $fields_to_select = isset($params["fields_to_select"]) ? $params["fields_to_select"] : "*";
+
+                $get_user = $this->db->query("SELECT {$fields_to_select} FROM users WHERE {$params['field_to_compare']} IN ?;", array($params["compare_values"]));
+
+                $response_data["result"] = $get_user->result_array();
+                
+                $response_data["status"] = true;
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
     }
 ?>
