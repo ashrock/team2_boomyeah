@@ -69,6 +69,7 @@ $route['docs/reorder']['POST']   = 'workspaces/updateWorkspace';
 /* POST | Admin Edit Documentation Routs */
 $route['collaborators/add']['POST'] = 'collaborators/addCollaborators';
 $route['collaborators/get']['POST'] = 'collaborators/getCollaborators';
+$route['collaborators/update']['POST'] = 'collaborators/updateCollaborator';
 
 /* POST | Admin Section Routes */
 $route['sections/add']['POST']       = 'sections/addSection';

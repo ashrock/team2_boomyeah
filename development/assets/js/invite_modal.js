@@ -181,6 +181,7 @@ function setRoleChangeAction(event){
     let collaborator_email = invited_user.find(".invited_user_info").self().innerText;
     const selected_action = event.target.value;
     const invited_user_id = event.target.dataset.invited_user_id;
+    const collaborator_id = event.target.dataset.collaborator_id;
 
     if(selected_action === "remove"){
         let remove_invited_user_modal = document.querySelector("#confirm_to_remove_invited_user");
@@ -193,6 +194,7 @@ function setRoleChangeAction(event){
         // for changing role to viewer/editor in the backend
         let update_invited_user_form = ux("#update_invited_user_form");
         update_invited_user_form.find(".invited_user_id").val(invited_user_id);
+        update_invited_user_form.find(".collaborator_id").val(collaborator_id);
         update_invited_user_form.find(".email").val(collaborator_email);
         update_invited_user_form.find(".update_value").val(COLLABORATOR_LEVEL[selected_action]);
         update_invited_user_form.trigger("submit");

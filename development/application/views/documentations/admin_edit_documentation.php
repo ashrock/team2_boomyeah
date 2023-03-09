@@ -64,17 +64,16 @@
                     </div>
                 </div>
                 <div id="sections_content">
-<?php if(count($sections)){ ?>
                     <div class="section_container" id="section_container">
-                <?php $this->load->view("partials/section_block_partial.php", array("all_sections" => $sections)); ?>
+                        <?php if(count($sections)){ ?>
+                            <?php $this->load->view("partials/section_block_partial.php", array("all_sections" => $sections)); ?>
+                        <?php } ?>
                     </div>
-<?php } else { ?>
-                    <div class="no_sections">
+                    <div class="no_sections <?php (!count($sections)) ? "hidden" : "" ?>">
                         <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                             alt="Empty Content Illustration">
                         <p>You have no sections yet</p>
                     </div>
-<?php } ?>
                 </div>
             </div>
         </div>

@@ -189,6 +189,35 @@
             return $response_data;
         }
 
+        # DOCU: This function will update collaborator record
+        # Triggered by: (POST) collaborators/update
+        # Requires: $params { invited_user_id, collaborator_id, update_type, update_value, email }
+        # Returns: { status: true/false, result: { collaborator_level_id }, error: null }
+        # Last updated at: March 9, 2023
+        # Owner: Jovic
+        public function updateCollaborator($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try{
+			    $this->db->trans_start();
+
+                $update_collaborator = $this->db->query("UPDATE collaborators SET collaborator_level_id = ?, updated_at = NOW() WHERE id = ?;", array($params["update_value"], $params["collaborator_id"]));
+
+                if($update_collaborator){
+                    $response_data["status"] = true;
+                    $response_data["result"]["collaborator_level_id"] = $params["update_value"];
+
+                    $this->db->trans_complete();
+                }
+            }
+            catch (Exception $e) {
+			    $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
         # DOCU: This function will delete collaborators depending on $params given.
         # Triggered by: (POST) docs/remove
         # Requires: $params (e.g. id, documentation_id, etc.)
