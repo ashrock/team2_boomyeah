@@ -423,6 +423,29 @@
                 );
                 break;
             }
+            case "add_module_tab" : {
+                $module_id = $_POST["module_id"];
+                $tab_id = time() + rand();
+                $module_tabs_json = array(
+                    array(
+                        "id" => $tab_id,
+                        "title" => "Untitled Tab",
+                        "content" => "Add description",
+                        "module_id" => $module_id,
+                        "is_comments_allowed" => 0
+                    )
+                );
+                $view_data = array("module_tabs_json" => $module_tabs_json);
+
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "module_id"     => $module_id,
+                    "tab_id"        => $tab_id,
+                    "html_tab"      => get_include_contents("../views/partials/page_tab_item_partial.php", $view_data),
+                    "html_content"  => get_include_contents("../views/partials/section_page_tab_partial.php", $view_data),
+                );
+                break;
+            }
         }
     }
 

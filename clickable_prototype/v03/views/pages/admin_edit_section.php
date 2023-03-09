@@ -80,31 +80,11 @@
                 <input type="hidden" name="action" value="add_module">
                 <button id="add_page_tabs_btn" type="submit">+ Add New</button>
             </form>
+            <form id="add_module_tab_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+                <input type="hidden" name="action" value="add_module_tab">
+                <input type="hidden" name="module_id" class="module_id">
+            </form>
             <div id="clone_section_page">
-                <div class="section_page_content">
-                    <ul class="section_page_tabs">
-                        <li class="page_tab_item">
-                            <a href="#tab_">Untitled Tab</a>
-                            <button type="button" class="remove_tab_btn">&times;</button>
-                        </li>
-                        <li class="add_page_tab">
-                            <button class="add_page_btn">+</button>
-                        </li>
-                    </ul>
-                    <div class="section_page_tab">
-                        <input type="text" class="tab_title" value="Untitled Tab">
-                        <textarea class="tab_content">This is a description</textarea>
-                        <div class="tab_footer">
-                            <label for="allow_comments_" class="checkbox_label">
-                                <input type="checkbox" id="allow_comments_" name="allow_comments">
-                                <div class="checkbox_marker"></div>
-                                <span class="checkbox_text">Allow Comments</span>
-                            </label>
-                            <div class="row_placeholder"></div>
-                            <div class="saving_indicator">Saving...</div>
-                        </div>
-                    </div>
-                </div>
                 <?php include_once("../partials/clone_section_page.php"); ?>
             </div>
             <div id="modals_container">

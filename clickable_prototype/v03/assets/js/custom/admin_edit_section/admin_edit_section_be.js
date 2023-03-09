@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ux("body")
         .on("submit", "#add_module_form", addNewSectionContent)
+        .on("submit", "#add_module_tab_form", onAddModuleTab)
         .on("submit", "#remove_tab_form", onConfirmRemoveTab)
         .on("click", ".section_page_tabs .add_page_btn", addNewTab);
 });
@@ -54,36 +55,44 @@ function addNewSectionContent(event){
     return false
 }
 
+function onAddModuleTab(event){
+    event.preventDefault();
+    let post_form = ux(event.target);
+    
+    ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+        if(response_data.status){
+            let module_id = `#module_${ response_data.result.module_id }`;
+            let module_tab_id = `.module_tab_${ response_data.result.tab_id }`;
+            let tab_id = `#tab_${ response_data.result.tab_id }`;
+            let section_page_content = ux(module_id);
+            let section_page_tabs = ux(module_id).find(".section_page_tabs");
+            let add_page_tab = section_page_tabs.find(".add_page_tab");
+            section_page_content.append(response_data.result.html_content);
+            section_page_tabs.append(response_data.result.html_tab);
+
+            /** Insert New tab */
+            addAnimation(ux(module_tab_id).self(), "animate__zoomIn");
+            section_page_tabs.self().append(add_page_tab.self());
+            
+            setTimeout(() => {
+                /** Insert Add page tab btn at the end */
+                initializeRedactor(`${tab_id} .tab_content`);
+                
+                /** Auto click new tab */
+                ux(`${module_tab_id} a`).self().click();
+            });
+        }
+    }, "json");
+    
+    return false
+}
+
 function addNewTab(event){
     event.preventDefault();
-    let tab_item = event.target;
-    let add_page_tab = event.target.closest(".add_page_tab");
-    let section_page_content = ux(tab_item.closest(".section_page_content"));
-    let section_page_tabs_list = ux(tab_item.closest(".section_page_tabs"));
-
-    let page_tab_clone = ux("#clone_section_page .section_page_tab").clone();
-    let page_tab_item = ux("#clone_section_page .page_tab_item").clone();
-    let tab_id = `tab_${ new Date().getTime()}`;
-    page_tab_clone.self().id = tab_id;
-    section_page_content.self().append(page_tab_clone.self());
-    
-    page_tab_clone.find(".checkbox_label").attr("for", "allow_comments_"+ tab_id);
-    page_tab_clone.find("input[type=checkbox]").attr("id", "allow_comments_"+ tab_id);
-    
-    /** Insert New tab */
-    section_page_tabs_list.self().append(page_tab_item.self());
-    addAnimation(page_tab_item.self(), "animate__zoomIn");
-
-    /** Insert Add page tab btn at the end */
-    section_page_tabs_list.self().append(add_page_tab);
-    page_tab_item.self().setAttribute("data-tab_id", tab_id);
-    
-    setTimeout(() => {
-        initializeRedactor(`#${tab_id} .tab_content`);
-        
-        /** Auto click new tab */
-        page_tab_item.find("a").self().click();
-    });
+    let add_module_tab_form = ux("#add_module_tab_form");
+    let module_id = ux(event.target).data("module_id");
+    add_module_tab_form.find(".module_id").val(module_id);
+    add_module_tab_form.trigger("submit");
 }
 
 function onConfirmRemoveTab(event){
