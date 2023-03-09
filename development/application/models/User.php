@@ -45,7 +45,7 @@
         }
 
         # DOCU: This function will fetch User record
-        # Triggered by: (GET) docs/get_collaborators
+        # Triggered by: (GET) collaborators/get
         # Requires: $user_id
         # Returns: { status: true/false, result: user record, error: null }
         # Last updated at: Mar. 8, 2023
@@ -70,7 +70,7 @@
         }
 
         # DOCU: This function will fetch Users record based on array of compare values
-        # Triggered by: (POST) docs/add_collaborators
+        # Triggered by: (POST) collaborators/add
         # Requires: $params { fields_to_select, compare_values }
         # Returns: { status: true/false, result: users record, error: null }
         # Last updated at: Mar. 9, 2023
@@ -95,7 +95,7 @@
         }
 
         # DOCU: This function will create user records
-        # Triggered by: (POST) docs/add_collaborators
+        # Triggered by: (POST) collaborators/add
         # Requires: $params { new_users_email, collaborator_emails }
         # Returns: { status: true/false, result: { ids }, error: null }
         # Last updated at: Mar. 9, 2023

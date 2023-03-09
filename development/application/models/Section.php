@@ -109,8 +109,9 @@
                                 $new_section = $this->getSection($new_section_id);
 
                                 if($new_section["status"]){
-                                    $response_data["status"] = true;
-                                    $response_data["result"]["html"] = $this->load->view('partials/section_block_partial.php', array("all_sections" => array($new_section["result"])), true);
+                                    $response_data["status"]               = true;
+                                    $response_data["result"]["section_id"] = $new_section_id;
+                                    $response_data["result"]["html"]       = $this->load->view('partials/section_block_partial.php', array("all_sections" => array($new_section["result"])), true);
                                 }
                             }
                         }
