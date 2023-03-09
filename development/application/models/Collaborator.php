@@ -3,7 +3,7 @@
 
     class Collaborator extends CI_Model {
         # DOCU: This function will fetch the owner and collaborators of a documentation
-        # Triggered by: (GET) docs/get_collaborators
+        # Triggered by: (GET) collaborators/get
         # Requires: $documentation_id
         # Returns: { status: true/false, result: { owner, html }, error: null }
         # Last updated at: March 8, 2023
@@ -60,7 +60,7 @@
         }
 
         # DOCU: This function will create collaborator records
-        # Triggered by: (POST) docs/add_collaborators
+        # Triggered by: (POST) collaborators/add
         # Requires: $params { document_id, collaborator_emails }
         # Returns: { status: true/false, result: { html }, error: null }
         # Last updated at: March 9, 2023

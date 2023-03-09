@@ -9,7 +9,7 @@
         }
 
         # DOCU: This function will call getCollaborators() from Collaborator model and return data to Admin Edit Documentation page
-        # Triggered by: (GET) /docs/get_collaborators
+        # Triggered by: (GET) collaborators/get
         # Required: $_POST["document_id"]
         # Returns: { status: true/false, result: { owner, html }, error: null }
         # Last updated at: March 8, 2023

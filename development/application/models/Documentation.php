@@ -343,7 +343,7 @@
         }
 
         # DOCU: This function will get user record of documentation owner
-        # Triggered by: (GET) docs/get_collaborators
+        # Triggered by: (GET) collaborators/get
         # Requires: $documentation_id
         # Returns: { status: true/false, result: user record, error: null }
         # Last updated at: March 8, 2023

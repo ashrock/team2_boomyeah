@@ -67,8 +67,8 @@ $route['docs/remove']['POST']    = 'documentations/removeDocumentation';
 $route['docs/reorder']['POST']   = 'workspaces/updateWorkspace';
 
 /* POST | Admin Edit Documentation Routs */
-$route['docs/add_collaborators']['POST'] = 'collaborators/addCollaborators';
-$route['docs/get_collaborators']['POST'] = 'collaborators/getCollaborators';
+$route['collaborators/add']['POST'] = 'collaborators/addCollaborators';
+$route['collaborators/get']['POST'] = 'collaborators/getCollaborators';
 
 /* POST | Admin Section Routes */
 $route['sections/add']['POST']       = 'sections/addSection';
