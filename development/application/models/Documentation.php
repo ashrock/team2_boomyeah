@@ -135,18 +135,25 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, documentation_id }
         # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
-        # Last updated at: March 8, 2023
+        # Last updated at: March 9, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $document = $this->db->query("SELECT id FROM documentations WHERE id = ?", $params["documentation_id"])->row();
+                $document = $this->db->query("SELECT * FROM documentations WHERE id = ?", $params["documentation_id"])->result_array()[0];
                 
                 # Check document id if existing
-                if(isset($document->{'id'})){
+                if(isset($document["id"])){
                     # Double check if update_type only have this following values: "title", "is_archived", "is_private"
-                    if( in_array($params["update_type"], ["title", "is_archived", "is_private", "description"]) ){
+                    if( in_array($params["update_type"], ["title", "is_archived", "is_private", "description", "cache_collaborators_count"]) ){
+                        if($params["update_value"] == "add_collaborator"){
+                            $params["update_value"] = (int)$document["cache_collaborators_count"] + $params["collaborator_count"];
+                        }
+                        else if($params["update_value"] == "remove_collaborator"){
+                            $params["update_value"] = (int)$document["cache_collaborators_count"] - 1;
+                        }
+
                         $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?", array($params["update_value"], $_SESSION["user_id"], $params["documentation_id"]) );
                         
                         if($update_document){
@@ -190,6 +197,10 @@
                                     $response_data["result"]["message"] = ($params["update_value"] == NO) ? "You have no archived documentations yet." : "You have no documentations yet.";
                                     $response_data["result"]["documentations_count"] = $documentations_count;
                                 }
+                            }
+                            # Check if updating cache_collaborators_count
+                            else if($params["update_type"] == "cache_collaborators_count"){
+                                $response_data["result"]["cache_collaborators_count"] = $params["update_value"];
                             }
                         }
                     }
@@ -343,7 +354,7 @@
         }
 
         # DOCU: This function will get user record of documentation owner
-        # Triggered by: (GET) docs/get_collaborators
+        # Triggered by: (GET) collaborators/get
         # Requires: $documentation_id
         # Returns: { status: true/false, result: user record, error: null }
         # Last updated at: March 8, 2023
