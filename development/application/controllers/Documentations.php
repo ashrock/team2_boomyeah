@@ -217,6 +217,11 @@
 			echo json_encode($response_data);
 		}
 
+		# DOCU: This function will call getDocumentation from Documentation Model and render admin_edit_documentation page
+		# Triggered by: (GET) docs/(:any)/edit
+		# Requires: $documentation_id
+		# Last updated at: Mar. 9, 2023
+		# Owner: Jovic
 		public function getDocumentation($documentation_id){
 			$documentation = $this->Documentation->getDocumentation($documentation_id);
 			
@@ -228,7 +233,24 @@
 				$this->load->model("Section");
 				$sections = $this->Section->getSections($documentation_id);
 
-				$this->load->view('documentations/admin_edit_documentation', array("documentation" => $documentation["result"], "sections" => $sections["result"]));
+				$this->load->view('documentations/admin_edit_documentation', array("document_data" => $documentation["result"], "sections" => $sections["result"]));
+			}
+			else{
+				# Confirm if we need to show error or just redirect back to dashboard
+				echo "Documentation doesn't exist";
+			}
+		}
+
+		public function userDocumentation($documentation_id){
+			$documentation = $this->Documentation->getDocumentation($documentation_id);
+			
+			if($documentation["status"] && $documentation["result"]){
+				# Fetch sections
+				$this->load->model("Section");
+				$sections = $this->Section->getSections($documentation_id);
+
+				# TODO: FIX LATER
+				$this->load->view('documentations/admin_edit_documentation', array("document_data" => $documentation["result"], "sections" => $sections["result"]));
 			}
 			else{
 				# Confirm if we need to show error or just redirect back to dashboard

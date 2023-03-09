@@ -9,7 +9,7 @@
         }
 
         # DOCU: This function will call getCollaborators() from Collaborator model and return data to Admin Edit Documentation page
-        # Triggered by: (GET) /docs/get_collaborators
+        # Triggered by: (GET) collaborators/get
         # Required: $_POST["document_id"]
         # Returns: { status: true/false, result: { owner, html }, error: null }
         # Last updated at: March 8, 2023
@@ -21,7 +21,67 @@
                 # Check if user is allowed to do action
                 $this->isUserAllowed();
                 
-                $response_data = $this->Collaborator->getCollaborators($_POST["document_id"]);
+                $response_data = $this->Collaborator->getCollaborators(array("get_type" => "get_collaborators", "get_values" => array("documentation_id" => $_POST["document_id"])));
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            echo json_encode($response_data);
+        }
+
+        # DOCU: This function will call addCollaborators() from Collaborator model and return data to Admin Edit Documentation page
+        # Triggered by: (POST) collaborators/add
+        # Required: $_POST["document_id", "collaborator_emails"]
+        # Returns: { status: true/false, result: { owner, html }, error: null }
+        # Last updated at: March 9, 2023
+        # Owner: Jovic
+        public function addCollaborators(){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                # Check if user is allowed to do action
+                $this->isUserAllowed();
+                
+                $response_data = $this->Collaborator->addCollaborators($_POST);
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            echo json_encode($response_data);
+        }
+
+        # DOCU: This function will call updateCollaborator() from Collaborator model and return data to Admin Edit Documentation page
+        # Triggered by: (POST) collaborators/update
+        # Required: $_POST["invited_user_id", "collaborator_id", "update_type", "update_value", "email"]
+        # Returns: { status: true/false, result: { collaborator_level_id }, error: null }
+        # Last updated at: March 9, 2023
+        # Owner: Jovic
+        public function updateCollaborator(){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $response_data = $this->Collaborator->updateCollaborator($_POST);
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            echo json_encode($response_data);
+        }
+
+        # DOCU: This function will call removeCollaborator() from Collaborator model and return data to Admin Edit Documentation page
+        # Triggered by: (POST) collaborators/remove
+        # Required: $_POST["invited_user_id", "collaborator_id"]
+        # Returns: { status: true/false, result: { invited_user_id }, error: null }
+        # Last updated at: March 9, 2023
+        # Owner: Jovic
+        public function removeCollaborator(){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $response_data = $this->Collaborator->removeCollaborator($_POST);
             }
             catch (Exception $e) {
                 $response_data["error"] = $e->getMessage();
