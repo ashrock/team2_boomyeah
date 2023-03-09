@@ -2,6 +2,8 @@ let valid_email = true;
 let invited_emails = [];
 let invite_instance = null;
 let role_instance   = null;
+let current_collaborator_role = null;
+const ROLE_OPTIONS = ["viewer", "editor"];
 const COLLABORATOR_LEVEL = {
     "viewer" : 1,
     "editor" : 2,
@@ -12,17 +14,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     initializeMaterializeTooltip();
     initializeMaterializeDropdown();
 
-    document.addEventListener("click", (event) => {
-        let element = event.target.closest(".add_invite_result");
-        
-        if(element){
-            addSearchEmailResult(element);
-        }
-    });
-
     ux("body")
         .on("click", "#add_invite_btn", addPeopleWithAccess)
         .on("click", "#remove_invited_user_confirm", confirmRemoveInvitedUser)
+        .on("click", "#confirm_to_remove_invited_user .no_btn", onCancelRemoveCollaborator)
         .on("click", ".invite_collaborators_btn", function(event){
             event.stopImmediatePropagation();
             event.preventDefault();
@@ -55,6 +50,7 @@ function initSelect(dropdown_selector = "select"){
 
 function initializeCollaboratorChipsInstance(){
     let collaborator_chips = document.querySelector(".collaborator_chips");
+
     M.Chips.init(collaborator_chips, {
         placeholder: "Email address",
         secondaryPlaceholder: "Type email address",
@@ -89,8 +85,8 @@ function addEmail(email){
 
 
 function addPeopleWithAccess(event){
-    event.stopPropagation();
-    
+    event.stopImmediatePropagation();
+
     if(invited_emails.length > 0){
         let add_collaborators_form = ux("#add_collaborators_form");
         add_collaborators_form.find(".collaborator_emails").val(invited_emails.join(","));
@@ -164,21 +160,30 @@ function onSubmitAddCollaboratorsForm(event){
     return false;
 }
 
-function setRoleChangeAction(event){
+function setRoleChangeAction(event, ...args){
     let invited_user = ux(event.target.closest(".invited_user"));
     let collaborator_email = invited_user.find(".invited_user_info").self().innerText;
     const selected_action = event.target.value;
     const invited_user_id = event.target.dataset.invited_user_id;
+    let role_options = event.target.children;
+    for(let option_index in role_options){
+        if(typeof role_options[option_index] === "object"){
+            if(ux(role_options[option_index]).attr("selected") === ""){
+                current_collaborator_role = ROLE_OPTIONS[option_index];
+            }
+        }
+    }
 
     if(selected_action === "remove"){
-        let remove_invited_user_modal = document.querySelector("#confirm_to_remove_invited_user");
-        var instance = M.Modal.getInstance(remove_invited_user_modal);
-        instance.open();
-
         ux("#remove_invited_user_form").find(".invited_user_id").val(invited_user_id);
-    }
-    else{
-        // for changing role to viewer/editor in the backend
+
+        let remove_invited_user_modal = document.querySelector("#confirm_to_remove_invited_user");
+        let instance = M.Modal.getInstance(remove_invited_user_modal);
+        instance.options.onCloseStart = () => {
+            onCancelRemoveCollaborator()
+        }
+        instance.open();
+    } else {
         let update_invited_user_form = ux("#update_invited_user_form");
         update_invited_user_form.find(".invited_user_id").val(invited_user_id);
         update_invited_user_form.find(".email").val(collaborator_email);
@@ -233,4 +238,18 @@ function onSubmitRemoveInvitedUser(event){
 
 function confirmRemoveInvitedUser(event){
     ux("#remove_invited_user_form").trigger("submit");
+}
+
+function onCancelRemoveCollaborator(event = null){
+    let invite_user_id = ux("#remove_invited_user_form .invited_user_id").val();
+    let invited_user_role = ux(`#invited_user_${invite_user_id}`).find(".invited_user_role");
+    M.FormSelect.getInstance(invited_user_role.self()).destroy();
+    
+    invited_user_role.findAll("option").forEach((role_option) => {
+        if(role_option.value === current_collaborator_role){
+            role_option.selected = true;
+        }
+    });
+
+    M.FormSelect.init(invited_user_role.self());
 }
