@@ -230,7 +230,7 @@
         # Triggered by: (POST) docs/remove
         # Requires: $params { documentation_id, section_id }
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 8, 2023
+        # Last updated at: March 9, 2023
         # Owner: Erick
         public function removeSection($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -240,7 +240,7 @@
                 $this->db->trans_start();
 
                 $section = $this->getSection($params["section_id"]);
-                
+               
                 # Check section if existing
                 if($section["status"]){
                     # TODO: For v.03, remove modules, tabs that is associated on sections table.
@@ -273,11 +273,48 @@
                                     $response_data["result"]["section_id"] = $section["result"]["id"];
                                 }
                             }
+                            else{
+                                $this->db->trans_rollback();
+                                throw new Exception("Unable to delete section, the section is not included in the section_ids_order field.");
+                            }
                         }
                         else{
                             throw new Exception($documentation["error"]);
                         }
                     }
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will reorder the sections of a documentation
+        # Triggered by: (POST) sections/reorder
+        # Requires: $params { documentation_id, sections_order }
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 9, 2023
+        # Owner: Erick
+        public function reOrderSection($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                # Fetch section_ids_order
+                $this->load->model("Documentation");
+                $documentation = $this->Documentation->getDocumentation($params["documentation_id"]);
+
+                if($documentation["status"]){
+                    # Update documentations section_ids_order
+                    $update_docs_section_order = $this->db->query("UPDATE documentations SET section_ids_order = ? WHERE id = ?", array($params["sections_order"], $params["documentation_id"]));
+                    
+                    if($update_docs_section_order){
+                        $response_data["status"] = true;
+                    }
+                }
+                else{
+                    throw new Exception($documentation["error"]);
                 }
             }
             catch (Exception $e) {
