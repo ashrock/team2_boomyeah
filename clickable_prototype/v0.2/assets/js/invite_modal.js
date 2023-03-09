@@ -26,6 +26,18 @@ document.addEventListener("DOMContentLoaded", async () => {
             get_collaborators_form.find(".document_id").val(document_id);
             get_collaborators_form.trigger("submit");
         })
+        .on("keyup", ".collaborator_email_address", async (event) => {
+            let collaborator_email_address = ux(event.target);
+            let email_width = collaborator_email_address.val().length * 8;
+
+            email_width = (email_width < 355) ? email_width : 355;
+            collaborator_email_address.self().style.minWidth = email_width + "px";
+            // if(event.keyCode != 13){
+            // } else {
+            //     email_width = 120;
+            // }
+
+        })
         .on("change", ".invited_user_role", setRoleChangeAction)
         .on("submit", "#add_collaborators_form", onSubmitAddCollaboratorsForm)
         .on("submit", "#get_collaborators_form", onSubmitGetCollaboratorsForm)
@@ -54,16 +66,17 @@ function initializeCollaboratorChipsInstance(){
     M.Chips.init(collaborator_chips, {
         placeholder: "Email address",
         secondaryPlaceholder: "Type email address",
-        onChipAdd: (element, email) => {
+        onChipAdd: async (element, email) => {
             let collaborator_email = email.innerText.split("close")[0];
-            
+            let chip_instance = M.Chips.getInstance(collaborator_chips);
+            let chips_data = chip_instance.chipsData;
+
             if(validateEmail(collaborator_email)){
                 addEmail(collaborator_email);
+                ux(".collaborator_email_address").self().removeAttribute("style");
             } else {
-                email.remove();
-                setTimeout(() => {
-                    ux(".collaborator_email_address").val(collaborator_email);
-                });
+                await chip_instance.deleteChip(chips_data.length - 1);
+                await ux(".collaborator_email_address").val(collaborator_email);
             }
         },
         onChipDelete: () => {

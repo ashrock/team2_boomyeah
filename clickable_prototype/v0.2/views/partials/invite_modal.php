@@ -9,7 +9,7 @@
                 <div class="row">
                     <div class="collaborator_row input-field col s6">
                         <div class="collaborator_chips">
-                            <input id="email_address" type="text" class="validate email_address collaborator_email_address"/>
+                            <input id="email_address" type="text" class="validate email_address collaborator_email_address" contenteditable="true"/>
                             <div class="row_placeholder"></div>
                             <a id="add_invite_btn" class="users add_collaborator_btn" href="#" data-target="add_invite"></a>
                         </div>
