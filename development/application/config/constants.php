@@ -85,8 +85,9 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 /* BOOMYEAH V2 CONSTANTS */
-defined('BASE_URL') OR define('BASE_URL', "http://localhost:8888/");
+defined('BASE_URL') OR define('BASE_URL', "http://internaldocumentation.localhost.com:8888/");
 defined('USER_LEVEL') OR define('USER_LEVEL', array("ADMIN" => 9, "USER" => 1));
+defined('COLLABORATOR_LEVEL') OR define('COLLABORATOR_LEVEL', array("VIEWER" => 1, "EDITOR" => 2));
 defined('TRUE_VALUE') OR define('TRUE_VALUE', 1);
 defined('FALSE_VALUE') OR define('FALSE_VALUE', 0);
 defined('ZERO_VALUE') OR define('ZERO_VALUE', 0);

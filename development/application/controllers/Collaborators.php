@@ -21,7 +21,23 @@
                 # Check if user is allowed to do action
                 $this->isUserAllowed();
                 
-                $response_data = $this->Collaborator->getCollaborators($_POST["document_id"]);
+                $response_data = $this->Collaborator->getCollaborators(array("get_type" => "get_collaborators", "get_values" => array("documentation_id" => $_POST["document_id"])));
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            echo json_encode($response_data);
+        }
+
+        public function addCollaborators(){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                # Check if user is allowed to do action
+                $this->isUserAllowed();
+                
+                $response_data = $this->Collaborator->addCollaborators($_POST);
             }
             catch (Exception $e) {
                 $response_data["error"] = $e->getMessage();

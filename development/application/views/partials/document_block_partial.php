@@ -48,7 +48,7 @@
             </div>
 <?php   }
         else { ?>
-            <div class="document_block mobile_block">
+            <div id="document_<?= $documentation["id"] ?>" class="document_block mobile_block">
                 <div class="document_details">
                     <h2><?= $documentation['title'] ?></h2>
                     <?php if($documentation['is_private']){ ?>

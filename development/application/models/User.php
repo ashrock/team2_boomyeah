@@ -68,5 +68,76 @@
 
             return $response_data;
         }
+
+        # DOCU: This function will fetch Users record based on array of compare values
+        # Triggered by: (POST) docs/add_collaborators
+        # Requires: $params { fields_to_select, compare_values }
+        # Returns: { status: true/false, result: users record, error: null }
+        # Last updated at: Mar. 9, 2023
+        # Owner: Jovic
+        public function getUsers($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $fields_to_select = isset($params["fields_to_select"]) ? $params["fields_to_select"] : "*";
+
+                $get_user = $this->db->query("SELECT {$fields_to_select} FROM users WHERE {$params['field_to_compare']} IN ?;", array($params["compare_values"]));
+
+                $response_data["result"] = $get_user->result_array();
+                
+                $response_data["status"] = true;
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will create user records
+        # Triggered by: (POST) docs/add_collaborators
+        # Requires: $params { new_users_email, collaborator_emails }
+        # Returns: { status: true/false, result: { ids }, error: null }
+        # Last updated at: Mar. 9, 2023
+        # Owner: Jovic
+        public function createUsers($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $this->db->trans_start();
+                # Generate values
+                $values_clause = array();
+                $user_level_id = USER_LEVEL["USER"];
+
+                foreach($params["new_users_email"] as $email){
+                    array_push($values_clause, "({$_SESSION['workspace_id']}, {$user_level_id}, '{$email}', NOW(), NOW())");
+                }
+
+                $values_clause = implode(", ", $values_clause);
+
+                $create_users = $this->db->query("INSERT INTO users (workspace_id, user_level_id, email, created_at, updated_at) VALUES {$values_clause};");
+
+                if($create_users){
+                    $get_users = $this->getUsers(array(
+                        "fields_to_select"  => "JSON_ARRAYAGG(id) AS user_ids",
+                        "field_to_compare"  => "email",
+                        "compare_values"    => $params["collaborator_emails"]
+                    ));
+
+                    if($get_users["status"]){
+                        $response_data["status"]        = true;
+                        $response_data["result"]["ids"] = json_decode($get_users["result"][0]["user_ids"]);
+
+                        $this->db->trans_complete();
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $this->db->rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
     }
 ?>
