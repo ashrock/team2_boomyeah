@@ -66,7 +66,7 @@ $route['docs/duplicate']['POST'] = 'documentations/duplicateDocumentation';
 $route['docs/remove']['POST']    = 'documentations/removeDocumentation';
 $route['docs/reorder']['POST']   = 'workspaces/updateWorkspace';
 
-/* POST | Admin Edit Documentation Routs */
+/* POST | Admin Edit Documentation Routes */
 $route['collaborators/add']['POST'] = 'collaborators/addCollaborators';
 $route['collaborators/get']['POST'] = 'collaborators/getCollaborators';
 $route['collaborators/update']['POST'] = 'collaborators/updateCollaborator';
@@ -76,6 +76,7 @@ $route['sections/add']['POST']       = 'sections/addSection';
 $route['sections/update']['POST']    = 'sections/updateSection';
 $route['sections/duplicate']['POST'] = 'sections/duplicateSection';
 $route['sections/remove']['POST']    = 'sections/removeSection';
+$route['sections/reorder']['POST']    = 'sections/reOrderSection';
 
 /* User Documentation Routes */
 $route['docs']['GET']        = 'documentations/userDocumentations';
