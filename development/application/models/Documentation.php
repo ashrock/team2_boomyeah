@@ -135,7 +135,7 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, documentation_id }
         # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
-        # Last updated at: March 8, 2023
+        # Last updated at: March 9, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -146,7 +146,7 @@
                 # Check document id if existing
                 if(isset($document->{'id'})){
                     # Double check if update_type only have this following values: "title", "is_archived", "is_private"
-                    if( in_array($params["update_type"], ["title", "is_archived", "is_private", "description"]) ){
+                    if( in_array($params["update_type"], ["title", "is_archived", "is_private", "description", "cache_collaborators_count"]) ){
                         $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?", array($params["update_value"], $_SESSION["user_id"], $params["documentation_id"]) );
                         
                         if($update_document){
@@ -343,7 +343,7 @@
         }
 
         # DOCU: This function will get user record of documentation owner
-        # Triggered by: (GET) docs/get_collaborators
+        # Triggered by: (GET) collaborators/get
         # Requires: $documentation_id
         # Returns: { status: true/false, result: user record, error: null }
         # Last updated at: March 8, 2023
