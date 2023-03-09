@@ -2,7 +2,7 @@
     for($collaborators_index = 0; $collaborators_index < count($collaborators); $collaborators_index++){
         $collaborator = $collaborators[$collaborators_index]; ?>
 
-        <div id="invited_user_<?= $collaborator["id"] ?>" class="invited_user">
+        <div id="invited_user_<?= $collaborator["id"] ?>" class="invited_user" data-documentation_id="<?= $collaborator["documentation_id"] ?>">
             <div class="invited_user_info">
                 <p><?= $collaborator["email"] ?></p>
             </div>
