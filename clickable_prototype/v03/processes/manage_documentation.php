@@ -467,6 +467,13 @@
 
                 break;
             }
+
+            case "reorder_tabs" : {
+                $response_data["status"]                   = true;
+                $tab_ids_order                            = $_POST["tab_ids_order"];
+                $response_data["result"]["tab_ids_order"] = $tab_ids_order;
+                break;
+            }
         }
     }
 

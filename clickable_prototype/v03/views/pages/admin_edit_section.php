@@ -22,7 +22,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Company - Employee Handbook | BoomYEAH</title>
-    <link rel="shortcut icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= add_file("assets/images/favicon.ico") ?>" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
@@ -83,6 +83,11 @@
             <form id="add_module_tab_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
                 <input type="hidden" name="action" value="add_module_tab">
                 <input type="hidden" name="module_id" class="module_id">
+            </form>
+            <form id="reorder_tabs_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+                <input type="hidden" name="action" value="reorder_tabs">
+                <input type="hidden" name="module_id" class="module_id">
+                <input type="hidden" name="tab_ids_order" class="tab_ids_order">
             </form>
             <div id="clone_section_page">
                 <?php include_once("../partials/clone_section_page.php"); ?>
