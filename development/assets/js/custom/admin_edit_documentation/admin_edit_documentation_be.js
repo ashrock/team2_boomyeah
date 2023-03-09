@@ -132,7 +132,7 @@ function onSubmitAddSectionForm(event){
             if(response_data.status){
                 let section_block = await ux("#section_container").append(response_data.result.html);
                 initializeMaterializeDropdown(section_block.find(".dropdown-trigger").self());
-                addAnimation(`#section_${response_data.section_id}`, "animate__fadeIn animate__slower");
+                addAnimation(`#section_${response_data.result.section_id}`, "animate__fadeIn animate__slower");
                 appearEmptySection();
 
                 window.scrollTo(0, document.body.scrollHeight);
