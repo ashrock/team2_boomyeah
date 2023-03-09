@@ -7,6 +7,7 @@
     $_SESSION["workspace_id"]  = 1;
     // END
 
+    include_once("../../processes/partial_helper.php");  
     include_once("../view_helper.php");  
     include_once("../../config/connection.php");
     include_once("../../config/constants.php");

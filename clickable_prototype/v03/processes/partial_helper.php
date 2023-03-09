@@ -1,5 +1,10 @@
 <?php
-    function get_include_contents($filename, $variables = array()) {
+    function load_view($file_url, $variables = array(), $views_path = "../"){
+        extract($variables);
+        include($file_url);
+    }
+    
+    function get_include_contents($filename, $variables = array(), $views_path = "../views/") {
         if (is_file($filename)) {
             extract($variables);
     

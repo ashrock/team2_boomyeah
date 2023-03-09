@@ -397,6 +397,32 @@
                 $response_data["result"]["sections_order"] = $sections_order;
                 break;
             }
+
+
+            case "add_module" : {
+                $module_id = time() + rand();
+                $tab_id = time() + rand();
+                $module_data = array(
+                    "id" => $module_id,
+                    "module_tabs_json" => array(
+                        array(
+                            "id" => $tab_id,
+                            "title" => "Tab ". $tab_id ." Module ". $module_id,
+                            "content" => "Sample",
+                            "module_id" => $module_id,
+                            "is_comments_allowed" => 0
+                        )
+                    )
+                );
+                $modules_array = array("modules" => array($module_data));
+
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "module_id" => $module_id,
+                    "html"      => get_include_contents("../views/partials/section_page_content_partial.php", $modules_array)
+                );
+                break;
+            }
         }
     }
 

@@ -850,6 +850,9 @@ body::-webkit-scrollbar-thumb {
 #edit_section_content #add_page_tabs_btn:hover {
   background: #BDDAFF;
 }
+.faded {
+  opacity: 0;
+}
 @font-face {
   font-family: 'ReadexPro-Bold';
   src: url('../fonts/ReadexPro-Bold.ttf');

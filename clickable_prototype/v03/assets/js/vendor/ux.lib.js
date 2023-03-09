@@ -229,7 +229,7 @@ function delegateEvent(event_type, ancestor_element, target_element_selector, li
             }
         }, false);
     } else {
-        console.log("Invalid Element Selector", target_element_selector)
+        console.warn("Invalid Element Selector", target_element_selector)
     }
 }
 
@@ -242,7 +242,7 @@ function addAnimation(element, animation, timeout = 480){
 }
 
 function removeAnimation(element, animation){
-    ux(element).removeClass("animate__animated").removeClass(animation);
+    ux(element).removeClass("animate__animated faded").removeClass(animation);
 }
 
 function selectElementText(el, win) {

@@ -3,11 +3,11 @@ let saving_timeout = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     if(ux("#add_page_tabs_btn").self()){
-        ux("#add_page_tabs_btn").on("click", addNewSectionContent);
         initializeRedactor("#section_pages .tab_content");
     }
 
     ux("body")
+        .on("submit", "#add_module_form", addNewSectionContent)
         .on("submit", "#remove_tab_form", onConfirmRemoveTab)
         .on("click", ".section_page_tabs .add_page_btn", addNewTab);
 });
@@ -33,26 +33,25 @@ function saveTabChanges(section_page_tab){
 
 function addNewSectionContent(event){
     event.preventDefault();
-    let tab_id = `tab_${ new Date().getTime()}`;
     let section_pages = ux("#section_pages");
-
-    let section_page_content = ux("#clone_section_page .section_page_content").clone();
-    let section_page_tab = section_page_content.find(".section_page_tab");
-    section_page_content.find(".page_tab_item").addClass("active");
-    section_page_tab.addClass("show");
-    section_pages.self().append(section_page_content.self());
-    section_page_tab.self().id = tab_id;
-    section_page_content.find(".section_page_tab .tab_title").self().select();
-    section_page_content.find(".section_page_tabs .page_tab_item").self()
-        .setAttribute("data-tab_id", tab_id);
-    section_page_tab.find(".checkbox_label").attr("for", "allow_comments_"+ tab_id);
-    section_page_tab.find("input[type=checkbox]").attr("id", "allow_comments_"+ tab_id);
-    addAnimation(section_page_content.self(), "animate__zoomIn");
-
-    initializeRedactor(`#${tab_id} .tab_content`);
-
-    /* Scroll to bottom */
-    window.scrollTo(0, document.body.scrollHeight);
+    
+    let post_form = ux(event.target);
+    
+    ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+        if(response_data.status){
+            let module_id = `#module_${ response_data.result.module_id }`;
+            section_pages.append(response_data.result.html);
+            addAnimation(module_id, "animate__fadeIn animate__slower");
+            
+            setTimeout(() => {
+                initializeRedactor(`${ module_id } .section_page_tab .tab_content`);
+            });
+            /* Scroll to bottom */
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    }, "json");
+    
+    return false
 }
 
 function addNewTab(event){
