@@ -75,8 +75,6 @@ function documentDescriptionPlaceholder(){
         setSectionsContentHeight();
         
         if(event.keyCode === 13){
-            let update_value = event.target.innerText;
-            updateDocumentationData("document_description", encodeURI(update_value));
             event.target.blur();
         }
     })
@@ -93,29 +91,6 @@ function setSectionsContentHeight(){
 
     ux("#documentation_details").conditionalClass("fixed", is_sections_visible);
     ux("#sections_content").self().style.paddingTop = `${sections_offset}px`;
-}
-
-function documentDescriptionPlaceholder(){
-    let document_description = ux("#document_description");
-    document_description.on("input", (event) => {
-        if (!event.target.firstChild) {
-            document_description.append("<p>Add Description</p>");
-        } 
-        else if (event.target.firstChild.nodeName === "P") {
-            document_description.find("p").remove();
-        }
-
-        setSectionsContentHeight();
-    });
-    document_description.on("keydown", (event) =>{
-        setSectionsContentHeight();
-        
-        if(event.keyCode === 13){
-            let update_value = event.target.innerText;
-            updateDocumentationData("document_description", encodeURI(update_value));
-            event.target.blur();
-        }
-    })
 }
 
 function updateDocumentationData(update_type, update_value){
