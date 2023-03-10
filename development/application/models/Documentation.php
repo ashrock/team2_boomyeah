@@ -135,7 +135,7 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, documentation_id }
         # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
-        # Last updated at: March 9, 2023
+        # Last updated at: March 10, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -147,14 +147,16 @@
                 if(isset($document["id"])){
                     # Double check if update_type only have this following values: "title", "is_archived", "is_private"
                     if( in_array($params["update_type"], ["title", "is_archived", "is_private", "description", "cache_collaborators_count"]) ){
+                        $update_value = $params["update_value"];
+                        # Set custom update_value if admin is Adding/Removing a collaborator
                         if($params["update_value"] == "add_collaborator"){
-                            $params["update_value"] = (int)$document["cache_collaborators_count"] + $params["collaborator_count"];
+                            $update_value = (int)$document["cache_collaborators_count"] + $params["collaborator_count"];
                         }
                         else if($params["update_value"] == "remove_collaborator"){
-                            $params["update_value"] = (int)$document["cache_collaborators_count"] - 1;
+                            $update_value = (int)$document["cache_collaborators_count"] - 1;
                         }
 
-                        $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?", array($params["update_value"], $_SESSION["user_id"], $params["documentation_id"]) );
+                        $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?", array($update_value, $_SESSION["user_id"], $params["documentation_id"]) );
                         
                         if($update_document){
                             $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->result_array();
@@ -176,7 +178,7 @@
                                 $documentations_count = 0;
 
                                 # Process archiving of documentations and remove it from the documentation_ids_order field of workspaces
-                                if($params["update_value"] == YES){
+                                if($update_value == YES){
                                     if (($key = array_search($params["documentation_id"], $documentation_order_array)) !== false) {
                                         unset($documentation_order_array[$key]);
                                         $documentations_count = count($documentation_order_array);
@@ -194,13 +196,13 @@
                                 $update_workspace = $this->db->query("UPDATE workspaces SET documentation_ids_order = ? WHERE id = ?", array($new_documents_order, $params["workspace_id"]));
                                 
                                 if($update_workspace){
-                                    $response_data["result"]["message"] = ($params["update_value"] == NO) ? "You have no archived documentations yet." : "You have no documentations yet.";
+                                    $response_data["result"]["message"] = ($update_value == NO) ? "You have no archived documentations yet." : "You have no documentations yet.";
                                     $response_data["result"]["documentations_count"] = $documentations_count;
                                 }
                             }
                             # Check if updating cache_collaborators_count
                             else if($params["update_type"] == "cache_collaborators_count"){
-                                $response_data["result"]["cache_collaborators_count"] = $params["update_value"];
+                                $response_data["result"]["cache_collaborators_count"] = $update_value;
                             }
                         }
                     }
@@ -291,11 +293,13 @@
 
                 # Delete collaborators of remove_documentation_id
 				$this->load->model("Collaborator");
-                $delete_collaborators = $this->Collaborator->deleteCollaborators(array("documentation_id" => $params["remove_documentation_id"]));
+                $this->load->model("Section");
+                $remove_collaborators = $this->Collaborator->removeCollaborators($params["remove_documentation_id"]);
+                $remove_sections      = $this->Section->removeSections($params["remove_documentation_id"]);
 
-                # TODO: Also delete records from tables with documentation_id foreign key.
+                $is_valid = $remove_collaborators["status"] && $remove_sections["status"];
 
-                if($delete_collaborators["status"]){
+                if($is_valid){
                     $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $params["remove_documentation_id"]);
     
                     if($this->db->affected_rows()){

@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="<?= add_file("assets/js/vendor/jquery-3.6.3.min.js") ?>"></script>
-    <script src="<?= add_file("assets/js/vendor/Sortable.min.js") ?>"></script>
+    <script src="<?= add_file("assets/js/vendor/ux.lib.js") ?>"></script>
 </head>
 <body>
     <!--- Add #main_navigation --->
