@@ -27,6 +27,9 @@ function submitUpdateDocumentationData(event){
                 switch_btn.innerText = (is_private) ? "Private" : "Public";
                 invite_collaborator_btn.conditionalClass("hidden", !is_private);
             }
+            else{
+                addAnimation(`#document_description`, "animated_blinkBorder");
+            }
         }
     }, "json");
 
