@@ -36,7 +36,6 @@
 <form action="/collaborators/add" id="add_collaborators_form" method="POST">
     <input type="hidden" name="document_id" class="document_id">
     <input type="hidden" name="collaborator_emails" class="collaborator_emails">
-    <input type="hidden" name="cache_collaborators_count" class="cache_collaborators_count">
 </form>
 <form action="/collaborators/get" id="get_collaborators_form" method="POST">
     <input type="hidden" name="action" value="get_collaborators">

@@ -71,6 +71,25 @@
             echo json_encode($response_data);
         }
 
+        # DOCU: This function will call removeCollaborator() from Collaborator model and return data to Admin Edit Documentation page
+        # Triggered by: (POST) collaborators/remove
+        # Required: $_POST["invited_user_id", "collaborator_id"]
+        # Returns: { status: true/false, result: { invited_user_id }, error: null }
+        # Last updated at: March 9, 2023
+        # Owner: Jovic
+        public function removeCollaborator(){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $response_data = $this->Collaborator->removeCollaborator($_POST);
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            echo json_encode($response_data);
+        }
+
         # DOCU: This function will check if user is allowed to visit a page or do an action.
         # Triggered by: GET and POST functions in Documentations Controller
         # Requires: $_SESSION["user_level_id"]; $is_admin_page
