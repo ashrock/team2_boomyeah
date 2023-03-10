@@ -63,7 +63,7 @@
         # Triggered by: (POST) collaborators/add
         # Requires: $params { document_id, collaborator_emails }
         # Returns: { status: true/false, result: { html }, error: null }
-        # Last updated at: March 9, 2023
+        # Last updated at: March 10, 2023
         # Owner: Jovic
         public function addCollaborators($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -155,8 +155,8 @@
                                     collaborators.documentation_id, collaborators.id AS collaborator_id, collaborators.collaborator_level_id
                                 FROM users
                                 INNER JOIN collaborators ON collaborators.user_id = users.id
-                                WHERE users.id IN ?;
-                            ", array($user_ids));
+                                WHERE collaborators.documentation_id = ? AND users.id IN ?;
+                            ", array($params["document_id"], $user_ids));
 
                             if($get_collaborators){
                                 # Update cache_collaborators_count
@@ -172,6 +172,7 @@
                                     $response_data["status"]         = true;
                                     $response_data["result"]["html"] = $this->load->view("partials/invited_user_partial.php", array("collaborators" => $get_collaborators->result_array()), true);
                                     $response_data["result"]["cache_collaborators_count"] = $update_documentation["result"]["cache_collaborators_count"];
+                                    $response_data["result"]["get_collab"] = $get_collaborators->result_array();
     
                                     $this->db->trans_complete();
                                 }
