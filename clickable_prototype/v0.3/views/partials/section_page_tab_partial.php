@@ -1,6 +1,7 @@
 <?php
     /** DOCU: Temp fix for CPT issues when editing module tab details */
-    $base_url = explode("views", $_SERVER["HTTP_REFERER"])[0];
+    $view_url = str_contains($_SERVER["REQUEST_URI"], "views") ? $_SERVER["REQUEST_URI"] : $_SERVER["HTTP_REFERER"];
+    $base_url = explode("views", $view_url)[0];
 ?>
 <?php foreach($module_tabs_json as $module_tab) { ?>
     <div class="section_page_tab show" id="tab_<?= $module_tab["id"] ?>">
