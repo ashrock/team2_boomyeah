@@ -82,14 +82,13 @@
 
             try {
                 # Finalize bind params
-                $description       = isset($params["description"]) ? $params["description"] : NULL;
-                $section_ids_order = isset($params["section_ids_order"]) ? $params["section_ids_order"] : NULL;
-                $is_private        = isset($params["is_private"]) ? $params["is_private"] : YES;
+                $description = isset($params["description"]) ? $params["description"] : NULL;
+                $is_private  = isset($params["is_private"]) ? $params["is_private"] : YES;
 
                 $insert_document_record = $this->db->query("
-                    INSERT INTO documentations (user_id, workspace_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count, updated_by_user_id, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-                    array($params["user_id"], $params["workspace_id"], $params["title"], $description, $section_ids_order, NO, $is_private, ZERO_VALUE, $_SESSION["user_id"])
+                    INSERT INTO documentations (user_id, workspace_id, title, description, is_archived, is_private, cache_collaborators_count, updated_by_user_id, created_at, updated_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+                    array($params["user_id"], $params["workspace_id"], $params["title"], $description, NO, $is_private, ZERO_VALUE, $_SESSION["user_id"])
                 );
 
                 $new_documentation_id = $this->db->insert_id($insert_document_record);
@@ -219,7 +218,7 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]
         # Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-        # Last updated at: March 6, 2023
+        # Last updated at: March 10, 2023
         # Owner: Jovic
         public function duplicateDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -240,26 +239,35 @@
                         "workspace_id"      => $_SESSION["workspace_id"],
                         "title"		        => $duplicate_title,
                         "description"       => $get_documentation["result"]["description"],
-                        "is_private"        => $get_documentation["result"]["is_private"],
-                        "section_ids_order" => $get_documentation["result"]["section_ids_order"]
+                        "is_private"        => $get_documentation["result"]["is_private"]
                     ));
 
-                    if($duplicate_documentation["status"]){
-                        # TODO: Also create sections, modules, and tabs
-                        $response_data["status"]                     = true;
-                        $response_data["result"]["documentation_id"] = $documentation_id;
-                        $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
-                        $response_data["result"]["html"]             = $this->load->view(
-                            "partials/document_block_partial.php",
-                            array( "all_documentations" => [array(
-                                "id"                        => $duplicate_documentation["result"]["documentation_id"],
-                                "title"                     => $duplicate_title,
-                                "is_private"                => $get_documentation["result"]["is_private"],
-                                "is_archived"               => FALSE_VALUE,
-                                "cache_collaborators_count" => ZERO_VALUE
-                            )]), 
-                            true
-                        );
+                    if($duplicate_documentation["status"]){                        
+                        # Get sections of documentation
+                        $this->load->model("Section");
+                        $duplicate_sections = $this->Section->duplicateSections(array(
+                            "documentation_id"  => $documentation_id,
+                            "duplicate_id"      => $duplicate_documentation["result"]["documentation_id"],
+                            "section_ids_order" => $get_documentation["result"]["section_ids_order"]
+                        ));
+
+                        if($duplicate_sections["status"]){
+                            # TODO: Also create modules, and tabs
+                            $response_data["status"]                     = true;
+                            $response_data["result"]["documentation_id"] = $documentation_id;
+                            $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
+                            $response_data["result"]["html"]             = $this->load->view(
+                                "partials/document_block_partial.php",
+                                array( "all_documentations" => [array(
+                                    "id"                        => $duplicate_documentation["result"]["documentation_id"],
+                                    "title"                     => $duplicate_title,
+                                    "is_private"                => $get_documentation["result"]["is_private"],
+                                    "is_archived"               => FALSE_VALUE,
+                                    "cache_collaborators_count" => ZERO_VALUE
+                                )]), 
+                                true
+                            );
+                        }
                     }
                     else{
                         throw new Exception($duplicate_documentation["error"]);
