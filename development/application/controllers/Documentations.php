@@ -250,7 +250,7 @@
 				$sections = $this->Section->getSections($documentation_id);
 
 				# TODO: FIX LATER
-				$this->load->view('documentations/admin_edit_documentation', array("document_data" => $documentation["result"], "sections" => $sections["result"]));
+				$this->load->view('documentations/user_view_documentation', array("document_data" => $documentation["result"], "sections" => $sections["result"]));
 			}
 			else{
 				# Confirm if we need to show error or just redirect back to dashboard
