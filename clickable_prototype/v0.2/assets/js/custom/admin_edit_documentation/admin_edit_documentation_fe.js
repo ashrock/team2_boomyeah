@@ -72,8 +72,6 @@ function documentDescriptionPlaceholder(){
         setSectionsContentHeight();
         
         if(event.keyCode === 13){
-            let update_value = event.target.innerText;
-            updateDocumentationData("document_description", encodeURI(update_value));
             event.target.blur();
         }
     })
