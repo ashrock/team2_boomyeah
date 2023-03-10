@@ -70,7 +70,7 @@
                             <?php $this->load->view("partials/section_block_partial.php", array("all_sections" => $sections)); ?>
                         <?php } ?>
                     </div>
-                    <div class="no_sections <?php (!count($sections)) ? "hidden" : "" ?>">
+                    <div class="no_sections <?= count($sections) ? "hidden" : "" ?>">
                         <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                             alt="Empty Content Illustration">
                         <p>You have no sections yet</p>
