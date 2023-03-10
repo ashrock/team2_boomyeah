@@ -17,6 +17,8 @@ function submitUpdateDocumentationData(event){
     ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
         if(!response_data.status){
             alert("An error occured while updating documentation data!");
+        } else {
+            addAnimation(`#document_description`, "animated_blinkBorder");
         }
     }, "json");
 

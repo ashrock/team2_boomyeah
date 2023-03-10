@@ -36,7 +36,7 @@
                 $get_collaborators = $this->db->query("
                     SELECT
                         users.id, users.email,
-                        collaborators.id AS collaborator_id, collaborators.collaborator_level_id
+                        collaborators.documentation_id, collaborators.id AS collaborator_id, collaborators.collaborator_level_id
                     FROM users
                     INNER JOIN collaborators ON collaborators.user_id = users.id
                     WHERE {$where_conditions};", $bind_params
@@ -152,27 +152,26 @@
                             $get_collaborators = $this->db->query("
                                 SELECT
                                     users.id, users.email,
-                                    collaborators.id AS collaborator_id, collaborators.collaborator_level_id
+                                    collaborators.documentation_id, collaborators.id AS collaborator_id, collaborators.collaborator_level_id
                                 FROM users
                                 INNER JOIN collaborators ON collaborators.user_id = users.id
                                 WHERE users.id IN ?;
                             ", array($user_ids));
 
                             if($get_collaborators){
-                                $cache_collaborators_count = (int)$params["cache_collaborators_count"] + $get_collaborators->num_rows();
-
                                 # Update cache_collaborators_count
                                 $this->load->model("Documentation");
                                 $update_documentation = $this->Documentation->updateDocumentations(array(
-                                    "documentation_id" => $params["document_id"],
-                                    "update_type" 	   => "cache_collaborators_count",
-                                    "update_value"     => $cache_collaborators_count
+                                    "documentation_id"   => $params["document_id"],
+                                    "update_type" 	     => "cache_collaborators_count",
+                                    "update_value"       => "add_collaborator",
+                                    "collaborator_count" => $get_collaborators->num_rows()
                                 ));
 
-                                if($update_documentation){
+                                if($update_documentation["status"]){
                                     $response_data["status"]         = true;
                                     $response_data["result"]["html"] = $this->load->view("partials/invited_user_partial.php", array("collaborators" => $get_collaborators->result_array()), true);
-                                    $response_data["result"]["cache_collaborators_count"] = (int)$params["cache_collaborators_count"] + $get_collaborators->num_rows();
+                                    $response_data["result"]["cache_collaborators_count"] = $update_documentation["result"]["cache_collaborators_count"];
     
                                     $this->db->trans_complete();
                                 }
@@ -208,6 +207,45 @@
                     $response_data["result"]["collaborator_level_id"] = $params["update_value"];
 
                     $this->db->trans_complete();
+                }
+            }
+            catch (Exception $e) {
+			    $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will remove collaborator record
+        # Triggered by: (POST) collaborators/remove
+        # Requires: $params { invited_user_id, collaborator_id }
+        # Returns: { status: true/false, result: { invited_user_id }, error: null }
+        # Last updated at: March 9, 2023
+        # Owner: Jovic  
+        public function removeCollaborator($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try{
+			    $this->db->trans_start();
+
+                $remove_collaborator = $this->db->query("DELETE FROM collaborators WHERE id = ?;", $params["collaborator_id"]);
+
+                if($remove_collaborator){
+                    $this->load->model("Documentation");
+                    $update_documentation = $this->Documentation->updateDocumentations(array(
+                        "documentation_id" => $params["documentation_id"],
+                        "update_type" 	   => "cache_collaborators_count",
+                        "update_value"     => "remove_collaborator"
+                    ));
+
+                    if($update_documentation["status"]){
+                        $response_data["status"]                              = true;
+                        $response_data["result"]["invited_user_id"]           = $params["invited_user_id"];
+                        $response_data["result"]["cache_collaborators_count"] = $update_documentation["result"]["cache_collaborators_count"];
+    
+                        $this->db->trans_complete();
+                    }
                 }
             }
             catch (Exception $e) {
