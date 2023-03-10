@@ -31,38 +31,40 @@
             <div id="documentations_container">
                 <div id="documentation_details">
                     <div class="documentation_placeholder"></div>
-                    <div class="documentation_header">
-                        <ul id="breadcrumb_list">
-                            <li class="breadcrumb_item"><a href="/docs/edit">Documentation</a></li>
-                            <li class="breadcrumb_item active"><?= $document_data["title"] ?></li>
-                        </ul>
-                        <div class="divider"></div>
-                        <div id="doc_title_access">
-                            <h1 id="doc_title"><?= $document_data["title"] ?></h1>
-                            <!-- Switch -->     
-                            <div class="switch switch_btn">
-                                <label for="set_privacy_switch">
-                                    <span class="toggle_text"><?= $document_data["is_private"] ? "Private" : "Public" ?></span>
-                                    <input class="toggle_switch" type="checkbox" id="set_privacy_switch" <?= $document_data["is_private"] ? "checked" : "" ?>>
-                                    <span class="lever"></span>
-                                </label>
+                        <div class="documentation_header_container">
+                            <div class="documentation_header">
+                                <ul id="breadcrumb_list">
+                                    <li class="breadcrumb_item"><a href="/docs/edit">Documentation</a></li>
+                                    <li class="breadcrumb_item active"><?= $document_data["title"] ?></li>
+                                </ul>
+                                <div class="divider"></div>
+                                <div id="doc_title_access">
+                                    <h1 id="doc_title"><?= $document_data["title"] ?></h1>
+                                    <!-- Switch -->     
+                                    <div class="switch switch_btn">
+                                        <label for="set_privacy_switch">
+                                            <span class="toggle_text"><?= $document_data["is_private"] ? "Private" : "Public" ?></span>
+                                            <input class="toggle_switch" type="checkbox" id="set_privacy_switch" <?= $document_data["is_private"] ? "checked" : "" ?>>
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+                                    <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>"><?= $document_data["cache_collaborators_count"] + 1 ?> Collaborators</a>
+                                </div>
+                                <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["description"] ?></p>
+                                <form action="/sections/add" id="section_form" method="post">
+                                    <input type="hidden" name="documentation_id" value="<?= $document_data["id"] ?>">
+                                    <input type="hidden" name="action" value="create_section">
+                                    <div class="group_add_section input-field">
+                                        <button id="submit_add_section_btn" type="submit"></button>
+                                        <input name="section_title" id="input_add_section" type="text" class="section_title validate" autofocus>
+                                        <label for="input_add_section">Add Section</label>
+                                    </div>
+                                </form>
+                                <div class="section_header">
+                                    <h2>Sections</h2>
+                                </div>
                             </div>
-                            <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>"><?= $document_data["cache_collaborators_count"] + 1 ?> Collaborators</a>
                         </div>
-                        <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["description"] ?></p>
-                        <form action="/sections/add" id="section_form" method="post">
-                            <input type="hidden" name="documentation_id" value="<?= $document_data["id"] ?>">
-                            <input type="hidden" name="action" value="create_section">
-                            <div class="group_add_section input-field">
-                                <button id="submit_add_section_btn" type="submit"></button>
-                                <input name="section_title" id="input_add_section" type="text" class="section_title validate" autofocus>
-                                <label for="input_add_section">Add Section</label>
-                            </div>
-                        </form>
-                        <div class="section_header">
-                            <h2>Sections</h2>
-                        </div>
-                    </div>
                 </div>
                 <div id="sections_content">
                     <div class="section_container" id="section_container">
@@ -70,7 +72,7 @@
                             <?php $this->load->view("partials/section_block_partial.php", array("all_sections" => $sections)); ?>
                         <?php } ?>
                     </div>
-                    <div class="no_sections <?php (!count($sections)) ? "hidden" : "" ?>">
+                    <div class="no_sections <?= count($sections) ? "hidden" : "" ?>">
                         <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/empty_illustration.png"
                             alt="Empty Content Illustration">
                         <p>You have no sections yet</p>
