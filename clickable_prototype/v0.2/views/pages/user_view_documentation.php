@@ -51,7 +51,7 @@
     <div id="wrapper">
         <div class="container">
             <ul id="breadcrumb_list">
-                <li class="breadcrumb_item"><a href="admin_documentation.html">All Documentation</a></li>
+                <li class="breadcrumb_item"><a href="admin_documentation.html">Documentation</a></li>
                 <li class="breadcrumb_item mobile_breadcrumb"><a href="user_documentation.html">&lt;</a></li>
                 <li class="breadcrumb_item active">Employee Handbook</li>
             </ul>
@@ -62,12 +62,6 @@
             <p class="doc_text_content">This handbook replaces and supersedes all prior employee handbooks regarding employment or HR matters effective January 01, 2021. The policies and practices included in this handbook may be modified at any time.<br/> Your department has additional specific procedures for many of the general policies stated in the handbook. You are expected to learn your department's procedures and comply with them. You are also expected to conform to the professional standards of your occupation. Please direct any questions to your supervisor, department head, or to the Human Resources Management and Development Office.</p>
             <div class="section_header">
                 <h2>Sections</h2>
-                <button class="sort_btn dropdown-trigger" data-target="sort_list">Sort by</button>
-                <!-- Dropdown Structure -->
-                <ul id="sort_list" class="dropdown-content sort_dropdown">
-                    <li><a href="#!" class="sort_by" data-sort-by="az">A-Z</a></li>
-                    <li><a href="#!" class="sort_by" data-sort-by="za">Z-A</a></li>
-                </ul>
             </div>
             <div class="section_container" id="section_container">
                 <?php if(count($sections_data["fetch_section_user_data"])) { ?>
@@ -75,9 +69,6 @@
                         <div class="section_block">
                             <div class="section_details">
                                 <input type="text" name="section_title" value="<?= $section_data["title"] ?>" id="" class="section_title tooltipped" data-tooltip="<?= $section_data["title"] ?>"">
-                            </div>
-                            <div class="section_controls">
-                                <span><?= $section_data["tab_count"] > 1 ? $section_data["tab_count"] . " Tabs" : ($section_data["tab_count"] == 1 ? "1 Tab" : "") ?></span>
                             </div>
                         </div>
                     <?php } ?>
