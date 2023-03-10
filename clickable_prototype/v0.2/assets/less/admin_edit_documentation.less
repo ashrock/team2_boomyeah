@@ -127,20 +127,23 @@ body{
 
                 #breadcrumb_list{
                     display: flex;
-                    position: relative;
-                    margin-bottom: 33px;
                     font: 16px/24px @readex_regular;
+                    margin-bottom: 33px;
+                    position: relative;
                     .breadcrumb_item{
                         color: @by_primary;
+                        a{
+                            color: inherit;
+                        }
                         &::after{
                             background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/admin_edit_docs_sprite.svg') no-repeat 0 -15px;
                             content: "";
                             display: inline-block;
                             height: 7px;
+                            margin: 0 9px;
                             position: relative;
-                            width: 5px;
-                            margin: 0 7px;
                             transform: translateY(-2px);
+                            width: 5px;
                         }
                         &.active{
                             color: @by_black;
@@ -175,8 +178,10 @@ body{
                         margin-left: 24px;
                         width: 130px;
                         label {
-                            font: 16px/24px @readex_medium;
+                            align-items: center;
                             color: @by_black;
+                            display: flex;
+                            font: 16px/24px @readex_medium;
                             input:checked+.lever{
                                 background-color: @by_primary;
                             }
@@ -276,9 +281,11 @@ body{
                         position: relative;
                         width: 522px;
     
-                        &::before {
+                        #submit_add_section_btn {
                             background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat -12px -4px;
+                            border: 0;
                             content: "";
+                            cursor: pointer;
                             display: inline-block;
                             height: 18px;
                             position: absolute;
@@ -286,6 +293,9 @@ body{
                             top: 22px;
                             width: 18px;
                             z-index: 1;
+                           &:hover{
+                                opacity: 0.8;
+                           }
                         }
     
                         &::after {
