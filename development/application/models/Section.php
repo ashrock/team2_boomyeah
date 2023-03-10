@@ -291,6 +291,30 @@
             return $response_data;
         }
 
+        # DOCU: This function will all section records with a matching documentation_id
+        # Triggered by: (POST) docs/remove
+        # Requires: $documentation_id
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 10, 2023
+        # Owner: Jovic
+        public function removeSections($documentation_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $remove_sections = $this->db->query("DELETE FROM sections WHERE documentation_id = ?;", $documentation_id);
+
+                if($remove_sections){
+                    $response_data["status"] = true;
+                }
+
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
         # DOCU: This function will reorder the sections of a documentation
         # Triggered by: (POST) sections/reorder
         # Requires: $params { documentation_id, sections_order }

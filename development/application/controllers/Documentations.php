@@ -241,6 +241,11 @@
 			}
 		}
 
+		# DOCU: This function will call getDocumentation from Documentation Model and render user_view_documentation page
+		# Triggered by: (GET) docs/(:any)
+		# Requires: $documentation_id
+		# Last updated at: Mar. 10, 2023
+		# Owner: Jovic
 		public function userDocumentation($documentation_id){
 			$documentation = $this->Documentation->getDocumentation($documentation_id);
 			
@@ -249,7 +254,6 @@
 				$this->load->model("Section");
 				$sections = $this->Section->getSections($documentation_id);
 
-				# TODO: FIX LATER
 				$this->load->view('documentations/user_view_documentation', array("document_data" => $documentation["result"], "sections" => $sections["result"]));
 			}
 			else{
