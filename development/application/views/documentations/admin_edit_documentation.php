@@ -33,7 +33,7 @@
                     <div class="documentation_placeholder"></div>
                     <div class="documentation_header">
                         <ul id="breadcrumb_list">
-                            <li class="breadcrumb_item"><a href="admin_documentation.php">Documentation</a></li>
+                            <li class="breadcrumb_item"><a href="/docs/edit">Documentation</a></li>
                             <li class="breadcrumb_item active"><?= $document_data["title"] ?></li>
                         </ul>
                         <div class="divider"></div>
