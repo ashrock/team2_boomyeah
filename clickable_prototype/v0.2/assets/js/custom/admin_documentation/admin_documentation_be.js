@@ -37,11 +37,8 @@ function onSubmitAddDocumentationForm(event){
     }
     else{
         let add_documentation_input = ux(".group_add_documentation");
-
-        add_documentation_input.addClass("input_error").addClass("animate__animated animate__headShake");
-        add_documentation_input.on("animationend", () => {
-            add_documentation_input.removeClass("animate__animated animate__headShake");
-        });
+        add_documentation_input.addClass("input_error");
+        addAnimation(".group_add_documentation", "animate__animated animate__headShake");
     }
 }
 
@@ -89,11 +86,8 @@ function onChangeDocumentationTitle(event){
     }
     else{
         parent_document_block.addClass("error");
-
-        parent_document_block.addClass("input_error").addClass("animate__animated animate__headShake");
-        parent_document_block.on("animationend", () => {
-            parent_document_block.removeClass("animate__animated animate__headShake");
-        });
+        let document_block = parent_document_block.attr("id");
+        addAnimation(`#${document_block}`, "animate__animated animate__headShake");
     }
     return;
 }
