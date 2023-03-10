@@ -49,12 +49,13 @@
                             </div>
                             <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>"><?= $document_data["cache_collaborators_count"] + 1 ?> Collaborators</a>
                         </div>
-                        <p autofocus class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["description"] ?></p>
+                        <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["description"] ?></p>
                         <form action="/sections/add" id="section_form" method="post">
                             <input type="hidden" name="documentation_id" value="<?= $document_data["id"] ?>">
                             <input type="hidden" name="action" value="create_section">
                             <div class="group_add_section input-field">
-                                <input name="section_title" id="input_add_section" type="text" class="section_title validate">
+                                <button id="submit_add_section_btn" type="submit"></button>
+                                <input name="section_title" id="input_add_section" type="text" class="section_title validate" autofocus>
                                 <label for="input_add_section">Add Section</label>
                             </div>
                         </form>
