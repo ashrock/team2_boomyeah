@@ -118,7 +118,7 @@ function onSubmitAddSectionForm(event){
     event.preventDefault();
     let post_form = ux(event.target);
     let section_title = post_form.find(".section_title").val();
-    post_form.find(".group_add_section").removeClass("error");
+    post_form.find(".group_add_section").removeClass("input_error");
 
     if(section_title){
         ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
@@ -130,7 +130,7 @@ function onSubmitAddSectionForm(event){
 
                 window.scrollTo(0, document.body.scrollHeight);
             } else {
-                post_form.find(".group_add_section").addClass("error")
+                post_form.find(".group_add_section").addClass("input_error")
             }
 
             post_form.self().reset();
@@ -140,6 +140,9 @@ function onSubmitAddSectionForm(event){
                 ux("#input_add_section").self().focus();    
             });
         }, "json");
+    }
+    else{
+        post_form.find(".group_add_section").addClass("input_error");
     }
     
     return false;

@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
         .on("keydown", ".section_block .section_title", (event) => editSectionTitle(event, true))
+        .on("input", "#input_add_section", removeInputError)
         ;
 
     window.addEventListener("resize", () => {
@@ -54,6 +55,14 @@ function setSectionsContentHeight(){
 
     ux("#documentation_details").conditionalClass("fixed", is_sections_visible);
     ux("#sections_content").self().style.paddingTop = `${sections_offset}px`;
+}
+
+function removeInputError(event){
+    let input_add_section = event.target;
+    if(input_add_section.value.length){
+        let post_form = ux(".group_add_section");
+        post_form.removeClass("input_error");
+    }
 }
 
 function documentDescriptionPlaceholder(){
