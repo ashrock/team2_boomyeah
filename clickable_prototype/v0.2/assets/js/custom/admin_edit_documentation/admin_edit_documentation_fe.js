@@ -62,8 +62,20 @@ function documentDescriptionPlaceholder(){
         if (!event.target.firstChild) {
             document_description.append("<p>Add Description</p>");
         } 
-        else if (event.target.firstChild.nodeName === "P") {
+        else if (event.target.firstChild?.nodeName === 'P') {
             document_description.find("p").remove();
+            event.target.innerText = event.data;
+            let selection = window.getSelection();
+            let range = document.createRange();
+            range.selectNodeContents(event.target);
+            range.collapse(false);
+            selection.removeAllRanges();
+            try {
+              selection.addRange(range);
+            }
+            catch (err) {
+              console.warn('Error adding range to selection:', err);
+            }
         }
 
         setSectionsContentHeight();
@@ -74,7 +86,7 @@ function documentDescriptionPlaceholder(){
         if(event.keyCode === 13){
             event.target.blur();
         }
-    })
+    });
 }
 
 function updateDocumentationData(update_type, update_value){
