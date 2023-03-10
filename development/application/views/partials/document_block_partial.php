@@ -10,7 +10,7 @@
                     <input type="hidden" name="update_type" value="title">
                     <input type="hidden" name="documentation_id" value="<?= $documentation["id"] ?>">
                     <?php if($documentation["is_private"]){ ?>
-                        <button type="button" class="invite_collaborators_btn modal-trigger <?= ($documentation["is_archived"]) ? 'archived_disabled' : '' ?>" tabindex="-1">&nbsp;<?= $documentation["cache_collaborators_count"] ?></button>
+                        <button type="button" class="invite_collaborators_btn modal-trigger <?= ($documentation["is_archived"]) ? 'archived_disabled' : '' ?>" tabindex="-1">&nbsp;<?= $documentation["cache_collaborators_count"] + 1 ?></button>
                     <?php } ?>
                 </form>
                 <div class="document_controls">
