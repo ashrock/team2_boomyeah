@@ -936,12 +936,17 @@ body {
 .container .doc_text_content {
   color: #6C7177;
   font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  margin: 0 0 34px;
+  margin: 0 0 96px;
   max-width: 893px;
   width: 100%;
 }
 .container .doc_text_content:focus-visible {
   outline: none;
+}
+@media screen and (max-width: 632px) {
+  .container .doc_text_content {
+    margin: 0 0 24px;
+  }
 }
 .container .no_sections {
   width: 100%;
@@ -960,9 +965,9 @@ body {
   margin: 0px;
 }
 .container .section_header {
-  display: flex;
+  display: none;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 23px;
   font: 16px/20px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
 }
 .container .section_header h2 {
@@ -1003,7 +1008,10 @@ body {
   color: #334155;
   font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
 }
-@media screen and (max-width: 622px) {
+@media screen and (max-width: 632px) {
+  .container .section_header {
+    display: flex;
+  }
   .container .section_header .sort_btn {
     font-size: 0;
   }
@@ -1019,18 +1027,18 @@ body {
 }
 .container .section_container .section_block {
   align-items: center;
+  animation-duration: 0.3s !important;
   background-color: #EFF6FF;
   border-radius: 8px;
   border: 1px solid transparent;
   cursor: pointer;
   display: flex;
-  height: 83px;
+  height: 52px;
   justify-content: space-between;
   padding: 20px 23px 20px 16px;
   position: relative;
   transition: all 0.21s ease-in-out;
-  width: 316px;
-  animation-duration: 0.3s !important;
+  width: 522px;
 }
 .container .section_container .section_block::after {
   border-bottom: 2px solid #DBEAFE;
@@ -1047,20 +1055,24 @@ body {
 .container .section_container .section_block.hidden_private {
   display: none !important;
 }
+.container .section_container .section_block:hover {
+  border: 1px solid #2563EB;
+}
 .container .section_container .section_block .section_details {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-  height: 80px;
+  height: inherit;
   justify-content: center;
-  width: 225px;
+  width: 100%;
 }
 .container .section_container .section_block .section_details .section_title {
   border-bottom: 1px solid transparent;
   box-shadow: none;
   color: #0F172A;
-  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 400 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   height: 21px;
+  letter-spacing: 0.25px;
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1229,17 +1241,14 @@ body {
   }
   .container .doc_text_content {
     font: 12px/18px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+    margin: 0 0 24px;
   }
   .container h2 {
     font: 14px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
   }
   .container .section_container .section_block {
-    height: 83px;
+    height: 52px;
     margin: 0;
-  }
-  .container .section_container .section_block .section_details {
-    max-width: 100%;
-    width: auto;
   }
   .container .section_container .section_block .section_details .section_title {
     font: 14px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
