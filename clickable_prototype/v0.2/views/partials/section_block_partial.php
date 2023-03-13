@@ -1,5 +1,6 @@
 <div id="section_<?= $id ?>" class="section_block">
     <input type="hidden" name="section_id" value="<?= $id ?>" class="section_id">
+    <input type="hidden" name="original_section_title" value="<?= $title ?>">
     <div class="drag_handle"></div>
     <div class="section_title autoheight"><?= $title ?></div>
     <ul id="section_more_actions_<?= $id ?>" class="more_action_list">
