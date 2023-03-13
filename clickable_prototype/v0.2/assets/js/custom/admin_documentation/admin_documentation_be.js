@@ -87,6 +87,9 @@ function onChangeDocumentationTitle(event){
     else{
         parent_document_block.addClass("error");
         let document_block = parent_document_block.attr("id");
+        let original_data = edit_doc_title_form.find("[name=original_value]").val();
+        document_title_input.self().blur();
+        document_title_input.val(original_data);
         addAnimation(`#${document_block}`, "animate__animated animate__headShake");
     }
     return;

@@ -4,6 +4,7 @@
         <input type="hidden" name="action" value="update_documentation">
         <input type="hidden" name="update_type" value="title">
         <input type="hidden" name="documentation_id" value="<?= $id ?>">
+        <input type="hidden" name="original_value" value="<?= $title ?>">
         <?php if($is_private){ ?>
             <button type="button" class="invite_collaborators_btn <?= ($is_archived) ? 'archived_disabled' : '' ?>" data-document_id="<?= $id ?>" tabindex="-1">&nbsp;<?= $cache_collaborators_count ?></button>
         <?php } ?>
