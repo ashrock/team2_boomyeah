@@ -7,8 +7,10 @@
     //load the initial data from the json file
     $sections_data_file_path = "../assets/json/sections_data.json";
     $documentation_data_file = "../assets/json/documentation_data.json";
+    $edit_section_module_file_path = "../assets/json/edit_section_module_data.json";
     $sections_data = load_json_file($sections_data_file_path);
     $documentation_data = load_json_file($documentation_data_file);
+    $edit_section_module_data = load_json_file($edit_section_module_file_path);
 
     if(isset($_POST["action"])){
         $response_data = array("status" => false, "result" => [], "error"  => null);
@@ -400,20 +402,23 @@
 
 
             case "add_module" : {
-                $module_id = time() + rand();
-                $tab_id = time() + rand();
+                $module_id   = time() + rand();
+                $tab_id      = time() + rand();
                 $module_data = array(
-                    "id" => $module_id,
+                    "id"               => $module_id,
                     "module_tabs_json" => array(
                         array(
-                            "id" => $tab_id,
-                            "title" => "Tab ". $tab_id ." Module ". $module_id,
-                            "content" => "Add desciption",
-                            "module_id" => $module_id,
+                            "id"                  => $tab_id,
+                            "title"               => "Tab ". $tab_id ." Module ". $module_id,
+                            "content"             => "Add desciption",
+                            "module_id"           => $module_id,
                             "is_comments_allowed" => 0
                         )
                     )
                 );
+              
+                array_push($edit_section_module_data["fetch_admin_module_data"], $module_data);
+                file_put_contents($edit_section_module_file_path, json_encode($edit_section_module_data));
                 $modules_array = array("modules" => array($module_data));
 
                 $response_data["status"]    = true;
@@ -424,18 +429,24 @@
                 break;
             }
             case "add_module_tab" : {
-                $module_id = $_POST["module_id"];
-                $tab_id = time() + rand();
+                $module_id        = intval($_POST["module_id"]);
+                $tab_id           = time() + rand();
                 $module_tabs_json = array(
-                    array(
-                        "id" => $tab_id,
-                        "title" => "Untitled Tab",
-                        "content" => "Add description",
-                        "module_id" => $module_id,
-                        "is_comments_allowed" => 0
-                    )
+                    "id"                  => $tab_id,
+                    "title"               => "Untitled Tab ". $tab_id,
+                    "content"             => "Add description",
+                    "module_id"           => $module_id,
+                    "is_comments_allowed" => 0
                 );
-                $view_data = array("module_tabs_json" => $module_tabs_json);
+                
+                foreach ($edit_section_module_data["fetch_admin_module_data"] as &$module_data) {
+                    if ($module_id === $module_data["id"]) {
+                        array_push($module_data["module_tabs_json"], $module_tabs_json);
+                    }
+                }
+                file_put_contents($edit_section_module_file_path, json_encode($edit_section_module_data));
+              
+                $view_data = array("module_tabs_json" => array($module_tabs_json));
 
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
@@ -448,6 +459,27 @@
             }
 
             case "remove_module_tab": {
+                $module_id = intval($_POST["module_id"]);
+                $tab_id    = intval($_POST["tab_id"]);
+                
+                foreach($edit_section_module_data["fetch_admin_module_data"] as $module_key => &$module_data){
+                    if($module_data["id"] === $module_id){
+                        if(count($module_data["module_tabs_json"]) > 1){
+                            foreach($module_data["module_tabs_json"] as $tab_key => $module_tab){
+                                if($module_tab["id"] === $tab_id){
+                                    unset($module_data["module_tabs_json"][$tab_key]);
+                                }
+                            }
+                        }
+                        else{
+                            // Remove the entire module object
+                            unset($edit_section_module_data["fetch_admin_module_data"][$module_key]);
+                        }
+                        break;
+                    }
+                }
+                file_put_contents($edit_section_module_file_path, json_encode($edit_section_module_data));
+                
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "module_id" => $_POST["module_id"],
@@ -459,6 +491,24 @@
             }
 
             case "update_module_tab": {
+                $module_id   = intval($_POST["module_id"]);
+                $tab_id      = intval($_POST["tab_id"]);
+                $tab_title   = $_POST["module_title"];
+                $tab_content = $_POST["module_content"];
+                
+                foreach($edit_section_module_data["fetch_admin_module_data"] as &$module_data){
+                    if($module_data["id"] === $module_id){
+                        foreach($module_data["module_tabs_json"] as &$module_tab){
+                            if($module_tab["id"] === $tab_id){
+                                $module_tab["title"] = $tab_title;
+                                $module_tab["content"] = $tab_content;
+                            }
+                        }
+                        break;
+                    }
+                }
+                file_put_contents($edit_section_module_file_path, json_encode($edit_section_module_data));               
+
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "module_id" => $_POST["module_id"],
@@ -469,8 +519,29 @@
             }
 
             case "reorder_tabs" : {
+                $tab_ids_order            = explode(",", $_POST["tab_ids_order"]);
+                $module_id                = intval($_POST["module_id"]);
+                $updated_module_tabs_json = array();
+                
+                foreach ($edit_section_module_data["fetch_admin_module_data"] as &$module_data) {
+                    if ($module_data["id"] === $module_id) {
+                        foreach ($tab_ids_order as $tab_id) {
+                            foreach ($module_data["module_tabs_json"] as $tab_data) {
+                                if ($tab_data["id"] == $tab_id) {
+                                    $updated_module_tabs_json[] = $tab_data;
+                                    break;
+                                }
+                            }
+                        }
+                        $module_data["module_tabs_json"] = $updated_module_tabs_json;
+                        break;
+                    }
+                }
+                
+                //update json file
+                file_put_contents($edit_section_module_file_path, json_encode($edit_section_module_data));
+                
                 $response_data["status"]                   = true;
-                $tab_ids_order                            = $_POST["tab_ids_order"];
                 $response_data["result"]["tab_ids_order"] = $tab_ids_order;
                 break;
             }

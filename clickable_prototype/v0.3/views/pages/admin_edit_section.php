@@ -14,6 +14,8 @@
     $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Employee Handbook";
     $section_title = (isset($_GET["section_title"])) ? htmlspecialchars_decode( $_GET["section_title"] ) : "About Company";
 
+    $edit_section_module_file_path = "../../assets/json/edit_section_module_data.json";
+    $edit_section_module_data = load_json_file($edit_section_module_file_path);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,22 +63,15 @@
             </form>
                 <div id="section_pages">
                     <?php
-                        $module_id = time() + rand();
-                        $tab_id = time() + rand();
-                        $module_data = array(
-                            "id" => $module_id,
-                            "module_tabs_json" => array(
-                                array(
-                                    "id" => $tab_id,
-                                    "title" => "Tab ". $tab_id ." Module ". $module_id,
-                                    "content" => "Sample",
-                                    "module_id" => $module_id,
-                                    "is_comments_allowed" => 0
-                                )
-                            )
-                        );
-                        $modules_array = array("modules" => array($module_data));
-                        load_view("../partials/section_page_content_partial.php", $modules_array);
+                        foreach($edit_section_module_data["fetch_admin_module_data"] as $module_data){
+                            $modules_array = array("modules" => array($module_data));
+                            if($modules_array){
+                                load_view("../partials/section_page_content_partial.php", $modules_array);
+                            }
+                            else{
+                                //when no data display nothing
+                            }
+                        }
                     ?>
                 </div>
             <form id="add_module_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">

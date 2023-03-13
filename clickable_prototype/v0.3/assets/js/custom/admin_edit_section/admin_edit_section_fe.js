@@ -29,7 +29,19 @@ function(){
             .on("change", ".is_comments_allowed", (event) => {
                 ux(event.target.closest(".update_module_tab_form")).trigger("submit");
             })
-
+        
+        let section_pages = ux("#section_pages").findAll(".section_page_content");
+        section_pages.forEach((page) => {
+            let show_added = false;
+            page.querySelectorAll(".section_page_tab").forEach((section_tab) => {
+                if (!show_added && !section_tab.classList.contains("show")) {
+                    if ( !Array.from(section_tab.parentNode.children).some( (element_section) => element_section.classList.contains("show")) ) {
+                        section_tab.classList.add("show");
+                        show_added = true;
+                    }
+                }
+            });
+        });
         let modals = document.querySelectorAll('.modal');
         M.Modal.init(modals);
         
