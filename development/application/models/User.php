@@ -21,8 +21,7 @@
                     array(1, USER_LEVEL["USER"], $userinfo["givenName"], $userinfo["familyName"], $userinfo["email"]));
 
                     if($create_user){
-                        $is_successful = true;
-                        $user_info     = array(
+                        $user_info = array(
                             "type"          => "SIGNUP",
                             "id"            => $this->db->insert_id(),
                             "user_level_id" => USER_LEVEL["USER"],
@@ -41,17 +40,14 @@
                         array($userinfo["givenName"], $userinfo["familyName"], $user_info["id"]));
 
                         if($update_user){
-                            $is_successful           = true;
                             $user_info["first_name"] = $userinfo["givenName"];
                             $user_info["last_name"]  = $userinfo["familyName"];
                         }
                     }
                 }
                 
-                if($is_successful){
-                    $response_data["status"] = true;
-                    $response_data["result"]["user_info"] = $user_info;
-                }
+                $response_data["status"] = true;
+                $response_data["result"]["user_info"] = $user_info;
             }
             catch (Exception $e) {
                 $response_data["error"] = $e->getMessage();
