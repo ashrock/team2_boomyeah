@@ -148,6 +148,9 @@ function disableEditSectionTitle(event){
         updateSectionFormSubmit(section_id, "title", section_title.innerText, true);
     } else {
         section_block.addClass("error");
+        let original_section_title = section_block.find("[name=original_section_title]").val();
+        section_block.find(".section_title").text(original_section_title);
+        addAnimation(`#section_${section_id}`, "animate__animated animate__headShake");
     }
 }
 

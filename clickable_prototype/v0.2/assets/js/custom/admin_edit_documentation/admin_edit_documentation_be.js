@@ -143,6 +143,7 @@ function onSubmitAddSectionForm(event){
     }
     else{
         post_form.find(".group_add_section").addClass("input_error");
+        addAnimation(".group_add_section", "animate__animated animate__headShake");
     }
     
     return false;
