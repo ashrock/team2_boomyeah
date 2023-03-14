@@ -159,7 +159,9 @@ function onSubmitAddCollaboratorsForm(event){
             let invite_collaborator_btn = document.getElementById("invite_collaborator_btn");
             let collaborator_count      = parseInt(response_data.result.cache_collaborators_count) + 1;
 
-            invite_collaborator_btn.innerHTML = (`${collaborator_count} Collaborators`);
+            if(invite_collaborator_btn){
+                invite_collaborator_btn.innerHTML = (`${collaborator_count} Collaborators`);
+            }
             
             ux("#invited_users_wrapper").findAll(".added_collaborator").forEach(dropdown_element => {
                 M.FormSelect.init(dropdown_element);
@@ -239,7 +241,9 @@ function onSubmitRemoveInvitedUser(event){
                 let invite_collaborator_btn = document.getElementById("invite_collaborator_btn");
                 let collaborator_count      = parseInt(response_data.result.cache_collaborators_count) + 1;
 
-                invite_collaborator_btn.innerHTML = (`${collaborator_count} Collaborators`);
+                if(invite_collaborator_btn){
+                    invite_collaborator_btn.innerHTML = (`${collaborator_count} Collaborators`);
+                }
             }, false);
         } else {
 
