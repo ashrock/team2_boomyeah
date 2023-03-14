@@ -583,6 +583,32 @@
                 break;
             }
 
+            case "add_tab_post" : {
+                $tab_id = intval($_POST["tab_id"]);
+                $post_comment_message = $_POST["post_comment"];
+                $post_id = time() + rand();
+
+                $view_data = array(
+                    "comment_items" => array(
+                        array(
+                            "post_id" => $post_id,
+                            "message" => $post_comment_message,
+                            "first_name" => "Post Erick",
+                            "user_profile_pic" => "https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png",
+                            "date_posted" => "Mar 10, 2023",
+                        )
+                    )
+                );
+
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "tab_id"    => $tab_id,
+                    "post_id"   => $post_id,
+                    "html"      => get_include_contents("../views/partials/replies_item_partial.php", $view_data),
+                );
+                break;
+            }
+
             case "edit_comment" : {
                 $is_post = intval($_POST["is_post"]);
                 $post_comment_message = $_POST["post_comment"];

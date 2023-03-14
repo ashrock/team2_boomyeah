@@ -10,8 +10,10 @@ document.addEventListener("DOMContentLoaded", async (event) => {
             let fetch_tab_posts_form = ux("#fetch_tab_posts_form");
             fetch_tab_posts_form.find(".tab_id").val(tab_id);
             fetch_tab_posts_form.trigger("submit");
+            event.target.remove();
         })
         .on("submit", "#fetch_tab_posts_form", onFetchTabPosts)
+        .on("submit", ".add_post_form", onSubmitPostForm)
         .on("submit", ".add_reply_form", onAddPostComment)
 
         .on("click", ".toggle_replies_btn *", showRepliesList)
@@ -21,24 +23,52 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         .on("click", ".edit_comment_form .cancel_btn", closeEditCommentForm)
         ;
 });
+function onSubmitPostForm(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    let post_form = ux(event.target);
+    
+    ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
+        if(response_data.status){
+            let tab_id = `#tab_${response_data.result.tab_id}`;
+            let comments_list = ux(tab_id).find(".tab_comments .comments_list");
+            let fetch_tab_posts_btn = ux(tab_id).find(".fetch_tab_posts_btn");
+
+            (fetch_tab_posts_btn.self()) && fetch_tab_posts_btn.trigger("click");
+            
+            setTimeout(() => {
+                comments_list.append(response_data.result.html);
+            }, 200);
+
+            post_form.self().reset();
+            post_form.find(".comment_message").self().blur();
+        }
+
+    }, "json");
+    
+    return false;
+
+}
+
+function onFetchTabPosts(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    let post_form = ux(event.target);
+    
+    ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
+        if(response_data.status){
+            let tab_id = `#tab_${response_data.result.tab_id}`;
+            addAnimation(ux(tab_id).find(".tab_comments .comments_list").self(), "animate__zoomIn");
+            setTimeout(() => {
+                ux(tab_id).find(".tab_comments .comments_list").prepend(response_data.result.html);
+            }, 200);
+        }
+    }, "json");
+    
+    return false;
+}
 
 function onSubmitEditForm(event){
-    /* event.stopImmediatePropagation();
-    event.preventDefault();
-    let edit_comment_form = event.target;
-    let comment_message = ux(edit_comment_form).find(".comment_message").self().value;
-    let comment_content = edit_comment_form.nextElementSibling;
-    ux(comment_content).find(".comment_message").text(comment_message);
-    ux(comment_content).find(".posted_at").addClass("edited");
-    ux(comment_content).addClass("animate__animated").addClass("animate__pulse");
-    closeEditCommentForm(edit_comment_form);
-    ux(".active_comment_item").removeClass("active_comment_item");
-
-    setTimeout(() => {
-        ux(comment_content).removeClass("animate__animated").removeClass("animate__pulse");    
-    }, 480);
-    return false; */
-
     event.stopImmediatePropagation();
     event.preventDefault();
     let post_form = ux(event.target);
@@ -74,24 +104,6 @@ function onAddPostComment(event){
             post_form.find(".comment_message").self().blur();
         }
 
-    }, "json");
-    
-    return false;
-}
-
-function onFetchTabPosts(event){
-    event.stopImmediatePropagation();
-    event.preventDefault();
-    let post_form = ux(event.target);
-    
-    ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
-        if(response_data.status){
-            let tab_id = `#tab_${response_data.result.tab_id}`;
-            addAnimation(ux(tab_id).find(".tab_comments .comments_list").self(), "animate__zoomIn");
-            setTimeout(() => {
-                ux(tab_id).find(".tab_comments .comments_list").html(response_data.result.html);
-            }, 200);
-        }
     }, "json");
     
     return false;

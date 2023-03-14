@@ -12,6 +12,8 @@
         <?php } ?>
             <div class="tab_comments comment_container">
                 <form action="<?= $base_url ?>processes/manage_documentation.php" method="POST" class="add_comment_form add_post_form">
+                    <input type="hidden" name="action" value="add_tab_post">
+                    <input type="hidden" name="tab_id" class="tab_id" value="<?= $module_tab["id"] ?>">
                     <div class="comment_field">
                         <div class="comment_message_content input-field col s12">
                             <label for="post_comment_<?= $module_tab["id"] ?>">Write a comment</label>
