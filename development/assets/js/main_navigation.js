@@ -9,12 +9,6 @@ M.Dropdown.init(elem, {
     coverTrigger: false
 });
 
-$(document).on("ready", () => {
-    $("#search_documentation_field").on("keydown", onSearchDocumentation);
-    $("#search_section_field").on("keyup", onSearchSection);
-
-});
-
 function onSearchDocumentation(event){
     clearTimeout(search_timeout);
     let search_field = event.target;

@@ -4,6 +4,7 @@
 
         <div id="section_<?= $section['id'] ?>" class="section_block">
             <input type="hidden" name="section_id" value="<?= $section['id'] ?>" class="section_id">
+            <input type="hidden" name="original_section_title" value="<?= $section['title'] ?>">
             <div class="drag_handle"></div>
             <div class="section_title autoheight"><?= $section['title'] ?></div>
         <?php if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) { ?>    
