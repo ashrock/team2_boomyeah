@@ -423,7 +423,7 @@
                         array(
                             "id"                  => $tab_id,
                             "title"               => "Tab ". $tab_id ." Module ". $module_id,
-                            "content"             => "Add desciption",
+                            "content"             => "",
                             "module_id"           => $module_id,
                             "is_comments_allowed" => 0
                         )
