@@ -1,6 +1,5 @@
 <?php
-  $dir_path = "./views/pages";
-  $files = scandir($dir_path);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,29 +11,29 @@
         <meta name="author" content="UX Team 2">
         <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
         <meta name="description" content="A great way to describe your documentation tool">
-        <title>Boom Yeah | Team 2</title>
+        <title>Boom Yeah | Team 2 | Clickable Prototype V0.3</title>
         <link rel="stylesheet" href="./assets/css/index.css"/>
     </head>
     <body>
-        <div class="header">
-            <img src="./assets/images/global_logo.svg" class="global_logo" alt="global_logo">
-            <div class="divider"></div>
-            <h1>Team <span>2</span></h1>
+        <div id="wrapper">
+            <div class="context_container v03">
+                <h1>Clickable Prototype v.03 Links</h1>
+                <a href="./views/pages/admin_edit_section.php">Admin Edit Section Page</a>
+                <p>
+                    <span> User Stories</span>
+                    (P7) As an admin, I want to manage the modules and tabs so that I can easily build a documentation and decide what are needed contents.<br/><br/>
+                    (P6)As an admin, I want to upload files/images so that I can easily use them in the documentations without much effort.
+                </p>
+                <a href="./views/pages/user_view_section.php">User View Section Page</a>
+                <p>
+                    <span>User Stories</span>
+                    (P7) As a user, I want to be able to watch videos, see images, discuss, and read text in a documentation so that I can see the meaning and feel the importance of being in a team.<br/><br/>
+                    (P6) As a user, I want to be able to update and delete my comment so that I can be more confident that my thoughts and feelings will be seen by the rest of the community whichever way I like.
+                </p>
+                <h2>Figma Design</h2>
+                <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" class="frame_display" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7sD1iBde0wOo0CjXn01mqU%2FBoomYEAH%3Fnode-id%3D2588%253A124819%26t%3DhtIMY7mtv2HI0Mow-1" allowfullscreen></iframe>
+                <a href="https://tinyurl.com/Roadmap-Spreadsheet-Link">Product Roadmap Spreadsheet Link</a>
+            </div>
         </div>
-        <ul>
-            <?php foreach($files as $file_name) {
-                // Ignore the current and parent directory entries and directories
-                if ($file_name === '.' || $file_name === '..' || is_dir($dir_path . '/' . $file_name)) {
-                    continue;
-                }
-            ?>
-                <li>
-                    <a href="./views/pages/<?= $file_name ?>">
-                        <?= ucwords(str_replace(['.php', '_'], ['', ' '], $file_name)) ?>
-                    </a>
-                    <iframe src="./views/pages/<?= $file_name?>" scrolling="no" frameBorder="0" class="frame_display"></iframe>
-                </li>
-            <?php } ?>
-        </ul>
     </body>
 </html>

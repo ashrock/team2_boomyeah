@@ -43,12 +43,12 @@ class Users extends CI_Controller {
 						$_SESSION["workspace_id"]  = 1;
 						
 						# Set user session
-						$_SESSION["user_id"]         = $register_user["result"]["user_info"]["id"];
-						$_SESSION["user_level_id"]   = $register_user["result"]["user_info"]["user_level_id"];
-						$_SESSION["first_name"]      = $register_user["result"]["user_info"]["first_name"];
-						$_SESSION["last_name"]       = $register_user["result"]["user_info"]["last_name"];
-						$_SESSION["email"]           = $register_user["result"]["user_info"]["email"];
-						$_SESSION["profile_picture"] = $register_user["result"]["user_info"]["profile_picture"];
+						$_SESSION["user_id"]          = $register_user["result"]["user_info"]["id"];
+						$_SESSION["user_level_id"]    = $register_user["result"]["user_info"]["user_level_id"];
+						$_SESSION["first_name"]       = $register_user["result"]["user_info"]["first_name"];
+						$_SESSION["last_name"]        = $register_user["result"]["user_info"]["last_name"];
+						$_SESSION["email"]            = $register_user["result"]["user_info"]["email"];
+						$_SESSION["user_profile_pic"] = $register_user["result"]["user_info"]["profile_picture"];
 	
 						redirect(($register_user["result"]["user_info"]["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
 					}

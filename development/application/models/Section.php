@@ -69,6 +69,60 @@
             return $response_data;
         }
 
+        # DOCU: This function will fetch tabs of a section
+        # Triggered by: (GET) docs/:documentation_id/:section_id/edit
+        # Requires: $section_id
+        # Returns: { status: true/false, result: { section_tabs data }, error: null }
+        # Last updated at: March 14, 2023
+        # Owner: Jovic
+        public function getSectionTabs($section_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $get_section = $this->db->query("
+                    SELECT
+                        modules.id AS module_id, 
+                        modules.tab_ids_order,
+                        ANY_VALUE(module_tabs.tabs) AS module_tabs_json
+                    FROM sections
+                    INNER JOIN modules ON modules.section_id = sections.id
+                    LEFT JOIN (
+                            SELECT
+                                tabs.module_id,
+                                JSON_OBJECTAGG(
+                                    tabs.id,
+                                    JSON_OBJECT(
+                                        'id', tabs.id,
+                                        'module_id', tabs.module_id,
+                                        'title', tabs.title,
+                                        'content', tabs.content,
+                                        'comments_count', tabs.cache_posts_count,
+                                        'is_comments_allowed', tabs.is_comments_allowed
+                                    )
+                                ) AS tabs
+                            FROM tabs
+                        GROUP BY module_id
+                    ) AS module_tabs ON module_tabs.module_id = modules.id
+                    WHERE sections.id = ?
+                    GROUP BY modules.id;
+                ", $section_id);
+                
+                if($get_section->num_rows()){                    
+                    $response_data["status"] = true;
+                    $response_data["result"] = $get_section->result_array();
+                }
+                else{
+                    throw new Exception("No section found.");
+                }      
+            }
+
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
         # DOCU: This function will add section to a documentation
         # Triggered by: (POST) sections/add
         # Requires: $params { documentation_id, user_id, section_title }
