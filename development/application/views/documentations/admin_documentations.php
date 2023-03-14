@@ -20,9 +20,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/vendor/jquery-3.6.3.min.js") ?>"></script>
-    <script src="<?= add_file("assets/js/vendor/ux.lib.js") ?>"></script>
     <script src="<?= add_file("assets/js/vendor/Sortable.min.js") ?>"></script>
+    <script src="<?= add_file("assets/js/vendor/ux.lib.js") ?>"></script>
 </head>
 
 <body>
@@ -77,7 +78,6 @@
     <?php $this->load->view("partials/confirm_documentation_modals.php"); ?>
     <?php $this->load->view("partials/confirm_invite_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
     <script src="<?= add_file("assets/js/invite_modal.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_documentation/admin_documentation_fe.js") ?>"></script>

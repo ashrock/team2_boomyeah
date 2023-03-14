@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
         .on("click", ".change_privacy_yes_btn", submitDocumentationPrivacy)
         .on("keydown", ".section_block .section_title", (event) => editSectionTitle(event, true))
+        .on("input", "#input_add_section", removeInputError)
         ;
 
     window.addEventListener("resize", () => {
@@ -59,14 +60,34 @@ function setSectionsContentHeight(){
     ux("#sections_content").self().style.paddingTop = `${sections_offset}px`;
 }
 
+function removeInputError(event){
+    let input_add_section = event.target;
+    if(input_add_section.value.length){
+        let post_form = ux(".group_add_section");
+        post_form.removeClass("input_error");
+    }
+}
+
 function documentDescriptionPlaceholder(){
     let document_description = ux("#document_description");
     document_description.on("input", (event) => {
         if (!event.target.firstChild) {
             document_description.append("<p>Add Description</p>");
         } 
-        else if (event.target.firstChild.nodeName === "P") {
+        else if (event.target.firstChild?.nodeName === 'P') {
             document_description.find("p").remove();
+            event.target.innerText = event.data;
+            let selection = window.getSelection();
+            let range = document.createRange();
+            range.selectNodeContents(event.target);
+            range.collapse(false);
+            selection.removeAllRanges();
+            try {
+              selection.addRange(range);
+            }
+            catch (err) {
+              console.warn('Error adding range to selection:', err);
+            }
         }
 
         setSectionsContentHeight();
@@ -77,7 +98,7 @@ function documentDescriptionPlaceholder(){
         if(event.keyCode === 13){
             event.target.blur();
         }
-    })
+    });
 }
 
 function setSectionsContentHeight(){
@@ -143,6 +164,9 @@ function disableEditSectionTitle(event){
         updateSectionFormSubmit(section_id, "title", section_title.innerText, true);
     } else {
         section_block.addClass("error");
+        let original_section_title = section_block.find("[name=original_section_title]").val();
+        section_block.find(".section_title").text(original_section_title);
+        addAnimation(`#section_${section_id}`, "animate__animated animate__headShake");
     }
 }
 
