@@ -11,7 +11,8 @@
     include_once("../view_helper.php");  
     include_once("../../config/connection.php");
     include_once("../../config/constants.php");
-
+    include_once("../../processes/partial_helper.php");  
+    
     /** TODO: Backend should provide the $document_id */
     $document_id = time();
     $document_data = array(
@@ -52,8 +53,8 @@
     <div id="wrapper">
         <div class="container">
             <ul id="breadcrumb_list">
-                <li class="breadcrumb_item"><a href="admin_documentation.html">Documentation</a></li>
-                <li class="breadcrumb_item mobile_breadcrumb"><a href="user_documentation.html">&lt;</a></li>
+                <li class="breadcrumb_item"><a href="admin_documentation.php">Documentation</a></li>
+                <li class="breadcrumb_item mobile_breadcrumb"><a href="user_documentation.php">&lt;</a></li>
                 <li class="breadcrumb_item active">Employee Handbook</li>
             </ul>
             <div class="divider"></div>
