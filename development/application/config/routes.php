@@ -55,8 +55,9 @@ $route['default_controller'] = 'users';
 $route['logout'] = 'users/logout';
 
 /* GET | Admin Documentation Routes */
-$route['docs/edit']['GET']        = 'documentations/adminDocumentations';
-$route['docs/(:any)/edit']['GET'] = 'documentations/getDocumentation/$1';
+$route['docs/edit']['GET']               = 'documentations/adminDocumentations';
+$route['docs/(:any)/edit']['GET']        = 'documentations/getDocumentation/$1';
+$route['docs/(:any)/(:any)/edit']['GET'] = 'documentations/getSection/$1/$2';
 
 /* POST | Admin Documentation Routes */
 $route['docs/get']['POST']       = 'documentations/getDocumentations';
