@@ -55,8 +55,9 @@ $route['default_controller'] = 'users';
 $route['logout'] = 'users/logout';
 
 /* GET | Admin Documentation Routes */
-$route['docs/edit']['GET']        = 'documentations/adminDocumentations';
-$route['docs/(:any)/edit']['GET'] = 'documentations/getDocumentation/$1';
+$route['docs/edit']['GET']               = 'documentations/adminDocumentations';
+$route['docs/(:any)/edit']['GET']        = 'documentations/getDocumentation/$1';
+$route['docs/(:any)/(:any)/edit']['GET'] = 'documentations/getSection/$1/$2';
 
 /* POST | Admin Documentation Routes */
 $route['docs/get']['POST']       = 'documentations/getDocumentations';
@@ -80,8 +81,9 @@ $route['sections/remove']['POST']    = 'sections/removeSection';
 $route['sections/reorder']['POST']    = 'sections/reOrderSection';
 
 /* User Documentation Routes */
-$route['docs']['GET']        = 'documentations/userDocumentations';
-$route['docs/(:any)']['GET'] = 'documentations/userDocumentation/$1';
+$route['docs']['GET']               = 'documentations/userDocumentations';
+$route['docs/(:any)']['GET']        = 'documentations/userDocumentation/$1';
+$route['docs/(:any)/(:any)']['GET'] = 'documentations/userSection/$1/$2';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
