@@ -81,8 +81,9 @@ $route['sections/remove']['POST']    = 'sections/removeSection';
 $route['sections/reorder']['POST']    = 'sections/reOrderSection';
 
 /* User Documentation Routes */
-$route['docs']['GET']        = 'documentations/userDocumentations';
-$route['docs/(:any)']['GET'] = 'documentations/userDocumentation/$1';
+$route['docs']['GET']               = 'documentations/userDocumentations';
+$route['docs/(:any)']['GET']        = 'documentations/userDocumentation/$1';
+$route['docs/(:any)/(:any)']['GET'] = 'documentations/userSection/$1/$2';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

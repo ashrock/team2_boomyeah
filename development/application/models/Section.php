@@ -69,6 +69,12 @@
             return $response_data;
         }
 
+        # DOCU: This function will fetch tabs of a section
+        # Triggered by: (GET) docs/:documentation_id/:section_id/edit
+        # Requires: $section_id
+        # Returns: { status: true/false, result: { section_tabs data }, error: null }
+        # Last updated at: March 14, 2023
+        # Owner: Jovic
         public function getSectionTabs($section_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
