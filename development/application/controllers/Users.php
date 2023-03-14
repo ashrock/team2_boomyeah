@@ -13,7 +13,7 @@ class Users extends CI_Controller {
 	# Triggered by: (GET) /
 	# Optionals: Data returned by Google; $_SESSION["user_id", "user_level_id"]
 	# Returns: login.php
-	# Last updated at: Feb. 28, 2023
+	# Last updated at: Mar. 14, 2023
 	# Owner: Jovic
 	public function index(){
 		# Proceed to Google API if there is no session
@@ -48,7 +48,7 @@ class Users extends CI_Controller {
 						$_SESSION["first_name"]       = $register_user["result"]["user_info"]["first_name"];
 						$_SESSION["last_name"]        = $register_user["result"]["user_info"]["last_name"];
 						$_SESSION["email"]            = $register_user["result"]["user_info"]["email"];
-						$_SESSION["user_profile_pic"] = $userinfo["picture"];
+						$_SESSION["user_profile_pic"] = $register_user["result"]["user_info"]["profile_picture"];
 	
 						redirect(($register_user["result"]["user_info"]["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
 					}

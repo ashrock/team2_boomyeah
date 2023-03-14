@@ -276,6 +276,7 @@ textarea {
 #invite_modal_container .invite_wrapper .modal .invite_collab {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   max-height: calc(100% - (99px + 85px));
   padding: 24px 0px;
 }
@@ -820,19 +821,16 @@ body::-webkit-scrollbar-thumb {
 }
 #edit_section_content .section_details .add_description {
   position: relative;
-}
-#edit_section_content .section_details .add_description:hover::after {
-  background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/admin_edit_docs_sprite.svg') no-repeat;
-  background-position: -59px -4px;
-  content: '';
-  display: inline-block;
-  height: 18px;
-  position: absolute;
-  right: -5px;
-  width: 18px;
+  border: 1px solid #D5E3FF;
+  border-radius: 8px;
+  padding: 28px 24px 30px;
 }
 #edit_section_content .section_details .add_description textarea {
   max-width: 955px;
+  overflow: hidden;
+}
+#edit_section_content .section_details .add_description:focus-within {
+  box-shadow: 0 1px 4px 2px rgba(181, 196, 228, 0.25);
 }
 #edit_section_content #add_page_tabs_btn {
   border-radius: 20px;
@@ -849,6 +847,9 @@ body::-webkit-scrollbar-thumb {
 }
 #edit_section_content #add_page_tabs_btn:hover {
   background: #BDDAFF;
+}
+#section_pages .error {
+  border: 1px solid #DA4D4D !important;
 }
 .faded {
   opacity: 0;

@@ -241,6 +241,31 @@
 			}
 		}
 
+		# DOCU: This function will call getDocumentation from Documentation Model, getSection and getSectionTabs from Section Model
+		# Triggered by: (GET) docs/(:any)/(:any)/edit
+		# Requires: $documentation_id, $section_id
+		# Last updated at: Mar. 14, 2023
+		# Owner: Jovic
+		public function getSection($documentation_id, $section_id){
+			$documentation = $this->Documentation->getDocumentation($documentation_id);
+			
+			# Check if user is allowed to access page
+			$this->isUserAllowed();
+
+			if($documentation["status"] && $documentation["result"]){
+				# Fetch sections
+				$this->load->model("Section");
+				$sections = $this->Section->getSection($section_id);
+				$modules  = $this->Section->getSectionTabs($section_id);
+
+				$this->load->view('documentations/admin_edit_section', array("documentation" => $documentation["result"], "section" => $sections["result"], "modules" => $modules["result"]));
+			}
+			else{
+				# Confirm if we need to show error or just redirect back to dashboard
+				echo "Documentation doesn't exist";
+			}
+		}
+
 		# DOCU: This function will call getDocumentation from Documentation Model and render user_view_documentation page
 		# Triggered by: (GET) docs/(:any)
 		# Requires: $documentation_id
@@ -260,6 +285,10 @@
 				# Confirm if we need to show error or just redirect back to dashboard
 				echo "Documentation doesn't exist";
 			}
+		}
+
+		public function userSection($documentation_id, $section_id){
+			$this->load->view('documentations/user_view_documentation');
 		}
 
 		# DOCU: This function will call getDocumentationsOrder from Workspace Model and prepare params needed when fetching documentations.
