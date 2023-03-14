@@ -219,7 +219,7 @@ function redirectToEditSection(event){
         return;
     }
     
-    location.href = "admin_edit_section.html";
+    location.href = `${event.target.id.split("_")[1]}/edit`;
 }
 
 function appearEmptySection(){
