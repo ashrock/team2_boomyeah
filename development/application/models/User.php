@@ -13,7 +13,7 @@
 
             try {
                 # Check if User exists
-                $get_user = $this->db->query("SELECT id, user_level_id, first_name, last_name, email FROM users WHERE email = ?;", $userinfo["email"]);
+                $get_user = $this->db->query("SELECT id, user_level_id, first_name, last_name, email, profile_picture FROM users WHERE email = ?;", $userinfo["email"]);
 
                 # Create User record
                 if(!$get_user->num_rows()){
