@@ -38,7 +38,7 @@
                         (Admin Edit Documentations Page, User View Documentations Page + Invite Collaborator Modal Feature)
                     </li>
                     <li>
-                        <a href="#!">v0.3</a>
+                        <a href="./v0.3/index.php">v0.3</a>
                         (Admin Edit Section Page, User View Section Page (Text & Discussion) + File Uploading)
                     </li>
                 </ul>
