@@ -394,8 +394,21 @@
                 break;
             }
             case "reorder_sections" : {
+                $sections_order           = explode(",", $_POST["sections_order"]);
+                $reordered_sections_array = array();
+                foreach ($sections_order as $order) {
+                    foreach ($sections_data["fetch_section_admin_data"] as $item) {
+                        if ($item["id"] == $order) {
+                            $reordered_sections_array[] = $item;
+                            break;
+                        }
+                    }
+                }
+                $sections_data["fetch_section_admin_data"] = $reordered_sections_array;
+
+                file_put_contents($sections_data_file_path, json_encode($sections_data));
+
                 $response_data["status"]                   = true;
-                $sections_order                            = $_POST["sections_order"];
                 $response_data["result"]["sections_order"] = $sections_order;
                 break;
             }
@@ -491,17 +504,19 @@
             }
 
             case "update_module_tab": {
-                $module_id   = intval($_POST["module_id"]);
-                $tab_id      = intval($_POST["tab_id"]);
-                $tab_title   = $_POST["module_title"];
-                $tab_content = $_POST["module_content"];
+                $module_id           = intval($_POST["module_id"]);
+                $tab_id              = intval($_POST["tab_id"]);
+                $tab_title           = $_POST["module_title"];
+                $tab_content         = $_POST["module_content"];
+                $is_comments_allowed = intval($_POST["is_comments_allowed"]);
                 
                 foreach($edit_section_module_data["fetch_admin_module_data"] as &$module_data){
                     if($module_data["id"] === $module_id){
                         foreach($module_data["module_tabs_json"] as &$module_tab){
                             if($module_tab["id"] === $tab_id){
-                                $module_tab["title"] = $tab_title;
-                                $module_tab["content"] = $tab_content;
+                                $module_tab["title"]               = $tab_title;
+                                $module_tab["content"]             = $tab_content;
+                                $module_tab["is_comments_allowed"] = $is_comments_allowed;
                             }
                         }
                         break;
