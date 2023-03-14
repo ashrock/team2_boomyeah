@@ -1,0 +1,66 @@
+// out: "../css/admin_edit_section.css", compress: false, sourceMap: false
+
+@import url(./global.less);
+#wrapper{
+    padding-left: 80px;
+    width: 100% !important;
+
+    @media (max-width: 632px) {
+        padding: 40px 0px;
+    }
+
+    .mobile_search_form{
+        display: none !important;
+    }
+}
+
+#edit_section_content{
+    margin: 0 auto 40px;
+    width: 1024px;
+    
+    @media (max-width: 1168px) {
+        padding: 0 32px;
+        width: 100% !important;
+    }
+    
+    .section_details{
+        .add_description{
+            position: relative;
+            &:hover{
+                &::after{
+                    background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/admin_edit_docs_sprite.svg') no-repeat;
+                    background-position: -59px -4px;
+                    content: '';
+                    display: inline-block;
+                    height: 18px;
+                    position: absolute;
+                    right: -5px;
+                    width: 18px;
+                }
+            }
+            textarea{
+                max-width: 955px;
+            }
+        }
+    }
+
+    #add_page_tabs_btn{
+        .cta_btn();
+        background: transparent;
+        border-style: dashed;
+        font: 14px @readex_medium;
+        height: 45px;
+        line-height: 45px;
+        width: 100%;
+
+        &:hover{
+            background: @by_hovered_btn;
+        }
+    } 
+}
+
+.faded{
+    opacity: 0;
+}
+
+@import url(./view_section_content.less);

@@ -6,7 +6,7 @@
         # Triggered by: (GET) docs
         # Requires: object returned by Google Login API
         # Returns: { status: true/false, result: user_info, error: null }
-        # Last updated at: Feb. 28, 2023
+        # Last updated at: Mar. 13, 2023
         # Owner: Jovic
         public function loginUser($userinfo){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -20,18 +20,30 @@
                     $create_user = $this->db->query("INSERT INTO users (workspace_id, user_level_id, first_name, last_name, email, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW());", 
                     array(1, USER_LEVEL["USER"], $userinfo["givenName"], $userinfo["familyName"], $userinfo["email"]));
 
-                    $user_info = array(
-                        "type"          => "SIGNUP",
-                        "id"            => $this->db->insert_id(),
-                        "user_level_id" => USER_LEVEL["USER"],
-                        "first_name"    => $userinfo["givenName"],
-                        "last_name"     => $userinfo["familyName"],
-                        "email"         => $userinfo["email"]
-                    );
+                    if($create_user){
+                        $user_info = array(
+                            "type"          => "SIGNUP",
+                            "id"            => $this->db->insert_id(),
+                            "user_level_id" => USER_LEVEL["USER"],
+                            "first_name"    => $userinfo["givenName"],
+                            "last_name"     => $userinfo["familyName"],
+                            "email"         => $userinfo["email"]
+                        );
+                    }
                 }
                 else {
-                    # Return User record
+                    # Check if First Name and Last Name exists
                     $user_info = $get_user->result_array()[0];
+
+                    if(!$user_info["first_name"] || !$user_info["last_name"]){
+                        $update_user = $this->db->query("UPDATE users SET first_name = ?, last_name = ?, updated_at = NOW() WHERE id = ?;",
+                        array($userinfo["givenName"], $userinfo["familyName"], $user_info["id"]));
+
+                        if($update_user){
+                            $user_info["first_name"] = $userinfo["givenName"];
+                            $user_info["last_name"]  = $userinfo["familyName"];
+                        }
+                    }
                 }
                 
                 $response_data["status"] = true;

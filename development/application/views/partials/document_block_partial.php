@@ -9,8 +9,9 @@
                     <input type="hidden" name="action" value="update_documentation">
                     <input type="hidden" name="update_type" value="title">
                     <input type="hidden" name="documentation_id" value="<?= $documentation["id"] ?>">
+                    <input type="hidden" name="original_value" value="<?= $documentation["title"] ?>">
                     <?php if($documentation["is_private"]){ ?>
-                        <button type="button" class="invite_collaborators_btn modal-trigger <?= ($documentation["is_archived"]) ? 'archived_disabled' : '' ?>" tabindex="-1">&nbsp;<?= $documentation["cache_collaborators_count"] ?></button>
+                        <button type="button" class="invite_collaborators_btn <?= ($documentation["is_archived"]) ? 'archived_disabled' : '' ?>" data-document_id="<?= $documentation["id"] ?>" tabindex="-1">&nbsp;<?= $documentation["cache_collaborators_count"] + 1 ?></button>
                     <?php } ?>
                 </form>
                 <div class="document_controls">
@@ -28,7 +29,7 @@
                             <li><a href="#confirm_to_archive" class="archive_icon modal-trigger archive_btn" data-document_id="<?= $documentation["id"] ?>" data-documentation_action="archive">Archive</a></li>
                             <?php if($documentation["is_private"]){ ?>
                                 <li class="divider" tabindex="-1"></li>
-                                <li><a href="#modal1" class="invite_icon modal-trigger">Invite</a></li>
+                                <li><a href="#" class="invite_icon invite_collaborators_btn" data-document_id="<?= $documentation["id"] ?>">Invite</a></li>
                             <?php } ?>
                             <li class="divider" tabindex="-1"></li>
                             <?php if($documentation["is_private"]){ ?>

@@ -44,7 +44,7 @@
 </head>
 <body>
     <!--- Add #main_navigation --->
-    <div id="main_navigation"></div>
+    <div id="main_navigation"><?php include_once("../partials/main_navigation.php"); ?></div>
     <!--- Add #invite_modal --->
     <div id="invite_modal"></div>
     
@@ -59,27 +59,20 @@
             <div id="doc_title_access">
                 <h1 id="doc_title">Employee Handbook</h1>
             </div>
-            <p class="doc_text_content">This handbook replaces and supersedes all prior employee handbooks regarding employment or HR matters effective January 01, 2021. The policies and practices included in this handbook may be modified at any time. Your department has additional specific procedures for many of the general policies stated in the handbook. You are expected to learn your department's procedures and comply with them. You are also expected to conform to the professional standards of your occupation. Please direct any questions to your supervisor, department head, or to the Human Resources Management and Development Office.</p>
+            <p class="doc_text_content">This handbook replaces and supersedes all prior employee handbooks regarding employment or HR matters effective January 01, 2021. The policies and practices included in this handbook may be modified at any time.<br/> Your department has additional specific procedures for many of the general policies stated in the handbook. You are expected to learn your department's procedures and comply with them. You are also expected to conform to the professional standards of your occupation. Please direct any questions to your supervisor, department head, or to the Human Resources Management and Development Office.</p>
             <div class="section_header">
                 <h2>Sections</h2>
-                <button class="sort_btn dropdown-trigger" data-target="sort_list">Sort by</button>
-                <!-- Dropdown Structure -->
-                <ul id="sort_list" class="dropdown-content sort_dropdown">
-                    <li><a href="#!" class="sort_by" data-sort-by="az">A-Z</a></li>
-                    <li><a href="#!" class="sort_by" data-sort-by="za">Z-A</a></li>
-                </ul>
             </div>
             <div class="section_container" id="section_container">
-                <?php 
-                    if(count($sections_data["fetch_section_user_data"])){
-                        foreach($sections_data["fetch_section_user_data"] as $section_data){
-                            load_view("../partials/section_block_partial.php", $section_data);
-                        }
-                    }
-                    else{
-                        //display if no sections
-                    }
-                ?>
+                <?php if(count($sections_data["fetch_section_user_data"])) { ?>
+                    <?php foreach($sections_data["fetch_section_user_data"] as $section_data) { ?>
+                        <div class="section_block">
+                            <div class="section_details">
+                                <input type="text" name="section_title" value="<?= $section_data["title"] ?>" id="" class="section_title tooltipped" data-tooltip="<?= $section_data["title"] ?>"">
+                            </div>
+                        </div>
+                    <?php } ?>
+                <?php } ?>
             </div>
         </div>
     </div>
