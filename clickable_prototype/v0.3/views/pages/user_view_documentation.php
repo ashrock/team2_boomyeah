@@ -7,6 +7,7 @@
     $_SESSION["workspace_id"]  = 1;
     // END
 
+    include_once("../../processes/partial_helper.php");  
     include_once("../view_helper.php");  
     include_once("../../config/connection.php");
     include_once("../../config/constants.php");
@@ -79,6 +80,6 @@
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/hotkeys.js") ?>"></script>
-    <script src="<?= add_file("assets/js/user_view_documentation/user_view_documentation_fe.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/user_view_documentation/user_view_documentation_fe.js") ?>"></script>
 </body>
 </html> 

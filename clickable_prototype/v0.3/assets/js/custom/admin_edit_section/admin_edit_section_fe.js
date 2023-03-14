@@ -8,12 +8,10 @@ function(){
             ux("#next_page_btn").on("click", ()=> { openSectionTab(1) })
             updateSectionProgress();
         }
+
         ux("body")
             .on("click", ".section_page_tabs .page_tab_item a", (event) =>{
                 openTabLink(event);
-            })
-            .on("click", ".section_page_tab .tab_title", (event) =>{
-                openTabLink(event, true);
             })
             .on("click", ".section_page_tabs .remove_tab_btn", showConfirmRemoveTab)
             .on("keyup", "#section_short_description", (event) => {
@@ -28,8 +26,16 @@ function(){
             })
             .on("change", ".is_comments_allowed", (event) => {
                 ux(event.target.closest(".update_module_tab_form")).trigger("submit");
-            })
+            });
         
+        /** Enable title field clicking only for mobile */
+        if( document.documentElement.clientWidth <= MOBILE_WIDTH ){
+            ux("body")
+                .on("click", ".section_page_tab .tab_title", (event) =>{
+                    openTabLink(event, true);
+                });
+        }
+
         let section_pages = ux("#section_pages").findAll(".section_page_content");
         section_pages.forEach((page) => {
             let show_added = false;
