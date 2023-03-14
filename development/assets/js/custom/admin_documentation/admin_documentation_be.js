@@ -101,7 +101,9 @@ function onSubmitAddDocumentationForm(event){
                 location.href = `/docs/${response_data.result.documentation_id}/edit`;
             }
             else{
-                alert(response_data.error);
+                let add_documentation_input = ux(".group_add_documentation");
+                add_documentation_input.addClass("input_error");
+                addAnimation(".group_add_documentation", "animate__animated animate__headShake");
             }
         }, "json");
         
@@ -136,22 +138,28 @@ function onChangeDocumentationTitle(event){
     if(document_title_input.val()){
         document_title_input.attr("readonly", "");
         let edit_title_form = ux(event.target);
+        let original_value = edit_doc_title_form.find("[name=original_value]").val();
 
-        /** Use AJAX to generate new documentation */
-        ux().post(edit_title_form.attr("action"), edit_title_form.serialize(), (response_data) => {
-            if(response_data.status){
-                /* TODO: Improve UX after success updating of title. Add animation. */
-                parent_document_block.addClass("animate__animated animated_blinkBorder").removeClass("error");
-                
-                setTimeout(() => {
-                    parent_document_block.removeClass("animate__animated animated_blinkBorder");
-                }, 480);
-            }
-            else{
-                /* TODO: Improve UX after updating empty title. Add animation red border. */
-                alert(response_data.error);
-            }
-        }, "json");
+        if(original_value != edit_doc_title_form.find("[name=update_value]").val()){
+            /** Use AJAX to generate new documentation */
+            ux().post(edit_title_form.attr("action"), edit_title_form.serialize(), (response_data) => {
+                if(response_data.status){
+                    /* TODO: Improve UX after success updating of title. Add animation. */
+                    parent_document_block.addClass("animate__animated animated_blinkBorder").removeClass("error");
+                    
+                    setTimeout(() => {
+                        parent_document_block.removeClass("animate__animated animated_blinkBorder");
+                    }, 480);
+                }
+                else{
+                    let document_block = parent_document_block.attr("id");
+                    let original_data = original_value;
+                    document_title_input.self().blur();
+                    document_title_input.val(original_data);
+                    addAnimation(`#${document_block}`, "animate__animated animate__headShake");
+                }
+            }, "json");
+        }
     }
     else{
         parent_document_block.addClass("error");

@@ -1,0 +1,51 @@
+{
+    "fetch_section_modules" : [
+        {
+            "module_id": 1,
+            "tab_ids_order": [2, 1],
+            "module_tabs_json": {
+                "1": {
+                    "id": 1,
+                    "title": "Tab 1 Module 1",
+                    "content": "Sample",
+                    "module_id": 1,
+                    "is_comments_allowed": 0
+                },
+                "2": {
+                    "id": 2,
+                    "title": "Tab 2 Module 1",
+                    "content": "Sample",
+                    "module_id": 1,
+                    "is_comments_allowed": 1
+                }
+            }
+        },
+        {
+            "module_id": 2,
+            "tab_ids_order": [4, 3, 5],
+            "module_tabs_json": {
+                "3": {
+                    "id": 3,
+                    "title": "Tab 1 Module 2",
+                    "content": "Sample",
+                    "module_id": 2,
+                    "is_comments_allowed": 1
+                },
+                "4": {
+                    "id": 4,
+                    "title": "Tab 2 Module 2",
+                    "content": "Sample",
+                    "module_id": 2,
+                    "is_comments_allowed": 0
+                },
+                "5": {
+                    "id": 5,
+                    "title": "Tab 3 Module 2",
+                    "content": "Sample",
+                    "module_id": 2,
+                    "is_comments_allowed": 0
+                }
+            }
+        }
+    ]
+}
