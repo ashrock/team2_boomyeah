@@ -504,17 +504,19 @@
             }
 
             case "update_module_tab": {
-                $module_id   = intval($_POST["module_id"]);
-                $tab_id      = intval($_POST["tab_id"]);
-                $tab_title   = $_POST["module_title"];
-                $tab_content = $_POST["module_content"];
+                $module_id           = intval($_POST["module_id"]);
+                $tab_id              = intval($_POST["tab_id"]);
+                $tab_title           = $_POST["module_title"];
+                $tab_content         = $_POST["module_content"];
+                $is_comments_allowed = intval($_POST["is_comments_allowed"]);
                 
                 foreach($edit_section_module_data["fetch_admin_module_data"] as &$module_data){
                     if($module_data["id"] === $module_id){
                         foreach($module_data["module_tabs_json"] as &$module_tab){
                             if($module_tab["id"] === $tab_id){
-                                $module_tab["title"] = $tab_title;
-                                $module_tab["content"] = $tab_content;
+                                $module_tab["title"]               = $tab_title;
+                                $module_tab["content"]             = $tab_content;
+                                $module_tab["is_comments_allowed"] = $is_comments_allowed;
                             }
                         }
                         break;

@@ -12,9 +12,9 @@
             <input type="text" class="tab_title" name="module_title" value="<?= $module_tab["title"] ?>">
             <textarea id="tab_content_<?= $module_tab["id"] ?>" name="module_content" class="tab_content"><?= $module_tab["content"] ?></textarea>
             <div class="tab_footer">
-                <input type="hidden" name="is_comments_allowed" value="false">
+                <input type="hidden" name="is_comments_allowed" value="">
                 <label for="allow_comments_tab_<?= $module_tab["id"] ?>" class="checkbox_label">
-                    <input type="checkbox" class="is_comments_allowed" id="allow_comments_tab_<?= $module_tab["id"] ?>" name="is_comments_allowed" <?= ($module_tab["is_comments_allowed"]) ? "checked='checked'" : "" ?>>
+                    <input type="checkbox" class="is_comments_allowed" id="allow_comments_tab_<?= $module_tab["id"] ?>" <?= ($module_tab["is_comments_allowed"] === 1) ? "checked='checked'" : "" ?>>
                     <div class="checkbox_marker"></div>
                     <span class="checkbox_text">Allow Comments</span>
                 </label>

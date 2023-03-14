@@ -45,12 +45,12 @@
                 <div id="section_summary">
                     <div class="breadcrumbs">
                         <ul id="breadcrumbs_list">
-                            <li class="breadcrumb_item"><a href="admin_documentation.html">Documentations</a></li class="breadcrumb_item">
-                            <li class="breadcrumb_item"><a href="admin_edit_documentation.html">Employee Handbook</a></li class="breadcrumb_item">
+                            <li class="breadcrumb_item"><a href="admin_documentation.php">Documentations</a></li class="breadcrumb_item">
+                            <li class="breadcrumb_item"><a href="admin_edit_documentation.php">Employee Handbook</a></li class="breadcrumb_item">
                             <li class="breadcrumb_item active"><span>About Company</span></li>
                         </ul>
                         <div class="row_placeholder"></div>
-                        <a href="../default_data/preview_section.html" id="preview_section_btn">Preview</a>
+                        <a href="user_view_section.php" id="preview_section_btn">Preview</a>
                     </div>
                     <div class="section_details">
                         <h1 id="section_title">About Company</h1>

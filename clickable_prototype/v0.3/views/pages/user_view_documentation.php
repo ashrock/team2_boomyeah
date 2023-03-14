@@ -53,8 +53,8 @@
     <div id="wrapper">
         <div class="container">
             <ul id="breadcrumb_list">
-                <li class="breadcrumb_item"><a href="admin_documentation.html">Documentation</a></li>
-                <li class="breadcrumb_item mobile_breadcrumb"><a href="user_documentation.html">&lt;</a></li>
+                <li class="breadcrumb_item"><a href="admin_documentation.php">Documentation</a></li>
+                <li class="breadcrumb_item mobile_breadcrumb"><a href="user_documentation.php">&lt;</a></li>
                 <li class="breadcrumb_item active">Employee Handbook</li>
             </ul>
             <div class="divider"></div>
