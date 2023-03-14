@@ -1,9 +1,8 @@
+let is_mobile_reply_open = false;
 (function(){
     let swipe_value = 0;
-    let is_comments_displayed = false;
     let swipe_timeout = null;
-    let is_mobile_reply_open = false;
-    let active_comment_item = null;
+    let is_comments_displayed = false;
     let has_scrolled = false;
 
     document.addEventListener("DOMContentLoaded", async (event) => {
@@ -166,12 +165,6 @@
         }
     }
 
-    function closeCommentActions(){
-        ux(document).findAll(".comment_actions_toggle").forEach((element) => ux(element).removeClass("active"));
-        ux("#comment_actions_container").removeClass("active");
-        (!is_mobile_reply_open && ux(".active_comment_item").self()) && ux(".active_comment_item").removeClass("active_comment_item");
-    }
-
     async function showTabComments(event){
         event.preventDefault();
         let mobile_comments_slideout = ux("#mobile_comments_slideout");
@@ -189,21 +182,6 @@
                     });
                 }
             });
-        }
-    }
-
-    function showConfirmaDeleteComment(event){
-        event.stopImmediatePropagation();
-        let event_target = event.target;
-
-        if(event_target.classList.contains("remove_btn")){
-            let remove_comment_modal = ux("#confirm_remove_comment_modal");
-            let modal_instance = M.Modal.getInstance(remove_comment_modal);
-            modal_instance.open();
-            ux("#remove_comment_form").on("submit", onConfirmDeleteComment);
-
-            /** Determine active_comment_item */
-            active_comment_item = (CLIENT_WIDTH > MOBILE_WIDTH) ? event_target.closest(".comment_item") : ux(".active_comment_item").self();
         }
     }
 

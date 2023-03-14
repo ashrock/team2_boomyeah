@@ -5,7 +5,7 @@
 ?>
 <?php
     foreach($comment_items as $comment_item) { ?>
-<li class="comment_item comment_container">
+<li class="comment_item comment_container" id="comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">
     <div class="comment_content">
         <img src="<?= isset($comment_item["post_id"]) ? $comment_item["user_profile_pic"] : $comment_item["commenter_profile_pic"] ?>" 
             alt="<?= isset($comment_item["post_id"]) ? $comment_item["first_name"] : $comment_item["commenter_first_name"] ?>" class="user_image"/> 
@@ -16,8 +16,8 @@
                 <div class="comment_actions">
                     <button type="button" class="comment_actions_toggle"></button>
                     <div class="comment_actions_menu">
-                        <button type="button" class="comment_action_btn edit_btn">Edit</button>
-                        <button type="button" class="comment_action_btn remove_btn">Remove</button>
+                        <button type="button" class="comment_action_btn edit_btn" data-is_post="<?= intval(isset($comment_item["post_id"])) ?>" data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Edit</button>
+                        <button type="button" class="comment_action_btn remove_btn" data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Remove</button>
                     </div>
                 </div>
             </h4>
@@ -27,7 +27,7 @@
     <div class="reply_actions">
         <button type="button" class="toggle_reply_form_btn" data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Reply</button>
         <?php if(isset($comment_item["post_id"])) { ?>
-        <button type="button" class="toggle_replies_btn"><b>Show <span class="reply_count"> replies</span></b></button>
+        <button type="button" class="toggle_replies_btn"data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"><b>Show <span class="reply_count"> replies</span></b></button>
         <?php } ?>
     </div>
     <?php if(isset($comment_item["post_id"])) { ?>

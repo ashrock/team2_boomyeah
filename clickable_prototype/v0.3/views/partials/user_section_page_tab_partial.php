@@ -11,7 +11,7 @@
         <?php if($module_tab["is_comments_allowed"]) { ?>
         <?php } ?>
             <div class="tab_comments comment_container">
-                <form action="/" method="POST" class="add_comment_form add_post_form">
+                <form action="<?= $base_url ?>processes/manage_documentation.php" method="POST" class="add_comment_form add_post_form">
                     <div class="comment_field">
                         <div class="comment_message_content input-field col s12">
                             <label for="post_comment_<?= $module_tab["id"] ?>">Write a comment</label>

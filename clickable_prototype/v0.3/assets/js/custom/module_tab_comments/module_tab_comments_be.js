@@ -1,3 +1,4 @@
+let active_comment_item = null;
 
 document.addEventListener("DOMContentLoaded", async (event) => {
     let document_element = event.target;
@@ -13,9 +14,45 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         .on("submit", "#fetch_tab_posts_form", onFetchTabPosts)
         .on("submit", ".add_reply_form", onAddPostComment)
 
-        .on("click", ".toggle_replies_btn b", showRepliesList)
-        .on("submit", "#remove_comment_form", onConfirmDeleteComment);
+        .on("click", ".toggle_replies_btn *", showRepliesList)
+        .on("submit", "#remove_comment_form", onConfirmDeleteComment)
+        .on("submit", ".edit_comment_form", onSubmitEditForm)
+        .on("keydown", ".edit_comment_form .comment_message", onEditMessageKeypress)
+        .on("click", ".edit_comment_form .cancel_btn", closeEditCommentForm)
+        ;
 });
+
+function onSubmitEditForm(event){
+    /* event.stopImmediatePropagation();
+    event.preventDefault();
+    let edit_comment_form = event.target;
+    let comment_message = ux(edit_comment_form).find(".comment_message").self().value;
+    let comment_content = edit_comment_form.nextElementSibling;
+    ux(comment_content).find(".comment_message").text(comment_message);
+    ux(comment_content).find(".posted_at").addClass("edited");
+    ux(comment_content).addClass("animate__animated").addClass("animate__pulse");
+    closeEditCommentForm(edit_comment_form);
+    ux(".active_comment_item").removeClass("active_comment_item");
+
+    setTimeout(() => {
+        ux(comment_content).removeClass("animate__animated").removeClass("animate__pulse");    
+    }, 480);
+    return false; */
+
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    let post_form = ux(event.target);
+    
+    ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
+        if(response_data.status){
+            let comment_id = `#comment_${response_data.result.post_id}`;
+            ux(comment_id).replaceWith(response_data.result.html);
+            console.log(response_data.result.post_id);
+        }
+    }, "json");
+    
+    return false;
+}
 
 function onAddPostComment(event){
     event.stopImmediatePropagation();
@@ -24,19 +61,59 @@ function onAddPostComment(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            console.log(response_data)
-            // let tab_id = `#tab_${response_data.result.tab_id}`;
-            // addAnimation(ux(tab_id).find(".tab_comments .comments_list").self(), "animate__fadeOut");
-            // setTimeout(() => {
-            //     ux(tab_id).find(".tab_comments .comments_list").html(response_data.result.html);
-            // }, 200);
+            let comment_id = `#comment_${response_data.result.post_id}`;
+            let comments_list = ux(comment_id).find(".replies_list");
+            let toggle_replies_btn = ux(comment_id).find(".toggle_replies_btn b");
+            toggle_replies_btn.trigger("click");
+            
+            setTimeout(() => {
+                comments_list.prepend(response_data.result.html);
+            }, 200);
+
+            post_form.self().reset();
+            post_form.find(".comment_message").self().blur();
         }
+
     }, "json");
     
     return false;
 }
 
 function onFetchTabPosts(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    let post_form = ux(event.target);
+    
+    ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
+        if(response_data.status){
+            let tab_id = `#tab_${response_data.result.tab_id}`;
+            addAnimation(ux(tab_id).find(".tab_comments .comments_list").self(), "animate__zoomIn");
+            setTimeout(() => {
+                ux(tab_id).find(".tab_comments .comments_list").html(response_data.result.html);
+            }, 200);
+        }
+    }, "json");
+    
+    return false;
+}
+
+function showRepliesList(event){
+    event.stopImmediatePropagation();
+    let show_replies_btn = event.target.closest(".toggle_replies_btn");
+    let comment_item = event.target.closest(".comment_item");
+    let replies_list  = ux(comment_item).find(".replies_list");
+    let post_id = ux(show_replies_btn).data("target_comment");
+    console.log("fetch comments for:", post_id);
+    
+    if(!replies_list.self().classList.contains("show")){
+        addAnimation(replies_list.self(), "animate__zoomIn");
+
+        replies_list.addClass("show");
+        ux(show_replies_btn).addClass("hidden");
+    }
+}
+
+function onFetchPostComments(event){
     event.stopImmediatePropagation();
     event.preventDefault();
     let post_form = ux(event.target);
@@ -52,20 +129,6 @@ function onFetchTabPosts(event){
     }, "json");
     
     return false;
-}
-
-function showRepliesList(event){
-    event.stopImmediatePropagation();
-    let show_replies_btn = event.target.closest(".toggle_replies_btn");
-    let comment_item = event.target.closest(".comment_item");
-    let replies_list  = ux(comment_item).find(".replies_list");
-    
-    if(!replies_list.self().classList.contains("show")){
-        addAnimation(replies_list.self(), "animate__zoomIn");
-
-        replies_list.addClass("show");
-        ux(show_replies_btn).addClass("hidden");
-    }
 }
 
 function onConfirmDeleteComment(event){
@@ -163,23 +226,29 @@ function onEditComment(event){
     let event_target = event.target;
 
     if(event_target.classList.contains("edit_btn")){
+        let comment_id = ux(event_target).data("target_comment");
+        let is_post = parseInt(ux(event_target).data("is_post"));
         active_comment_item = (CLIENT_WIDTH > MOBILE_WIDTH) ? event_target.closest(".comment_item") : ux(".active_comment_item").self();
         let comment_content = ux(active_comment_item).find(".comment_content");
         let comment_details = comment_content.find(".comment_details").self();
         let comment_message_value = ux(comment_details).find(".comment_message").text();
-
+        
         /** Show edit comment form */
         let edit_comment_form = ux("#clone_section_page .edit_comment_form").clone();
-        let edit_comment_id = "post_comment_" + new Date().getTime();
+        let edit_comment_id = "post_comment_" + comment_id;
         let comment_message_field = edit_comment_form.find(".comment_message");
-        let comment_cancel_btn = edit_comment_form.find(".cancel_btn");
         comment_message_field.self().value = comment_message_value;
         comment_message_field.attr("id", edit_comment_id);
+        edit_comment_form.find(".is_post").val(is_post);
 
-        ux(edit_comment_form.self()).on("submit", onSubmitEditForm);
-        comment_message_field.on("keydown", onEditMessageKeypress);
-        comment_cancel_btn.on("click", closeEditCommentForm);
-
+        if(is_post){
+            edit_comment_form.find(".comment_id").remove();
+            edit_comment_form.find(".post_id").val(comment_id);
+        } else {
+            edit_comment_form.find(".post_id").remove();
+            edit_comment_form.find(".comment_id").val(comment_id);
+        }
+        
         if((CLIENT_WIDTH > MOBILE_WIDTH)){
             comment_content.self().before(edit_comment_form.self());
             comment_message_field.self().focus();
@@ -194,31 +263,13 @@ function onEditComment(event){
     }
 }
 
-function onSubmitEditForm(event){
-    event.stopImmediatePropagation();
-    event.preventDefault();
-    let edit_comment_form = event.target;
-    let comment_message = ux(edit_comment_form).find(".comment_message").self().value;
-    let comment_content = edit_comment_form.nextElementSibling;
-    ux(comment_content).find(".comment_message").text(comment_message);
-    ux(comment_content).find(".posted_at").addClass("edited");
-    ux(comment_content).addClass("animate__animated").addClass("animate__pulse");
-    closeEditCommentForm(edit_comment_form);
-    ux(".active_comment_item").removeClass("active_comment_item");
-
-    setTimeout(() => {
-        ux(comment_content).removeClass("animate__animated").removeClass("animate__pulse");    
-    }, 480);
-    return false;
-}
-
 function onEditMessageKeypress(event){
     event.stopImmediatePropagation();
     let edit_comment_form = event.target.closest(".edit_comment_form");
-    
+    console.log(edit_comment_form);
     if(event.which === KEYS.ENTER){
         event.preventDefault();
-        ux(edit_comment_form).find(".update_btn").self().click();
+        ux(edit_comment_form).find(".update_btn").trigger("click");
         return;
     }
     
@@ -232,11 +283,18 @@ function onCommentMessageKeypress(event){
     event.stopImmediatePropagation();
     let comment_message = event.target;
     let post_form = comment_message.closest(".add_comment_form");
+    let edit_comment_form = comment_message.closest(".edit_comment_form");
 
     if(event.which === KEYS.ENTER){
         event.preventDefault();
-        // onSubmitComment(post_form, comment_message.closest(".comments_list"));
-        ux(post_form).trigger("submit");
+        let submit_form = (post_form) ? post_form : edit_comment_form;
+        
+        ux(submit_form).trigger("submit");
+    }
+    
+    if(edit_comment_form && event.which === KEYS.ESCAPE){
+        /** Close edit form */
+        closeEditCommentForm(event);
     }
 }
 
@@ -255,5 +313,26 @@ function showRepliesCount(comment_container){
         let reply_count = comments_list.findAll(".comment_item").length;
         let replies_text = reply_count + ` ${(reply_count == 1) ? "reply" : "replies"}`;
         ux(comment_container).find(".reply_count").text(replies_text);
+    }
+}
+
+function closeCommentActions(){
+    ux(document).findAll(".comment_actions_toggle").forEach((element) => ux(element).removeClass("active"));
+    ux("#comment_actions_container").removeClass("active");
+    (!is_mobile_reply_open && ux(".active_comment_item").self()) && ux(".active_comment_item").removeClass("active_comment_item");
+}
+
+function showConfirmaDeleteComment(event){
+    event.stopImmediatePropagation();
+    let event_target = event.target;
+
+    if(event_target.classList.contains("remove_btn")){
+        let remove_comment_modal = ux("#confirm_remove_comment_modal");
+        let modal_instance = M.Modal.getInstance(remove_comment_modal);
+        modal_instance.open();
+        ux("#remove_comment_form").on("submit", onConfirmDeleteComment);
+
+        /** Determine active_comment_item */
+        active_comment_item = (CLIENT_WIDTH > MOBILE_WIDTH) ? event_target.closest(".comment_item") : ux(".active_comment_item").self();
     }
 }
