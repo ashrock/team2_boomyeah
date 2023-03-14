@@ -823,7 +823,7 @@ body::-webkit-scrollbar-thumb {
   position: relative;
   border: 1px solid #D5E3FF;
   border-radius: 8px;
-  padding: 28px 24px 34px;
+  padding: 28px 24px 30px;
 }
 #edit_section_content .section_details .add_description textarea {
   max-width: 955px;

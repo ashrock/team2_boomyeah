@@ -33,6 +33,10 @@ function(){
                     openTabLink(event, true);
                 });
         }
+        /**
+         * On load adjust the text area size base on its pre-loaded content
+         */
+        adjustDescriptionHeight();
 
         let section_pages = ux("#section_pages").findAll(".section_page_content");
         section_pages.forEach((page) => {
@@ -55,6 +59,13 @@ function(){
             }
         })
     });
+
+    function adjustDescriptionHeight() {
+        let section_short_description = ux("#section_short_description").self();
+        let computed_style = window.getComputedStyle(section_short_description);
+        section_short_description.style.height = "auto";
+        section_short_description.style.height = `${section_short_description.scrollHeight + parseInt(computed_style.lineHeight)}px`;
+    }
 
     function updateIsCommentAllowed(event){
         let allow_comments         = event.target.checked;
