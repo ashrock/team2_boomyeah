@@ -75,12 +75,13 @@
         <input type="hidden" id="documentations_order" name="documentations_order">
     </form>
     <?php $this->load->view("partials/confirm_documentation_modals.php"); ?>
+    <?php $this->load->view("partials/confirm_invite_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
+    <script src="<?= add_file("assets/js/invite_modal.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_documentation/admin_documentation_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_documentation/admin_documentation_be.js") ?>"></script>
-    <script src="<?= add_file("assets/js/invite_modal.js") ?>"></script>
     <script src="<?= add_file("assets/js/hotkeys.js") ?>"></script>
 </body>
 
