@@ -3,16 +3,16 @@
         {
                 "post_id" : 2,
                 "message" : "first post",
-                "first_name" : "Erick",
-                "user_profile_pic" : "sample_img.url",
+                "first_name" : "Post Erick",
+                "user_profile_pic" : "https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png",
                 "date_posted" : "Mar 10, 2023",
                 "comments" : [
                         {
                                 "comment_id": 110,
                                 "commenter_message": "555",
                                 "commenter_user_id": 12,
-                                "commenter_first_name": "Erick",
-                                "commenter_profile_pic" : "sample_img.url",
+                                "commenter_first_name": "Comment Erick",
+                                "commenter_profile_pic" : "https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png",
                                 "date_commented" : "Mar 10, 2023"
                         }
                 ]

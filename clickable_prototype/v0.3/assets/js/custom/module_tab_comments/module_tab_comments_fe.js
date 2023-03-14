@@ -84,7 +84,6 @@
             .on("keydown", ".comment_message", onCommentMessageKeypress)
             .on("click", ".show_comments_btn", showTabComments)
             .on("click", ".toggle_reply_form_btn", showReplyForm)
-            .on("click", ".toggle_replies_btn", showRepliesList)
             .on("click", ".mobile_comment_btn", (event) => {
                 event.stopImmediatePropagation();
                 onSubmitComment(event.target.closest(".mobile_add_comment_form"))
@@ -134,20 +133,6 @@
         }
     }
 
-    function showRepliesList(event){
-        event.stopImmediatePropagation();
-        let show_replies_btn = event.target.closest(".toggle_replies_btn");
-        let comment_item = event.target.closest(".comment_item");
-        let replies_list  = ux(comment_item).find(".replies_list");
-        
-        if(!replies_list.self().classList.contains("show")){
-            addAnimation(replies_list.self(), "animate__zoomIn");
-
-            replies_list.addClass("show");
-            ux(show_replies_btn).addClass("hidden");
-        }
-    }
-
     async function showReplyForm(event){
         event.stopImmediatePropagation();
         let comment_item = event.target.closest(".comment_item");
@@ -185,16 +170,6 @@
         ux(document).findAll(".comment_actions_toggle").forEach((element) => ux(element).removeClass("active"));
         ux("#comment_actions_container").removeClass("active");
         (!is_mobile_reply_open && ux(".active_comment_item").self()) && ux(".active_comment_item").removeClass("active_comment_item");
-    }
-
-    function showRepliesCount(comment_container){
-        let comments_list = ux(comment_container).find(".replies_list");
-
-        if(comments_list.self()){
-            let reply_count = comments_list.findAll(".comment_item").length;
-            let replies_text = reply_count + ` ${(reply_count == 1) ? "reply" : "replies"}`;
-            ux(comment_container).find(".reply_count").text(replies_text);
-        }
     }
 
     async function showTabComments(event){
@@ -254,13 +229,5 @@
                 ux(event_target.closest(".comment_item")).addClass("active_comment_item");
             }
         }
-    }
-
-    function closeEditCommentForm(event){
-        let edit_comment_form = ("type" in event) ? event.target.closest(".edit_comment_form") : event;
-
-        /** Close edit form */
-        edit_comment_form.remove();
-        ux(".mobile_tab_comments").removeClass("hidden");
     }
 })();

@@ -8,9 +8,11 @@
     $sections_data_file_path = "../assets/json/sections_data.json";
     $documentation_data_file = "../assets/json/documentation_data.json";
     $edit_section_module_file_path = "../assets/json/edit_section_module_data.json";
+    $tab_posts_file_path = "../assets/json/tab_posts_data.json";
     $sections_data = load_json_file($sections_data_file_path);
     $documentation_data = load_json_file($documentation_data_file);
     $edit_section_module_data = load_json_file($edit_section_module_file_path);
+    $tab_posts_data = load_json_file($tab_posts_file_path);
 
     if(isset($_POST["action"])){
         $response_data = array("status" => false, "result" => [], "error"  => null);
@@ -543,6 +545,40 @@
                 
                 $response_data["status"]                   = true;
                 $response_data["result"]["tab_ids_order"] = $tab_ids_order;
+                break;
+            }
+            
+            
+            case "fetch_tab_posts" : {
+                $tab_id = intval($_POST["tab_id"]);
+                $view_data = $tab_posts_data;
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "tab_id"        => $tab_id,
+                    "html"      => get_include_contents("../views/partials/comment_item_partial.php", $view_data),
+                );
+                break;
+            }
+            case "add_post_comment" : {
+                $post_id = intval($_POST["post_id"]);
+                // var_dump($tab_posts_data);
+                $view_data = array(
+                    "comment_items" => array(
+                        array(
+                            "comment_id" => 110,
+                            "commenter_message" => "555",
+                            "commenter_user_id" => 12,
+                            "commenter_first_name" => "Erick",
+                            "commenter_profile_pic" => "sample_img.url",
+                            "date_commented" => "Mar 10, 2023"
+                        )
+                    )
+                );
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "post_id"   => $post_id,
+                    "html"      => get_include_contents("../views/partials/replies_item_partial.php", $view_data),
+                );
                 break;
             }
         }
