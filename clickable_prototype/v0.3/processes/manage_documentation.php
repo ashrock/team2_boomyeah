@@ -394,8 +394,21 @@
                 break;
             }
             case "reorder_sections" : {
+                $sections_order           = explode(",", $_POST["sections_order"]);
+                $reordered_sections_array = array();
+                foreach ($sections_order as $order) {
+                    foreach ($sections_data["fetch_section_admin_data"] as $item) {
+                        if ($item["id"] == $order) {
+                            $reordered_sections_array[] = $item;
+                            break;
+                        }
+                    }
+                }
+                $sections_data["fetch_section_admin_data"] = $reordered_sections_array;
+
+                file_put_contents($sections_data_file_path, json_encode($sections_data));
+
                 $response_data["status"]                   = true;
-                $sections_order                            = $_POST["sections_order"];
                 $response_data["result"]["sections_order"] = $sections_order;
                 break;
             }
