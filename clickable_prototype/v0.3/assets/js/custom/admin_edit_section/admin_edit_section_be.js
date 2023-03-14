@@ -58,24 +58,12 @@ function addNewModuleContent(event){
     
     let post_form = ux(event.target);
     
-    ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+    ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
             let module_id = `#module_${ response_data.result.module_id }`;
             section_pages.append(response_data.result.html);
-
-            let section_page_content = section_pages.findAll(".section_page_content");
-            section_page_content.forEach((page) => {
-                let show_added = false;
-                page.querySelectorAll(".section_page_tab").forEach((section_tab) => {
-                    if (!show_added && !section_tab.classList.contains("show")) {
-                        if ( !Array.from(section_tab.parentNode.children).some( (element_section) => element_section.classList.contains("show")) ) {
-                            section_tab.classList.add("show");
-                            show_added = true;
-                        }
-                    }
-                });
-            });
-              
+            addAnimation(ux(module_id).self(), "animate__fadeIn");
+            await ux(module_id).find(".section_page_tab").addClass("show");
 
             setTimeout(() => {
                 initializeRedactor(`${ module_id } .section_page_tab .tab_content`);
