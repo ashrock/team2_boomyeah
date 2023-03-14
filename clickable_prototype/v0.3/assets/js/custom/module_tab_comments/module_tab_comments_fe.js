@@ -26,10 +26,6 @@
                 }
             }
         })
-        
-        setTimeout(() => {
-            ux("body").on("submit", "#remove_comment_form", onConfirmDeleteComment);
-        }, 480);
 
         /** Mobile Device events */
         document.addEventListener("touchstart", function (event){

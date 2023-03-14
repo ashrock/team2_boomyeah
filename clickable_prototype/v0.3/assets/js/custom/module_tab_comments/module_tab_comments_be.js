@@ -2,7 +2,8 @@
 document.addEventListener("DOMContentLoaded", async (event) => {
     let document_element = event.target;
 
-    ux("body").on("submit", "#remove_comment_form", onConfirmDeleteComment);
+    ux("body")
+        .on("submit", "#remove_comment_form", onConfirmDeleteComment);
 });
 
 
