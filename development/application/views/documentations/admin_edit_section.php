@@ -61,8 +61,9 @@
                         // var_dump($modules);
                     ?>
                 </div>
-            <form id="add_module_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
+            <form id="add_module_form" action="/modules/add" method="POST">
                 <input type="hidden" name="action" value="add_module">
+                <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
                 <button id="add_page_tabs_btn" type="submit">+ Add New</button>
             </form>
             <form id="add_module_tab_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
