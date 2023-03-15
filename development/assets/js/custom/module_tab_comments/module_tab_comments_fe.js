@@ -124,7 +124,7 @@ let is_mobile_reply_open = false;
             event.preventDefault();
             event.stopImmediatePropagation();
             toggleCommentActions(event);
-            showEditComment(event);
+            onEditComment(event);
 
             showConfirmaDeleteComment(event);
         } else {

@@ -41,72 +41,9 @@
                 </div>
             </div>
             <div id="section_pages">
-                <div class="section_page_content active">
-                    <ul class="section_page_tabs">
-                        <li class="page_tab_item active" data-tab_id="tab_1">
-                            <a href="#tab_1">Our Mission &amp; Vision</a>
-                        </li>
-                        <li class="page_tab_item" data-tab_id="tab_2">
-                            <a href="#tab_2">Corporate Responsibility</a>
-                        </li>
-                        <li class="page_tab_item" data-tab_id="tab_3">
-                            <a href="#tab_3">Corporate Opportunities</a>
-                        </li>
-                    </ul>
-                    <div class="section_page_tab show" id="tab_1">
-                        <h3 class="tab_title">Our Mission &amp; Vision</h3>
-                        <p id="tab_content_1" class="tab_content">There are many paths where one could start his career. Finding your focus is essential to the outcome of your career. Starting too many fronts could easily drain you or waterdown your energy levels when not done properly. Spreading yourself too thin at the start of your career leads to poor quality foundation. We all want to be that well-compensated employee in the long run. But being one with an untrusted foundation ends this hope.</p>
-                        <a href="#" data-target="mobile_comments_slideout" class="show_comments_btn sidenav-trigger">Comments (3)</a>
-                        <div class="tab_comments comment_container">
-                            <form action="/" method="POST" class="add_comment_form">
-                                <div class="comment_field">
-                                    <div class="comment_message_content input-field col s12">
-                                        <label for="post_comment_1">Write a comment</label>
-                                        <textarea name="post_comment" id="post_comment_1" class="materialize-textarea comment_message"></textarea>
-                                    </div>
-                                </div>
-                            </form>
-                            <ul class="comments_list"></ul>
-                        </div>
-                    </div>
-                    <div class="section_page_tab" id="tab_2">
-                        <h3 class="tab_title">Corporate Responsibility</h3>
-                        <p class="tab_content">After choosing a foundation to start on, proceed to putting in the hours or time to learn as much as you can and gain a jumpstart on your career. Being equipped with the right knowhow about your career is a great way to assure that you are on the path to your career’s success. Feel free to ask help from your seniors and/or peers. This not only reinforces your knowledge, but also helps build relationship with your team. Spend time with them; determine and solve problems together. But remember to spend time with yourself and reflect on the things you have learned. Learn to gather information and solutions alone; then compare them with your team (leader/members).</p>
-                        <a href="#" data-target="mobile_comments_slideout" class="show_comments_btn sidenav-trigger">Comments (2)</a>
-                    </div>
-                    <div class="section_page_tab" id="tab_3">
-                        <h3 class="tab_title">Corporate Opportunities</h3>
-                        <p class="tab_content">Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.</p>
-                        <a href="#" data-target="mobile_comments_slideout" class="show_comments_btn sidenav-trigger">Comments (2)</a>
-                    </div>
-                </div>
-                <!-- Mobile View: Show one section_page_content at a time -->
-                <div class="section_page_content">
-                    <ul class="section_page_tabs">
-                        <li class="page_tab_item active" data-tab_id="tab_4">
-                            <a href="#tab_4">Village88 2012</a>
-                        </li>
-                    </ul>
-                    <div class="section_page_tab show" id="tab_4">
-                        <h3 class="tab_title">Village88 2012</h3>
-                        <p id="tab_content_1" class="tab_content">Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.</p>
-                        <a href="#" data-target="mobile_comments_slideout" class="show_comments_btn sidenav-trigger">Comments (2)</a>
-                        <div class="tab_comments comment_container">
-                            <form action="/" method="POST" class="add_comment_form">
-                                <div class="comment_field">
-                                    <div class="comment_message_content input-field col s12">
-                                        <label for="post_comment_4">Write a comment</label>
-                                        <textarea name="post_comment" id="post_comment_4" class="materialize-textarea comment_message"></textarea>
-                                    </div>
-                                </div>
-                            </form>
-                            <ul class="comments_list">
-                                <li id="user_view_comments"></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mobile View: Progress bar corresponds to the section_page_content not the section_page_tab  -->
+                <?php
+                    $this->load->view("partials/user_section_page_content_partial.php", array("modules" => $modules));
+                ?>
             </div>
             <div id="mobile_section_pages_controls">
                 <div id="page_btns">
@@ -150,6 +87,15 @@
     <div id="modals_container">
         <?php $this->load->view("partials/confirm_action_modals.php"); ?>
     </div>
+    <form id="fetch_tab_posts_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+        <input type="hidden" name="action" value="fetch_tab_posts">
+        <input type="hidden" name="tab_id" class="tab_id">
+    </form>
+
+    <form id="fetch_post_comments_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+        <input type="hidden" name="action" value="fetch_post_comments">
+        <input type="hidden" name="post_id" class="post_id">
+    </form>
     <script src="<?= add_file("assets/js/vendor/redactorx.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_be.js") ?>"></script>
