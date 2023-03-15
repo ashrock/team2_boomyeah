@@ -44,8 +44,8 @@
 		# Triggered by: (POST) sections/add
 		# Requires: $_POST["section_id"], $_POST["update_type"], $_POST["update_value"]
 		# Returns: { status: true/false, result: { html }, error: null }
-		# Last updated at: Mar. 8, 2023
-		# Owner: Erick
+		# Last updated at: Mar. 15, 2023
+		# Owner: Erick, Updated by: Jovic
 		public function updateSection(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -55,7 +55,7 @@
 
 				if(isset($_POST["section_id"])){
 					# Process updating of documentation
-					$response_data = $this->Section->updateDocumentation($_POST);
+					$response_data = $this->Section->updateSection($_POST);
 				}
 				else{
 					$response_data["error"] = "Section id is required";
