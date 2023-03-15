@@ -1148,6 +1148,9 @@ body::-webkit-scrollbar-thumb {
   margin-bottom: 16px;
   padding: 0px 16px;
 }
+.section_page_content .section_page_tab input.tab_title:focus {
+  box-shadow: 0px 2px 0px #2563EB;
+}
 .section_page_content .section_page_tab textarea.tab_content {
   min-height: 360px;
 }

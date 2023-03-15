@@ -6,11 +6,17 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     ux("body")
         .on("click", ".fetch_tab_posts_btn", (event) => {
             event.preventDefault();
-            let tab_id = ux(event.target).data("tab_id");
-            let fetch_tab_posts_form = ux("#fetch_tab_posts_form");
-            fetch_tab_posts_form.find(".tab_id").val(tab_id);
-            fetch_tab_posts_form.trigger("submit");
-            event.target.remove();
+            let toggle_btn = ux(event.target);
+            let tab_id = toggle_btn.data("tab_id");
+            
+            if(tab_id){
+                let fetch_tab_posts_form = ux("#fetch_tab_posts_form");
+                fetch_tab_posts_form.find(".tab_id").val(tab_id);
+                fetch_tab_posts_form.trigger("submit");
+                event.target.removeAttribute("data-tab_id");
+            }
+
+            toggle_btn.conditionalClass("open", !toggle_btn.self().classList.contains("open"));
         })
         .on("submit", "#fetch_tab_posts_form", onFetchTabPosts)
         .on("submit", ".add_post_form", onSubmitPostForm)
@@ -33,9 +39,9 @@ function onSubmitPostForm(event){
         if(response_data.status){
             let tab_id = `#tab_${response_data.result.tab_id}`;
             let comments_list = ux(tab_id).find(".tab_comments .comments_list");
-            let fetch_tab_posts_btn = ux(tab_id).find(".fetch_tab_posts_btn");
+            let toggle_btn = ux(tab_id).find(".fetch_tab_posts_btn");
 
-            (fetch_tab_posts_btn.self()) && fetch_tab_posts_btn.trigger("click");
+            (toggle_btn.self() && !toggle_btn.self().classList.contains("open")) && fetch_tab_posts_btn.trigger("click");
             
             comments_list.append(response_data.result.html);
             setTimeout(() => {
