@@ -2,6 +2,31 @@
     defined('BASEPATH') OR exit('No direct script access allowed');
 
     class Collaborator extends CI_Model {
+        # DOCU: This function will fetch a collaborator based on user_id and documentation_id
+        # Triggered by: POST and GET requests where getDocumentation is used
+        # Requires: $params (user_id, documentation_id)
+        # Returns: { status: true/false, result: () , error: "User has no access to this Documentation." }
+        # Last updated at: March 15, 2023
+        # Owner: Jovic
+        public function getCollaborator($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try{
+                $get_collaborator = $this->db->query("SELECT id FROM collaborators WHERE user_id = ? AND documentation_id = ?", $params);
+
+                if(!$get_collaborator->num_rows()){
+                    throw new Exception("User has no access to this Documentation.");
+                }
+
+                $response_data["status"] = true;
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
         # DOCU: This function will fetch the owner and collaborators of a documentation
         # Triggered by: (GET) collaborators/get
         # Requires: $documentation_id
