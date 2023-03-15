@@ -4,7 +4,7 @@
     $tab = $module["module_tabs_json"]->$module_tab;
 ?>
     <div class="section_page_tab" id="tab_<?= $tab->id ?>">
-        <form action="#" class="update_module_tab_form" method="POST">
+        <form action="/modules/update" class="update_module_tab_form" method="POST">
             <input type="hidden" name="action" value="update_module_tab">
             <input type="hidden" name="module_id" value="<?= $module['module_id'] ?>" class="module_id">
             <input type="hidden" name="tab_id" value="<?= $tab->id ?>" class="tab_id">
