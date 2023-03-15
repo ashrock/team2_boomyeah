@@ -570,7 +570,7 @@
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "tab_id"        => $tab_id,
-                    "html"      => get_include_contents("../views/partials/comment_item_partial.php", $view_data),
+                    "html"      => get_include_contents("../views/partials/post_item_partial.php", $view_data),
                 );
                 break;
             }
@@ -593,7 +593,7 @@
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "post_id"   => $post_id,
-                    "html"      => get_include_contents("../views/partials/replies_item_partial.php", $view_data),
+                    "html"      => get_include_contents("../views/partials/comment_items_partial.php", $view_data),
                 );
                 break;
             }
@@ -604,7 +604,7 @@
                 $post_id = time() + rand();
 
                 $view_data = array(
-                    "comment_items" => array(
+                    "tab_posts" => array(
                         array(
                             "post_id" => $post_id,
                             "message" => $post_comment_message,
@@ -619,7 +619,7 @@
                 $response_data["result"]    = array(
                     "tab_id"    => $tab_id,
                     "post_id"   => $post_id,
-                    "html"      => get_include_contents("../views/partials/replies_item_partial.php", $view_data),
+                    "html"      => get_include_contents("../views/partials/post_item_partial.php", $view_data),
                 );
                 break;
             }
@@ -663,7 +663,7 @@
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "post_id"   => ($is_post) ? $post_id : $comment_id,
-                    "html"      => get_include_contents("../views/partials/replies_item_partial.php", $view_data),
+                    "html"      => get_include_contents("../views/partials/comment_items_partial.php", $view_data),
                 );
                 break;
             }

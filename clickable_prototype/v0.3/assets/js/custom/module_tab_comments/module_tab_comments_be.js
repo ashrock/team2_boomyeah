@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         .on("click", ".edit_comment_form .cancel_btn", closeEditCommentForm)
         ;
 });
+
 function onSubmitPostForm(event){
     event.stopImmediatePropagation();
     event.preventDefault();
@@ -36,8 +37,8 @@ function onSubmitPostForm(event){
 
             (fetch_tab_posts_btn.self()) && fetch_tab_posts_btn.trigger("click");
             
+            comments_list.append(response_data.result.html);
             setTimeout(() => {
-                comments_list.append(response_data.result.html);
             }, 200);
 
             post_form.self().reset();
@@ -59,6 +60,7 @@ function onFetchTabPosts(event){
         if(response_data.status){
             let tab_id = `#tab_${response_data.result.tab_id}`;
             addAnimation(ux(tab_id).find(".tab_comments .comments_list").self(), "animate__zoomIn");
+            
             setTimeout(() => {
                 ux(tab_id).find(".tab_comments .comments_list").prepend(response_data.result.html);
             }, 200);
