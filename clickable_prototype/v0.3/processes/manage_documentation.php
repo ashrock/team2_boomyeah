@@ -570,31 +570,60 @@
             
             case "fetch_tab_posts" : {
                 $tab_id = intval($_POST["tab_id"]);
-                $view_data = $tab_posts_data;
+
+                foreach($tab_posts_data as &$tab){
+                    if($tab["tab_id"] === $tab_id){
+                        $view_data = $tab;
+                        break;
+                    }
+                }
+
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
-                    "tab_id"        => $tab_id,
-                    "html"      => get_include_contents("../views/partials/post_item_partial.php", $view_data),
+                    "tab_id"  => $tab_id,
+                    "html"    => get_include_contents("../views/partials/post_item_partial.php", $view_data),
                 );
                 break;
             }
 
             case "add_tab_post" : {
-                $tab_id = intval($_POST["tab_id"]);
+                $tab_id               = intval($_POST["tab_id"]);
                 $post_comment_message = $_POST["post_comment"];
-                $post_id = time() + rand();
-
-                $view_data = array(
-                    "tab_posts" => array(
-                        array(
-                            "post_id" => $post_id,
-                            "message" => $post_comment_message,
-                            "first_name" => "Post Erick",
-                            "user_profile_pic" => "https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png",
-                            "date_posted" => "Mar 10, 2023",
-                        )
-                    )
+                $post_id              = time() + rand();
+                $current_date         = date("M d, Y");
+                $user_first_name      = array( "Post Erick", "Post Caccam", "Post Athena");
+           
+                $save_data = array(
+                    "post_id"          => $post_id,
+                    "message"          => $post_comment_message,
+                    "first_name"       => $user_first_name[array_rand($user_first_name)],
+                    "user_profile_pic" => "https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png",
+                    "date_posted"      => $current_date,
+                    "comments"         => array()
                 );
+
+                $found_tab = false;
+                foreach ($tab_posts_data as &$tab) {
+                    if ($tab["tab_id"] === $tab_id) {
+                        array_push($tab["tab_posts"], $save_data);
+                        $latest_post = end($tab["tab_posts"]);
+                        $view_data = array("tab_posts" => array($latest_post));
+                        $found_tab = true;
+                        break;
+                    }
+                }
+                
+                if (!$found_tab) {
+                    $new_tab = array(
+                        "tab_id" => $tab_id,
+                        "tab_posts" => array($save_data)
+                    );
+                    array_push($tab_posts_data, $new_tab);
+                    $latest_post = end($new_tab["tab_posts"]);
+                    $view_data = array("tab_posts" => array($latest_post));
+                }
+                
+                file_put_contents($tab_posts_file_path, json_encode($tab_posts_data));
 
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
@@ -606,21 +635,34 @@
             }
 
             case "add_post_comment" : {
-                $post_id = intval($_POST["post_id"]);
-                $post_comment = $_POST["post_comment"];
-                
-                $view_data = array(
-                    "comment_items" => array(
-                        array(
-                            "comment_id" => time() + rand(),
-                            "commenter_message" => $post_comment,
-                            "commenter_user_id" => 12,
-                            "commenter_first_name" => "Erick",
-                            "commenter_profile_pic" => "sample_img.url",
-                            "date_commented" => "Mar 10, 2023"
-                        )
-                    )
+                $post_id         = intval($_POST["post_id"]);
+                $post_comment    = $_POST["post_comment"];
+                $current_date    = date("M d, Y");
+                $user_first_name = array( "Comment Erick", "Comment Caccam", "Comment Athena");
+
+                $save_data = array(
+                    "comment_id"            => time() + rand(),
+                    "commenter_message"     => $post_comment,
+                    "commenter_user_id"     => time() + rand(),
+                    "commenter_first_name"  => $user_first_name[array_rand($user_first_name)],
+                    "commenter_profile_pic" => "https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/user_profile.png",
+                    "date_commented"        => $current_date
                 );
+
+           
+                foreach($tab_posts_data as &$tab){
+                    foreach($tab["tab_posts"] as &$post){
+                        if($post["post_id"] === $post_id){
+                            array_push($post["comments"], $save_data);
+                            $latest_comment = end($post["comments"]);
+                            $view_data      = array( "comment_items" => array($latest_comment));
+                            break;
+                        }
+                    }
+                }
+
+                file_put_contents($tab_posts_file_path, json_encode($tab_posts_data));
+            
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "post_id"   => $post_id,
@@ -631,21 +673,21 @@
 
             case "edit_post" : {
                 $post_comment_message = $_POST["post_comment"];
+                $post_id              = intval($_POST["post_id"]);
+                $current_date         = date("M d, Y");
 
-                $post_id = intval($_POST["post_id"]);
-
-                $view_data = array(
-                    "comment_items" => array(
-                        array(
-                            "post_id" => $post_id,
-                            "message" => $post_comment_message,
-                            "first_name" => "Post Erick",
-                            "user_profile_pic" => "https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png",
-                            "date_posted" => "Mar 10, 2023",
-                            "is_edited" => TRUE,
-                        )
-                    )
-                );
+                foreach($tab_posts_data as &$tab){
+                    foreach($tab["tab_posts"] as &$tab_post){
+                        if($tab_post["post_id"] === $post_id){
+                            $tab_post["message"]     = $post_comment_message;
+                            $tab_post["date_posted"] = $current_date;
+                            $tab_post["is_edited"]   = true;
+                            $view_data               = array("comment_items" => array($tab_post));
+                            break;
+                        }
+                    }
+                }
+                file_put_contents($tab_posts_file_path, json_encode($tab_posts_data));
 
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
@@ -658,22 +700,24 @@
 
             case "edit_comment" : {
                 $post_comment_message = $_POST["post_comment"];
-                $comment_id = intval($_POST["comment_id"]);
-
-                $view_data = array(
-                    "comment_items" => array(
-                        array(
-                            "comment_id" => $comment_id,
-                            "commenter_message" => $post_comment_message,
-                            "commenter_user_id" => 12,
-                            "commenter_first_name" => "Erick",
-                            "commenter_profile_pic" => "sample_img.url",
-                            "date_commented" => "Mar 10, 2023",
-                            "is_edited" => TRUE,
-                        )
-                    )
-                );
+                $comment_id           = intval($_POST["comment_id"]);
+                $current_date         = date("M d, Y");
                 
+                foreach($tab_posts_data as &$tab){
+                    foreach($tab["tab_posts"] as &$post){
+                        foreach($post["comments"] as &$comment){
+                            if($comment["comment_id"] === $comment_id){
+                                $comment["commenter_message"] = $post_comment_message;
+                                $comment["is_edited"] = true;
+                                $comment["date_commented"] = $current_date;
+                                $view_data = array( "comment_items" => array($comment));
+                                break;
+                            }
+                        }
+                    }
+                }
+                file_put_contents($tab_posts_file_path, json_encode($tab_posts_data));
+
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "post_comment_id"   => $comment_id,
@@ -684,19 +728,16 @@
 
             case "fetch_post_comments" : {
                 $post_id = intval($_POST["post_id"]);
-                $view_data = array(
-                    "comment_items" => array(
-                        array(
-                            "comment_id" => time() + rand(),
-                            "commenter_message" => "this is my reply to this post",
-                            "commenter_user_id" => 12,
-                            "commenter_first_name" => "Erick",
-                            "commenter_profile_pic" => "sample_img.url",
-                            "date_commented" => "Mar 10, 2023"
-                        )
-                    )
-                );
-                
+
+                foreach($tab_posts_data as &$tab){
+                    foreach($tab["tab_posts"] as &$post){
+                        if($post["post_id"] === $post_id){
+                            $view_data = array( "comment_items" => $post["comments"]);
+                            break;
+                        }
+                    }
+                }
+
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "post_id"   => $post_id,
@@ -706,7 +747,19 @@
             }
 
             case "remove_post" : {
-                $post_id = $_POST["post_id"];
+                $post_id = intval($_POST["post_id"]);
+
+                foreach ($tab_posts_data as &$tab) {
+                    foreach ($tab["tab_posts"] as $key => &$post) {
+                        if ($post["post_id"] === $post_id) {
+                            unset($tab["tab_posts"][$key]);
+                            break;
+                        }
+                    }
+                }
+                
+                file_put_contents($tab_posts_file_path, json_encode($tab_posts_data));
+
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "post_id"   => $post_id
@@ -715,7 +768,21 @@
             }
 
             case "remove_comment" : {
-                $comment_id = $_POST["comment_id"];
+                $comment_id = intval($_POST["comment_id"]);
+
+                foreach ($tab_posts_data as &$tab) {
+                    foreach ($tab["tab_posts"] as &$post) {
+                        foreach ($post["comments"] as $key => $comment) {
+                            if ($comment["comment_id"] === $comment_id) {
+                                unset($post["comments"][$key]);
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                file_put_contents($tab_posts_file_path, json_encode($tab_posts_data));
+
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "comment_id"   => $comment_id
