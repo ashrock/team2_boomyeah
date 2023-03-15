@@ -210,6 +210,38 @@
         display: block !important;
     }
 }
+.fetch_tab_posts_btn{
+    color: @by_primary;
+    font-family: @readex_medium;
+    margin-top: 20px;
+    
+    &:before{
+        display: inline-block;
+        border: 6px solid transparent;
+        border-left: 6px solid @by_primary;
+        content: "";
+        margin-left: 2px;
+    }
+    &.open{
+        &:before{
+            display: inline-block;
+            border: 6px solid transparent;
+            border-top: 6px solid @by_primary;
+            border-bottom-width: 2px;
+            margin-left: 0px;
+            margin-right: 2px;
+            content: "";
+        }
+        & + .tab_comments{
+            display: initial !important;
+        }
+    }
+
+    & + .tab_comments{
+        display: none !important;
+    }
+}
+
 .tab_comments{
     margin-top: 20px;
 }

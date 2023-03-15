@@ -6,7 +6,7 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentationd_id
         # Returns: { status: true/false, result: documentation record (Array), error: null }
-        # Last updated at: March 8, 2023
+        # Last updated at: March 15, 2023
         # Owner: Jovic
         public function getDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -15,8 +15,21 @@
                 $get_documentation = $this->db->query("SELECT id, user_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?;", $documentation_id);
 
                 if($get_documentation->num_rows()){
-                    $response_data["result"] = $get_documentation->result_array()[0];
+                    $get_documentation = $get_documentation->result_array()[0];
+
+                    # Check if User has access to Documentation
+                    if($_SESSION["user_level_id"] == USER_LEVEL["USER"] && $get_documentation["is_private"] == TRUE_VALUE){
+                        $this->load->model("Collaborator");
+                        $get_collaborator = $this->Collaborator->getCollaborator(array($_SESSION["user_id"], $documentation_id));
+    
+                        if(!$get_collaborator["status"]){
+                            throw new Exception($get_collaborator["error"]);
+                        }
+                    }
+
+                    $response_data["result"] = $get_documentation;
                 }
+                
 
                 $response_data["status"] = true;
             }

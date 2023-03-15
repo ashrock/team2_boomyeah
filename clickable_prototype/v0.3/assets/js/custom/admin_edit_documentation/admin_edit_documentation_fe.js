@@ -203,7 +203,7 @@ function redirectToEditSection(event){
         return;
     }
     
-    location.href = "admin_edit_section.html";
+    location.href = "admin_edit_section.php";
 }
 
 function appearEmptySection(){
