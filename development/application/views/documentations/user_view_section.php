@@ -1,54 +1,43 @@
 <?php
-    session_start();
-
-    // Sample admin session
-    $_SESSION["user_id"]       = 1;
-    $_SESSION["user_level_id"] = 9;
-    $_SESSION["workspace_id"]  = 1;
-    // END
-
-    include_once("../../processes/partial_helper.php");  
-    include_once("../view_helper.php");  
-    include_once("../../config/connection.php");
-    include_once("../../config/constants.php");
-    $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Employee Handbook";
-    $section_title = (isset($_GET["section_title"])) ? htmlspecialchars_decode( $_GET["section_title"] ) : "About Company";
-
+    include_once("application/views/view_helper.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Company - Employee Handbook | BoomYEAH</title>
     <link rel="shortcut icon" href="<?= add_file("assets/images/favicon.ico") ?>" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <link rel="stylesheet" href="<?= add_file("assets/css/vendor/redactorx.min.css") ?>">
-    <link rel="stylesheet" href="<?= add_file("assets/css/vendor/animate.min.css") ?>">
+    <link rel="stylesheet" href="<?= add_file("assets/css/global.css") ?>">
     <link rel="stylesheet" href="<?= add_file("assets/css/user_view_section.css") ?>">
-    
+    <script src="<?= add_file("assets/js/vendor/Sortable.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/vendor/ux.lib.js") ?>"></script>
     <script src="<?= add_file("assets/js/constants.js") ?>"></script>
 </head>
 <body>
-    <div id="main_navigation"><?php include_once("../partials/main_navigation.php"); ?></div>
+    <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php"); ?></div>
     <div id="wrapper" class="container">
         <div id="view_section_content">
             <div id="section_summary">
                 <div class="breadcrumbs">
                     <ul id="breadcrumbs_list">
-                        <li class="breadcrumb_item"><a href="user_documentation">Documentations</a></li class="breadcrumb_item">
-                        <li class="breadcrumb_item"><a href="user_view_documentation">Employee Handbook</a></li class="breadcrumb_item">
-                        <li class="breadcrumb_item active"><span>About Company</span></li>
+                        <li class="breadcrumb_item"><a href="/docs">Documentations</a></li class="breadcrumb_item">
+                        <li class="breadcrumb_item"><a href="/docs/<?= $documentation['id'] ?>"><?= $documentation["title"] ?></a></li class="breadcrumb_item">
+                        <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
                     </ul>
                     <div class="row_placeholder"></div>
                 </div>
                 <div class="section_details">
-                    <h1 id="section_title">About Company</h1>
-                    <p id="section_short_description">Village 88 Inc. is a US-Delaware corporation which focuses on incubating companies and providing IT consultancy services to companies in the US. V88 also has a remote branch in San Fernando, La Union, Philippines registered in Securities and Exchange Commission as 457Avenue Inc. Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Philippines in 2013. It is the company’s vision to provide world-class IT education to brilliant individuals with less IT-career opportunity due to lack of industry experience or exposure. So far, Village 88, Inc. (V88) has produced 30+ talented software engineers from the Philippines who now worked with the company in incubating and launching businesses that bring a positive impact to the world. Since 2011, V88 has incubated Coding Dojo, Hacker Hero, Data Compass, and helped start numerous start-ups including Alumnify, SpotTrender, MatrixDS, and others.</p>
+                    <h1 id="section_title"><?= $section["title"] ?></h1>
+                    <div class="add_description">
+                        <textarea name="section_short_description" id="section_short_description" placeholder="Add Description"><?= $section["description"] ?></textarea>
+                    </div>
                 </div>
             </div>
             <div id="section_pages">
@@ -130,7 +119,7 @@
                 </div>
             </div>
             <div id="clone_section_page">
-                <?php include_once("../partials/clone_section_page.php"); ?>
+                <?php $this->load->view("partials/clone_section_page.php"); ?>
             </div>
         </div>
     </div>
@@ -159,7 +148,7 @@
         </div>
     </div>
     <div id="modals_container">
-        <?php include_once("../partials/confirm_action_modals.php"); ?>
+        <?php $this->load->view("partials/confirm_action_modals.php"); ?>
     </div>
     <script src="<?= add_file("assets/js/vendor/redactorx.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_fe.js") ?>"></script>

@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     let global_path = (view_path === "/views")? "." : "..";
     let assets_path = (view_path === "/views" )? ".." : "../..";
 
-    ux(".section_block").onEach("click", function(){
-        location.href = "user_view_section.html";
+    ux(".section_block").onEach("click", function(event){
+        location.href += `/${event.target.id.split("_")[1]}`;
     });
 
     ux(".sort_by").onEach("click", sort_documentations);
