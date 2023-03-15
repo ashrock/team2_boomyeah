@@ -40,7 +40,7 @@
     <div id="wrapper" class="container">
         <div id="edit_section_content">
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" id="edit_section_form">
-                <input type="hidden" name="action" value="update_section">
+                <input type="hidden" name="action" value="update_admin_section">
                 <input type="hidden" name="section_id" value="section_id" value="">
                 <div id="section_summary">
                     <div class="breadcrumbs">
@@ -50,7 +50,7 @@
                             <li class="breadcrumb_item active"><span>About Company</span></li>
                         </ul>
                         <div class="row_placeholder"></div>
-                        <a href="user_view_section.php" id="preview_section_btn">Preview</a>
+                        <a href="user_view_section.php/?view_type=preview" id="preview_section_btn">Preview</a>
                     </div>
                     <div class="section_details">
                         <h1 id="section_title">About Company</h1>
