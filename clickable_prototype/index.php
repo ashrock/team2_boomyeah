@@ -39,7 +39,12 @@
                     </li>
                     <li>
                         <a href="./v0.3/index.php">v0.3</a>
-                        (Admin Edit Section Page, User View Section Page (Text & Discussion) + File Uploading)
+                        (Admin Edit Section Page, User View Section Page (Text & Discussion))
+                    </li>
+                    </li>
+                    <li>
+                        <a href="./v0.4/index.php">v0.4</a>
+                        (Admin Edit Section Page - Uploading of Files)
                     </li>
                 </ul>
                 <h2>Figma Design</h2>
