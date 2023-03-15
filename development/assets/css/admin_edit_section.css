@@ -1015,10 +1015,10 @@ body::-webkit-scrollbar-thumb {
 .section_page_content .section_page_tabs .page_tab_item .remove_tab_btn {
   background: transparent;
   border: none;
-  color: #E2E2EC;
+  color: #8CA8FF;
   cursor: pointer;
-  font-size: 20px;
-  height: 48px;
+  font-size: 23px;
+  height: 47px;
   margin-right: 16px;
   position: absolute;
   right: 0px;
