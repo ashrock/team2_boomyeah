@@ -40,9 +40,9 @@
                     </div>
                 </div>
             </div>
-            <div id="section_page">
+            <div id="section_pages">
                 <?php
-                    $this->load->view("partials/section_page_content_partial.php", array("modules" => $modules));
+                    $this->load->view("partials/user_section_page_content_partial.php", array("modules" => $modules));
                 ?>
             </div>
             <div id="mobile_section_pages_controls">
