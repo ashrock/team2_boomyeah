@@ -163,7 +163,34 @@ function onFetchPostComments(event){
     return false;
 }
 
-function showEditComment(event){
+function onConfirmDeleteComment(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+
+    /** Do these after form submission */
+    let comment_container = null;
+    
+    if(active_comment_item){
+        if(active_comment_item.closest(".replies_list")){
+            comment_container = active_comment_item.closest(".replies_list").closest(".comment_container");
+        }
+
+        addAnimation(active_comment_item, "animate__fadeOut");
+
+        closeCommentActions();
+        setTimeout(() => {
+            active_comment_item.remove();
+
+            if(comment_container){
+                showRepliesCount(comment_container);
+            }
+        }, 148);
+    }
+
+    return false;
+}
+
+function onEditComment(event){
     event.stopImmediatePropagation();
     let event_target = event.target;
 
@@ -181,7 +208,7 @@ function showEditComment(event){
         let comment_message_field = edit_comment_form.find(".comment_message");
         comment_message_field.self().value = comment_message_value;
         comment_message_field.attr("id", edit_comment_id);
-        
+        // edit_comment_form.find(".is_post").val(is_post);
         edit_comment_form.find(".action").val((is_post) ? "edit_post" : "edit_comment");
         edit_comment_form.find((is_post) ? ".post_id" : ".comment_id").val(comment_id);
 
@@ -263,51 +290,14 @@ function showConfirmaDeleteComment(event){
     let event_target = event.target;
 
     if(event_target.classList.contains("remove_btn")){
-        let is_post = parseInt(ux(event_target).data("is_post"));
-        let comment_id = ux(event_target).data("target_comment");
         let remove_comment_modal = ux("#confirm_remove_comment_modal");
         let modal_instance = M.Modal.getInstance(remove_comment_modal);
         modal_instance.open();
-
-        remove_comment_modal.find((is_post) ? ".comment_id" : ".post_id").val("");
-        remove_comment_modal.find((is_post) ? ".post_id" : ".comment_id").val(comment_id);
-        remove_comment_modal.find(".action").val((is_post) ? "remove_post" : "remove_comment");
+        ux("#remove_comment_form").on("submit", onConfirmDeleteComment);
 
         /** Determine active_comment_item */
         active_comment_item = (CLIENT_WIDTH > MOBILE_WIDTH) ? event_target.closest(".comment_item") : ux(".active_comment_item").self();
     }
-}
-
-function onConfirmDeleteComment(event){
-    event.stopImmediatePropagation();
-    event.preventDefault();
-    let post_form = ux(event.target);
-    
-    ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
-        if(response_data.status){
-            /** Do these after form submission */
-            let comment_container = null;
-            
-            if(active_comment_item){
-                if(active_comment_item.closest(".replies_list")){
-                    comment_container = active_comment_item.closest(".replies_list").closest(".comment_container");
-                }
-
-                addAnimation(active_comment_item, "animate__fadeOut");
-
-                closeCommentActions();
-                setTimeout(() => {
-                    active_comment_item.remove();
-
-                    if(comment_container){
-                        showRepliesCount(comment_container);
-                    }
-                }, 148);
-            }
-        }
-    }, "json");
-    
-    return false;
 }
 
 async function onSubmitComment(post_form, is_reply = false){

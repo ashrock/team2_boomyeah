@@ -14,12 +14,16 @@ function(){
                 openTabLink(event);
             })
             .on("click", ".section_page_tabs .remove_tab_btn", showConfirmRemoveTab)
+            .on("blur", "#section_short_description", (event) => {
+                clearTimeout(keyup_timeout);
+                ux("#edit_section_form").trigger("submit");
+            })
             .on("keyup", "#section_short_description", (event) => {
                 clearTimeout(keyup_timeout);
 
                 keyup_timeout = setTimeout(() => {    
                     ux("#edit_section_form").trigger("submit");
-                }, 800);
+                }, 480);
             })
             .on("keyup", ".section_page_content .tab_title", (event) => {
                 onUpdateTabTitle(event);
@@ -36,7 +40,24 @@ function(){
         /**
          * On load adjust the text area size base on its pre-loaded content
          */
-        adjustDescriptionHeight();
+        let section_short_description = ux("#section_short_description").self();
+        autoExpand(section_short_description);
+
+        /**
+         * Add show class to tabs on DOM load
+         */
+        onLoadShowTab();
+        let modals = document.querySelectorAll('.modal');
+        M.Modal.init(modals);
+
+        window.addEventListener("resize", () => {
+            if(MOBILE_WIDTH < document.documentElement.clientWidth){
+                window.location.reload();
+            }
+        })
+    });
+
+    function onLoadShowTab(){
         
         let section_pages = ux("#section_pages").findAll(".section_page_content");
         section_pages.forEach((page) => {
@@ -50,21 +71,6 @@ function(){
                 }
             });
         });
-        let modals = document.querySelectorAll('.modal');
-        M.Modal.init(modals);
-        
-        window.addEventListener("resize", () => {
-            if(MOBILE_WIDTH < document.documentElement.clientWidth){
-                window.location.reload();
-            }
-        })
-    });
-
-    function adjustDescriptionHeight() {
-        let section_short_description = ux("#section_short_description").self();
-        let computed_style = window.getComputedStyle(section_short_description);
-        section_short_description.style.height = "auto";
-        section_short_description.style.height = `${section_short_description.scrollHeight + parseInt(computed_style.lineHeight)}px`;
     }
 
     function updateIsCommentAllowed(event){

@@ -704,6 +704,24 @@
                 );
                 break;
             }
+
+            case "remove_post" : {
+                $post_id = $_POST["post_id"];
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "post_id"   => $post_id
+                );
+                break;
+            }
+
+            case "remove_comment" : {
+                $comment_id = $_POST["comment_id"];
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "comment_id"   => $comment_id
+                );
+                break;
+            }
         }
     }
 
