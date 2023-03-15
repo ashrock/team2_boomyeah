@@ -73,7 +73,7 @@
         # Triggered by: (GET) docs/:documentation_id/:section_id/edit
         # Requires: $section_id
         # Returns: { status: true/false, result: { section_tabs data }, error: null }
-        # Last updated at: March 14, 2023
+        # Last updated at: March 15, 2023
         # Owner: Jovic
         public function getSectionTabs($section_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -96,7 +96,7 @@
                                         'module_id', tabs.module_id,
                                         'title', tabs.title,
                                         'content', tabs.content,
-                                        'comments_count', tabs.cache_posts_count,
+                                        'cache_posts_count', tabs.cache_posts_count,
                                         'is_comments_allowed', tabs.is_comments_allowed
                                     )
                                 ) AS tabs

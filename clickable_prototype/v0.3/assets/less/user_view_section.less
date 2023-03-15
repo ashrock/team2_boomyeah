@@ -214,23 +214,25 @@
     color: @by_primary;
     font-family: @readex_medium;
     margin-top: 20px;
-    
     &:before{
+        border: solid @by_primary;
+        border-width: 0 2px 2px 0;
         display: inline-block;
-        border: 6px solid transparent;
-        border-left: 6px solid @by_primary;
+        padding: 3px;
         content: "";
-        margin-left: 2px;
+        margin-right: 12px;
+        position: relative;
+        top: -1px;
+        transition: transform 0.3s ease-in-out;
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
     }
     &.open{
         &:before{
-            display: inline-block;
-            border: 6px solid transparent;
-            border-top: 6px solid @by_primary;
-            border-bottom-width: 2px;
-            margin-left: 0px;
-            margin-right: 2px;
-            content: "";
+            top: -2px;
+            transition: transform 0.3s ease-in-out;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
         }
         & + .tab_comments{
             display: initial !important;

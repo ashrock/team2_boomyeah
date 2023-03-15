@@ -29,6 +29,9 @@
 
                     $response_data["result"] = $get_documentation;
                 }
+                else{
+                    $response_data["error"] = "Documentation doesn't exist.";
+                }
                 
 
                 $response_data["status"] = true;

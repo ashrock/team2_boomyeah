@@ -25,7 +25,9 @@ function onEditSectionData(event){
     let post_form = ux(event.target);
     
     ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
-        if(!response_data.status){
+        if(response_data.status){
+            addAnimation(".section_details .add_description", "animated_blinkBorder")
+        } else {
             alert("Error saving module data")
         }
     }, "json");

@@ -823,7 +823,7 @@ body::-webkit-scrollbar-thumb {
   position: relative;
   border: 1px solid #D5E3FF;
   border-radius: 8px;
-  padding: 28px 24px 30px;
+  padding: 16px 16px 41px;
 }
 #edit_section_content .section_details .add_description textarea {
   max-width: 955px;
@@ -947,9 +947,10 @@ body::-webkit-scrollbar-thumb {
 }
 #section_summary .section_details {
   padding: 24px;
+  min-height: 327px;
 }
 #section_summary .section_details #section_title {
-  font: 40px/50px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 24px/30px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0px 0px 16px;
 }
 @media (max-width: 632px) {
@@ -1147,6 +1148,9 @@ body::-webkit-scrollbar-thumb {
   line-height: 52px;
   margin-bottom: 16px;
   padding: 0px 16px;
+}
+.section_page_content .section_page_tab input.tab_title:focus {
+  box-shadow: 0px 2px 0px #2563EB;
 }
 .section_page_content .section_page_tab textarea.tab_content {
   min-height: 360px;
