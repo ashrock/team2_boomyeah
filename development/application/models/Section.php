@@ -74,11 +74,15 @@
         # Requires: $section_id
         # Returns: { status: true/false, result: { section_tabs data }, error: null }
         # Last updated at: March 15, 2023
-        # Owner: Jovic
-        public function getSectionTabs($section_id){
+        # Owner: Jovic, Updated by: Erick
+        public function getSectionTabs($section_id, $module_id = 0){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
+                $where_statement = ($module_id) ? "AND modules.id = ?" : "";
+                $where_values    = ($module_id) ? array($module_id, $section_id, $module_id) : array($section_id);
+                $group_by_module_id = ($module_id) ? "WHERE tabs.module_id = ?" : "GROUP BY module_id";
+
                 $get_section = $this->db->query("
                     SELECT
                         modules.id AS module_id, 
@@ -87,26 +91,26 @@
                     FROM sections
                     INNER JOIN modules ON modules.section_id = sections.id
                     LEFT JOIN (
-                            SELECT
-                                tabs.module_id,
-                                JSON_OBJECTAGG(
-                                    tabs.id,
-                                    JSON_OBJECT(
-                                        'id', tabs.id,
-                                        'module_id', tabs.module_id,
-                                        'title', tabs.title,
-                                        'content', tabs.content,
-                                        'cache_posts_count', tabs.cache_posts_count,
-                                        'is_comments_allowed', tabs.is_comments_allowed
-                                    )
-                                ) AS tabs
-                            FROM tabs
-                        GROUP BY module_id
+                        SELECT
+                            tabs.module_id,
+                            JSON_OBJECTAGG(
+                                tabs.id,
+                                JSON_OBJECT(
+                                    'id', tabs.id,
+                                    'module_id', tabs.module_id,
+                                    'title', tabs.title,
+                                    'content', tabs.content,
+                                    'cache_posts_count', tabs.cache_posts_count,
+                                    'is_comments_allowed', tabs.is_comments_allowed
+                                )
+                            ) AS tabs
+                        FROM tabs
+                        {$group_by_module_id} 
                     ) AS module_tabs ON module_tabs.module_id = modules.id
-                    WHERE sections.id = ?
+                    WHERE sections.id = ? {$where_statement}
                     GROUP BY modules.id;
-                ", $section_id);
-                
+                ", $where_values);
+
                 if($get_section->num_rows()){                    
                     $response_data["status"] = true;
                     $response_data["result"] = $get_section->result_array();

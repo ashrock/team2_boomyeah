@@ -80,6 +80,10 @@ $route['sections/duplicate']['POST'] = 'sections/duplicateSection';
 $route['sections/remove']['POST']    = 'sections/removeSection';
 $route['sections/reorder']['POST']    = 'sections/reOrderSection';
 
+/* POST | Admin Edit Section Routes */
+$route['modules/add']['POST']       = 'modules/addModule';
+
+
 /* User Documentation Routes */
 $route['docs']['GET']               = 'documentations/userDocumentations';
 $route['docs/(:any)']['GET']        = 'documentations/userDocumentation/$1';
