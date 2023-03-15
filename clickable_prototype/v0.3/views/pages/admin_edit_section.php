@@ -45,18 +45,20 @@
                 <div id="section_summary">
                     <div class="breadcrumbs">
                         <ul id="breadcrumbs_list">
-                            <li class="breadcrumb_item"><a href="admin_documentation.html">Documentations</a></li class="breadcrumb_item">
-                            <li class="breadcrumb_item"><a href="admin_edit_documentation.html">Employee Handbook</a></li class="breadcrumb_item">
+                            <li class="breadcrumb_item"><a href="admin_documentation.php">Documentations</a></li class="breadcrumb_item">
+                            <li class="breadcrumb_item"><a href="admin_edit_documentation.php">Employee Handbook</a></li class="breadcrumb_item">
                             <li class="breadcrumb_item active"><span>About Company</span></li>
                         </ul>
                         <div class="row_placeholder"></div>
-                        <a href="../default_data/preview_section.html" id="preview_section_btn">Preview</a>
+                        <a href="user_view_section.php" id="preview_section_btn">Preview</a>
                     </div>
                     <div class="section_details">
                         <h1 id="section_title">About Company</h1>
 
                         <div class="add_description">
-                            <textarea name="section_short_description" id="section_short_description" placeholder="Add Description">Village 88 Inc. is a US-Delaware corporation which focuses on incubating companies and providing IT consultancy services to companies in the US. V88 also has a remote branch in San Fernando, La Union, Philippines registered in Securities and Exchange Commission as 457Avenue Inc.</textarea>
+                            <textarea name="section_short_description" id="section_short_description" placeholder="Add Description">Village 88 Inc. is a US-Delaware corporation which focuses on incubating companies and providing IT consultancy services to companies in the US. V88 also has a remote branch in San Fernando, La Union, Philippines registered in Securities and Exchange Commission as 457Avenue Inc.
+
+Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Philippines in 2013. It is the company’s vision to provide world-class IT education to brilliant individuals with less IT-career opportunity due to lack of industry experience or exposure. So far, Village 88, Inc. (V88) has produced 30+ talented software engineers from the Philippines who now worked with the company in incubating and launching businesses that bring a positive impact to the world. </textarea>
                         </div>
                     </div>
                 </div>
