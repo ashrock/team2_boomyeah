@@ -111,12 +111,13 @@ function onAddPostComment(event){
         if(response_data.status){
             let comment_id = `#comment_${response_data.result.post_id}`;
             let comments_list = ux(comment_id).find(".replies_list");
-            let toggle_replies_btn = ux(comment_id).find(".toggle_replies_btn b");
-            toggle_replies_btn.trigger("click");
+            let toggle_replies_btn = ux(comment_id).find(".toggle_replies_btn");
             
-            setTimeout(() => {
+            if(toggle_replies_btn.self()){
+                toggle_replies_btn.find("b").trigger("click");
+            } else {
                 comments_list.append(response_data.result.html);
-            }, 200);
+            }
 
             post_form.self().reset();
             post_form.find(".comment_message").self().blur();
@@ -140,7 +141,7 @@ function showRepliesList(event){
         let post_comments_form = ux("#fetch_post_comments_form");
         post_comments_form.find(".post_id").val(post_id);
         post_comments_form.trigger("submit");
-        ux(show_replies_btn).addClass("hidden");
+        ux(show_replies_btn).remove();
     }
 }
 

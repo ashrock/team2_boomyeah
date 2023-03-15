@@ -68,8 +68,8 @@ $route['docs/remove']['POST']    = 'documentations/removeDocumentation';
 $route['docs/reorder']['POST']   = 'workspaces/updateWorkspace';
 
 /* POST | Admin Edit Documentation Routes */
-$route['collaborators/add']['POST'] = 'collaborators/addCollaborators';
-$route['collaborators/get']['POST'] = 'collaborators/getCollaborators';
+$route['collaborators/add']['POST']    = 'collaborators/addCollaborators';
+$route['collaborators/get']['POST']    = 'collaborators/getCollaborators';
 $route['collaborators/update']['POST'] = 'collaborators/updateCollaborator';
 $route['collaborators/remove']['POST'] = 'collaborators/removeCollaborator';
 
@@ -78,11 +78,12 @@ $route['sections/add']['POST']       = 'sections/addSection';
 $route['sections/update']['POST']    = 'sections/updateSection';
 $route['sections/duplicate']['POST'] = 'sections/duplicateSection';
 $route['sections/remove']['POST']    = 'sections/removeSection';
-$route['sections/reorder']['POST']    = 'sections/reOrderSection';
+$route['sections/reorder']['POST']   = 'sections/reOrderSection';
 
 /* POST | Admin Edit Section Routes */
 $route['modules/add']['POST']       = 'modules/addModule';
 $route['modules/add_tab']['POST']   = 'modules/addTab';
+$route['modules/update']['POST']    = 'modules/updateModule';
 
 
 /* User Documentation Routes */
