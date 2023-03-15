@@ -269,7 +269,7 @@
 		# DOCU: This function will call getDocumentation from Documentation Model and render user_view_documentation page
 		# Triggered by: (GET) docs/(:any)
 		# Requires: $documentation_id
-		# Last updated at: Mar. 10, 2023
+		# Last updated at: Mar. 14, 2023
 		# Owner: Jovic
 		public function userDocumentation($documentation_id){
 			$documentation = $this->Documentation->getDocumentation($documentation_id);
@@ -283,7 +283,7 @@
 			}
 			else{
 				# Confirm if we need to show error or just redirect back to dashboard
-				echo "Documentation doesn't exist";
+				echo $documentation["error"];
 			}
 		}
 
@@ -300,7 +300,7 @@
 			}
 			else{
 				# Confirm if we need to show error or just redirect back to dashboard
-				echo "Documentation doesn't exist";
+				echo $documentation["error"];
 			}
 		}
 
