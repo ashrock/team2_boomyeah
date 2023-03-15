@@ -288,7 +288,20 @@
 		}
 
 		public function userSection($documentation_id, $section_id){
-			$this->load->view('documentations/user_view_documentation');
+			$documentation = $this->Documentation->getDocumentation($documentation_id);
+
+			if($documentation["status"] && $documentation["result"]){
+				# Fetch sections
+				$this->load->model("Section");
+				$sections = $this->Section->getSection($section_id);
+				$modules  = $this->Section->getSectionTabs($section_id);
+
+				$this->load->view('documentations/user_view_section', array("documentation" => $documentation["result"], "section" => $sections["result"], "modules" => $modules["result"]));
+			}
+			else{
+				# Confirm if we need to show error or just redirect back to dashboard
+				echo "Documentation doesn't exist";
+			}
 		}
 
 		# DOCU: This function will call getDocumentationsOrder from Workspace Model and prepare params needed when fetching documentations.
