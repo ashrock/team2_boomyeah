@@ -40,7 +40,7 @@
     <div id="wrapper" class="container">
         <div id="edit_section_content">
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" id="edit_section_form">
-                <input type="hidden" name="action" value="update_section">
+                <input type="hidden" name="action" value="update_admin_section">
                 <input type="hidden" name="section_id" value="section_id" value="">
                 <div id="section_summary">
                     <div class="breadcrumbs">

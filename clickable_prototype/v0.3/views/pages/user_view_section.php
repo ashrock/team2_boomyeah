@@ -117,6 +117,11 @@
         <input type="hidden" name="action" value="fetch_tab_posts">
         <input type="hidden" name="tab_id" class="tab_id">
     </form>
+    
+    <form id="fetch_post_comments_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+        <input type="hidden" name="action" value="fetch_post_comments">
+        <input type="hidden" name="post_id" class="post_id">
+    </form>
     <script src="<?= add_file("assets/js/vendor/redactorx.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_be.js") ?>"></script>

@@ -35,10 +35,9 @@
     </li>
 </ul>
 <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="edit_comment_form">
-    <input type="hidden" name="action" value="edit_comment">
+    <input type="hidden" name="action" value="edit_comment" class="action">
     <input type="hidden" name="post_id" class="post_id">
     <input type="hidden" name="comment_id" class="comment_id">
-    <input type="hidden" name="is_post" class="is_post">
 
     <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png" alt="Jhaver" class="user_image"/>
     <div class="comment_contents">
