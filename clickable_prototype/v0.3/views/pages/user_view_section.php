@@ -16,6 +16,7 @@
 
     $edit_section_module_file_path = "../../assets/json/edit_section_module_data.json";
     $user_view_section_module_data = load_json_file($edit_section_module_file_path);
+    $view_type = (isset($_GET["view_type"]))?  htmlspecialchars_decode( $_GET["view_type"] ) : "Edit View";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,15 +43,16 @@
             <div id="section_summary">
                 <div class="breadcrumbs">
                     <ul id="breadcrumbs_list">
-                        <li class="breadcrumb_item"><a href="user_documentation">Documentations</a></li class="breadcrumb_item">
-                        <li class="breadcrumb_item"><a href="user_view_documentation">Employee Handbook</a></li class="breadcrumb_item">
-                        <li class="breadcrumb_item active"><span>About Company</span></li>
+                        <li class="breadcrumb_item"><a href="<?= BASE_FILE_URL?>views/pages/user_documentation.php">Documentations</a></li class="breadcrumb_item">
+                        <li class="breadcrumb_item"><a href="<?= BASE_FILE_URL?>views/pages/user_view_documentation.php">Employee Handbook</a></li class="breadcrumb_item">
+                        <li class="breadcrumb_item active"><span><?= $section_title ?></span></li>
                     </ul>
                     <div class="row_placeholder"></div>
+                    <a href="<?= BASE_FILE_URL?>views/pages/admin_edit_section.php" id="preview_section_btn">Back to edit</a>
                 </div>
                 <div class="section_details">
-                    <h1 id="section_title">About Company</h1>
-                    <p id="section_short_description">Village 88 Inc. is a US-Delaware corporation which focuses on incubating companies and providing IT consultancy services to companies in the US. V88 also has a remote branch in San Fernando, La Union, Philippines registered in Securities and Exchange Commission as 457Avenue Inc. Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Philippines in 2013. It is the company’s vision to provide world-class IT education to brilliant individuals with less IT-career opportunity due to lack of industry experience or exposure. So far, Village 88, Inc. (V88) has produced 30+ talented software engineers from the Philippines who now worked with the company in incubating and launching businesses that bring a positive impact to the world. Since 2011, V88 has incubated Coding Dojo, Hacker Hero, Data Compass, and helped start numerous start-ups including Alumnify, SpotTrender, MatrixDS, and others.</p>
+                    <h1 id="section_title"><?= $section_title ?></h1>
+                    <p id="section_short_description">Village 88 Inc. is a US-Delaware corporation which focuses on incubating companies and providing IT consultancy services to companies in the US. V88 also has a remote branch in San Fernando, La Union, Philippines registered in Securities and Exchange Commission as 457Avenue Inc.</br></br>Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Philippines in 2013. It is the company’s vision to provide world-class IT education to brilliant individuals with less IT-career opportunity due to lack of industry experience or exposure. So far, Village 88, Inc. (V88) has produced 30+ talented software engineers from the Philippines who now worked with the company in incubating and launching businesses that bring a positive impact to the world.</br></br>Since 2011, V88 has incubated Coding Dojo, Hacker Hero, Data Compass, and helped start numerous start-ups including Alumnify, SpotTrender, MatrixDS, and others.</p>
                 </div>
             </div>
             <div id="section_pages">

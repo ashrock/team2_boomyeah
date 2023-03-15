@@ -50,7 +50,7 @@
                             <li class="breadcrumb_item active"><span>About Company</span></li>
                         </ul>
                         <div class="row_placeholder"></div>
-                        <a href="user_view_section.php" id="preview_section_btn">Preview</a>
+                        <a href="user_view_section.php/?view_type=preview" id="preview_section_btn">Preview</a>
                     </div>
                     <div class="section_details">
                         <h1 id="section_title">About Company</h1>
