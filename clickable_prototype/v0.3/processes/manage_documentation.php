@@ -563,6 +563,11 @@
                 break;
             }
             
+            case "update_admin_section" : {
+                $response_data["status"] = true;
+                break;
+            }
+            
             case "fetch_tab_posts" : {
                 $tab_id = intval($_POST["tab_id"]);
                 $view_data = $tab_posts_data;
@@ -637,6 +642,7 @@
                             "first_name" => "Post Erick",
                             "user_profile_pic" => "https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png",
                             "date_posted" => "Mar 10, 2023",
+                            "is_edited" => TRUE,
                         )
                     )
                 );
@@ -662,7 +668,8 @@
                             "commenter_user_id" => 12,
                             "commenter_first_name" => "Erick",
                             "commenter_profile_pic" => "sample_img.url",
-                            "date_commented" => "Mar 10, 2023"
+                            "date_commented" => "Mar 10, 2023",
+                            "is_edited" => TRUE,
                         )
                     )
                 );
