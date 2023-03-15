@@ -34,12 +34,16 @@
         </form>
     </li>
 </ul>
-<form action="/" method="POST" class="edit_comment_form">
+<form action="#" method="POST" class="edit_comment_form">
+    <input type="hidden" name="action" value="edit_comment" class="action">
+    <input type="hidden" name="post_id" class="post_id">
+    <input type="hidden" name="comment_id" class="comment_id">
+
     <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png" alt="Jhaver" class="user_image"/>
     <div class="comment_contents">
         <div class="comment_field">
             <div class="comment_message_content input-field col s12">
-                <textarea name="post_comment_" id="post_comment" class="materialize-textarea comment_message"></textarea>
+                <textarea name="post_comment" id="post_comment" class="materialize-textarea comment_message"></textarea>
             </div>
         </div>
         <div class="edit_form_btns">

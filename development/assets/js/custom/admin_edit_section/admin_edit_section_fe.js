@@ -8,27 +8,56 @@ function(){
             ux("#next_page_btn").on("click", ()=> { openSectionTab(1) })
             updateSectionProgress();
         }
+
         ux("body")
             .on("click", ".section_page_tabs .page_tab_item a", (event) =>{
                 openTabLink(event);
             })
-            .on("click", ".section_page_tab .tab_title", (event) =>{
-                openTabLink(event, true);
-            })
             .on("click", ".section_page_tabs .remove_tab_btn", showConfirmRemoveTab)
+            .on("blur", "#section_short_description", (event) => {
+                clearTimeout(keyup_timeout);
+                ux("#edit_section_form").trigger("submit");
+            })
             .on("keyup", "#section_short_description", (event) => {
                 clearTimeout(keyup_timeout);
 
                 keyup_timeout = setTimeout(() => {    
                     ux("#edit_section_form").trigger("submit");
-                }, 800);
+                }, 480);
             })
             .on("keyup", ".section_page_content .tab_title", (event) => {
                 onUpdateTabTitle(event);
             })
-            .on("change", ".is_comments_allowed", (event) => {
-                ux(event.target.closest(".update_module_tab_form")).trigger("submit");
-            })
+            .on("change", ".is_comments_allowed", updateIsCommentAllowed)
+        
+        /** Enable title field clicking only for mobile */
+        if( document.documentElement.clientWidth <= MOBILE_WIDTH ){
+            ux("body")
+                .on("click", ".section_page_tab .tab_title", (event) =>{
+                    openTabLink(event, true);
+                });
+        }
+        /**
+         * On load adjust the text area size base on its pre-loaded content
+         */
+        let section_short_description = ux("#section_short_description").self();
+        autoExpand(section_short_description);
+
+        /**
+         * Add show class to tabs on DOM load
+         */
+        onLoadShowTab();
+        let modals = document.querySelectorAll('.modal');
+        M.Modal.init(modals);
+
+        window.addEventListener("resize", () => {
+            if(MOBILE_WIDTH < document.documentElement.clientWidth){
+                window.location.reload();
+            }
+        })
+    });
+
+    function onLoadShowTab(){
         
         let section_pages = ux("#section_pages").findAll(".section_page_content");
         section_pages.forEach((page) => {
@@ -42,21 +71,14 @@ function(){
                 }
             });
         });
-        let modals = document.querySelectorAll('.modal');
-        M.Modal.init(modals);
-        
-        window.addEventListener("resize", () => {
-            if(MOBILE_WIDTH < document.documentElement.clientWidth){
-                window.location.reload();
-            }
-        })
-    });
+    }
 
-    function updateSectionProgress(){
-        let sections = ux("#section_pages").findAll(".section_page_content");
-        let section_items = Array.from(sections);
-        let total_progress = `${ Math.round(((target_index + 1) / section_items.length) * 100)}%`;
-        ux("#section_page_progress .progress").self().style.width = total_progress;
+    function updateIsCommentAllowed(event){
+        let allow_comments         = event.target.checked;
+        let update_module_tab_form =  ux(event.target.closest(".update_module_tab_form"));
+        let is_comments_allowed    = update_module_tab_form.find("[name=is_comments_allowed");
+        is_comments_allowed.val(allow_comments? 1 : 0);
+        update_module_tab_form.trigger("submit");
     }
 
     function updateSectionProgress(){
@@ -73,13 +95,19 @@ function(){
         let tab_title_value = (tab_title.value.length > 0) ? tab_title.value : "Untitled Tab*";
         ux(`.page_tab_item[data-tab_id="${tab_id}"] a`).text(tab_title_value);
         
-        if(tab_title.value.length > 0){
+        let tab_title_ux = section_page_tab.find(".tab_title");
+        if(tab_title.value.length > 1){
             /* saveTabChanges(section_page_tab); */
             clearTimeout(keyup_timeout);
-
+            tab_title_ux.removeClass("error");
             keyup_timeout = setTimeout(() => {
                 ux(tab_title.closest(".update_module_tab_form")).trigger("submit");
             }, 1000);
+        }
+        else{
+            clearTimeout(keyup_timeout);
+            tab_title_ux.addClass("error");
+            console.log(section_page_tab);
         }
     }
 

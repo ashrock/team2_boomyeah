@@ -210,6 +210,40 @@
         display: block !important;
     }
 }
+.fetch_tab_posts_btn{
+    color: @by_primary;
+    font-family: @readex_medium;
+    margin-top: 20px;
+    &:before{
+        border: solid @by_primary;
+        border-width: 0 2px 2px 0;
+        display: inline-block;
+        padding: 3px;
+        content: "";
+        margin-right: 12px;
+        position: relative;
+        top: -1px;
+        transition: transform 0.3s ease-in-out;
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+    }
+    &.open{
+        &:before{
+            top: -2px;
+            transition: transform 0.3s ease-in-out;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+        }
+        & + .tab_comments{
+            display: initial !important;
+        }
+    }
+
+    & + .tab_comments{
+        display: none !important;
+    }
+}
+
 .tab_comments{
     margin-top: 20px;
 }

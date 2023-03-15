@@ -25,7 +25,9 @@ function onEditSectionData(event){
     let post_form = ux(event.target);
     
     ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
-        if(!response_data.status){
+        if(response_data.status){
+            addAnimation(".section_details .add_description", "animated_blinkBorder")
+        } else {
             alert("Error saving module data")
         }
     }, "json");
@@ -64,6 +66,7 @@ function addNewModuleContent(event){
             section_pages.append(response_data.result.html);
             addAnimation(ux(module_id).self(), "animate__fadeIn");
             await ux(module_id).find(".section_page_tab").addClass("show");
+            ux(module_id).find(".tab_title").self().focus();
 
             setTimeout(() => {
                 initializeRedactor(`${ module_id } .section_page_tab .tab_content`);
@@ -209,8 +212,14 @@ function removeModuleTab(tab_item){
     
 function initializeRedactor(selector){
     RedactorX(selector, {
+        placeholder: 'Add description',
         editor: {
             minHeight: "360px"
+        },
+        buttons: {
+            context: ['bold', 'italic', 'deleted', 'link'],
+            addbar: ['paragraph', 'table', 'quote', 'pre', 'line'],
+            topbar: ['undo', 'redo']
         },
         subscribe: {
             "editor.change" : function(event) {
