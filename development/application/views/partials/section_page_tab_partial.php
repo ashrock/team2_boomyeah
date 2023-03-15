@@ -1,12 +1,10 @@
-<?php $module["module_tabs_json"] = json_decode($module["module_tabs_json"]); ?>
-
-<?php foreach($module_tabs as $module_index => $module_tab){
-    $tab = $module["module_tabs_json"]->$module_tab;
+<?php foreach($tab_ids_order as $tab_ids_index => $tab_id){
+    $tab = $module_tabs_json->$tab_id;
 ?>
     <div class="section_page_tab" id="tab_<?= $tab->id ?>">
         <form action="/modules/update" class="update_module_tab_form" method="POST">
             <input type="hidden" name="action" value="update_module_tab">
-            <input type="hidden" name="module_id" value="<?= $module['module_id'] ?>" class="module_id">
+            <input type="hidden" name="module_id" value="<?= $tab->module_id ?>" class="module_id">
             <input type="hidden" name="tab_id" value="<?= $tab->id ?>" class="tab_id">
             <input type="text" class="tab_title" name="module_title" value="<?= $tab->title ?>">
             <textarea id="tab_content_<?= $tab->id ?>" name="module_content" class="tab_content"><?= $tab->content ?></textarea>
