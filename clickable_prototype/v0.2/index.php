@@ -21,14 +21,14 @@
                 <a href="./views/pages/admin_edit_documentation.php">Admin Edit Document Page</a>
                 <p>
                     <span> User Stories</span>
-                    (P8) As an admin, I want to be able to create a section so that I can feel fulfilled guiding the team and showing them the information they need to impart.<br/><br/>
+                    (P10) As an admin, I want to be able to adjust the documentation’s visibility so that I can be confident that the right audience has access to it. <br><br>
+                    (P8) As an admin, I want to be able to create a section so that I can feel fulfilled guiding the team and showing them the information they need to impart. <br><br>
                     (P6) As an admin, I want to be able to manage the sections so that I can easily decide on what to do on the sections.
                 </p>
                 <a href="./views/pages/user_view_documentation.php">User View Document Page</a>
                 <p>
                     <span>User Stories</span>
-                    (P9) As a user, I want to see all the sections available in the documentation so that I could have an idea on where to start reading.<br/><br/>
-                    (P5) As a user, I want to identify which part of documentation I am currently at so that I won’t feel lost while reading all the content.
+                    (P9) As a user, I want to see all the sections available in the documentation so that I could have an idea on where to start reading.
                 </p>
                 <h2>Figma Design</h2>
                 <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" class="frame_display" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7sD1iBde0wOo0CjXn01mqU%2FBoomYEAH%3Fnode-id%3D2364%253A124363%26t%3Dh80dXGRUUdtY9p8B-1" allowfullscreen></iframe>
