@@ -449,7 +449,7 @@
                 $module_tabs_json = array(
                     "id"                  => $tab_id,
                     "title"               => "Untitled Tab ". $tab_id,
-                    "content"             => "Add description",
+                    "content"             => "",
                     "module_id"           => $module_id,
                     "is_comments_allowed" => 0
                 );
