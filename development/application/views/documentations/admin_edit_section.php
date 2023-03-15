@@ -24,9 +24,11 @@
     <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php"); ?></div>
     <div id="wrapper" class="container">
         <div id="edit_section_content">
-            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" id="edit_section_form">
+            <form action="/sections/update" method="POST" id="edit_section_form">
+                <input type="hidden" name="section_id" class="section_id" value="<?= $section["id"] ?>">
                 <input type="hidden" name="action" value="update_section">
-                <input type="hidden" name="section_id" value="section_id" value="">
+                <input type="hidden" name="update_type" class="update_type" value="description">
+                <input type="hidden" name="update_value" class="update_value" value="<?= $section["description"] ?>">
                 <div id="section_summary">
                     <div class="breadcrumbs">
                         <ul id="breadcrumbs_list">
@@ -59,11 +61,12 @@
                         // var_dump($modules);
                     ?>
                 </div>
-            <form id="add_module_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST">
+            <form id="add_module_form" action="/modules/add" method="POST">
                 <input type="hidden" name="action" value="add_module">
+                <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
                 <button id="add_page_tabs_btn" type="submit">+ Add New</button>
             </form>
-            <form id="add_module_tab_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+            <form id="add_module_tab_form" action="/modules/add_tab" method="POST" class="hidden">
                 <input type="hidden" name="action" value="add_module_tab">
                 <input type="hidden" name="module_id" class="module_id">
             </form>

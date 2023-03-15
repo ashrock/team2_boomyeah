@@ -4,7 +4,7 @@
             <?php
                 /** DOCU: $views_path is specified for this file in order for the partial be loaded from FE and BE side */
                 if($module["tab_ids_order"]){
-                    $this->load->view("partials/page_tab_item_partial.php", array("module" => $module, "module_tabs" => explode(",",$module["tab_ids_order"])));
+                    $this->load->view("partials/page_tab_item_partial.php", array("module_tabs_json" => json_decode($module["module_tabs_json"]), "tab_ids_order" => explode(",",$module["tab_ids_order"])));
                 }
             ?>
             <li class="add_page_tab">
@@ -14,7 +14,7 @@
         <?php
             /** DOCU: $views_path is specified for this file in order for the partial be loaded from FE and BE side */
             if($module["tab_ids_order"]){
-                $this->load->view("partials/section_page_tab_partial.php", array("module" => $module, "module_tabs" => explode(",",$module["tab_ids_order"])));
+                $this->load->view("partials/section_page_tab_partial.php", array("module_tabs_json" => json_decode($module["module_tabs_json"]), "tab_ids_order" => explode(",",$module["tab_ids_order"])));
             }
         ?>
     </div>

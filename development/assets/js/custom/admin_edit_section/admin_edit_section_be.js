@@ -23,14 +23,20 @@ function onEditSectionData(event){
     event.stopImmediatePropagation();
     event.preventDefault();
     let post_form = ux(event.target);
-    
-    ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
-        if(response_data.status){
-            addAnimation(".section_details .add_description", "animated_blinkBorder")
-        } else {
-            alert("Error saving module data")
-        }
-    }, "json");
+    let old_value = post_form.find(".update_value").val();
+    let new_value = ux("#section_short_description").val();
+
+    if(new_value != old_value){
+        post_form.find(".update_value").val(new_value);
+
+        ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+            if(response_data.status){
+                addAnimation(".section_details .add_description", "animated_blinkBorder")
+            } else {
+                alert("Error updating Section")
+            }
+        }, "json");
+    }
     
     return false;
 }
@@ -101,8 +107,6 @@ function onAddModuleTab(event){
             setTimeout(() => {
                 /** Insert Add page tab btn at the end */
                 initializeRedactor(`${tab_id} .tab_content`);
-                
-                reorderModuleTabs(section_page_tabs.self());
                 
                 /** Auto click new tab */
                 ux(`${module_tab_id} a`).self().click();
