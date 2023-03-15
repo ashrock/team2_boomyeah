@@ -6,8 +6,8 @@
         # Triggered by: (GET) docs
         # Requires: object returned by Google Login API
         # Returns: { status: true/false, result: user_info, error: null }
-        # Last updated at: Mar. 14, 2023
-        # Owner: Jovic
+        # Last updated at: Mar. 15, 2023
+        # Owner: Jovic, Updated by: Erick
         public function loginUser($userinfo){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -18,7 +18,7 @@
                 # Create User record
                 if(!$get_user->num_rows()){
                     $create_user = $this->db->query("INSERT INTO users (workspace_id, user_level_id, first_name, last_name, profile_picture, email, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW());", 
-                    array(1, USER_LEVEL["USER"], $userinfo["givenName"], $userinfo["familyName"], $userinfo["email"]));
+                    array(1, USER_LEVEL["USER"], $userinfo["givenName"], $userinfo["familyName"], $userinfo["picture"], $userinfo["email"]));
 
                     if($create_user){
                         $user_info = array(
