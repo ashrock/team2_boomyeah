@@ -102,8 +102,6 @@ function onAddModuleTab(event){
                 /** Insert Add page tab btn at the end */
                 initializeRedactor(`${tab_id} .tab_content`);
                 
-                reorderModuleTabs(section_page_tabs.self());
-                
                 /** Auto click new tab */
                 ux(`${module_tab_id} a`).self().click();
             });
