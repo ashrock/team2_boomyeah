@@ -8,9 +8,11 @@
     $sections_data_file_path = "../assets/json/sections_data.json";
     $documentation_data_file = "../assets/json/documentation_data.json";
     $edit_section_module_file_path = "../assets/json/edit_section_module_data.json";
+    $tab_posts_file_path = "../assets/json/tab_posts_data.json";
     $sections_data = load_json_file($sections_data_file_path);
     $documentation_data = load_json_file($documentation_data_file);
     $edit_section_module_data = load_json_file($edit_section_module_file_path);
+    $tab_posts_data = load_json_file($tab_posts_file_path);
 
     if(isset($_POST["action"])){
         $response_data = array("status" => false, "result" => [], "error"  => null);
@@ -558,6 +560,111 @@
                 
                 $response_data["status"]                   = true;
                 $response_data["result"]["tab_ids_order"] = $tab_ids_order;
+                break;
+            }
+            
+            
+            case "fetch_tab_posts" : {
+                $tab_id = intval($_POST["tab_id"]);
+                $view_data = $tab_posts_data;
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "tab_id"        => $tab_id,
+                    "html"      => get_include_contents("../views/partials/post_item_partial.php", $view_data),
+                );
+                break;
+            }
+            case "add_post_comment" : {
+                $post_id = intval($_POST["post_id"]);
+                $post_comment = $_POST["post_comment"];
+                
+                $view_data = array(
+                    "comment_items" => array(
+                        array(
+                            "comment_id" => 110,
+                            "commenter_message" => $post_comment,
+                            "commenter_user_id" => 12,
+                            "commenter_first_name" => "Erick",
+                            "commenter_profile_pic" => "sample_img.url",
+                            "date_commented" => "Mar 10, 2023"
+                        )
+                    )
+                );
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "post_id"   => $post_id,
+                    "html"      => get_include_contents("../views/partials/comment_items_partial.php", $view_data),
+                );
+                break;
+            }
+
+            case "add_tab_post" : {
+                $tab_id = intval($_POST["tab_id"]);
+                $post_comment_message = $_POST["post_comment"];
+                $post_id = time() + rand();
+
+                $view_data = array(
+                    "tab_posts" => array(
+                        array(
+                            "post_id" => $post_id,
+                            "message" => $post_comment_message,
+                            "first_name" => "Post Erick",
+                            "user_profile_pic" => "https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png",
+                            "date_posted" => "Mar 10, 2023",
+                        )
+                    )
+                );
+
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "tab_id"    => $tab_id,
+                    "post_id"   => $post_id,
+                    "html"      => get_include_contents("../views/partials/post_item_partial.php", $view_data),
+                );
+                break;
+            }
+
+            case "edit_comment" : {
+                $is_post = intval($_POST["is_post"]);
+                $post_comment_message = $_POST["post_comment"];
+
+                if($is_post){
+                    $post_id = intval($_POST["post_id"]);
+    
+                    $view_data = array(
+                        "comment_items" => array(
+                            array(
+                                "post_id" => $post_id,
+                                "message" => $post_comment_message,
+                                "first_name" => "Post Erick",
+                                "user_profile_pic" => "https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/jhaver.png",
+                                "date_posted" => "Mar 10, 2023",
+                            )
+                        )
+                    );
+
+                } else {
+                    $comment_id = intval($_POST["comment_id"]);
+    
+                    $view_data = array(
+                        "comment_items" => array(
+                            array(
+                                "comment_id" => $comment_id,
+                                "commenter_message" => $post_comment_message,
+                                "commenter_user_id" => 12,
+                                "commenter_first_name" => "Erick",
+                                "commenter_profile_pic" => "sample_img.url",
+                                "date_commented" => "Mar 10, 2023"
+                            )
+                        )
+                    );
+                    
+                }
+                $response_data["status"]    = true;
+                $response_data["result"]    = array(
+                    "post_id"   => ($is_post) ? $post_id : $comment_id,
+                    "html"      => get_include_contents("../views/partials/comment_items_partial.php", $view_data),
+                );
                 break;
             }
         }

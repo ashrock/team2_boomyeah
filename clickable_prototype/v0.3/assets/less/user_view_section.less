@@ -210,6 +210,25 @@
         display: block !important;
     }
 }
+.fetch_tab_posts_btn{
+    color: @by_primary;
+    font-weight: bold;
+    margin-top: 20px;
+    &:before{
+        display: block;
+        border-left: 1px solid #000;
+    }
+    &.open{
+        & + .tab_comments{
+            display: initial !important;
+        }
+    }
+
+    & + .tab_comments{
+        display: none !important;
+    }
+}
+
 .tab_comments{
     margin-top: 20px;
 }
