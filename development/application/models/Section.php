@@ -219,9 +219,9 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, section_id }
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 8, 2023
-        # Owner: Erick
-        public function updateDocumentation($params){
+        # Last updated at: March 15, 2023
+        # Owner: Erick, Updated by: Jovic
+        public function updateSection($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
