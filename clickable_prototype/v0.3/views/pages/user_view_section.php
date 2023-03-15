@@ -14,6 +14,7 @@
     $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Employee Handbook";
     $section_title = (isset($_GET["section_title"])) ? htmlspecialchars_decode( $_GET["section_title"] ) : "About Company";
 
+    $title = (isset($_GET["view_type"]))?  htmlspecialchars_decode( $_GET["view_type"] ) : "About Company";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,9 +46,10 @@
                         <li class="breadcrumb_item active"><span>About Company</span></li>
                     </ul>
                     <div class="row_placeholder"></div>
+                    <a href="admin_edit_section.php" id="preview_section_btn">Back to edit</a>
                 </div>
                 <div class="section_details">
-                    <h1 id="section_title">About Company</h1>
+                    <h1 id="section_title"><?= $title ?></h1>
                     <p id="section_short_description">Village 88 Inc. is a US-Delaware corporation which focuses on incubating companies and providing IT consultancy services to companies in the US. V88 also has a remote branch in San Fernando, La Union, Philippines registered in Securities and Exchange Commission as 457Avenue Inc. Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Philippines in 2013. It is the company’s vision to provide world-class IT education to brilliant individuals with less IT-career opportunity due to lack of industry experience or exposure. So far, Village 88, Inc. (V88) has produced 30+ talented software engineers from the Philippines who now worked with the company in incubating and launching businesses that bring a positive impact to the world. Since 2011, V88 has incubated Coding Dojo, Hacker Hero, Data Compass, and helped start numerous start-ups including Alumnify, SpotTrender, MatrixDS, and others.</p>
                 </div>
             </div>

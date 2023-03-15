@@ -823,7 +823,7 @@ body::-webkit-scrollbar-thumb {
   position: relative;
   border: 1px solid #D5E3FF;
   border-radius: 8px;
-  padding: 28px 24px 30px;
+  padding: 16px 16px 41px;
 }
 #edit_section_content .section_details .add_description textarea {
   max-width: 955px;
@@ -949,7 +949,7 @@ body::-webkit-scrollbar-thumb {
   padding: 24px;
 }
 #section_summary .section_details #section_title {
-  font: 40px/50px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 24px/30px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0px 0px 16px;
 }
 @media (max-width: 632px) {
