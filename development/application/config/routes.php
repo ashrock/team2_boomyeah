@@ -81,10 +81,11 @@ $route['sections/remove']['POST']    = 'sections/removeSection';
 $route['sections/reorder']['POST']   = 'sections/reOrderSection';
 
 /* POST | Admin Edit Section Routes */
-$route['modules/add']['POST']        = 'modules/addModule';
-$route['modules/add_tab']['POST']    = 'modules/addTab';
-$route['modules/update']['POST']     = 'modules/updateModule';
-$route['modules/remove_tab']['POST'] = 'modules/removeTab';
+$route['modules/add']['POST']         = 'modules/addModule';
+$route['modules/add_tab']['POST']     = 'modules/addTab';
+$route['modules/update']['POST']      = 'modules/updateModule';
+$route['modules/remove_tab']['POST']  = 'modules/removeTab';
+$route['modules/reorder_tab']['POST'] = 'modules/reorderTab';
 
 
 /* User Documentation Routes */
