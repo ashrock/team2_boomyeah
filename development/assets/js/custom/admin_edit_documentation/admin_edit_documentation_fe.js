@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".duplicate_icon", duplicateSection)
         .on("click", ".remove_icon", setRemoveSectionBlock)
         .on("click", "#remove_confirm", confirmRemoveSectionBlock)
-        .on("click", ".section_block", redirectToEditSection)
+        .on("click", ".section_block, .section_title", redirectToEditSection)
         .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
         .on("click", ".change_privacy_yes_btn", submitDocumentationPrivacy)
