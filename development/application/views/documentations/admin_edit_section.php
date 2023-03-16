@@ -66,7 +66,7 @@
                 <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
                 <button id="add_page_tabs_btn" type="submit">+ Add New</button>
             </form>
-            <form id="add_module_tab_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+            <form id="add_module_tab_form" action="/modules/add_tab" method="POST" class="hidden">
                 <input type="hidden" name="action" value="add_module_tab">
                 <input type="hidden" name="module_id" class="module_id">
             </form>
