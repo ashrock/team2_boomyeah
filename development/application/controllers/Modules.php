@@ -39,6 +39,55 @@
 
 			echo json_encode($response_data);
 		}
+		
+		# DOCU: This function will call addTab() from Module Model to process adding of new tab
+		# Triggered by: (POST) modules/addTab
+		# Requires: $_POST["module_id"]
+		# Returns: { status: true/false, result: { html }, error: null }
+		# Last updated at: Mar. 15, 2023
+		# Owner: Erick
+		public function addTab(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
+
+				if(isset($_POST["module_id"])){
+					$response_data = $this->Module->addTab($_POST);
+				}
+				else{
+					$response_data["error"] = "Module id is required";
+				}
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+
+		# DOCU: This function will call updateModule() from Module Model to process updating of Module feature
+		# Triggered by: (POST) modules/update
+		# Requires: $_POST
+		# Returns: { status: true/false, result: {}, error: null }
+		# Last updated at: Mar. 15, 2023
+		# Owner: Jovic
+		public function updateModule(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
+
+				$response_data = $this->Module->updateModule($_POST);
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
 
 		# DOCU: This function will check if user is allowed to visit a page or do an action.
 		# Triggered by: GET and POST functions in Documentations Controller
