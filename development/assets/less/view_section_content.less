@@ -1,6 +1,7 @@
 // out: false
 @import url(./variables.less);
 @by_section_tab: #D5E3FF;
+@by_remove_blue: #8CA8FF;
 
 #section_summary{
     background: @by_white;
@@ -69,7 +70,7 @@
     .section_details{
         padding: 24px;
         #section_title{
-            font: 40px/50px @readex_regular;
+            font: 24px/30px @readex_regular;
             margin: 0px 0px 16px;
 
             @media (max-width: 632px) {
@@ -127,6 +128,7 @@
         .page_tab_item{
             position: relative;
             display: inline-flex;
+            margin-top: 5px;
             a{
                 background: @by_section_tab;
                 border-top-left-radius: 10px;
@@ -141,10 +143,10 @@
             .remove_tab_btn{
                 background: transparent;
                 border: none;
-                color: @by_neutral_gray;
+                color: @by_remove_blue;
                 cursor: pointer;
-                font-size: 20px;
-                height: 48px;
+                font-size: 23px;
+                height: 47px;
                 margin-right: 16px;
                 position: absolute;
                 right: 0px;
@@ -280,6 +282,10 @@
             line-height: 52px;
             margin-bottom: 16px;
             padding: 0px 16px;
+
+            &:focus{
+                box-shadow: 0px 2px 0px @by_primary;
+            }
         }
         textarea.tab_content{
             min-height: 360px;

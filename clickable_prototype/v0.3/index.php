@@ -21,8 +21,8 @@
                 <a href="./views/pages/admin_edit_section.php">Admin Edit Section Page</a>
                 <p>
                     <span> User Stories</span>
-                    (P7) As an admin, I want to manage the modules and tabs so that I can easily build a documentation and decide what are needed contents.<br/><br/>
-                    (P6)As an admin, I want to upload files/images so that I can easily use them in the documentations without much effort.
+                    P9 As an admin, I want to create/manage modules and tabs to the documentations so that I can impart and guide people on different areas. <br/><br/>
+                    P7 As an admin, I want to have a preview of the documentation so that I won't feel stressed trying to remember what's in it and prevent unnecessary repeated asking the same question.
                 </p>
                 <a href="./views/pages/user_view_section.php">User View Section Page</a>
                 <p>

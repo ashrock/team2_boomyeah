@@ -26,20 +26,15 @@
     .section_details{
         .add_description{
             position: relative;
-            &:hover{
-                &::after{
-                    background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/admin_edit_docs_sprite.svg') no-repeat;
-                    background-position: -59px -4px;
-                    content: '';
-                    display: inline-block;
-                    height: 18px;
-                    position: absolute;
-                    right: -5px;
-                    width: 18px;
-                }
-            }
+            border: 1px solid @by_input_border;
+            border-radius: 8px;
+            padding: 16px;
             textarea{
                 max-width: 955px;
+                overflow: hidden;
+            }
+            &:focus-within{
+                box-shadow: 0 1px 4px 2px rgba(181,196,228,0.25);
             }
         }
     }
@@ -57,6 +52,17 @@
             background: @by_hovered_btn;
         }
     } 
+
+
+}
+#section_pages{
+    .error{
+        border: 1px solid @by_error !important;
+    }
+}
+
+.faded{
+    opacity: 0;
 }
 
 @import url(./view_section_content.less);

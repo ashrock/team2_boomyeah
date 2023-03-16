@@ -241,6 +241,42 @@
 			}
 		}
 
+		# DOCU: This function will call getDocumentation from Documentation Model, getSection and getSectionTabs from Section Model
+		# Triggered by: (GET) docs/(:any)/(:any)/edit
+		# Requires: $documentation_id, $section_id
+		# Last updated at: Mar. 15, 2023
+		# Owner: Jovic
+		public function getSection($documentation_id, $section_id){
+			$documentation = $this->Documentation->getDocumentation($documentation_id);
+			
+			# Check if user is allowed to access page
+			$this->isUserAllowed();
+
+			if($documentation["status"] && $documentation["result"]){
+				# Fetch sections
+				$this->load->model("Section");
+				$sections = $this->Section->getSection($section_id);
+
+				if($sections["status"] && $sections["result"]){
+					$modules  = $this->Section->getSectionTabs($section_id);
+	
+					$this->load->view('documentations/admin_edit_section', array("documentation" => $documentation["result"], "section" => $sections["result"], "modules" => $modules["result"]));
+				}
+				else{
+					echo $sections["error"];
+				}
+			}
+			else{
+				# Confirm if we need to show error or just redirect back to dashboard
+				echo $documentation["error"];
+			}
+		}
+
+		# DOCU: This function will call getDocumentation from Documentation Model and render user_view_documentation page
+		# Triggered by: (GET) docs/(:any)
+		# Requires: $documentation_id
+		# Last updated at: Mar. 14, 2023
+		# Owner: Jovic
 		public function userDocumentation($documentation_id){
 			$documentation = $this->Documentation->getDocumentation($documentation_id);
 			
@@ -249,12 +285,39 @@
 				$this->load->model("Section");
 				$sections = $this->Section->getSections($documentation_id);
 
-				# TODO: FIX LATER
-				$this->load->view('documentations/admin_edit_documentation', array("document_data" => $documentation["result"], "sections" => $sections["result"]));
+				$this->load->view('documentations/user_view_documentation', array("document_data" => $documentation["result"], "sections" => $sections["result"]));
 			}
 			else{
 				# Confirm if we need to show error or just redirect back to dashboard
-				echo "Documentation doesn't exist";
+				echo $documentation["error"];
+			}
+		}
+
+		# DOCU: This function will call getDocumentation from Documentation Model and render user_view_section page
+		# Triggered by: (GET) docs/(:any)/(:any)
+		# Requires: $documentation_id, $section_id
+		# Last updated at: Mar. 15, 2023
+		# Owner: Jovic
+		public function userSection($documentation_id, $section_id){
+			$documentation = $this->Documentation->getDocumentation($documentation_id);
+			
+			if($documentation["status"] && $documentation["result"]){
+				# Fetch sections
+				$this->load->model("Section");
+				$sections = $this->Section->getSection($section_id);
+
+				if($sections["status"] && $sections["result"]){
+					$modules = $this->Section->getSectionTabs($section_id);
+	
+					$this->load->view('documentations/user_view_section', array("documentation" => $documentation["result"], "section" => $sections["result"], "modules" => $modules["result"]));
+				}
+				else{
+					echo $sections["error"];
+				}
+			}
+			else{
+				# Confirm if we need to show error or just redirect back to dashboard
+				echo $documentation["error"];
 			}
 		}
 

@@ -50,13 +50,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 
-/* User Routes */
 $route['default_controller'] = 'users';
 $route['logout'] = 'users/logout';
 
 /* GET | Admin Documentation Routes */
-$route['docs/edit']['GET']        = 'documentations/adminDocumentations';
-$route['docs/(:any)/edit']['GET'] = 'documentations/getDocumentation/$1';
+$route['docs/edit']['GET']               = 'documentations/adminDocumentations';
+$route['docs/(:any)/edit']['GET']        = 'documentations/getDocumentation/$1';
+$route['docs/(:any)/(:any)/edit']['GET'] = 'documentations/getSection/$1/$2';
 
 /* POST | Admin Documentation Routes */
 $route['docs/get']['POST']       = 'documentations/getDocumentations';
@@ -67,8 +67,8 @@ $route['docs/remove']['POST']    = 'documentations/removeDocumentation';
 $route['docs/reorder']['POST']   = 'workspaces/updateWorkspace';
 
 /* POST | Admin Edit Documentation Routes */
-$route['collaborators/add']['POST'] = 'collaborators/addCollaborators';
-$route['collaborators/get']['POST'] = 'collaborators/getCollaborators';
+$route['collaborators/add']['POST']    = 'collaborators/addCollaborators';
+$route['collaborators/get']['POST']    = 'collaborators/getCollaborators';
 $route['collaborators/update']['POST'] = 'collaborators/updateCollaborator';
 $route['collaborators/remove']['POST'] = 'collaborators/removeCollaborator';
 
@@ -77,11 +77,23 @@ $route['sections/add']['POST']       = 'sections/addSection';
 $route['sections/update']['POST']    = 'sections/updateSection';
 $route['sections/duplicate']['POST'] = 'sections/duplicateSection';
 $route['sections/remove']['POST']    = 'sections/removeSection';
-$route['sections/reorder']['POST']    = 'sections/reOrderSection';
+$route['sections/reorder']['POST']   = 'sections/reOrderSection';
 
-/* User Documentation Routes */
-$route['docs']['GET']        = 'documentations/userDocumentations';
-$route['docs/(:any)']['GET'] = 'documentations/userDocumentation/$1';
+/* POST | Admin Edit Section Routes */
+$route['modules/add']['POST']         = 'modules/addModule';
+$route['modules/add_tab']['POST']     = 'modules/addTab';
+$route['modules/update']['POST']      = 'modules/updateModule';
+$route['modules/remove_tab']['POST']  = 'modules/removeTab';
+$route['modules/reorder_tab']['POST'] = 'modules/reorderTab';
+
+/* GET | User Documentation Routes */
+$route['docs']['GET']               = 'documentations/userDocumentations';
+$route['docs/(:any)']['GET']        = 'documentations/userDocumentation/$1';
+$route['docs/(:any)/(:any)']['GET'] = 'documentations/userSection/$1/$2';
+
+/* POST | User View Section Routes */
+$route['modules/get_posts']['POST'] = 'modules/getPosts';
+$route['modules/add_post']['POST']  = 'modules/addPost';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

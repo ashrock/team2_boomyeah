@@ -55,33 +55,41 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
-#header_container .header .user_profile a {
-  background: #FFFFFF;
-  border-radius: 40px;
-  border: 1px solid #BBCCF3;
-  font: 14px/20px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
-  margin: 0 16px;
-  padding: 10px 54px 10px 24px;
-  position: relative;
-  text-decoration: none;
+#header_container .header .user_profile .user_settings #user_profile_pic {
+  border-radius: 25px;
+  height: 40px;
+  margin-top: 10px;
+  width: 40px;
 }
-#header_container .header .user_profile a::after {
-  background: url('../../assets/images/header_sprite.svg') no-repeat;
-  background-position: 1px 0px;
-  content: '';
-  display: inline;
-  height: 24px;
-  position: absolute;
-  right: 20px;
-  top: 8px;
-  width: 24px;
-}
-#header_container .header .user_profile .user_settings button {
+#header_container .header .user_profile .user_settings #logout {
   background: url("../images/header_sprite.svg") no-repeat;
   background-position: -40px 0px;
   border: none;
-  height: 28px;
+  color: transparent;
+  cursor: pointer;
+  display: inline-block;
+  height: 29px;
+  transform: translate(8px, -10px);
   width: 28px;
+}
+#header_container .header .user_profile .user_settings #dropdown_logout {
+  height: 40px;
+  overflow: hidden;
+}
+#header_container .header .user_profile .user_settings #dropdown_logout li {
+  background: #F4F7FA;
+  border-radius: 8px;
+}
+#header_container .header .user_profile .user_settings #dropdown_logout li .log_out_btn {
+  color: #78716C;
+  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  padding: 12px 0;
+  position: relative;
+  text-align: center;
+  z-index: 9999;
+}
+#header_container .header .user_profile .user_settings #dropdown_logout li:hover {
+  background: #E8F2FF;
 }
 @media screen and (max-width: 632px) {
   #header_container {
@@ -159,12 +167,6 @@ textarea {
   #nav_documentation {
     display: none;
   }
-}
-#mobile_container {
-  background: #FCFCFF;
-  border-radius: 12px 12px 0px 0px;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.168);
-  padding: 0 19px;
 }
 #mobile_container .header_mobile {
   align-items: center;
@@ -443,10 +445,8 @@ textarea {
   font: 20px/18px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper {
-  display: contents;
-  min-height: 268px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  max-height: 180px;
+  overflow-y: auto;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user {
   align-items: center;
@@ -691,16 +691,36 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
   width: 10px;
 }
-@keyframes slideSwipeLeft {
+.sortable-ghost {
+  background: #BDDAFF !important;
+  border: none !important;
+  box-shadow: 0 0 6px #BDDAFF !important;
+}
+.sortable-ghost *,
+.sortable-ghost::after,
+.sortable-ghost::before {
+  visibility: hidden !important;
+}
+.animated_blinkBorder {
+  animation-name: blinkBorder;
+}
+@keyframes blinkBorder {
   0% {
-    opacity: 0;
-    transform: translateX(10%);
+    border-color: transparent;
+    box-shadow: none;
   }
-  80% {
-    transform: translateX(0%);
+  30% {
+    border-color: #2563EB;
+  }
+  50% {
+    box-shadow: 0 0 12px #2563EB;
+  }
+  70% {
+    border-color: #2563EB;
   }
   100% {
-    opacity: 1;
+    border-color: transparent;
+    box-shadow: none;
   }
 }
 #wrapper {
@@ -727,19 +747,16 @@ body::-webkit-scrollbar-thumb {
 }
 #edit_section_content .section_details .add_description {
   position: relative;
-}
-#edit_section_content .section_details .add_description:hover::after {
-  background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/admin_edit_docs_sprite.svg') no-repeat;
-  background-position: -59px -4px;
-  content: '';
-  display: inline-block;
-  height: 18px;
-  position: absolute;
-  right: -5px;
-  width: 18px;
+  border: 1px solid #D5E3FF;
+  border-radius: 8px;
+  padding: 16px;
 }
 #edit_section_content .section_details .add_description textarea {
   max-width: 955px;
+  overflow: hidden;
+}
+#edit_section_content .section_details .add_description:focus-within {
+  box-shadow: 0 1px 4px 2px rgba(181, 196, 228, 0.25);
 }
 #edit_section_content #add_page_tabs_btn {
   border-radius: 20px;
@@ -756,6 +773,12 @@ body::-webkit-scrollbar-thumb {
 }
 #edit_section_content #add_page_tabs_btn:hover {
   background: #BDDAFF;
+}
+#section_pages .error {
+  border: 1px solid #DA4D4D !important;
+}
+.faded {
+  opacity: 0;
 }
 @font-face {
   font-family: 'ReadexPro-Bold';
@@ -852,7 +875,7 @@ body::-webkit-scrollbar-thumb {
   padding: 24px;
 }
 #section_summary .section_details #section_title {
-  font: 40px/50px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 24px/30px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0px 0px 16px;
 }
 @media (max-width: 632px) {
@@ -902,6 +925,7 @@ body::-webkit-scrollbar-thumb {
 .section_page_content .section_page_tabs .page_tab_item {
   position: relative;
   display: inline-flex;
+  margin-top: 5px;
 }
 .section_page_content .section_page_tabs .page_tab_item a {
   background: #D5E3FF;
@@ -917,10 +941,10 @@ body::-webkit-scrollbar-thumb {
 .section_page_content .section_page_tabs .page_tab_item .remove_tab_btn {
   background: transparent;
   border: none;
-  color: #E2E2EC;
+  color: #8CA8FF;
   cursor: pointer;
-  font-size: 20px;
-  height: 48px;
+  font-size: 23px;
+  height: 47px;
   margin-right: 16px;
   position: absolute;
   right: 0px;
@@ -1050,6 +1074,9 @@ body::-webkit-scrollbar-thumb {
   line-height: 52px;
   margin-bottom: 16px;
   padding: 0px 16px;
+}
+.section_page_content .section_page_tab input.tab_title:focus {
+  box-shadow: 0px 2px 0px #2563EB;
 }
 .section_page_content .section_page_tab textarea.tab_content {
   min-height: 360px;

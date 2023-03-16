@@ -6,7 +6,7 @@
         # Triggered by: (GET) docs/:id/edit
         # Requires: $documentation_id
         # Returns: { status: true/false, result: sections records, error: null }
-        # Last updated at: March 7, 2023
+        # Last updated at: March 10, 2023
         # Owner: Jovic
         public function getSections($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -21,7 +21,7 @@
                     $order_by_clause = $get_documentation['result']['section_ids_order'] ? "ORDER BY FIELD (id, {$get_documentation['result']['section_ids_order']})" : "";
 
                     # Fetch sections
-                    $get_sections = $this->db->query("SELECT id, title FROM sections WHERE documentation_id = ? {$order_by_clause};", $documentation_id);
+                    $get_sections = $this->db->query("SELECT id, title, description FROM sections WHERE documentation_id = ? {$order_by_clause};", $documentation_id);
 
                     if($get_sections->num_rows()){
                         $response_data["result"] = $get_sections->result_array();
@@ -56,6 +56,64 @@
                 if($get_section->num_rows()){                    
                     $response_data["status"] = true;
                     $response_data["result"] = $get_section->result_array()[0];
+                }
+                else{
+                    throw new Exception("No section found.");
+                }      
+            }
+
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will fetch tabs of a section
+        # Triggered by: (GET) docs/:documentation_id/:section_id/edit
+        # Requires: $section_id
+        # Returns: { status: true/false, result: { section_tabs data }, error: null }
+        # Last updated at: March 15, 2023
+        # Owner: Jovic, Updated by: Erick
+        public function getSectionTabs($section_id, $module_id = 0){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $where_statement = ($module_id) ? "AND modules.id = ?" : "";
+                $where_values    = ($module_id) ? array($module_id, $section_id, $module_id) : array($section_id);
+                $group_by_module_id = ($module_id) ? "WHERE tabs.module_id = ?" : "GROUP BY module_id";
+
+                $get_section = $this->db->query("
+                    SELECT
+                        modules.id AS module_id, 
+                        modules.tab_ids_order,
+                        ANY_VALUE(module_tabs.tabs) AS module_tabs_json
+                    FROM sections
+                    INNER JOIN modules ON modules.section_id = sections.id
+                    LEFT JOIN (
+                        SELECT
+                            tabs.module_id,
+                            JSON_OBJECTAGG(
+                                tabs.id,
+                                JSON_OBJECT(
+                                    'id', tabs.id,
+                                    'module_id', tabs.module_id,
+                                    'title', tabs.title,
+                                    'content', tabs.content,
+                                    'cache_posts_count', tabs.cache_posts_count,
+                                    'is_comments_allowed', tabs.is_comments_allowed
+                                )
+                            ) AS tabs
+                        FROM tabs
+                        {$group_by_module_id} 
+                    ) AS module_tabs ON module_tabs.module_id = modules.id
+                    WHERE sections.id = ? {$where_statement}
+                    GROUP BY modules.id;
+                ", $where_values);
+
+                if($get_section->num_rows()){                    
+                    $response_data["status"] = true;
+                    $response_data["result"] = $get_section->result_array();
                 }
                 else{
                     throw new Exception("No section found.");
@@ -129,13 +187,41 @@
             return $response_data;
         }
 
+        # DOCU: This function will duplicate section records based on documentation_id
+        # Triggered by: (POST) docs/duplicate
+        # Requires: $params { duplicate_id, documentation_id, section_ids_order }
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 10, 2023
+        # Owner: Jovic
+        public function duplicateSections($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                # Create sections
+                $create_sections = $this->db->query("
+                    INSERT INTO sections (documentation_id, user_id, title, description, created_at, updated_at)
+                    SELECT ?, ?, title, description, NOW(), NOW() FROM sections WHERE documentation_id = ? ORDER BY FIELD(id, {$params['section_ids_order']});",
+                    array($params["duplicate_id"], $_SESSION["user_id"], $params["documentation_id"])
+                );
+
+                if($create_sections){
+                    $response_data["status"] = true;
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
         # DOCU: This function will update a section depending on what update_type is given
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, section_id }
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 8, 2023
-        # Owner: Erick
-        public function updateDocumentation($params){
+        # Last updated at: March 15, 2023
+        # Owner: Erick, Updated by: Jovic
+        public function updateSection($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
@@ -283,6 +369,30 @@
                         }
                     }
                 }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will all section records with a matching documentation_id
+        # Triggered by: (POST) docs/remove
+        # Requires: $documentation_id
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 10, 2023
+        # Owner: Jovic
+        public function removeSections($documentation_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $remove_sections = $this->db->query("DELETE FROM sections WHERE documentation_id = ?;", $documentation_id);
+
+                if($remove_sections){
+                    $response_data["status"] = true;
+                }
+
             }
             catch (Exception $e) {
                 $response_data["error"] = $e->getMessage();
