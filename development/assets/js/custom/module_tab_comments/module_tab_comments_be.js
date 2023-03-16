@@ -53,7 +53,7 @@ function onSubmitPostForm(event){
             show_comments_btn.attr("data-cache_posts_count", posts_count);
             show_comments_btn.html(`Comments (${posts_count})`);
 
-            comments_list.append(response_data.result.html);
+            comments_list.prepend(response_data.result.html);
             setTimeout(() => {
             }, 200);
 
