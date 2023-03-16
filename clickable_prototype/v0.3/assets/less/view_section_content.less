@@ -262,12 +262,6 @@
                     width: calc(100%);
                 }
             }
-
-
-            iframe{
-                max-width: calc(100%) !important;
-                margin-bottom: 10px;
-            }
         }
         &.show{
             display: flex;
@@ -302,6 +296,16 @@
 
             @media (max-width: 632px) {
                 font: 12px/16px @readex_regular;
+            }
+        }
+            
+        figure, iframe{
+            max-width: calc(100%) !important;
+            margin: 0px 0px 10px;
+
+            img{
+                max-width: inherit;
+                width: inherit;
             }
         }
 
