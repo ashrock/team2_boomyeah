@@ -89,7 +89,7 @@
 			echo json_encode($response_data);
 		}
 
-		# DOCU: This function will call removeTab() from Module Model to process removing of Tab feature
+		# DOCU: This function will call removeTab() from Module Model to process removing of Tabs
 		# Triggered by: (POST) modules/remove_tab
 		# Requires: $_POST["tab_ib"]
 		# Returns: { status: true/false, result: {}, error: null }
@@ -103,6 +103,28 @@
 				$this->isUserAllowed();
 
 				$response_data = $this->Module->removeTab($_POST);
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+
+		# DOCU: This function will call reorderTab() from Module Model to process reordering of Tabs
+		# Triggered by: (POST) modules/reorder_tab
+		# Requires: $_POST["module_id"], $_POST["tab_ids_order"]
+		# Returns: { status: true/false, result: {}, error: null }
+		# Last updated at: Mar. 16, 2023
+		# Owner: Erick
+		public function reorderTab(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
+
+				$response_data = $this->Module->reorderTab($_POST);
 			}
 			catch (Exception $e) {
 				$response_data["error"] = $e->getMessage();

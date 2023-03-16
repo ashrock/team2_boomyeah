@@ -9,6 +9,9 @@ M.Dropdown.init(elem, {
     coverTrigger: false
 });
 
+var elems = document.querySelectorAll('.sidenav');
+var instances = M.Sidenav.init(elems, options);
+
 function onSearchDocumentation(event){
     clearTimeout(search_timeout);
     let search_field = event.target;

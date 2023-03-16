@@ -1,6 +1,8 @@
 // import data from "../json/large_dataset.json" assert { type: "json" };
 
 document.addEventListener("DOMContentLoaded", async () => {
+
+
     const current_location = window.location.pathname;
     const view_path = current_location.substring(0, current_location.lastIndexOf('/'));
 
@@ -16,6 +18,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     ux(".sort_by").onEach("click", sort_documentations);
     initializeMaterializeDropdown();
+
+    let sidenav_elems = document.querySelectorAll('.sidenav');
+    let instances = M.Sidenav.init(sidenav_elems);
 
     /* Print JSON data */
     // printSectionOutline(data.section_outline.sections);
