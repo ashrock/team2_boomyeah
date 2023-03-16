@@ -93,6 +93,7 @@ $route['docs/(:any)/(:any)']['GET'] = 'documentations/userSection/$1/$2';
 
 /* POST | User View Section Routes */
 $route['modules/get_posts']['POST'] = 'modules/getPosts';
+$route['modules/add_post']['POST']  = 'modules/addPost';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
