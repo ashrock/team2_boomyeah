@@ -19,7 +19,7 @@ services:
         links:
             - php
     php:
-        image: php:7-fpm
+        build: ./development
         volumes:
-            - ./clickable_prototype:/clickable_prototype
             - ./development:/development
+            - ./clickable_prototype:/clickable_prototype

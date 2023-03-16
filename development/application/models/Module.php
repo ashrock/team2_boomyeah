@@ -389,7 +389,7 @@
 
         # DOCU: This function will create Post record and call getPost() to fetch Post record and generate html
         # Triggered by: (POST) modules/add_post
-        # Requires: $params { tab_id, post_comment }, $_SESSION["user_id]
+        # Requires: $params { tab_id, post_comment }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: { tab_id, html }, error: null }
         # Last updated at: March 16, 2023
         # Owner: Jovic
@@ -411,6 +411,39 @@
                             $response_data = $get_post;
                             $this->db->trans_complete();
                         }
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will update Post record and call getPost() to fetch Post record and generate html
+        # Triggered by: (POST) modules/add_post
+        # Requires: $params { post_id, post_comment }
+        # Returns: { status: true/false, result: { post_id, post_comment_id, html }, error: null }
+        # Last updated at: March 16, 2023
+        # Owner: Jovic
+        public function editPost($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $this->db->trans_start();
+                $update_post = $this->db->query("UPDATE posts SET message = ?, updated_at = NOW() WHERE id = ?;", array($params["post_comment"], $params["post_id"]));
+
+                if($update_post){
+                    $get_post = $this->getPost($params["post_id"]);
+
+                    if($get_post["status"]){
+                        $response_data = $get_post;
+                        $response_data["result"]["post_id"]         = $params["post_id"];
+                        $response_data["result"]["post_comment_id"] = $params["post_id"];
+                        
+                        $this->db->trans_complete();
                     }
                 }
             }
