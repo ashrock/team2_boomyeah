@@ -50,7 +50,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 
-/* User Routes */
 $route['default_controller'] = 'users';
 $route['logout'] = 'users/logout';
 
@@ -85,11 +84,13 @@ $route['modules/add']['POST']       = 'modules/addModule';
 $route['modules/add_tab']['POST']   = 'modules/addTab';
 $route['modules/update']['POST']    = 'modules/updateModule';
 
-
-/* User Documentation Routes */
+/* GET | User Documentation Routes */
 $route['docs']['GET']               = 'documentations/userDocumentations';
 $route['docs/(:any)']['GET']        = 'documentations/userDocumentation/$1';
 $route['docs/(:any)/(:any)']['GET'] = 'documentations/userSection/$1/$2';
+
+/* POST | User View Section Routes */
+$route['modules/get_posts']['GET'] = 'modules/getPosts';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
