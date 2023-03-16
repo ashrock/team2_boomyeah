@@ -207,8 +207,6 @@ function removeModuleTab(tab_item){
                 if(is_active){
                     ux(section_page_tabs.querySelectorAll(".page_tab_item")[0]).find("a").self().click();
                 }
-
-                reorderModuleTabs(section_page_tabs);
             }
         });
     }, 248);

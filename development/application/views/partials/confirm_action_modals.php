@@ -22,7 +22,7 @@
             <p>Are you sure you want to remove `<span class="tab_title"></span>` tab?</p>
         </div>
         <div class="modal-footer">
-            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" id="remove_tab_form">
+            <form action="/modules/remove_tab" method="POST" id="remove_tab_form">
                 <input type="hidden" name="action" value="remove_module_tab">
                 <input type="hidden" name="module_id" value="" class="module_id">
                 <input type="hidden" name="tab_id" value="" class="tab_id">

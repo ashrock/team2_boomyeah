@@ -228,5 +228,64 @@
 
             return $response_data;
         }
+
+        # DOCU: This function will delete the tab of a module
+        # Triggered by: (POST) module/remove_tab
+        # Requires: $params { tab_id }
+        # Returns: { status: true/false, result: { tab_id }, error: null }
+        # Last updated at: March 16, 2023
+        # Owner: Erick
+        public function removeTab($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                # Start DB transaction
+                $this->db->trans_start();
+                $tab = $this->getTab($params["tab_id"]);
+
+                if($tab["status"]){
+                    # Delete Tab
+                    $delete_section = $this->db->query("DELETE FROM tabs WHERE id = ?;", $params["tab_id"]);
+
+                    if($delete_section){
+                        $module = $this->getModule($tab["result"]["module_id"]);
+                        # Remove section_id from section_ids_order and update documentation record
+                        $tabs_order = explode(",", $module["result"]["tab_ids_order"]);
+                        $tab_index  = array_search($params["tab_id"], $tabs_order);
+
+                        if($tab_index !== FALSE){
+                            unset($tabs_order[$tab_index]);
+                            $tabs_count = count($tabs_order);
+                            $tabs_order = ($tabs_count) ? implode(",", $tabs_order) : "";
+
+                            # Update documentations section_ids_order
+                            $update_module_tabs_order = $this->db->query("UPDATE modules SET tab_ids_order = ? WHERE id = ?", array($tabs_order, $tab["result"]["module_id"]));
+                            
+                            if($update_module_tabs_order){
+                                # Check if we are deleting the last tab then remove the module also.
+                                if($tabs_count == ZERO_VALUE){
+                                    $delete_module = $this->db->query("DELETE FROM modules WHERE id = ?;", $tab["result"]["module_id"]);
+                                }
+
+                                # Commit changes to DB
+                                $this->db->trans_complete();
+
+                                $response_data["status"] = true;
+                                $response_data["result"]["tab_id"] = $tab["result"]["id"];
+                            }
+                        }
+                        else{
+                            $this->db->trans_rollback();
+                            throw new Exception("Unable to delete tab, the tab is not included in thetab)ids_order field.");
+                        }
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
     }
 ?>
