@@ -249,6 +249,7 @@
 
                     if($delete_section){
                         $module = $this->getModule($tab["result"]["module_id"]);
+
                         # Remove section_id from section_ids_order and update documentation record
                         $tabs_order = explode(",", $module["result"]["tab_ids_order"]);
                         $tab_index  = array_search($params["tab_id"], $tabs_order);
@@ -279,6 +280,32 @@
                             throw new Exception("Unable to delete tab, the tab is not included in thetab)ids_order field.");
                         }
                     }
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will reoder the tabs of a module
+        # Triggered by: (POST) module/reorder_tab
+        # Requires: $params { module_id, tab_ids_order }
+        # Returns: { status: true/false, result: { tab_id }, error: null }
+        # Last updated at: March 16, 2023
+        # Owner: Erick
+        public function reorderTab($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $update_module_tab_ids_order = $this->db->query("UPDATE modules SET tab_ids_order = ?, updated_at = NOW() WHERE id = ?;", array($params["tab_ids_order"], $params["module_id"]));
+
+                if($update_module_tab_ids_order){
+                    $response_data["status"] = true;
+                }
+                else{
+                    throw new Exception("Unable to update order of the tabs.");
                 }
             }
             catch (Exception $e) {
