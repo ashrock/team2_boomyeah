@@ -82,6 +82,7 @@ $route['sections/reorder']['POST']   = 'sections/reOrderSection';
 
 /* POST | Admin Edit Section Routes */
 $route['modules/add']['POST']       = 'modules/addModule';
+$route['modules/add_tab']['POST']   = 'modules/addTab';
 $route['modules/update']['POST']    = 'modules/updateModule';
 
 
