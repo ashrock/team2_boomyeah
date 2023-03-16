@@ -1,6 +1,6 @@
 <?php
     /** DOCU: Temp fix for CPT issues when editing module tab details */
-    $view_url = str_contains($_SERVER["REQUEST_URI"], "views") ? $_SERVER["REQUEST_URI"] : $_SERVER["HTTP_REFERER"];
+    $view_url = strpos($_SERVER["REQUEST_URI"], "views") ? $_SERVER["REQUEST_URI"] : $_SERVER["HTTP_REFERER"];
     $base_url = explode("views", $view_url)[0];
 ?>
 <?php
