@@ -10,7 +10,7 @@
         <div class="comment_details">
             <h4 class="commenter_name">
                 <span class="user_name"><?= isset($comment_item["post_id"]) ? $comment_item["first_name"] : $comment_item["commenter_first_name"] ?></span>
-                <span class="posted_at <?= (int)$comment_item["is_edited"] ? 'edited' : '' ?>"> • <?= isset($comment_item["post_id"]) ? time_ago($comment_item["date_posted"]) : $comment_item["date_commented"] ?></span>
+                <span class="posted_at <?= (int)$comment_item["is_edited"] ? 'edited' : '' ?>">• <?= isset($comment_item["post_id"]) ? time_ago($comment_item["date_posted"]) : $comment_item["date_commented"] ?></span>
                 <div class="comment_actions">
                     <button type="button" class="comment_actions_toggle"></button>
                     <div class="comment_actions_menu">

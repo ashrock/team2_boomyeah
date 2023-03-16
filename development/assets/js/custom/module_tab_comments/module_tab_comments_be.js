@@ -38,12 +38,21 @@ function onSubmitPostForm(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let tab_id = `#tab_${response_data.result.tab_id}`;
-            let comments_list = ux(tab_id).find(".tab_comments .comments_list");
-            let toggle_btn = ux(tab_id).find(".fetch_tab_posts_btn");
+            let tab_id            = `#tab_${response_data.result.tab_id}`;
+            let comments_list     = ux(tab_id).find(".tab_comments .comments_list");
+            let toggle_btn        = ux(tab_id).find(".fetch_tab_posts_btn");
+            let show_comments_btn = ux(tab_id).find(".show_comments_btn");
+            let posts_count       = parseInt(toggle_btn.data("cache_posts_count"));
 
             (toggle_btn.self() && !toggle_btn.self().classList.contains("open")) && fetch_tab_posts_btn.trigger("click");
             
+            /* Update cache_posts_count */
+            posts_count += 1;
+            toggle_btn.attr("data-cache_posts_count", posts_count);
+            toggle_btn.html(`Comments (${posts_count})`);
+            show_comments_btn.attr("data-cache_posts_count", posts_count);
+            show_comments_btn.html(`Comments (${posts_count})`);
+
             comments_list.append(response_data.result.html);
             setTimeout(() => {
             }, 200);
