@@ -314,5 +314,40 @@
 
             return $response_data;
         }
+
+        # DOCU: This function will fetch Posts in a Tab and generate html
+        # Triggered by: (POST) modules/get_posts
+        # Requires: $tab_id
+        # Returns: { status: true/false, result: { tab_id, html }, error: null }
+        # Last updated at: March 16, 2023
+        # Owner: Erick
+        public function getPosts($tab_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $get_posts = $this->db->query("
+                    SELECT
+                        posts.id AS post_id, users.first_name, posts.updated_at AS date_posted,
+                        posts.message, posts.cache_comments_count, users.profile_picture AS user_profile_pic,
+                        (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited
+                    FROM posts
+                    INNER JOIN users ON users.id = posts.user_id
+                    WHERE posts.tab_id = ?;", $tab_id
+                );
+
+                if($get_posts->num_rows()){
+                    $response_data["result"]["tab_id"] = $tab_id;
+                    $response_data["result"]["html"]   = $this->load->view("partials/comment_container_partial.php", array("comment_items" => $get_posts->result_array()), true);
+                    $response_data["result"]["try"]    = $get_posts->result_array();
+                }
+
+                $response_data["status"] = true;
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
     }
 ?>
