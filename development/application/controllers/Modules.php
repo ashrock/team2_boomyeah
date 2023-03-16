@@ -89,6 +89,28 @@
 			echo json_encode($response_data);
 		}
 
+		# DOCU: This function will call removeTab() from Module Model to process removing of Tab feature
+		# Triggered by: (POST) modules/remove_tab
+		# Requires: $_POST["tab_ib"]
+		# Returns: { status: true/false, result: {}, error: null }
+		# Last updated at: Mar. 15, 2023
+		# Owner: Jovic
+		public function removeTab(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				# Check if user is allowed to do action
+				$this->isUserAllowed();
+
+				$response_data = $this->Module->removeTab($_POST);
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+
 		# DOCU: This function will check if user is allowed to visit a page or do an action.
 		# Triggered by: GET and POST functions in Documentations Controller
 		# Requires: $_SESSION["user_level_id"]; $is_admin_page
