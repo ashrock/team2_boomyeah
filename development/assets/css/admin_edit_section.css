@@ -823,7 +823,7 @@ body::-webkit-scrollbar-thumb {
   position: relative;
   border: 1px solid #D5E3FF;
   border-radius: 8px;
-  padding: 16px 16px 41px;
+  padding: 16px;
 }
 #edit_section_content .section_details .add_description textarea {
   max-width: 955px;
@@ -947,7 +947,7 @@ body::-webkit-scrollbar-thumb {
 }
 #section_summary .section_details {
   padding: 24px;
-  min-height: 327px;
+  min-height: 280px;
 }
 #section_summary .section_details #section_title {
   font: 24px/30px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
@@ -1000,6 +1000,7 @@ body::-webkit-scrollbar-thumb {
 .section_page_content .section_page_tabs .page_tab_item {
   position: relative;
   display: inline-flex;
+  margin-top: 5px;
 }
 .section_page_content .section_page_tabs .page_tab_item a {
   background: #D5E3FF;
