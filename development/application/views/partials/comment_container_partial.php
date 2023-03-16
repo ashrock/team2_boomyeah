@@ -1,5 +1,8 @@
 <?php
-    foreach($comment_items as $comment_item) { ?>
+    $this->load->helper("datetime");
+
+    foreach($comment_items as $comment_item) { 
+?>
 <li class="comment_item comment_container" id="comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">
     <div class="comment_content">
         <img src="<?= isset($comment_item["post_id"]) ? $comment_item["user_profile_pic"] : $comment_item["commenter_profile_pic"] ?>" 
@@ -7,7 +10,7 @@
         <div class="comment_details">
             <h4 class="commenter_name">
                 <span class="user_name"><?= isset($comment_item["post_id"]) ? $comment_item["first_name"] : $comment_item["commenter_first_name"] ?></span>
-                <span class="posted_at <?= (int)$comment_item["is_edited"] ? 'edited' : '' ?>">• <?= isset($comment_item["post_id"]) ? $comment_item["date_posted"] : $comment_item["date_commented"] ?></span>
+                <span class="posted_at <?= (int)$comment_item["is_edited"] ? 'edited' : '' ?>"> • <?= isset($comment_item["post_id"]) ? time_ago($comment_item["date_posted"]) : $comment_item["date_commented"] ?></span>
                 <div class="comment_actions">
                     <button type="button" class="comment_actions_toggle"></button>
                     <div class="comment_actions_menu">

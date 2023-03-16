@@ -314,7 +314,7 @@
 
             return $response_data;
         }
-        
+
         # DOCU: This function will fetch Posts in a Tab and generate html
         # Triggered by: (POST) modules/get_posts
         # Requires: $tab_id
@@ -327,27 +327,12 @@
             try {
                 $get_posts = $this->db->query("
                     SELECT
-                        posts.id AS post_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name,
+                        posts.id AS post_id, users.first_name, posts.updated_at AS date_posted,
                         posts.message, posts.cache_comments_count, users.profile_picture AS user_profile_pic,
-                        (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited,
-                        (
-                            CASE
-                                WHEN (TIMESTAMPDIFF(MINUTE, posts.updated_at, NOW()) < 60) 
-                                    THEN CONCAT(TIMESTAMPDIFF(MINUTE, posts.updated_at, NOW()), IF(TIMESTAMPDIFF(MINUTE, posts.updated_at, NOW()) > 1, ' minutes', ' minute'), ' ago')
-                                WHEN (TIMESTAMPDIFF(MINUTE, posts.updated_at, NOW()) > 59 AND TIMESTAMPDIFF(DAY, posts.updated_at, NOW()) < 1) 
-                                    THEN CONCAT(TIMESTAMPDIFF(HOUR, posts.updated_at, NOW()), IF(TIMESTAMPDIFF(HOUR, posts.updated_at, NOW()) > 1, ' hours', 'hour'), ' ago')
-                                WHEN (TIMESTAMPDIFF(HOUR, posts.updated_at, NOW()) > 23 AND TIMESTAMPDIFF(DAY, posts.updated_at, NOW()) < 30) 
-                                    THEN CONCAT(TIMESTAMPDIFF(DAY, posts.updated_at, NOW()), IF(TIMESTAMPDIFF(DAY, posts.updated_at, NOW()) > 1, ' days', ' day'), ' ago')
-                                WHEN (TIMESTAMPDIFF(DAY, posts.updated_at, NOW()) > 29 AND TIMESTAMPDIFF(MONTH, posts.updated_at, NOW()) < 2)
-                                    THEN CONCAT(TIMESTAMPDIFF(MONTH, posts.updated_at, NOW()), ' month ago')
-                                ELSE DATE_FORMAT(posts.updated_at, '%M %d, %Y')
-                            END
-                        ) AS date_posted,
-                        posts.updated_at
+                        (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM posts
                     INNER JOIN users ON users.id = posts.user_id
-                    WHERE posts.tab_id = ?
-                    ORDER BY posts.updated_at ASC;", $tab_id
+                    WHERE posts.tab_id = ?;", $tab_id
                 );
 
                 if($get_posts->num_rows()){
