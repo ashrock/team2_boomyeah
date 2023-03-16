@@ -10,7 +10,8 @@
         <div class="comment_details">
             <h4 class="commenter_name">
                 <span class="user_name"><?= isset($comment_item["post_id"]) ? $comment_item["first_name"] : $comment_item["commenter_first_name"] ?></span>
-                <span class="posted_at <?= (int)$comment_item["is_edited"] ? 'edited' : '' ?>"> • <?= isset($comment_item["post_id"]) ? time_ago($comment_item["date_posted"]) : $comment_item["date_commented"] ?></span>
+                <span class="posted_at <?= (int)$comment_item["is_edited"] ? 'edited' : '' ?>">• <?= isset($comment_item["post_id"]) ? time_ago($comment_item["date_posted"]) : $comment_item["date_commented"] ?></span>
+<?php if($_SESSION["user_id"] == $comment_item["user_id"]){ ?>
                 <div class="comment_actions">
                     <button type="button" class="comment_actions_toggle"></button>
                     <div class="comment_actions_menu">
@@ -18,6 +19,7 @@
                         <button type="button" class="comment_action_btn remove_btn" data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Remove</button>
                     </div>
                 </div>
+<?php }?>
             </h4>
             <p class="comment_message"><?= isset($comment_item["post_id"]) ? $comment_item["message"] : $comment_item["commenter_message"] ?></p>
         </div>

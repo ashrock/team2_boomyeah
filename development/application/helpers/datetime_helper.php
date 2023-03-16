@@ -13,7 +13,7 @@
             $time = $interval->m > 1 ? "%m months" : "%m month";
         }
         else if ($interval->d > 0) {
-            $time = $interval->h > 1 ? "%d days" : "%d day";
+            $time = $interval->d > 1 ? "%d days" : "%d day";
         }
         else if ($interval->h > 0) {
             $time = $interval->h > 1 ? "%h hours" : "%h hour";
