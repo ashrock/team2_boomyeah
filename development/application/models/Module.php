@@ -327,7 +327,7 @@
             try {
                 $get_post = $this->db->query("
                     SELECT
-                        posts.id AS post_id, posts.tab_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, posts.updated_at AS date_posted,
+                        posts.id AS post_id, posts.tab_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, posts.updated_at AS date_posted,
                         posts.message, posts.cache_comments_count, users.profile_picture AS user_profile_pic,
                         (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM posts
@@ -364,7 +364,7 @@
             try {
                 $get_posts = $this->db->query("
                     SELECT
-                        posts.id AS post_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, posts.updated_at AS date_posted,
+                        posts.id AS post_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, posts.updated_at AS date_posted,
                         posts.message, posts.cache_comments_count, users.profile_picture AS user_profile_pic,
                         (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM posts
