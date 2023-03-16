@@ -179,14 +179,15 @@
                         $update_modules_tab_order = $this->db->query("UPDATE modules SET tab_ids_order = ? WHERE id = ?", array($new_tab_ids_order, $module_id));
 
                         if($update_modules_tab_order){
-                            $response_data["status"] = true;
                             $new_tab_json = $this->getTab($new_tab_id, true);
+                            $module_tabs_json = json_decode($new_tab_json["result"]["module_tabs_json"]);
                             
-                            $response_data["result"]    = array(
+                            $response_data["status"] = true;
+                            $response_data["result"] = array(
                                 "module_id"     => $module_id,
                                 "tab_id"        => $new_tab_id,
-                                "html_tab"      => $this->load->view("partials/page_tab_item_partial.php", array("module" => $new_tab_json["result"], "module_tabs" => array($new_tab_id)), true),
-                                "html_content"  => $this->load->view("partials/section_page_tab_partial.php", array("module" => $new_tab_json["result"], "module_tabs" => array($new_tab_id)), true)
+                                "html_tab"      => $this->load->view("partials/page_tab_item_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true),
+                                "html_content"  => $this->load->view("partials/section_page_tab_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true)
                             );
                         }
                     }
