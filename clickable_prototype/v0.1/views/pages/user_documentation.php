@@ -8,7 +8,6 @@
     // END
 
     include_once("../view_helper.php");  
-    include_once("../../config/connection.php");
     include_once("../../config/constants.php");
 
     // Load initial data
