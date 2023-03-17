@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", function(){
     ux("body")
         .on("blur", ".document_title", (event) => {
             /* Check if empty title; Revert to old title if empty */
-            ux((event.target).closest(".edit_title_form")).trigger("submit");
+            if(!event.target.hasAttribute("readonly")){
+                ux(event.target.closest(".edit_title_form")).trigger("submit");
+            } 
         })
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
         .on("submit", "#duplicate_documentation_form", onSubmitDuplicateForm)
