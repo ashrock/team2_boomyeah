@@ -1,6 +1,5 @@
 <?php
     session_start();
-    include_once("../config/connection.php");
     include_once("../config/constants.php");
     include_once("./partial_helper.php");
 
