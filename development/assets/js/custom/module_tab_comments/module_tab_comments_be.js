@@ -122,7 +122,7 @@ function onAddPostComment(event){
             let comments_list = ux(comment_id).find(".replies_list");
             let toggle_replies_btn = ux(comment_id).find(".toggle_replies_btn");
 
-            if(toggle_replies_btn.self()){
+            if(!toggle_replies_btn.self().classList.contains("hidden")){
                 toggle_replies_btn.find("b").trigger("click");
             } else {
                 comments_list.append(response_data.result.html);
@@ -150,7 +150,8 @@ function showRepliesList(event){
         let post_comments_form = ux("#fetch_post_comments_form");
         post_comments_form.find(".post_id").val(post_id);
         post_comments_form.trigger("submit");
-        ux(show_replies_btn).remove();
+        
+        ux(show_replies_btn).addClass("hidden");
     }
 }
 
@@ -232,14 +233,19 @@ function onCommentMessageKeypress(event){
 
     if(event.which === KEYS.ENTER){
         event.preventDefault();
+
         let submit_form = (post_form) ? post_form : edit_comment_form;
-        
         ux(submit_form).trigger("submit");
     }
     
-    if(edit_comment_form && event.which === KEYS.ESCAPE){
+    if(event.which === KEYS.ESCAPE){
         /** Close edit form */
-        closeEditCommentForm(event);
+        if(edit_comment_form){
+            closeEditCommentForm(event);
+        } else {
+            post_form.reset();
+            ux(post_form).removeClass("show");
+        }
     }
 }
 
@@ -281,6 +287,7 @@ function showConfirmaDeleteComment(event){
         remove_comment_modal.find((is_post) ? ".comment_id" : ".post_id").val("");
         remove_comment_modal.find((is_post) ? ".post_id" : ".comment_id").val(comment_id);
         remove_comment_modal.find(".action").val((is_post) ? "remove_post" : "remove_comment");
+        remove_comment_modal.find(".parent_id").val(ux(event_target).data("parent_id"));
 
         /** Determine active_comment_item */
         active_comment_item = (CLIENT_WIDTH > MOBILE_WIDTH) ? event_target.closest(".comment_item") : ux(".active_comment_item").self();

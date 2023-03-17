@@ -8,7 +8,6 @@
     // END
 
     include_once("../view_helper.php");  
-    include_once("../../config/connection.php");
     include_once("../../config/constants.php");
     $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Employee Handbook";
     
