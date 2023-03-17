@@ -84,7 +84,7 @@
             case "create_documentation": {
                 if(isset($_POST["document_title"])){
                     //Manipulate the received data
-                    $document_title = escape_this_string($_POST["document_title"]);
+                    $document_title = $_POST["document_title"];
                     $new_data = array(
                         "id"                        => count($documentation_data["fetch_admin_data"]) + 1,
                         "title"                     => $document_title,
