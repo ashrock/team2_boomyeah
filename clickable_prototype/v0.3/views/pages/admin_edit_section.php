@@ -9,7 +9,6 @@
 
     include_once("../../processes/partial_helper.php");  
     include_once("../view_helper.php");  
-    include_once("../../config/connection.php");
     include_once("../../config/constants.php");
     $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Employee Handbook";
     $section_title = (isset($_GET["section_title"])) ? htmlspecialchars_decode( $_GET["section_title"] ) : "About Company";
@@ -50,7 +49,7 @@
                             <li class="breadcrumb_item active"><span>About Company</span></li>
                         </ul>
                         <div class="row_placeholder"></div>
-                        <a href="user_view_section.php/?view_type=preview" id="preview_section_btn">Preview</a>
+                        <a href="user_view_section.php?view_type=preview" id="preview_section_btn">Preview</a>
                     </div>
                     <div class="section_details">
                         <h1 id="section_title">About Company</h1>
