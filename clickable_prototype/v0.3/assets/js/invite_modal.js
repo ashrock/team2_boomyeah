@@ -98,16 +98,20 @@ function addEmail(email){
 
 
 function addPeopleWithAccess(event){
+    event.preventDefault();
     event.stopImmediatePropagation();
-    ux("#email_address").self().blur();
+    // ux("#email_address").self().blur();
+
     if(invited_emails.length > 0){
         let add_collaborators_form = ux("#add_collaborators_form");
         add_collaborators_form.find(".collaborator_emails").val(invited_emails.join(","));
         add_collaborators_form.trigger("submit");
+        
+        invited_emails = [];
+        initializeCollaboratorChipsInstance();
     }
 
-    invited_emails = [];
-    initializeCollaboratorChipsInstance();
+    return false;
 }
 
 function onSubmitGetCollaboratorsForm(event){
