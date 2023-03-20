@@ -43,11 +43,28 @@ function onSubmitMobilePostForm(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let comments_list = ux("#mobile_comments_slideout").find("#user_comments_list");
-            comments_list.append(response_data.result.html);
+            let {tab_id, post_id, html} = response_data.result;
+            let mobile_comments_slideout = ux("#mobile_comments_slideout");
+            let comments_list = mobile_comments_slideout.find("#user_comments_list");
 
+            if(tab_id){
+                comments_list.append(response_data.result.html);
+            } else {
+                let comment_item = mobile_comments_slideout.find(`.comment_${post_id}`);
+                let replies_list = comment_item.find(`.replies_list`);
+                
+                if(! replies_list.self().classList.contains("show")){
+                    /** Fetch replies */
+                    comment_item.find(".toggle_replies_btn b").trigger("click");
+                } else {
+                    replies_list.append(html);
+                }
+            }
+
+            post_form.find(".action").val("add_tab_post");
             post_form.self().reset();
             post_form.find(".comment_message").self().blur();
+            post_form.find(".comment_message_content label").text("Write a comment");
         }
 
     }, "json");

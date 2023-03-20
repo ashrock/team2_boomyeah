@@ -97,8 +97,9 @@
         <div class="mobile_tab_comments tab_comments comment_container">
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="mobile_add_comment_form add_comment_form">
                 <div class="comment_field">
-                    <input type="hidden" name="action" value="add_tab_post">
-                    <input type="hidden" name="tab_id" class="tab_id" value="<?= $module_tab["id"] ?>">
+                    <input type="hidden" name="action" value="add_tab_post" class="action">
+                    <input type="hidden" name="tab_id" class="tab_id" value="">
+                    <input type="hidden" name="post_id" class="post_id" value="">
                     <div class="comment_message_content input-field col s12">
                         <label for="mobile_comment_message">Write a comment</label>
                         <textarea name="post_comment" id="mobile_comment_message" class="materialize-textarea comment_message"></textarea>
@@ -115,7 +116,7 @@
     </div>
     
     <form id="fetch_tab_posts_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
-        <input type="hidden" name="action" value="fetch_tab_posts">
+        <input type="hidden" name="action" value="fetch_tab_posts" class="action">
         <input type="hidden" name="tab_id" class="tab_id">
     </form>
     

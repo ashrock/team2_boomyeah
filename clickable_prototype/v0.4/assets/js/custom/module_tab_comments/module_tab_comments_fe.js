@@ -160,6 +160,8 @@ let is_mobile_reply_open = false;
             let mobile_add_comment_form = ux(".mobile_add_comment_form");
             mobile_add_comment_form.find("label").text(label_text);
             mobile_add_comment_form.find("textarea").self().focus();
+            mobile_add_comment_form.find(".action").val("add_post_comment");
+            mobile_add_comment_form.find(".post_id").val(ux(event.target).data("target_comment"));
         }
     }
 
