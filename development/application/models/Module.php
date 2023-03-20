@@ -681,5 +681,79 @@
 
             return $response_data;
         }
+
+        # DOCU: This function will fetch Comments and generate html
+        # Triggered by: (POST) modules/get_commments
+        # Requires: $comment_id
+        # Returns: { status: true/false, result: { post_comment_id, html }, error: null }
+        # Last updated at: March 20, 2023
+        # Owner: Erick
+        public function getComments($comment_id, $post_id=NULL){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $where_statement = ($post_id) ? "posts.id =?" : "comments.id = ?";
+                $where_value     = ($post_id) ? $post_id : $comment_id;
+
+                $comments = $this->db->query("
+                    SELECT
+                        comments.id AS comment_id, comments.post_id AS post_comment_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS commenter_first_name, comments.updated_at AS date_commented,
+                        comments.message AS commenter_message, posts.cache_comments_count, users.profile_picture AS commenter_profile_pic,
+                        (CASE WHEN comments.created_at != comments.updated_at THEN 1 ELSE 0 END) AS is_edited
+                    FROM comments
+                    INNER JOIN users ON users.id = comments.user_id
+                    INNER JOIN posts ON posts.id = comments.post_id
+                    WHERE $where_statement
+                    ORDER BY comments.id ASC", 
+                    $where_value
+                );
+
+                if($comments->num_rows()){
+                    $comments = $comments->result_array();
+
+                    $response_data["result"]["post_comment_id"] = $comments[0]["post_comment_id"];
+                    $response_data["result"]["html"]  = $this->load->view("partials/comment_container_partial.php", array("comment_items" => $comments), true);
+                }
+
+                $response_data["status"] = true;
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will create Comment record 
+        # Triggered by: (POST) modules/add_comment
+        # Requires: $params { post_id, post_comment }, $_SESSION["user_id"]
+        # Returns: { status: true/false, result: { post_comment_id, html }, error: null }
+        # Last updated at: March 20, 2023
+        # Owner: Erick
+        public function addComment($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $this->db->trans_start();
+                $create_comment = $this->db->query("INSERT INTO comments (user_id, post_id, message, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW());", array($_SESSION["user_id"], $params["post_id"], $params["post_comment"]));
+               
+                if($create_comment){
+                    $comment_id = $this->db->insert_id();
+                    $update_cache_comments_count = $this->db->query("UPDATE posts SET cache_comments_count = cache_comments_count + 1 WHERE id = ?;", $params["post_id"]);
+
+                    if($update_cache_comments_count){
+                        $this->db->trans_complete();
+                        
+                        $response_data = $this->getComments($comment_id);
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
     }
 ?>
