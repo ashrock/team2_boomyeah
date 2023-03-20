@@ -106,7 +106,7 @@
                     </div>
                 </div>
                 <div class="comment_btn">
-                    <button type="button" class="mobile_comment_btn"></button>
+                    <button type="submit" class="mobile_comment_btn"></button>
                 </div>
             </form>
         </div>

@@ -14,8 +14,20 @@
 }
 @media (max-width: 632px) {
     #mobile_container{
+        background: @by_white;
+        box-shadow: @by_box_shadow;
+        padding: 0px 16px;
         position: fixed;
         width: 100%;
+        z-index: 100000;
+
+        #select_section_form{
+            .select-wrapper{
+                .dropdown-trigger{
+                    margin: 0px !important;
+                }
+            }
+        }
     }
 }
 #wrapper{
@@ -55,7 +67,7 @@
         background: @by_white;
         display: flex !important;
         flex-direction: column;
-        height: calc(100vh - 56px);
+        height: calc(100% - 56px);
         margin-top: 56px;
         padding: 0px;
         width: calc(100%);

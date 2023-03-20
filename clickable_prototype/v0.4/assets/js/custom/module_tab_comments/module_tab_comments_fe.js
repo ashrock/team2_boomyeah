@@ -7,6 +7,8 @@ let is_mobile_reply_open = false;
 
     document.addEventListener("DOMContentLoaded", async (event) => {
         let document_element = event.target;
+
+        M.FormSelect.init(ux(".section_dropdown").self());
         
         ux("#section_pages").findAll("ul.comments_list").forEach((comments_list) => {
             if(!comments_list.classList.contains("replies_list")){
