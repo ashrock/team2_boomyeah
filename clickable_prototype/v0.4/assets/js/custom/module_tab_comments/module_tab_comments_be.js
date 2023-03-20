@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
             toggle_btn.conditionalClass("open", !toggle_btn.self().classList.contains("open"));
         })
         .on("submit", "#fetch_post_comments_form", onFetchPostComments)
+        .on("click", ".show_comments_btn", showTabComments)
+        .on("submit", "#fetch_mobile_posts_form", onFetchMobilePosts)
         .on("submit", "#fetch_tab_posts_form", onFetchTabPosts)
         .on("submit", ".add_post_form", onSubmitPostForm)
         .on("submit", ".add_reply_form", onAddPostComment)
@@ -73,6 +75,40 @@ function onFetchTabPosts(event){
             setTimeout(() => {
                 ux(tab_id).find(".tab_comments .comments_list").prepend(response_data.result.html);
             }, 200);
+        }
+    }, "json");
+    
+    return false;
+}
+
+async function showTabComments(event){
+    event.preventDefault();
+    let mobile_comments_slideout = ux("#mobile_comments_slideout");
+
+    if(!mobile_comments_slideout.self().classList.contains("active")){
+        let show_comments_btn = ux(event.target);
+        let tab_id = show_comments_btn.data("tab_id");
+        mobile_comments_slideout.find("#user_comments_list").self().innerHtml = "";
+        
+        mobile_comments_slideout.addClass("active");
+        is_comments_displayed = true;
+
+        /** Fetch comments, then append */
+        let fetch_mobile_posts_form = ux("#fetch_mobile_posts_form");
+        fetch_mobile_posts_form.find(".tab_id").val(tab_id);
+        fetch_mobile_posts_form.trigger("submit");
+    }
+}
+
+function onFetchMobilePosts(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    let post_form = ux(event.target);
+    
+    ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
+        if(response_data.status){
+            let mobile_comments_slideout = ux("#mobile_comments_slideout");
+            mobile_comments_slideout.find("#user_comments_list").html(response_data.result.html);
         }
     }, "json");
     

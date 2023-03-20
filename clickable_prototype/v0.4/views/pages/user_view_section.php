@@ -56,8 +56,8 @@
             </div>
             <div id="section_pages">
                 <?php
-                    foreach($user_view_section_module_data["fetch_admin_module_data"] as $module_data){
-                        $modules_array = array("modules" => array($module_data));
+                    foreach($user_view_section_module_data["fetch_admin_module_data"] as $module_key => $module_data){
+                        $modules_array = array("modules" => array($module_data), "module_count" => $module_key + 1, "total_modules" => count($user_view_section_module_data["fetch_admin_module_data"]));
                         if($modules_array){
                             load_view("../partials/user_section_page_content_partial.php", $modules_array);
                         }
@@ -113,6 +113,11 @@
     </div>
     
     <form id="fetch_tab_posts_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+        <input type="hidden" name="action" value="fetch_tab_posts">
+        <input type="hidden" name="tab_id" class="tab_id">
+    </form>
+    
+    <form id="fetch_mobile_posts_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_tab_posts">
         <input type="hidden" name="tab_id" class="tab_id">
     </form>

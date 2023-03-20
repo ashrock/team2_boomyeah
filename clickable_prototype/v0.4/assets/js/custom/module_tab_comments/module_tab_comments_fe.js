@@ -32,7 +32,7 @@ let is_mobile_reply_open = false;
         });
         document.addEventListener("touchend", function (event){
             swipe_value = 0;
-            animateSwipe();
+            // animateSwipe();
         });
         
         document.addEventListener("touchmove", function (event){
@@ -81,12 +81,13 @@ let is_mobile_reply_open = false;
         
         ux("body")
             .on("keydown", ".comment_message", onCommentMessageKeypress)
-            .on("click", ".show_comments_btn", showTabComments)
             .on("click", ".toggle_reply_form_btn", showReplyForm)
             .on("click", ".mobile_comment_btn", (event) => {
                 event.stopImmediatePropagation();
                 onSubmitComment(event.target.closest(".mobile_add_comment_form"))
             });
+
+        M.Sidenav.init(ux("#mobile_comments_slideout").self());
     });
     
     async function animateSwipe(swipe_direction = ""){
@@ -162,26 +163,6 @@ let is_mobile_reply_open = false;
             let mobile_add_comment_form = ux(".mobile_add_comment_form");
             mobile_add_comment_form.find("label").text(label_text);
             mobile_add_comment_form.find("textarea").self().focus();
-        }
-    }
-
-    async function showTabComments(event){
-        event.preventDefault();
-        let mobile_comments_slideout = ux("#mobile_comments_slideout");
-        mobile_comments_slideout.find("#user_comments_list").self().innerHtml = "";
-
-        if(!mobile_comments_slideout.self().classList.contains("active")){
-            // await include("#user_comments_list" , `${relative_view_path}/global/user_view_section_comments.html`);
-            mobile_comments_slideout.addClass("active");
-            is_comments_displayed = true;
-
-            ux("#mobile_comments_slideout").findAll("ul.comments_list").forEach((comments_list) => {
-                if(!comments_list.classList.contains("replies_list")){
-                    ux(comments_list).findAll(".comment_container").forEach((comment_container) => {
-                        showRepliesCount(comment_container);
-                    });
-                }
-            });
         }
     }
 
