@@ -87,12 +87,12 @@
     <div id="modals_container">
         <?php $this->load->view("partials/confirm_action_modals.php"); ?>
     </div>
-    <form id="fetch_tab_posts_form" action="/modules/getPosts" method="POST" class="hidden">
+    <form id="fetch_tab_posts_form" action="/modules/get_posts" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_tab_posts">
         <input type="hidden" name="tab_id" class="tab_id">
     </form>
 
-    <form id="fetch_post_comments_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+    <form id="fetch_post_comments_form" action="/modules/get_comments" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_post_comments">
         <input type="hidden" name="post_id" class="post_id">
     </form>
