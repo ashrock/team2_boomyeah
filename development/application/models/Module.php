@@ -151,8 +151,8 @@
         # Triggered by: (POST) module/add_tab
         # Requires: $params { section_id }
         # Returns: { status: true/false, result: { module_id, tab_id, html_tab, html_content }, error: null }
-        # Last updated at: March 15, 2023
-        # Owner: Erick
+        # Last updated at: March 20, 2023
+        # Owner: Erick, Updated by: Jovic
         public function addTab($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -172,24 +172,26 @@
 
                     # Check if new tab is successfully created
                     if($new_tab_id > ZERO_VALUE){
-                        # Create new tab_ids_order in the module
-                        $new_tab_ids_order = $module["result"]["tab_ids_order"].",".$new_tab_id;
-                        
-                        # After new tab is created, updated the tab_ids_order of modules table
-                        $update_modules_tab_order = $this->db->query("UPDATE modules SET tab_ids_order = ? WHERE id = ?", array($new_tab_ids_order, $module_id));
-
-                        if($update_modules_tab_order){
-                            $new_tab_json = $this->getTab($new_tab_id, true);
-                            $module_tabs_json = json_decode($new_tab_json["result"]["module_tabs_json"]);
+                        # Check if tab_ids_order exists
+                        if($module["result"]["tab_ids_order"]){
+                            # Create new tab_ids_order in the module
+                            $new_tab_ids_order = $module["result"]["tab_ids_order"].",".$new_tab_id;
                             
-                            $response_data["status"] = true;
-                            $response_data["result"] = array(
-                                "module_id"     => $module_id,
-                                "tab_id"        => $new_tab_id,
-                                "html_tab"      => $this->load->view("partials/page_tab_item_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true),
-                                "html_content"  => $this->load->view("partials/section_page_tab_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true)
-                            );
+                            # After new tab is created, updated the tab_ids_order of modules table
+                            $update_modules_tab_order = $this->db->query("UPDATE modules SET tab_ids_order = ? WHERE id = ?", array($new_tab_ids_order, $module_id));
                         }
+
+                        # Generate updated module_tabs_json
+                        $new_tab_json = $this->getTab($new_tab_id, true);
+                        $module_tabs_json = json_decode($new_tab_json["result"]["module_tabs_json"]);
+                        
+                        $response_data["status"] = true;
+                        $response_data["result"] = array(
+                            "module_id"     => $module_id,
+                            "tab_id"        => $new_tab_id,
+                            "html_tab"      => $this->load->view("partials/page_tab_item_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true),
+                            "html_content"  => $this->load->view("partials/section_page_tab_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true)
+                        );
                     }
                 }
                 else{
