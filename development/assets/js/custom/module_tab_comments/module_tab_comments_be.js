@@ -118,7 +118,7 @@ function onAddPostComment(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let comment_id = `#comment_${response_data.result.post_id}`;
+            let comment_id = `#comment_${response_data.result.post_comment_id}`;
             let comments_list = ux(comment_id).find(".replies_list");
             let toggle_replies_btn = ux(comment_id).find(".toggle_replies_btn");
 
@@ -162,7 +162,7 @@ function onFetchPostComments(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let comment_id = `#comment_${response_data.result.post_id}`;
+            let comment_id = `#comment_${response_data.result.post_comment_id}`;
             addAnimation(ux(comment_id).find(".replies_list").self(), "animate__fadeOut");
             
             setTimeout(() => {

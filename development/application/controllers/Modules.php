@@ -210,6 +210,44 @@
 			echo json_encode($response_data);
 		}
 
+		# DOCU: This function will call getComments() from Module Model to process fetching of Post Comments
+		# Triggered by: (POST) modules/get_posts
+		# Requires: $_POST["post_id"]
+		# Returns: { status: true/false, result: { post_comment_id, html }, error: null }
+		# Last updated at: Mar 20, 2023
+		# Owner: Erick
+		public function getComments(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				$response_data = $this->Module->getComments(NULL, $_POST["post_id"]);
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+
+		# DOCU: This function will call addComment() from Module Model to process adding of comments
+		# Triggered by: (POST) modules/add_comment
+		# Requires: $_POST["post_id", "post_comment"]
+		# Returns: { status: true/false, result: { post_comment_id, html }, error: null }
+		# Last updated at: Mar. 20, 2023
+		# Owner: Erick
+		public function addComment(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				$response_data = $this->Module->addComment($_POST);
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+
 		# DOCU: This function will check if user is allowed to visit a page or do an action.
 		# Triggered by: GET and POST functions in Documentations Controller
 		# Requires: $_SESSION["user_level_id"]; $is_admin_page
