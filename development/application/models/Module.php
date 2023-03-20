@@ -151,8 +151,8 @@
         # Triggered by: (POST) module/add_tab
         # Requires: $params { section_id }
         # Returns: { status: true/false, result: { module_id, tab_id, html_tab, html_content }, error: null }
-        # Last updated at: March 15, 2023
-        # Owner: Erick
+        # Last updated at: March 20, 2023
+        # Owner: Erick, Updated by: Jovic
         public function addTab($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -172,24 +172,26 @@
 
                     # Check if new tab is successfully created
                     if($new_tab_id > ZERO_VALUE){
-                        # Create new tab_ids_order in the module
-                        $new_tab_ids_order = $module["result"]["tab_ids_order"].",".$new_tab_id;
-                        
-                        # After new tab is created, updated the tab_ids_order of modules table
-                        $update_modules_tab_order = $this->db->query("UPDATE modules SET tab_ids_order = ? WHERE id = ?", array($new_tab_ids_order, $module_id));
-
-                        if($update_modules_tab_order){
-                            $new_tab_json = $this->getTab($new_tab_id, true);
-                            $module_tabs_json = json_decode($new_tab_json["result"]["module_tabs_json"]);
+                        # Check if tab_ids_order exists
+                        if($module["result"]["tab_ids_order"]){
+                            # Create new tab_ids_order in the module
+                            $new_tab_ids_order = $module["result"]["tab_ids_order"].",".$new_tab_id;
                             
-                            $response_data["status"] = true;
-                            $response_data["result"] = array(
-                                "module_id"     => $module_id,
-                                "tab_id"        => $new_tab_id,
-                                "html_tab"      => $this->load->view("partials/page_tab_item_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true),
-                                "html_content"  => $this->load->view("partials/section_page_tab_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true)
-                            );
+                            # After new tab is created, updated the tab_ids_order of modules table
+                            $update_modules_tab_order = $this->db->query("UPDATE modules SET tab_ids_order = ? WHERE id = ?", array($new_tab_ids_order, $module_id));
                         }
+
+                        # Generate updated module_tabs_json
+                        $new_tab_json = $this->getTab($new_tab_id, true);
+                        $module_tabs_json = json_decode($new_tab_json["result"]["module_tabs_json"]);
+                        
+                        $response_data["status"] = true;
+                        $response_data["result"] = array(
+                            "module_id"     => $module_id,
+                            "tab_id"        => $new_tab_id,
+                            "html_tab"      => $this->load->view("partials/page_tab_item_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true),
+                            "html_content"  => $this->load->view("partials/section_page_tab_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true)
+                        );
                     }
                 }
                 else{
@@ -492,6 +494,234 @@
                         $response_data["status"] = true;
 
                         $this->db->trans_complete();
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will duplicate modules of a documentation
+        # Triggered by: (POST) docs/duplicate
+        # Requires: $params { documentation_id, duplicate_section_ids }, $_SESSION["user_id"]
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 20, 2023
+        # Owner: Jovic
+        public function duplicateModules($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                # Fetch documentation section_ids
+                $get_section_ids = $this->db->query("SELECT JSON_ARRAYAGG(id) AS section_ids FROM sections WHERE documentation_id = ?;", $params["documentation_id"]);
+
+                if($get_section_ids->num_rows()){
+                    # Fetch documentation modules
+                    $section_ids = json_decode($get_section_ids->result_array()[0]["section_ids"]);
+                    $get_modules = $this->db->query("SELECT COUNT(id) AS modules_count FROM modules WHERE section_id IN ? GROUP BY section_id;", array($section_ids));
+    
+                    if($get_modules->num_rows()){
+                        # create values_clause for creating modules for duplicated documentation
+                        $get_modules   = $get_modules->result_array();
+                        $values_clause = array();
+                        $bind_params   = array();
+    
+                        for($modules_index = 0; $modules_index < count($get_modules); $modules_index++){
+                            for($index = 0; $index < $get_modules[$modules_index]["modules_count"]; $index++){
+                                array_push($values_clause, "(?, ?, NOW(), NOW())");
+                                array_push($bind_params, $params["duplicate_section_ids"][$modules_index], $_SESSION["user_id"]);
+                            }
+                        }
+    
+                        # Finalize values_clause
+                        $values_clause = implode(",", $values_clause);
+                        $create_modules = $this->db->query("INSERT INTO modules (section_id, user_id, created_at, updated_at) VALUES {$values_clause};", $bind_params);
+                    
+                        if($create_modules){
+                            $get_created_modules = $this->db->query("SELECT JSON_ARRAYAGG(id) AS module_ids FROM modules WHERE section_id IN ?;", array($params["duplicate_section_ids"]));
+    
+                            if($get_created_modules->num_rows()){
+                                $response_data["status"] = true;
+                                $response_data["result"]["module_ids"] = json_decode($get_created_modules->result_array()[0]["module_ids"]);
+                            }
+    
+                            $response_data["status"] = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+        
+        # DOCU: This function will duplicate tabs of a documentation
+        # Triggered by: (POST) docs/duplicate
+        # Requires: $params { documentation_id, module_ids }, $_SESSION["user_id"]
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 20, 2023
+        # Owner: Jovic
+        public function duplicateTabs($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                # Fetch all modules and tabs of Documentation
+                $get_tabs = $this->db->query("
+                    SELECT
+                        modules.id AS module_id, 
+                        (CASE
+                            WHEN modules.tab_ids_order IS NOT NULL THEN 
+                                modules.tab_ids_order
+                            ELSE
+                                JSON_ARRAYAGG(tabs.id)
+                        END) AS tab_ids_order,
+                        ANY_VALUE(module_tabs.tabs) AS module_tabs_json
+                    FROM sections
+                    INNER JOIN modules ON modules.section_id = sections.id
+                    LEFT JOIN tabs ON tabs.module_id = modules.id
+                    LEFT JOIN (
+                        SELECT
+                            tabs.module_id,
+                            JSON_OBJECTAGG(
+                                tabs.id,
+                                JSON_OBJECT(
+                                    'id', tabs.id,
+                                    'module_id', tabs.module_id,
+                                    'title', tabs.title,
+                                    'content', tabs.content,
+                                    'cache_posts_count', tabs.cache_posts_count,
+                                    'is_comments_allowed', tabs.is_comments_allowed
+                                )
+                            ) AS tabs
+                        FROM tabs
+                        GROUP BY tabs.module_id
+                    ) AS module_tabs ON module_tabs.module_id = modules.id
+                    WHERE sections.documentation_id = ?
+                    GROUP BY modules.id;", $params["documentation_id"]
+                );
+                
+                if($get_tabs->num_rows()){
+                    $get_tabs = $get_tabs->result_array();
+
+                    # Loop through Duplicated Modules to start Duplicating Tabs of Documentation
+                    $values_clause = array();
+                    $bind_params   = array();
+
+                    for($index = 0; $index < count($params["module_ids"]); $index++) {
+                        # json_decode is used to remove brackets from tab_ids_order
+                        # tab_ids_order has brackets if we're fetching tab_ids from a duplicated Documentation
+                        $tab_ids = json_decode($get_tabs[$index]["tab_ids_order"]);
+                        
+                        if(!$tab_ids){
+                            # explode tab_ids_order is used if Documentaion's tab_ids_order column is not NULL
+                            $tab_ids = explode(",", $get_tabs[$index]["tab_ids_order"]);
+                        }
+
+                        $tabs_json = json_decode($get_tabs[$index]["module_tabs_json"]);
+
+                        foreach($tab_ids as $tab_id){
+                            $current_tab = $tabs_json->$tab_id;
+                            array_push($values_clause, "(?, ?, ?, ?, ?, ?, NOW(), NOW())");
+                            array_push($bind_params, 
+                                $params["module_ids"][$index], 
+                                $_SESSION["user_id"], 
+                                $current_tab->title, 
+                                $current_tab->content, 
+                                $_SESSION["user_id"], 
+                                $current_tab->is_comments_allowed
+                            );
+                        }
+                    }
+
+                    # Finalize values_clause
+                    $values_clause = implode(",", $values_clause);
+                    
+                    # Create Tabs for Duplicated Documentation
+                    $create_tabs = $this->db->query("
+                        INSERT INTO tabs (module_id, user_id, title, content, updated_by_user_id, is_comments_allowed, created_at, updated_at)
+                        VALUES {$values_clause};", $bind_params
+                    );
+
+                    if($create_tabs){
+                        $response_data["status"] = true;
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will fetch Comments and generate html
+        # Triggered by: (POST) modules/get_commments
+        # Requires: $comment_id
+        # Returns: { status: true/false, result: { post_comment_id, html }, error: null }
+        # Last updated at: March 20, 2023
+        # Owner: Erick
+        public function getComments($comment_id, $post_id=NULL){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $where_statement = ($post_id) ? "posts.id =?" : "comments.id = ?";
+                $where_value     = ($post_id) ? $post_id : $comment_id;
+
+                $comments = $this->db->query("
+                    SELECT
+                        comments.id AS comment_id, comments.post_id AS post_comment_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS commenter_first_name, comments.updated_at AS date_commented,
+                        comments.message AS commenter_message, posts.cache_comments_count, users.profile_picture AS commenter_profile_pic,
+                        (CASE WHEN comments.created_at != comments.updated_at THEN 1 ELSE 0 END) AS is_edited
+                    FROM comments
+                    INNER JOIN users ON users.id = comments.user_id
+                    INNER JOIN posts ON posts.id = comments.post_id
+                    WHERE $where_statement
+                    ORDER BY comments.id ASC", 
+                    $where_value
+                );
+
+                if($comments->num_rows()){
+                    $comments = $comments->result_array();
+
+                    $response_data["result"]["post_comment_id"] = $comments[0]["post_comment_id"];
+                    $response_data["result"]["html"]  = $this->load->view("partials/comment_container_partial.php", array("comment_items" => $comments), true);
+                }
+
+                $response_data["status"] = true;
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will create Comment record 
+        # Triggered by: (POST) modules/add_comment
+        # Requires: $params { post_id, post_comment }, $_SESSION["user_id"]
+        # Returns: { status: true/false, result: { post_comment_id, html }, error: null }
+        # Last updated at: March 20, 2023
+        # Owner: Erick
+        public function addComment($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $this->db->trans_start();
+                $create_comment = $this->db->query("INSERT INTO comments (user_id, post_id, message, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW());", array($_SESSION["user_id"], $params["post_id"], $params["post_comment"]));
+               
+                if($create_comment){
+                    $comment_id = $this->db->insert_id();
+                    $update_cache_comments_count = $this->db->query("UPDATE posts SET cache_comments_count = cache_comments_count + 1 WHERE id = ?;", $params["post_id"]);
+
+                    if($update_cache_comments_count){
+                        $this->db->trans_complete();
+                        
+                        $response_data = $this->getComments($comment_id);
                     }
                 }
             }

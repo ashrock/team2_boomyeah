@@ -234,7 +234,7 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]
         # Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-        # Last updated at: March 10, 2023
+        # Last updated at: March 20, 2023
         # Owner: Jovic
         public function duplicateDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -259,7 +259,7 @@
                     ));
 
                     if($duplicate_documentation["status"]){                        
-                        # Get sections of documentation
+                        # Create sections
                         $this->load->model("Section");
                         $duplicate_sections = $this->Section->duplicateSections(array(
                             "documentation_id"  => $documentation_id,
@@ -268,7 +268,23 @@
                         ));
 
                         if($duplicate_sections["status"]){
-                            # TODO: Also create modules, and tabs
+                            # Create module only if section_ids exist
+                            if($duplicate_sections["result"]["section_ids"]){
+                                $this->load->model("Module");
+                                $duplicate_modules = $this->Module->duplicateModules(array(
+                                    "documentation_id"      => $documentation_id,
+                                    "duplicate_section_ids" => $duplicate_sections["result"]["section_ids"]
+                                ));
+    
+                                if($duplicate_modules["status"] && $duplicate_modules["result"]["module_ids"] ){
+                                    # Create tabs
+                                    $duplicate_tabs = $this->Module->duplicateTabs(array(
+                                        "documentation_id" => $documentation_id, 
+                                        "module_ids"       => $duplicate_modules["result"]["module_ids"]
+                                    ));
+                                }
+                            }
+
                             $response_data["status"]                     = true;
                             $response_data["result"]["documentation_id"] = $documentation_id;
                             $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
