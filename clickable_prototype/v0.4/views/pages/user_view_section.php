@@ -95,11 +95,13 @@
             <ul id="user_comments_list" class="comments_list"></ul>
         </div>
         <div class="mobile_tab_comments tab_comments comment_container">
-            <form action="/" method="POST" class="mobile_add_comment_form add_comment_form">
+            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="mobile_add_comment_form add_comment_form">
                 <div class="comment_field">
+                    <input type="hidden" name="action" value="add_tab_post">
+                    <input type="hidden" name="tab_id" class="tab_id" value="<?= $module_tab["id"] ?>">
                     <div class="comment_message_content input-field col s12">
-                        <label for="post_comment_4">Write a comment</label>
-                        <textarea name="post_comment" id="post_comment_4" class="materialize-textarea comment_message"></textarea>
+                        <label for="mobile_comment_message">Write a comment</label>
+                        <textarea name="post_comment" id="mobile_comment_message" class="materialize-textarea comment_message"></textarea>
                     </div>
                 </div>
                 <div class="comment_btn">

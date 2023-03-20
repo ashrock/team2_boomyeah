@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         .on("click", ".show_comments_btn", showTabComments)
         .on("submit", "#fetch_mobile_posts_form", onFetchMobilePosts)
         .on("submit", "#fetch_tab_posts_form", onFetchTabPosts)
+        .on("submit", ".mobile_add_comment_form", onSubmitMobilePostForm)
         .on("submit", ".add_post_form", onSubmitPostForm)
         .on("submit", ".add_reply_form", onAddPostComment)
 
@@ -34,6 +35,25 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
     ux(".fetch_tab_posts_btn").trigger("click");
 });
+
+function onSubmitMobilePostForm(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    let post_form = ux(event.target);
+    
+    ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
+        if(response_data.status){
+            let comments_list = ux("#mobile_comments_slideout").find("#user_comments_list");
+            comments_list.append(response_data.result.html);
+
+            post_form.self().reset();
+            post_form.find(".comment_message").self().blur();
+        }
+
+    }, "json");
+    
+    return false;
+}
 
 function onSubmitPostForm(event){
     event.stopImmediatePropagation();
@@ -59,7 +79,6 @@ function onSubmitPostForm(event){
     }, "json");
     
     return false;
-
 }
 
 function onFetchTabPosts(event){
@@ -109,6 +128,7 @@ function onFetchMobilePosts(event){
         if(response_data.status){
             let mobile_comments_slideout = ux("#mobile_comments_slideout");
             mobile_comments_slideout.find("#user_comments_list").html(response_data.result.html);
+            ux(".mobile_add_comment_form").find(".tab_id").val(response_data.result.tab_id);
         }
     }, "json");
     
@@ -139,6 +159,8 @@ function onSubmitEditForm(event){
                     ux(comment_item).find(".edit_comment_form").self() && ux(comment_item).find(".edit_comment_form").remove();
                 });
             }
+
+            ux(".mobile_tab_comments").removeClass("hidden");
         }
     }, "json");
     

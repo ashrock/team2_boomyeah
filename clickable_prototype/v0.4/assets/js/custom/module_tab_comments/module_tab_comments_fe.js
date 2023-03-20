@@ -82,10 +82,7 @@ let is_mobile_reply_open = false;
         ux("body")
             .on("keydown", ".comment_message", onCommentMessageKeypress)
             .on("click", ".toggle_reply_form_btn", showReplyForm)
-            .on("click", ".mobile_comment_btn", (event) => {
-                event.stopImmediatePropagation();
-                onSubmitComment(event.target.closest(".mobile_add_comment_form"))
-            });
+            ;
 
         M.Sidenav.init(ux("#mobile_comments_slideout").self());
     });
