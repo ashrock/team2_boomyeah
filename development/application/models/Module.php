@@ -356,7 +356,7 @@
         # Triggered by: (POST) modules/get_posts
         # Requires: $tab_id
         # Returns: { status: true/false, result: { tab_id, html }, error: null }
-        # Last updated at: March 16, 2023
+        # Last updated at: March 17, 2023
         # Owner: Jovic
         public function getPosts($tab_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -364,7 +364,7 @@
             try {
                 $get_posts = $this->db->query("
                     SELECT
-                        posts.id AS post_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, posts.updated_at AS date_posted,
+                        posts.tab_id AS tab_id, posts.id AS post_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, posts.updated_at AS date_posted,
                         posts.message, posts.cache_comments_count, users.profile_picture AS user_profile_pic,
                         (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM posts
@@ -389,7 +389,7 @@
 
         # DOCU: This function will create Post record and call getPost() to fetch Post record and generate html
         # Triggered by: (POST) modules/add_post
-        # Requires: $params { tab_id, post_comment }, $_SESSION["user_id]
+        # Requires: $params { tab_id, post_comment }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: { tab_id, html }, error: null }
         # Last updated at: March 16, 2023
         # Owner: Jovic
@@ -411,6 +411,87 @@
                             $response_data = $get_post;
                             $this->db->trans_complete();
                         }
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will update Post record and call getPost() to fetch Post record and generate html
+        # Triggered by: (POST) modules/add_post
+        # Requires: $params { post_id, post_comment }
+        # Returns: { status: true/false, result: { post_id, post_comment_id, html }, error: null }
+        # Last updated at: March 16, 2023
+        # Owner: Jovic
+        public function editPost($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $this->db->trans_start();
+                $update_post = $this->db->query("UPDATE posts SET message = ?, updated_at = NOW() WHERE id = ?;", array($params["post_comment"], $params["post_id"]));
+
+                if($update_post){
+                    $get_post = $this->getPost($params["post_id"]);
+
+                    if($get_post["status"]){
+                        $response_data = $get_post;
+                        $response_data["result"]["post_id"]         = $params["post_id"];
+                        $response_data["result"]["post_comment_id"] = $params["post_id"];
+                        
+                        $this->db->trans_complete();
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will update remove Post/Comment Record and update cache_posts_count/cache_comments_count
+        # Triggered by: (POST) modules/remove_post
+        # Requires: $params { parent_id }, $_SESSION["user_id"]
+        # Optionals: $params { post_id, comment_id }
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 17, 2023
+        # Owner: Jovic
+        public function removePost($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $this->db->trans_start();
+
+                # Set query values for deleting record
+                $db_table        = "posts";
+                $db_value        = $params["post_id"];
+                $db_update_table = "tabs";
+                $db_cache_column = "cache_posts_count";
+                
+                if($params["comment_id"]){
+                    $db_table        = "comments";
+                    $db_value        = $params["comment_id"];
+                    $db_update_table = "posts";
+                    $db_cache_column = "cache_comments_count";
+                    $response_data["error"] = "nandito ba?";
+                }
+
+                $delete_record = $this->db->query("DELETE FROM {$db_table} WHERE id = ? AND user_id = ?;", array($db_value, $_SESSION["user_id"]));
+
+                if($delete_record){
+                    # Update cache_posts_count/cache_comments_count
+                    $update_record = $this->db->query("UPDATE {$db_update_table} SET {$db_cache_column} = {$db_cache_column} - 1 WHERE id = ?;", $params["parent_id"]);
+
+                    if($update_record){
+                        $response_data["status"] = true;
+
+                        $this->db->trans_complete();
                     }
                 }
             }
