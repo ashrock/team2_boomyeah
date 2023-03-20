@@ -123,16 +123,21 @@ function onSubmitEditForm(event){
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
             let {post_comment_id, post_id} = response_data.result;
-            item_id = `.comment_${post_comment_id}`;
+            let item_id = `.comment_${post_comment_id}`;
 
             if(!post_id){
                 /** Replace post comment HTML */
-                ux(item_id).replaceWith(response_data.result.html);
+                ux("body").findAll(item_id).forEach((comment_item) => {
+                    ux(comment_item).replaceWith(response_data.result.html);
+                });
             } else {
                 let response_html = stringToHtmlContent(response_data.result.html);
                 let comment_content = ux(response_html).find(".comment_content").self();
-                ux(item_id).find(".comment_content").self().replaceWith(comment_content);
-                ux(item_id).find(".edit_comment_form").remove();
+                
+                ux("body").findAll(item_id).forEach((comment_item) => {
+                    ux(comment_item).find(".comment_content").self().replaceWith(comment_content);
+                    ux(comment_item).find(".edit_comment_form").self() && ux(comment_item).find(".edit_comment_form").remove();
+                });
             }
         }
     }, "json");
@@ -192,7 +197,6 @@ function onFetchPostComments(event){
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
             let comment_id = `.comment_${response_data.result.post_id}`;
-            
             ux("body").findAll(comment_id).forEach((comment_item) => {
                 addAnimation(ux(comment_item).find(".replies_list").self(), "animate__fadeOut");
                 
