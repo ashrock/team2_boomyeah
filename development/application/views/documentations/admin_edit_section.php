@@ -49,16 +49,7 @@
             </form>
                 <div id="section_pages">
                     <?php
-                        // foreach($modules as $module){
-                            # $modules_array = array("modules" => array($module_data));
-                            // if($modules_array){
-                                $this->load->view("partials/section_page_content_partial.php", array("modules" => $modules));
-                            // }
-                            // else{
-                            //     //when no data display nothing
-                            // }
-                        // }
-                        // var_dump($modules);
+                        $this->load->view("partials/section_page_content_partial.php", array("modules" => $modules));
                     ?>
                 </div>
             <form id="add_module_form" action="/modules/add" method="POST">
