@@ -44,7 +44,7 @@
     <div class="reply_actions">
         <?php if(isset($comment_item["post_id"])) { ?>
             <button type="button" class="toggle_reply_form_btn" data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Reply</button>
-            <button type="button" class="toggle_replies_btn"data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"><b>Show <span class="reply_count"> replies</span></b></button>
+            <button type="button" class="toggle_replies_btn"data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"><b>Show <span class="reply_count"> <?= (int) $comment_item["cache_comments_count"] ?> replies</span></b></button>
         <?php } ?>
     </div>
     <?php if(isset($comment_item["post_id"])) { ?>
