@@ -1,0 +1,594 @@
+// out: "../css/admin_documentation.css", compress: true, sourceMap: false
+
+@import url(./global.less);
+
+body{
+    @media screen and (max-width: 880px) {
+        overflow: auto;
+    }
+}
+@media screen and (max-width: 1208px) {
+    #wrapper{
+        padding: 0 30px 0 100px;
+        .container{
+            min-width: unset !important;
+            max-width: 694px;
+            width: 100% !important;
+        }
+    }
+}
+@media screen and (max-width: 880px) {
+    #wrapper{
+        .container{
+            min-width: unset !important;
+            max-width: 694px;
+            width: 100% !important;
+            #documentations{
+                .document_block{
+                    width: 100% !important;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 622px) {
+    #wrapper{
+        padding: 16px;
+    }
+}
+.error{
+    border: 1px solid @by_error !important;
+}
+::-webkit-scrollbar {
+    display: none;
+}
+#select_section_form{
+    display: none !important;
+}
+#mobile_container{
+    background: @by_white;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.168);
+    padding: 0 9px;
+    .header_mobile{
+        background: url("https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/v88_logo.svg") no-repeat center left;
+        margin-left: 10px;
+        .user_profile{
+            position: absolute;
+            right: 10px;
+            top: 6px;
+        }
+        a{
+            display: none !important;
+        }
+    }
+}
+.container{
+    background-color: @by_white;
+    border-radius: 12px;
+    margin: 24px auto !important;
+    min-height: 895px;
+    min-width: 1024px !important;
+    padding: 40px 24px 32px;
+    position: relative;
+    width: 1024px !important;
+    @media screen and (max-width: 622px) {
+        margin: 16px;
+        max-width: 100% !important;
+        min-width: 260px !important;
+        padding: 16px;
+        width: 100%;
+        #add_documentation_form{
+            align-items: flex-end;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0;
+            .group_add_documentation{
+                margin: 16px auto;
+                width: 100%;
+            }
+            #input_add_documentation{
+                width: 97%;
+            }
+        }
+    }
+    #add_documentation_form{
+        align-items: center;
+        display: flex;
+        margin-bottom: 30px;
+        @media screen and (max-width: 622px) {
+            align-items: flex-end;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0;
+        }
+        .group_add_documentation{
+            background-color: @by_bg;
+            border-radius: 8px;
+            height: 56px;
+            margin: 0;
+            min-width: 316px;
+            position: relative;
+            width: 316px;
+            @media screen and (max-width: 622px) {
+                margin: 16px auto;
+                min-width: 226px;
+                width: 100%;
+            }
+            &::before{
+                background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat -12px -4px;
+                content: "";
+                display: inline-block;
+                height: 18px;
+                position: absolute;
+                right: 12px;
+                top: 22px;
+                width: 18px;
+                z-index: 1;
+            }
+            &::after {
+                background-color: @by_bg;
+                content: '';
+                display: inline-block;
+                height: 2px;
+                position: absolute;
+                top: 52px;
+                width: 100%;
+            }
+            label{
+                color: @by_gray;
+                font: 16px/35px @readex_regular;
+                padding-left: 12px;
+                
+            }
+            input {
+                padding-left: 11px;
+                border-radius: 4px;
+                bottom: 0;
+                color: @by_black;
+                font: 16px/24px @readex_regular;
+                height: 43px;
+                position: absolute;
+                width: 100%;
+            }
+
+            input:-internal-autofill-selected {
+                background-color: @by_bg;
+            }
+
+            input.valid,
+            input.validate {
+                background-color: transparent;
+                border-bottom: 2px solid @by_primary;
+                box-shadow: 0 1px 0 0 @by_primary;
+                z-index: 999;
+            }
+            label.active{
+                color: @by_primary;
+                line-height: 16px;
+                transform: translateY(6px) scale(0.8);
+            }
+            &.input_error {
+                label {
+                    color: @by_gray !important;
+                }
+
+                input {
+                    border-bottom: 2px solid @by_error;
+                    box-shadow: 0 1px 0 0 @by_error;
+                }
+                &::before{
+                    background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/disabled_add.svg') no-repeat;
+                }
+            }
+        }
+        #input_add_documentation{
+            margin-bottom: 0;
+            width: 304px;
+            @media screen and (max-width: 622px) {
+                width: 97%;
+            }
+        }
+        #save_status{
+            color: @by_off_gray;
+            font: 14px/20px @readex_medium;
+            margin-left: 21px;
+            vertical-align: super;
+            @media screen and (max-width: 622px) {
+                margin-top: 4px;
+            }
+        }
+    }
+    .section_header{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        .sort_btn{
+            background-color: transparent;
+            border: none;
+            font: 16px/20px @readex_medium;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            &::before{
+                content: '';
+                background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/sort_icon.svg') no-repeat;
+                display: inline-block;
+                width: 18px;
+                height: 12px;
+            }
+        }
+        .sort_dropdown {
+            border-radius: 4px;
+            width: 114px !important;
+            background-color: @by_dropdown_bg;
+            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+            li{
+                color: @by_dropdown_text;
+                font: 16px/24px @readex_regular;
+                padding: 14px 16px;
+                &:hover{
+                    background: @by_hovered_btn;
+                }
+            }
+        }
+        #docs_view_btn {
+            background-color: transparent;
+            border: none;
+            color: @by_black;
+            font: 20px/24px @readex_regular;
+            &::after{
+                background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat 0 -15px;
+                content: '';
+                display: inline-block;
+                height: 7px;
+                margin-left: 13px;
+                vertical-align: middle;
+                width: 10px;
+            }
+        }
+        #docs_view_list{
+            border-radius: 4px;
+            min-width: 209px;
+            .divider {
+                background-color: @by_bg;
+            }
+            li:hover {
+                background-color: @by_hovered_btn;
+            }
+            a {
+                color: @by_black;
+                font: 16px/24px @readex_medium;
+            }
+        }
+    }
+    #documentations,
+    #archived_documents{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        flex-wrap: wrap;
+        &.hidden{
+            display: none;
+        }
+        .document_block {
+            align-items: center;
+            background-color: @by_bg;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            display: flex;
+            height: 83px;
+            justify-content: space-between;
+            min-width: 316px;
+            padding: 20px 23px 20px 16px;
+            position: relative;
+            transition: all 0.21s ease-in-out;
+            width: 316px;
+
+            &::after {
+                border-bottom: 2px solid @by_lightgray;
+                border-radius: 8px;
+                bottom: 0;
+                content: "";
+                display: inline-block;
+                height: 10px;
+                left: 0;
+                position: absolute;
+                width: 100%;
+            }
+
+            &.hidden,
+            &.hidden_private {
+                display: none;
+            }
+
+            .document_details {
+                align-items: flex-start;
+                display: flex;
+                flex-direction: column;
+                height: 80px;
+                justify-content: center;
+                width: 225px;
+
+                .document_title {
+                    border-bottom: 1px solid transparent;
+                    box-shadow: none;
+                    color: @by_black;
+                    font: 12px/16px @readex_regular;
+                    height: 21px;
+                    margin: 0;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    &:hover{
+                        cursor: pointer;
+                    }
+                }
+
+                .invite_collaborators_btn {
+                    background-color: @by_bg;
+                    border-radius: 20px;
+                    border: 1px solid @by_primary;
+                    color: @by_primary;
+                    cursor: pointer;
+                    font: 12px/16px @readex_regular;
+                    height: 24px;
+                    position: relative;
+                    user-select: none;
+                    width: 49px;
+
+                    &::before {
+                        background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat -32px -13px;
+                        content: '';
+                        display: inline-block;
+                        height: 8.67px;
+                        width: 16px;
+                    }
+                }
+            }
+
+            .document_controls {
+                align-items: center;
+                display: flex;
+                font-size: 0;
+
+                .access_btn {
+                    background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat -50px -5px;
+                    border: 0;
+                    content: '';
+                    cursor: pointer;
+                    display: inline-block;
+                    height: 18px;
+                    margin-right: 18px;
+                    width: 14px;
+                }
+
+                .more_action_btn {
+                    background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/vertical_menu.svg') no-repeat center;
+                    border: 0;
+                    color: transparent;
+                    content: '';
+                    cursor: pointer;
+                    display: inline-block;
+                    height: 14px;
+                    padding: 12px;
+                    position: absolute;
+                    right: 17px;
+                    text-align: center;
+                    width: 8px;
+                }
+
+                .more_action_list_public,
+                .more_action_list_private {
+                    border-radius: 4px;
+                    width: 192px !important;
+
+                    .divider {
+                        background-color: @by_bg;
+
+                        &.hidden {
+                            display: none;
+                        }
+                    }
+
+                    .invite_btn {
+                        &.hidden {
+                            display: none;
+                        }
+                    }
+
+                    li:hover {
+                        background-color: @by_hovered_btn;
+                    }
+
+                    a {
+                        color: @by_icon;
+                        font: 16px/24px @readex_regular;
+
+                        &::before {
+                            background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat;
+                            content: "";
+                            display: inline-block;
+                            height: 18px;
+                            margin-right: 16px;
+                            position: relative;
+                            vertical-align: text-bottom;
+                            width: 18px;
+                        }
+
+                        &.edit_title_icon::before {
+                            background-position: -70px -4px;
+                        }
+
+                        &.duplicate_icon::before {
+                            background-position: -90px 0;
+                            height: 22px;
+                            width: 19px;
+                        }
+
+                        &.archive_icon::before {
+                            background-position: -111px -4px;
+                        }
+
+                        &.invite_icon::before {
+                            background-position: -131px -7px;
+                            height: 15px;
+                            width: 18px;
+                        }
+
+                        &.set_to_private_icon::before {
+                            background-position: -151px -3px;
+                            height: 19px;
+                            width: 16px;
+                        }
+
+                        &.set_to_public_icon::before {
+                            background-position: -185px -2px;
+                            height: 20px;
+                            width: 20px;
+                        }
+
+                        &.remove_icon::before {
+                            background-position: -169px -4px;
+                            height: 18px;
+                            width: 14px;
+                        }
+
+                        &.remove_btn {
+                            color: #DA4D4D;
+                        }
+                    }
+                }
+            }
+            @media screen and (max-width: 622px) {
+                min-width: 100% !important;
+            }
+        }
+        .no_documents,
+        .no_archived_documents{
+            &.hidden{
+                display: none;
+            }
+            width: 100%;
+            text-align: center;
+            margin: 41px 0 410px;
+            img{
+                margin-bottom: 9px;
+            }
+            p{
+                font: 16px/24px @readex_regular;
+                color: @by_off_gray;
+            }
+        }
+    }
+    #documentations{
+        .document_block{
+            &:hover {
+                border: 1px solid @by_primary;
+    
+                &::before {
+                    background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/draggable_icon.svg') no-repeat 0 0;
+                    content: "";
+                    cursor: grab;
+                    display: inline-block;
+                    height: 4px;
+                    left: 50%;
+                    padding: 8px 0;
+                    position: absolute;
+                    top: 6px;
+                    width: 10.67px;
+                }
+    
+                &::after {
+                    display: none;
+                }
+            }
+        }
+    }
+    #archived_documents{
+        .document_block{
+            background-color: @by_archived_bg;
+            &:hover {
+                border: 1px solid @by_primary;
+    
+                &::before {
+                    content: "";
+                    cursor: grab;
+                    display: inline-block;
+                    height: 4px;
+                    left: 50%;
+                    padding: 8px 0;
+                    position: absolute;
+                    top: 6px;
+                    width: 10.67px;
+                }
+    
+                &::after {
+                    display: none;
+                }
+            }
+        }
+        .archived_disabled{
+            pointer-events: none;
+        }
+    }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px @by_bg inset !important;
+    -webkit-text-fill-color: @by_black !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+#confirmation_modal,
+#confirmation_modal_private,
+#confirmation_modal_archive,
+#confirmation_modal_remove,
+#confirmation_modal_remove_invited_user{
+    .modal{
+        border-radius: 8px;
+        max-width: 343px;
+        overflow: hidden;
+        width: 100%;
+        .modal-content{
+            padding: 14px 24px;
+            h4{
+                color: @by_black;
+                font: 20px/32px @readex_regular;
+            }
+            p{
+                color: @by_text;
+                font: 16px/24px @readex_regular;
+            }
+        }
+        .modal-footer{
+            height: auto;
+            padding: 0px 24px 24px;
+
+            a, button{
+                margin: 0;
+            }
+            .no_btn{
+                color: @by_error;
+                font: 16px/36px @readex_regular;
+                text-transform: none !important;
+            }
+            .yes_btn{
+                border: 1px solid @by_primary;
+                border-radius: 20px;
+                color: @by_primary;
+                font: 16px/24px @readex_regular;
+                padding: 5px 16px;
+                text-transform: none !important;
+            }
+        }
+    }
+}
+
+@import url(./invite_modal.less);
+
+.no_documents{
+    pointer-events: none;
+}
