@@ -502,5 +502,159 @@
 
             return $response_data;
         }
+
+        # DOCU: This function will duplicate modules of a documentation
+        # Triggered by: (POST) docs/duplicate
+        # Requires: $params { documentation_id, duplicate_section_ids }, $_SESSION["user_id"]
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 20, 2023
+        # Owner: Jovic
+        public function duplicateModules($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                # Fetch documentation section_ids
+                $get_section_ids = $this->db->query("SELECT JSON_ARRAYAGG(id) AS section_ids FROM sections WHERE documentation_id = ?;", $params["documentation_id"]);
+
+                if($get_section_ids->num_rows()){
+                    # Fetch documentation modules
+                    $section_ids = json_decode($get_section_ids->result_array()[0]["section_ids"]);
+                    $get_modules = $this->db->query("SELECT COUNT(id) AS modules_count FROM modules WHERE section_id IN ? GROUP BY section_id;", array($section_ids));
+    
+                    if($get_modules->num_rows()){
+                        # create values_clause for creating modules for duplicated documentation
+                        $get_modules   = $get_modules->result_array();
+                        $values_clause = array();
+                        $bind_params   = array();
+    
+                        for($modules_index = 0; $modules_index < count($get_modules); $modules_index++){
+                            for($index = 0; $index < $get_modules[$modules_index]["modules_count"]; $index++){
+                                array_push($values_clause, "(?, ?, NOW(), NOW())");
+                                array_push($bind_params, $params["duplicate_section_ids"][$modules_index], $_SESSION["user_id"]);
+                            }
+                        }
+    
+                        # Finalize values_clause
+                        $values_clause = implode(",", $values_clause);
+                        $create_modules = $this->db->query("INSERT INTO modules (section_id, user_id, created_at, updated_at) VALUES {$values_clause};", $bind_params);
+                    
+                        if($create_modules){
+                            $get_created_modules = $this->db->query("SELECT JSON_ARRAYAGG(id) AS module_ids FROM modules WHERE section_id IN ?;", array($params["duplicate_section_ids"]));
+    
+                            if($get_created_modules->num_rows()){
+                                $response_data["status"] = true;
+                                $response_data["result"]["module_ids"] = json_decode($get_created_modules->result_array()[0]["module_ids"]);
+                            }
+    
+                            $response_data["status"] = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+        
+        # DOCU: This function will duplicate tabs of a documentation
+        # Triggered by: (POST) docs/duplicate
+        # Requires: $params { documentation_id, module_ids }, $_SESSION["user_id"]
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 20, 2023
+        # Owner: Jovic
+        public function duplicateTabs($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                # Fetch all modules and tabs of Documentation
+                $get_tabs = $this->db->query("
+                    SELECT
+                        modules.id AS module_id, 
+                        (CASE
+                            WHEN modules.tab_ids_order IS NOT NULL THEN 
+                                modules.tab_ids_order
+                            ELSE
+                                JSON_ARRAYAGG(tabs.id)
+                        END) AS tab_ids_order,
+                        ANY_VALUE(module_tabs.tabs) AS module_tabs_json
+                    FROM sections
+                    INNER JOIN modules ON modules.section_id = sections.id
+                    LEFT JOIN tabs ON tabs.module_id = modules.id
+                    LEFT JOIN (
+                        SELECT
+                            tabs.module_id,
+                            JSON_OBJECTAGG(
+                                tabs.id,
+                                JSON_OBJECT(
+                                    'id', tabs.id,
+                                    'module_id', tabs.module_id,
+                                    'title', tabs.title,
+                                    'content', tabs.content,
+                                    'cache_posts_count', tabs.cache_posts_count,
+                                    'is_comments_allowed', tabs.is_comments_allowed
+                                )
+                            ) AS tabs
+                        FROM tabs
+                        GROUP BY tabs.module_id
+                    ) AS module_tabs ON module_tabs.module_id = modules.id
+                    WHERE sections.documentation_id = ?
+                    GROUP BY modules.id;", $params["documentation_id"]
+                );
+                
+                if($get_tabs->num_rows()){
+                    $get_tabs = $get_tabs->result_array();
+
+                    # Loop through Duplicated Modules to start Duplicating Tabs of Documentation
+                    $values_clause = array();
+                    $bind_params   = array();
+
+                    for($index = 0; $index < count($params["module_ids"]); $index++) {
+                        # json_decode is used to remove brackets from tab_ids_order
+                        # tab_ids_order has brackets if we're fetching tab_ids from a duplicated Documentation
+                        $tab_ids = json_decode($get_tabs[$index]["tab_ids_order"]);
+                        
+                        if(!$tab_ids){
+                            # explode tab_ids_order is used if Documentaion's tab_ids_order column is not NULL
+                            $tab_ids = explode(",", $get_tabs[$index]["tab_ids_order"]);
+                        }
+
+                        $tabs_json = json_decode($get_tabs[$index]["module_tabs_json"]);
+
+                        foreach($tab_ids as $tab_id){
+                            $current_tab = $tabs_json->$tab_id;
+                            array_push($values_clause, "(?, ?, ?, ?, ?, ?, NOW(), NOW())");
+                            array_push($bind_params, 
+                                $params["module_ids"][$index], 
+                                $_SESSION["user_id"], 
+                                $current_tab->title, 
+                                $current_tab->content, 
+                                $_SESSION["user_id"], 
+                                $current_tab->is_comments_allowed
+                            );
+                        }
+                    }
+
+                    # Finalize values_clause
+                    $values_clause = implode(",", $values_clause);
+                    
+                    # Create Tabs for Duplicated Documentation
+                    $create_tabs = $this->db->query("
+                        INSERT INTO tabs (module_id, user_id, title, content, updated_by_user_id, is_comments_allowed, created_at, updated_at)
+                        VALUES {$values_clause};", $bind_params
+                    );
+
+                    if($create_tabs){
+                        $response_data["status"] = true;
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
     }
 ?>
