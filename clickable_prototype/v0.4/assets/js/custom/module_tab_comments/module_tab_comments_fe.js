@@ -181,7 +181,20 @@ let is_mobile_reply_open = false;
                     ux(".active_comment_item").removeClass("active_comment_item");
                 }
 
-                ux("#comment_actions_container").addClass("active");
+                let comment_id = ux(event_target).data("target_comment");
+                let is_post = ux(event_target).data("is_post");
+
+                let comment_actions = ux("#comment_actions_container");
+                let edit_btn = comment_actions.find(".edit_btn");
+                let remove_btn = comment_actions.find(".remove_btn");
+                
+                edit_btn.attr("data-target_comment", comment_id);
+                edit_btn.attr("data-is_post", is_post);
+                
+                comment_actions.addClass("active");
+                remove_btn.attr("data-target_comment", comment_id);
+                remove_btn.attr("data-is_post", is_post);
+                
                 ux(event_target.closest(".comment_item")).addClass("active_comment_item");
             }
         }

@@ -14,10 +14,16 @@
                 <span class="user_name"><?= isset($comment_item["post_id"]) ? $comment_item["first_name"] : $comment_item["commenter_first_name"] ?></span><!--
                 --><span class="posted_at <?= isset($comment_item["is_edited"]) ? 'edited' : '' ?>">• <?= isset($comment_item["post_id"]) ? $comment_item["date_posted"] : $comment_item["date_commented"] ?></span>
                 <div class="comment_actions">
-                    <button type="button" class="comment_actions_toggle"></button>
+                    <button type="button" class="comment_actions_toggle"
+                        data-is_post="<?= intval(isset($comment_item["post_id"])) ?>" 
+                        data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"></button>
                     <div class="comment_actions_menu">
-                        <button type="button" class="comment_action_btn edit_btn" data-is_post="<?= intval(isset($comment_item["post_id"])) ?>" data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Edit</button>
-                        <button type="button" class="comment_action_btn remove_btn" data-is_post="<?= intval(isset($comment_item["post_id"])) ?>" data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Remove</button>
+                        <button type="button" class="comment_action_btn edit_btn" 
+                            data-is_post="<?= intval(isset($comment_item["post_id"])) ?>" 
+                            data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Edit</button>
+                        <button type="button" class="comment_action_btn remove_btn" 
+                            data-is_post="<?= intval(isset($comment_item["post_id"])) ?>" 
+                            data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Remove</button>
                     </div>
                 </div>
             </h4>
