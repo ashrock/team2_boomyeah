@@ -123,7 +123,7 @@ function onSubmitEditForm(event){
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
             let {post_comment_id, post_id} = response_data.result;
-            item_id = `#comment_${post_comment_id}`;
+            item_id = `.comment_${post_comment_id}`;
 
             if(!post_id){
                 /** Replace post comment HTML */
@@ -147,7 +147,7 @@ function onAddPostComment(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let comment_id = `#comment_${response_data.result.post_id}`;
+            let comment_id = `.comment_${response_data.result.post_id}`;
             let comments_list = ux(comment_id).find(".replies_list");
             let toggle_replies_btn = ux(comment_id).find(".toggle_replies_btn");
             
@@ -191,12 +191,15 @@ function onFetchPostComments(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let comment_id = `#comment_${response_data.result.post_id}`;
-            addAnimation(ux(comment_id).find(".replies_list").self(), "animate__fadeOut");
+            let comment_id = `.comment_${response_data.result.post_id}`;
             
-            setTimeout(() => {
-                ux(comment_id).find(".replies_list").addClass("show").prepend(response_data.result.html);
-            }, 200);
+            ux("body").findAll(comment_id).forEach((comment_item) => {
+                addAnimation(ux(comment_item).find(".replies_list").self(), "animate__fadeOut");
+                
+                setTimeout(() => {
+                    ux(comment_item).find(".replies_list").addClass("show").prepend(response_data.result.html);
+                }, 200);
+            })
         }
     }, "json");
     

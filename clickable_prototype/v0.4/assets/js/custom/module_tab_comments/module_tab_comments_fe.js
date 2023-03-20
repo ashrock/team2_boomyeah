@@ -173,17 +173,14 @@ let is_mobile_reply_open = false;
             let viewport_width = document.documentElement.clientWidth;
 
             if(viewport_width > MOBILE_WIDTH){
-                if(event_target.classList.contains("active")){
-                    event_target.classList.remove("active");
-                } else {
-                    event_target.classList.add("active");
-                }
+                ux(event_target).conditionalClass("active", !event_target.classList.contains("active"));
             } else {
                 event.stopImmediatePropagation();
 
                 if(ux(".active_comment_item").self()){
                     ux(".active_comment_item").removeClass("active_comment_item");
                 }
+
                 ux("#comment_actions_container").addClass("active");
                 ux(event_target.closest(".comment_item")).addClass("active_comment_item");
             }

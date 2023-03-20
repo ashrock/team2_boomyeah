@@ -227,6 +227,7 @@
         transform: rotate(-45deg);
         -webkit-transform: rotate(-45deg);
     }
+
     &.open{
         &:before{
             top: -2px;
@@ -236,6 +237,10 @@
         }
         & + .tab_comments{
             display: initial !important;
+
+            @media (max-width: 632px) {
+                display: none !important;
+            }
         }
     }
 
