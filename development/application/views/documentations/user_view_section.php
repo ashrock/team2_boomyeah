@@ -32,6 +32,9 @@
                         <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
                     </ul>
                     <div class="row_placeholder"></div>
+<?php if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){ ?> 
+                    <a href="/docs/<?= "{$documentation['id']}/{$section["id"]}/edit" ?>" id="preview_section_btn">Back to Edit</a>
+<?php } ?>
                 </div>
                 <div class="section_details">
                     <h1 id="section_title"><?= $section["title"] ?></h1>
