@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".duplicate_icon", duplicateSection)
         .on("click", ".remove_icon", setRemoveSectionBlock)
         .on("click", "#remove_confirm", confirmRemoveSectionBlock)
-        .on("click", ".section_block, .section_title", redirectToEditSection)
+        .on("click", ".section_block", redirectToEditSection)
         .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
         .on("keydown", ".section_block .section_title", (event) => editSectionTitle(event, true))
@@ -202,6 +202,8 @@ function redirectToEditSection(event){
         event.target.closest("li")){
         return;
     }
+
+    alert("Redirecting to the admin edit section page will be added in v0.3.");
 }
 
 function appearEmptySection(){

@@ -1071,6 +1071,7 @@ body {
   border-bottom: 1px solid transparent;
   box-shadow: none;
   color: #0F172A;
+  cursor: initial;
   font: 400 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   height: 21px;
   letter-spacing: 0.25px;
