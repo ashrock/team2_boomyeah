@@ -66,6 +66,9 @@
                 <input type="hidden" name="module_id" class="module_id">
                 <input type="hidden" name="tab_ids_order" class="tab_ids_order">
             </form>
+            <form id="upload_file_form" action="/files/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" id="uploaded_file" name="uploaded_file">
+            </form>
             <div id="clone_section_page">
                 <?php $this->load->view("partials/clone_section_page.php"); ?>
             </div>
