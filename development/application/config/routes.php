@@ -85,6 +85,7 @@ $route['modules/add_tab']['POST']     = 'modules/addTab';
 $route['modules/update']['POST']      = 'modules/updateModule';
 $route['modules/remove_tab']['POST']  = 'modules/removeTab';
 $route['modules/reorder_tab']['POST'] = 'modules/reorderTab';
+$route['files/upload']['POST']        = 'files/uploadFile';
 
 /* GET | User Documentation Routes */
 $route['docs']['GET']               = 'documentations/userDocumentations';
