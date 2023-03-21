@@ -167,15 +167,17 @@ function onSubmitEditForm(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let {post_comment_id, post_id} = response_data.result;
-            let item_id = `#comment_${post_comment_id}`;
+            let {comment_id, post_id} = response_data.result;
+            let item_id = `#comment_${comment_id}`;
 
-            if(post_id){
+            if(comment_id){
                 /** Replace post HTML */
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).replaceWith(response_data.result.html);
                 });
             } else {
+                item_id = `#post_comment_${post_id}`;
+
                 let response_html = stringToHtmlContent(response_data.result.html);
                 let comment_content = ux(response_html).find(".comment_content").self();
                 
@@ -242,8 +244,11 @@ function onFetchPostComments(event){
     let post_form = ux(event.target);
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
+        console.log('response_data', response_data)
         if(response_data.status){
-            let comment_id = `.post_comment_${response_data.result.post_id}`;
+            let comment_id = `.post_comment_${response_data.result.post_comment_id}`;
+            console.log('comment_id', comment_id)
+            console.log('response_data.result.html', response_data.result.html)
             ux("body").findAll(comment_id).forEach((comment_item) => {
                 addAnimation(ux(comment_item).find(".replies_list").self(), "animate__fadeOut");
                 
