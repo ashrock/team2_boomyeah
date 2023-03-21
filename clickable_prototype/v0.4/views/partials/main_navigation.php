@@ -48,14 +48,12 @@
             <li><a href="#!">Engineering</a></li>
         </ul>
         <form action="#" id="select_section_form" method="POST">
-            <div class="input-field select">
-                <select class='dropdown-content'>
-                    <option value="employee_handbook">Employee Handbook</option>
-                    <option value="about_company">About Company</option>
-                    <option value="terms">Terms of Employment</option>
-                    <option value="general">General Policies & Procedures</option>
-                </select>
-            </div>
+            <select class="section_dropdown">
+                <option value="employee_handbook">Employee Handbook</option>
+                <option value="about_company">About Company</option>
+                <option value="terms">Terms of Employment</option>
+                <option value="general">General Policies & Procedures</option>
+            </select>
         </form>
         <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/user_profile.png" alt="user_profile" class="user_profile" >
     </div>

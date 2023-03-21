@@ -4,9 +4,8 @@ function(){
     let keyup_timeout = null;
     document.addEventListener("DOMContentLoaded", async ()=> {
         if(!ux("#add_page_tabs_btn").self()){
-            ux("#prev_page_btn").on("click", ()=> { openSectionTab(-1) })
-            ux("#next_page_btn").on("click", ()=> { openSectionTab(1) })
-            updateSectionProgress();
+            ux("#prev_page_btn").on("click", ()=> { openSectionTab(-1) });
+            ux("#next_page_btn").on("click", ()=> { openSectionTab(1) });
         }
 
         ux("body")
@@ -41,7 +40,7 @@ function(){
          * On load adjust the text area size base on its pre-loaded content
          */
         let section_short_description = ux("#section_short_description").self();
-        autoExpand(section_short_description);
+        (section_short_description.tagName != "P") && autoExpand(section_short_description);
 
         /**
          * Add show class to tabs on DOM load
@@ -87,13 +86,6 @@ function(){
         ux("#section_page_progress .progress").self().style.width = total_progress;
     }
 
-    function updateSectionProgress(){
-        let sections = ux("#section_pages").findAll(".section_page_content");
-        let section_items = Array.from(sections);
-        let total_progress = `${ Math.round(((target_index + 1) / section_items.length) * 100)}%`;
-        ux("#section_page_progress .progress").self().style.width = total_progress;
-    }
-
     function onUpdateTabTitle(event){
         let tab_title = event.target;
         let section_page_tab = ux(tab_title.closest(".section_page_tab"));
@@ -125,14 +117,6 @@ function(){
         section_items.forEach(async (section, section_index) => {
             if(section.classList.contains("active")){
                 target_index = section_index + move_index;
-                
-                if(section_items[target_index]){
-                    await ux(section).removeClass("active");
-                    section_items[target_index].classList.add("active");
-                    
-                    let animate_direction = (move_index > 0) ? "animate__slideInRight" : "animate__slideInLeft";
-                    addAnimation(section_items[target_index], animate_direction, 180);
-                }
 
                 if(target_index == FIRST_ITEM){
                     ux("#prev_page_btn").addClass("hidden");
@@ -141,8 +125,20 @@ function(){
                 if(target_index == section_items.length - 1){
                     ux("#next_page_btn").addClass("hidden");
                 }
-
-                updateSectionProgress();
+                
+                if(section_items[target_index]){
+                    await ux(section).removeClass("active");
+                    section_items[target_index].classList.add("active");
+                    await section_items[target_index].scrollIntoView({ behavior: "smooth", block: "start"});
+                    let section_coordinates = await section_items[target_index].getBoundingClientRect();
+                    let offset_height = section_coordinates.top + 56;
+                    console.log("section_coordinates", section_coordinates, offset_height);
+                    return;
+                    window.scrollTo({
+                        top: offset_height,
+                        behavior: "smooth",
+                    });
+                }
             }
         });
     }
