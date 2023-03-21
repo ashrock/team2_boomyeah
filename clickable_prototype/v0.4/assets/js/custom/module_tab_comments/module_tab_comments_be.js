@@ -48,7 +48,7 @@ function onSubmitMobilePostForm(event){
             if(tab_id){
                 comments_list.append(response_data.result.html);
             } else {
-                let comment_item = mobile_comments_slideout.find(`.comment_${post_id}`);
+                let comment_item = mobile_comments_slideout.find(`.post_comment_${post_id}`);
                 let replies_list = comment_item.find(`.replies_list`);
                 
                 if(! replies_list.self().classList.contains("show")){
@@ -158,10 +158,11 @@ function onSubmitEditForm(event){
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
             let {post_comment_id, post_id} = response_data.result;
-            let item_id = `.comment_${post_comment_id}`;
-
+            let item_id = `.post_comment_${post_comment_id}`;
+            
             if(!post_id){
                 /** Replace post comment HTML */
+                item_id = `.comment_${post_comment_id}`;
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).replaceWith(response_data.result.html);
                 });
@@ -189,7 +190,7 @@ function onAddPostComment(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let comment_id = `.comment_${response_data.result.post_id}`;
+            let comment_id = `.post_comment_${response_data.result.post_id}`;
             let comments_list = ux(comment_id).find(".replies_list");
             let toggle_replies_btn = ux(comment_id).find(".toggle_replies_btn");
             
@@ -233,7 +234,7 @@ function onFetchPostComments(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let comment_id = `.comment_${response_data.result.post_id}`;
+            let comment_id = `.post_comment_${response_data.result.post_id}`;
             ux("body").findAll(comment_id).forEach((comment_item) => {
                 addAnimation(ux(comment_item).find(".replies_list").self(), "animate__fadeOut");
                 
