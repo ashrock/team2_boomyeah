@@ -373,6 +373,7 @@ function showConfirmaDeleteComment(event){
 
         remove_comment_modal.find((is_post) ? ".comment_id" : ".post_id").val("");
         remove_comment_modal.find((is_post) ? ".post_id" : ".comment_id").val(comment_id);
+        remove_comment_modal.find(".parent_id").val( ux(event_target).data("parent_id") );
         remove_comment_modal.find(".action").val((is_post) ? "remove_post" : "remove_comment");
 
         /** Determine active_comment_item */
