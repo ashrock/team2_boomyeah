@@ -3,7 +3,7 @@
 
     foreach($comment_items as $comment_item) { 
 ?>
-<li class="comment_item comment_container" id="comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">
+<li class="comment_item comment_container comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>" id="comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">
     <div class="comment_content">
         <img src="<?= isset($comment_item["post_id"]) ? $comment_item["user_profile_pic"] : $comment_item["commenter_profile_pic"] ?>" 
             alt="<?= isset($comment_item["post_id"]) ? $comment_item["first_name"] : $comment_item["commenter_first_name"] ?>" class="user_image"/> 
@@ -13,7 +13,13 @@
                 <span class="posted_at <?= (int)$comment_item["is_edited"] ? 'edited' : '' ?>">• <?= isset($comment_item["post_id"]) ? time_ago($comment_item["date_posted"]) : time_ago($comment_item["date_commented"]) ?></span>
 <?php if($_SESSION["user_id"] == $comment_item["user_id"]){ ?>
                 <div class="comment_actions">
-                    <button type="button" class="comment_actions_toggle"></button>
+                    <button 
+                        type="button"
+                        class="comment_actions_toggle"
+                        data-is_post="<?= intval(isset($comment_item["post_id"])) ?>" 
+                        data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"
+                    >
+                    </button>
                     <div class="comment_actions_menu">
                         <button 
                             type="button"
@@ -41,13 +47,15 @@
             <p class="comment_message"><?= isset($comment_item["post_id"]) ? $comment_item["message"] : $comment_item["commenter_message"] ?></p>
         </div>
     </div>
-    <div class="reply_actions">
-        <?php if(isset($comment_item["post_id"])) { ?>
-            <button type="button" class="toggle_reply_form_btn" data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Reply</button>
-            <button type="button" class="toggle_replies_btn"data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"><b>Show <span class="reply_count"> <?= (int) $comment_item["cache_comments_count"] ?> replies</span></b></button>
-        <?php } ?>
-    </div>
     <?php if(isset($comment_item["post_id"])) { ?>
+        <div class="reply_actions">
+            <button type="button" class="toggle_reply_form_btn" data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Reply</button>
+        <?php if($comment_item["cache_comments_count"]) { ?>
+            <button type="button" class="toggle_replies_btn"data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"><b>Show <span class="reply_count"><?= $comment_item["cache_comments_count"] ?> <?= $comment_item["cache_comments_count"] == 1 ? "reply" : "replies" ?></span></b></button>
+        <?php }else{ ?>
+            <button type="button" class="toggle_replies_btn"data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"><b><span class="reply_count">No</span> replies</span></b></button>
+        <?php } ?>
+        </div>
         <ul class="replies_list comments_list"></ul>
         <form action="/modules/add_comment" method="POST" class="add_reply_form add_comment_form">
             <input type="hidden" name="action" value="add_post_comment">
