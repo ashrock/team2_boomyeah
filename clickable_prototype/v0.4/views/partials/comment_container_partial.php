@@ -5,7 +5,8 @@
 ?>
 <?php
     foreach($comment_items as $comment_item) { ?>
-<li class="comment_item comment_container comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>" id="comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">
+<li class="comment_item comment_container <?= isset($comment_item["post_id"]) ? 'post_' : '' ?>comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>" 
+    id="<?= isset($comment_item["post_id"]) ? 'post_' : '' ?>comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">
     <div class="comment_content">
         <img src="<?= isset($comment_item["post_id"]) ? $comment_item["user_profile_pic"] : $comment_item["commenter_profile_pic"] ?>" 
             alt="<?= isset($comment_item["post_id"]) ? $comment_item["first_name"] : $comment_item["commenter_first_name"] ?>" class="user_image"/> 
