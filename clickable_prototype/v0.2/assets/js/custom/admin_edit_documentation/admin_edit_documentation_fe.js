@@ -202,7 +202,6 @@ function redirectToEditSection(event){
         event.target.closest("li")){
         return;
     }
-    alert("Redirecting to the admin edit section page will be added in v0.3.");
 }
 
 function appearEmptySection(){
