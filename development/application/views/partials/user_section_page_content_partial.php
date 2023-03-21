@@ -1,4 +1,4 @@
-<?php foreach($modules as $module) {  
+<?php foreach($modules as $module_key => $module) {  
     # This is used to remove [] if tab_ids_order came from JSON_ARRAYAGG(). It will return null if tab_ids_order is from column
     $tab_ids_order = json_decode($module["tab_ids_order"]);
 
@@ -12,7 +12,7 @@
         $tab_ids_order = array($tab_ids_order);
     }    
 ?>
-    <div class="section_page_content" id="module_<?= $module["module_id"] ?>">
+    <div class="section_page_content <?= $module_key == 1 ? 'active' : '' ?>" id="module_<?= $module["module_id"] ?>">
         <div class="mobile_module_header">Module <?#= $module_count ?>/<?#= $total_modules ?></div>
         <ul class="section_page_tabs">
             <?php
