@@ -442,6 +442,7 @@ textarea {
   height: 20px;
   margin-top: 6px;
   position: absolute;
+  padding: 0px 10px;
   right: 14px;
   width: 20px;
 }
@@ -906,7 +907,7 @@ body {
   display: inline-block;
   height: 1px;
   left: 0;
-  margin-bottom: 33px;
+  margin-bottom: 24px;
   position: absolute;
   width: 100%;
 }
@@ -1070,6 +1071,7 @@ body {
   border-bottom: 1px solid transparent;
   box-shadow: none;
   color: #0F172A;
+  cursor: initial;
   font: 400 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   height: 21px;
   letter-spacing: 0.25px;

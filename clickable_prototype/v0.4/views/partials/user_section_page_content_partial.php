@@ -1,5 +1,5 @@
 <?php foreach($modules as $module_key => $module) {  ?>
-    <div class="section_page_content" id="module_<?= $module["id"] ?>">
+    <div class="section_page_content <?= $module_count == 1 ? 'active' : '' ?>" id="module_<?= $module["id"] ?>">
         <div class="mobile_module_header">Module <?= $module_count ?>/<?= $total_modules ?></div>
         <ul class="section_page_tabs">
             <?php
