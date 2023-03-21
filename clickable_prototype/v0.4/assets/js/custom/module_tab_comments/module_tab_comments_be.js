@@ -32,8 +32,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         .on("keydown", ".edit_comment_form .comment_message", onEditMessageKeypress)
         .on("click", ".edit_comment_form .cancel_btn", closeEditCommentForm)
         ;
-
-    ux(".fetch_tab_posts_btn").trigger("click");
 });
 
 function onSubmitMobilePostForm(event){
