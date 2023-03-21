@@ -70,13 +70,10 @@
                 <!-- Mobile View: Progress bar corresponds to the section_page_content not the section_page_tab  -->
             </div>
             <div id="mobile_section_pages_controls">
+                <div class="row_placeholder"></div>
                 <div id="page_btns">
-                    <div class="row_placeholder"></div>
                     <button id="prev_page_btn" type="button" class="page_btn hidden"></button>
                     <button id="next_page_btn" type="button" class="page_btn"></button>
-                </div>
-                <div id="section_page_progress">
-                    <div class="progress"></div>
                 </div>
             </div>
             <div id="clone_section_page">
