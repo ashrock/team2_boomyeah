@@ -180,7 +180,7 @@ function onSubmitEditForm(event){
 
                 let response_html = stringToHtmlContent(response_data.result.html);
                 let comment_content = ux(response_html).find(".comment_content").self();
-                
+
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).find(".comment_content").self().replaceWith(comment_content);
                     ux(comment_item).find(".edit_comment_form").self() && ux(comment_item).find(".edit_comment_form").remove();
@@ -247,8 +247,7 @@ function onFetchPostComments(event){
         console.log('response_data', response_data)
         if(response_data.status){
             let comment_id = `.post_comment_${response_data.result.post_comment_id}`;
-            console.log('comment_id', comment_id)
-            console.log('response_data.result.html', response_data.result.html)
+            
             ux("body").findAll(comment_id).forEach((comment_item) => {
                 addAnimation(ux(comment_item).find(".replies_list").self(), "animate__fadeOut");
                 
