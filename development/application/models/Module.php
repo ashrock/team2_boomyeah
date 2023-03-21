@@ -659,6 +659,29 @@
             return $response_data;
         }
 
+        # DOCU: This function will remove records from a given table
+        # Triggered by: (POST) docs/remove
+        # Requires: $params { table, ids }
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 20, 2023
+        # Owner: Jovic
+        public function removeRecords($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $remove_records = $this->db->query("DELETE FROM {$params['table']} WHERE id IN ?;", array($params['ids']));
+
+                if($remove_records){
+                    $response_data["status"] = true;
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
         # DOCU: This function will fetch Comments and generate html
         # Triggered by: (POST) modules/get_commments
         # Requires: $comment_id
