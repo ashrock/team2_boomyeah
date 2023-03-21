@@ -168,10 +168,10 @@ function onSubmitEditForm(event){
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
             let {post_comment_id, post_id} = response_data.result;
-            let item_id = `.post_comment_${post_comment_id}`;
+            let item_id = `#comment_${post_comment_id}`;
 
-            if(!post_id){
-                /** Replace post comment HTML */
+            if(post_id){
+                /** Replace post HTML */
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).replaceWith(response_data.result.html);
                 });
