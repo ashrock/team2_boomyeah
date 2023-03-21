@@ -150,14 +150,15 @@
 
     @media (max-width: 632px) {
         bottom: 0;
-        display: block !important;
+        display: flex !important;
         left: 0;
         position: fixed;
         width: 100%;
     
         #page_btns{
             display: flex;
-            padding: 0px 16px 26px;
+            flex-direction: column;
+            padding: 0px 16px 16px;
     
             .page_btn{
                 background-color: @by_white;
@@ -165,24 +166,11 @@
                 border: none;
                 box-shadow: @by_box_shadow;
                 height: 30px;
-                margin-left: 9px;
+                margin-top: 8px;
                 pointer-events: all;
                 width: 30px;
-                &#prev_page_btn{
-                    &.onload + #next_page_btn{
-                        &::before{
-                            background: @by_white;
-                            border-radius: 15px;
-                            box-shadow: @by_box_shadow;
-                            color: @by_mobile_link;
-                            content: "Swipe left to the next page";
-                            line-height: 30px;
-                            position: absolute;
-                            margin-left: calc(-50vw - 7px);
-                            width: 50vw;
-                        }
-                    }
-                }
+                transform: rotate(90deg);
+                
                 &#prev_page_btn::before{
                     .edit_section_icon(10.12px, 30px, -134.02px);
                 }

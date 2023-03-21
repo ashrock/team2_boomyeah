@@ -2,11 +2,13 @@
 function(){
     let target_index = 0;
     let keyup_timeout = null;
+    let active_scroll_offset = 0;
+    let module_scroll_checkpoints = [];
+
     document.addEventListener("DOMContentLoaded", async ()=> {
         if(!ux("#add_page_tabs_btn").self()){
-            ux("#prev_page_btn").on("click", ()=> { openSectionTab(-1) })
-            ux("#next_page_btn").on("click", ()=> { openSectionTab(1) })
-            updateSectionProgress();
+            ux("#prev_page_btn").on("click", ()=> { openSectionTab(-1) });
+            ux("#next_page_btn").on("click", ()=> { openSectionTab(1) });
         }
 
         ux("body")
@@ -41,7 +43,7 @@ function(){
          * On load adjust the text area size base on its pre-loaded content
          */
         let section_short_description = ux("#section_short_description").self();
-        autoExpand(section_short_description);
+        (section_short_description.tagName != "P") && autoExpand(section_short_description);
 
         /**
          * Add show class to tabs on DOM load
@@ -54,8 +56,40 @@ function(){
             if(MOBILE_WIDTH < document.documentElement.clientWidth){
                 window.location.reload();
             }
-        })
+        });
+
+        ux("#section_pages").findAll(".section_page_content").forEach(module_item => {
+            let module_coords = module_item.getBoundingClientRect();
+            module_scroll_checkpoints.push((module_coords.top - 56));
+        });
+        
+        window.addEventListener("scroll", async (event) => {
+            let scroll_top_offset = document.body.getBoundingClientRect().top;
+            await ux("#prev_page_btn").addClass("hidden");
+            await ux(".section_page_content.active").removeClass("active");
+            let section_pages = ux("#section_pages").findAll(".section_page_content");
+
+            for(scroll_index in module_scroll_checkpoints){
+                let scroll_value = (module_scroll_checkpoints[scroll_index] - 64) * -1;
+
+                if(scroll_value > scroll_top_offset){
+                    active_scroll_offset = scroll_index;
+                }
+
+                if(active_scroll_offset > 0){
+                    ux("#prev_page_btn").removeClass("hidden");
+                }
+            }
+
+            ux(section_pages[active_scroll_offset]).addClass("active");
+        });
+
+        window.scrollTo(0, 0);
     });
+
+    window.onbeforeunload = function () {
+        window.scrollTo(0, 0);
+    }
 
     function onLoadShowTab(){
         let section_pages = ux("#section_pages").findAll(".section_page_content");
@@ -87,13 +121,6 @@ function(){
         ux("#section_page_progress .progress").self().style.width = total_progress;
     }
 
-    function updateSectionProgress(){
-        let sections = ux("#section_pages").findAll(".section_page_content");
-        let section_items = Array.from(sections);
-        let total_progress = `${ Math.round(((target_index + 1) / section_items.length) * 100)}%`;
-        ux("#section_page_progress .progress").self().style.width = total_progress;
-    }
-
     function onUpdateTabTitle(event){
         let tab_title = event.target;
         let section_page_tab = ux(tab_title.closest(".section_page_tab"));
@@ -101,6 +128,7 @@ function(){
         let tab_title_value = (tab_title.value.length > 0) ? tab_title.value : "Untitled Tab*";
         ux(`.page_tab_item[data-tab_id="${tab_id}"] a`).text(tab_title_value);
         let tab_title_ux = section_page_tab.find(".tab_title");
+
         if(tab_title.value.length > 1){
             /* saveTabChanges(section_page_tab); */
             clearTimeout(keyup_timeout);
@@ -112,7 +140,6 @@ function(){
         else{
             clearTimeout(keyup_timeout);
             tab_title_ux.addClass("error");
-            console.log(section_page_tab)
         }
     }
 
@@ -125,14 +152,6 @@ function(){
         section_items.forEach(async (section, section_index) => {
             if(section.classList.contains("active")){
                 target_index = section_index + move_index;
-                
-                if(section_items[target_index]){
-                    await ux(section).removeClass("active");
-                    section_items[target_index].classList.add("active");
-                    
-                    let animate_direction = (move_index > 0) ? "animate__slideInRight" : "animate__slideInLeft";
-                    addAnimation(section_items[target_index], animate_direction, 180);
-                }
 
                 if(target_index == FIRST_ITEM){
                     ux("#prev_page_btn").addClass("hidden");
@@ -141,8 +160,15 @@ function(){
                 if(target_index == section_items.length - 1){
                     ux("#next_page_btn").addClass("hidden");
                 }
-
-                updateSectionProgress();
+                
+                if(section_items[target_index]){
+                    await ux(section).removeClass("active");
+                    section_items[target_index].classList.add("active");
+                    window.scrollTo({
+                        top: module_scroll_checkpoints[target_index],
+                        behavior: "smooth",
+                    });
+                }
             }
         });
     }
