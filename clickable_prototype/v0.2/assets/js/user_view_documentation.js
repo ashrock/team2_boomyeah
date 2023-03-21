@@ -1,19 +1,6 @@
-// import data from "../json/large_dataset.json" assert { type: "json" };
-
 document.addEventListener("DOMContentLoaded", async () => {
-
-
-    const current_location = window.location.pathname;
-    const view_path = current_location.substring(0, current_location.lastIndexOf('/'));
-
-    let global_path = (view_path === "/views")? "." : "..";
-    let assets_path = (view_path === "/views" )? ".." : "../..";
-
-    /* Render global view elements */
-    // await include("#main_navigation" , `${global_path}/global/main_navigation.html`, `${assets_path}/assets/js/main_navigation.js`);
-
     ux(".section_block").onEach("click", function(){
-        location.href = "user_view_section.html";
+        alert("Redirecting to the user view section page will be added in v0.3.");
     });
 
     ux(".sort_by").onEach("click", sort_documentations);
@@ -21,9 +8,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let sidenav_elems = document.querySelectorAll('.sidenav');
     let instances = M.Sidenav.init(sidenav_elems);
-
-    /* Print JSON data */
-    // printSectionOutline(data.section_outline.sections);
 }); 
 
 function printSectionOutline(section_data){
