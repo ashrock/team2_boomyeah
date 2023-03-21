@@ -937,7 +937,7 @@ body {
 .container .doc_text_content {
   color: #6C7177;
   font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  margin: 0 0 96px;
+  margin: 0 0 24px;
   max-width: 893px;
   width: 100%;
 }
