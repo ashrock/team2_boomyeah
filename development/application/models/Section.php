@@ -334,8 +334,8 @@
         # Triggered by: (POST) docs/remove
         # Requires: $params { documentation_id, section_id }
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 9, 2023
-        # Owner: Erick
+        # Last updated at: March 21, 2023
+        # Owner: Erick, Updated by: Jovic
         public function removeSection($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -357,30 +357,35 @@
                         $documentation = $this->Documentation->getDocumentation($params["documentation_id"]);
     
                         if($documentation["status"]){
-                            # Remove section_id from section_ids_order and update documentation record
-                            $sections_order = explode(",", $documentation["result"]["section_ids_order"]);
-                            $section_index  = array_search($params["section_id"], $sections_order);
-                            
-                            if($section_index !== FALSE){
-                                unset($sections_order[$section_index]);
-                                $sections_count = count($sections_order);
-                                $sections_order = ($sections_count) ? implode(",", $sections_order) : "";
-
-                                # Update documentations section_ids_order
-                                $update_docs_section_order = $this->db->query("UPDATE documentations SET section_ids_order = ? WHERE id = ?", array($sections_order, $params["documentation_id"]));
+                            # Check of section_ids_order exists
+                            if($documentation["result"]["section_ids_order"]){
+                                # Remove section_id from section_ids_order and update documentation record
+                                $sections_order = explode(",", $documentation["result"]["section_ids_order"]);
+                                $section_index  = array_search($params["section_id"], $sections_order);
                                 
-                                if($update_docs_section_order){
-                                    # Commit changes to DB
-                                    $this->db->trans_complete();
-
-                                    $response_data["status"] = true;
-                                    $response_data["result"]["section_id"] = $section["result"]["id"];
+                                if($section_index !== FALSE){
+                                    unset($sections_order[$section_index]);
+                                    $sections_count = count($sections_order);
+                                    $sections_order = ($sections_count) ? implode(",", $sections_order) : "";
+    
+                                    # Update documentations section_ids_order
+                                    $update_docs_section_order = $this->db->query("UPDATE documentations SET section_ids_order = ? WHERE id = ?", array($sections_order, $params["documentation_id"]));
+                                
+                                    if(!$update_docs_section_order["status"]){
+                                        throw new Exception("Error updating Documentation");
+                                    }
+                                }
+                                else{
+                                    $this->db->trans_rollback();
+                                    throw new Exception("Unable to delete section, the section is not included in the section_ids_order field.");
                                 }
                             }
-                            else{
-                                $this->db->trans_rollback();
-                                throw new Exception("Unable to delete section, the section is not included in the section_ids_order field.");
-                            }
+
+                            # Commit changes to DB
+                            $this->db->trans_complete();
+    
+                            $response_data["status"] = true;
+                            $response_data["result"]["section_id"] = $section["result"]["id"];
                         }
                         else{
                             throw new Exception($documentation["error"]);
