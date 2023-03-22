@@ -60,7 +60,7 @@ function(){
 
         ux("#section_pages").findAll(".section_page_content").forEach(module_item => {
             let module_coords = module_item.getBoundingClientRect();
-            module_scroll_checkpoints.push((module_coords.top - 56));
+            module_scroll_checkpoints.push((module_coords.top - 80));
         });
         
         window.addEventListener("scroll", async (event) => {
@@ -192,6 +192,10 @@ function(){
         
         if(active_tab && active_tab.find("input.tab_title").self()){
             active_tab.find("input.tab_title").self().select();
+        }
+
+        if(is_title){
+            tab_item.scrollIntoView({behavior: "smooth", block: "center"});
         }
     }
 

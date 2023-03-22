@@ -895,9 +895,11 @@ body {
 }
 .container #breadcrumb_list .breadcrumb_item.active {
   color: #6C7177;
-  line-height: 18px;
 }
 .container #breadcrumb_list .breadcrumb_item.active::after {
+  display: none;
+}
+.container #breadcrumb_list .breadcrumb_item.mobile_breadcrumb {
   display: none;
 }
 .container .divider {
@@ -1018,7 +1020,7 @@ body {
 .container .section_container {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 8px;
   margin: 18px auto;
 }
 .container .section_container.hidden {

@@ -37,7 +37,10 @@
 <?php } ?>
                 </div>
                 <div class="section_details">
-                    <h1 id="section_title"><?= $section["title"] ?></h1>
+                    <div id="section_title_content">
+                        <a class="mobile_document_link" href="/docs/<?= $documentation['id'] ?>"></a>
+                        <h1 id="section_title"><?= $section["title"] ?></h1>
+                    </div>
                     <div class="add_description">
                         <textarea name="section_short_description" id="section_short_description" placeholder="Add Description"><?= $section["description"] ?></textarea>
                     </div>
