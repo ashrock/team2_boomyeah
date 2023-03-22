@@ -78,7 +78,7 @@ body{
         }
 
         #doc_title_access {
-            margin: 0 0px 50px;
+            margin: 0 0px 48px;
             gap: 8px;
             flex-wrap: wrap;
             .switch {
@@ -116,34 +116,41 @@ body{
                 position: fixed;
             }
             .documentation_placeholder{
-                padding-top: 89.75px;
+                padding-top: 64.75px;
                 background-color: @by_bg;
             }
+            .documentation_header_container{
+                background-color: @by_bg;
+
+            }
             .documentation_header{
-                background-color: @by_white;
+                background: @by_white;
                 border-top-left-radius: 12px !important;
                 border-top-right-radius: 12px !important;
-                padding: 39px 24px 28px;
+                padding: 24px 24px 24px;
 
                 #breadcrumb_list{
                     display: flex;
-                    position: relative;
-                    margin-bottom: 33px;
                     font: 16px/24px @readex_regular;
+                    margin-bottom: 24px;
+                    position: relative;
                     .breadcrumb_item{
                         color: @by_primary;
+                        a{
+                            color: inherit;
+                        }
                         &::after{
                             background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/admin_edit_docs_sprite.svg') no-repeat 0 -15px;
                             content: "";
                             display: inline-block;
                             height: 7px;
+                            margin: 0 9px;
                             position: relative;
-                            width: 5px;
-                            margin: 0 7px;
                             transform: translateY(-2px);
+                            width: 5px;
                         }
                         &.active{
-                            color: @by_black;
+                            color: @by_text;
                             &::after{
                                 display: none;
                             }
@@ -158,25 +165,25 @@ body{
                     background-color: @by_bg;
                     position: absolute;
                     left: 0;
-                    margin-bottom: 33px;
                 }
                 #doc_title_access{
-                    align-items: center;
+                    align-items: flex-start;
                     display: flex;
                     justify-content: flex-start;
-                    margin: 62px 0 34px;
-                    height: 36px;
+                    margin: 48px 0 24px;
+                    min-height: 36px;
                     #doc_title {
                         font: 20px/24px @readex_medium;
                         margin: 0;
-                        max-width: 630px;
                     }
                     .switch{
                         margin-left: 24px;
                         width: 130px;
                         label {
-                            font: 16px/24px @readex_medium;
+                            align-items: center;
                             color: @by_black;
+                            display: flex;
+                            font: 16px/24px @readex_medium;
                             input:checked+.lever{
                                 background-color: @by_primary;
                             }
@@ -187,6 +194,9 @@ body{
                             input:checked+.lever:before,
                             input:checked+.lever:after{
                                 left: 24px;
+                            }
+                            .toggle_text{
+                                color: @by_text;
                             }
                             .lever{
                                 background-color: #B5C4E4;
@@ -210,6 +220,7 @@ body{
                         }
                     }
                     #invite_collaborator_btn{
+                        width: 190px;
                         &.hidden{
                             display: none;
                         }
@@ -242,8 +253,7 @@ body{
                     border: 1px solid @by_bg;
                     color: @by_text;
                     font: 16px/24px @readex_regular;
-                    margin: 0 0 34px;
-                    max-width: 893px;
+                    margin: 0 0 32px;
                     padding: 10px;
                     position: relative;
                     width: 100%;
@@ -276,9 +286,11 @@ body{
                         position: relative;
                         width: 522px;
     
-                        &::before {
+                        #submit_add_section_btn {
                             background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat -12px -4px;
+                            border: 0;
                             content: "";
+                            cursor: pointer;
                             display: inline-block;
                             height: 18px;
                             position: absolute;
@@ -286,6 +298,9 @@ body{
                             top: 22px;
                             width: 18px;
                             z-index: 1;
+                           &:hover{
+                                opacity: 0.8;
+                           }
                         }
     
                         &::after {
@@ -340,7 +355,7 @@ body{
                                 box-shadow: 0 1px 0 0 @by_error;
                             }
     
-                            &::before {
+                            #submit_add_section_btn {
                                 background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/disabled_add.svg') no-repeat;
                             }
                         }
@@ -461,16 +476,17 @@ body{
 
             /* v0.2 */
             &:hover{
+                border: 1px solid @by_primary;
                 .more_action_list{
                     display: flex;
                 }
             }
             .drag_handle{
-                background: url("../images/documentation_page_icons.svg") no-repeat;
+                background: url("https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/update_document_page_icon.svg") no-repeat;
                 display: block;
                 height: 16px;
                 margin-right: 13px;
-                width: 10px;
+                min-width: 10px;
             }
             .section_title {
                 border-bottom: 1px solid transparent;
@@ -491,9 +507,8 @@ body{
             }
             .more_action_list{
                 display: none;
-                flex-grow: 1;
                 .section_block_icon{
-                    background: url("../images/documentation_page_icons.svg") no-repeat;
+                    background: url("https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/update_document_page_icon.svg") no-repeat;
                     display: block;
                     height: 16px;
                     margin-left: 10px;
@@ -584,7 +599,7 @@ body{
   width: 100%;
 }
 #confirmation_modal_remove .modal{
-    max-height: 233px;
+    min-height: 233px;
 }
 #confirmation_modal_remove .modal .modal-content,
 #confirmation_modal_remove_invited_user .modal .modal-content {
