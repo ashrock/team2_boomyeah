@@ -39,7 +39,7 @@
     <div id="confirm_to_remove" class="modal">
         <div class="modal-content">
             <h4>Confirmation</h4>
-            <p>Are you sure you want to remove `<span class="documentation_title"></span>` documentation?</p>
+            <p>Are you sure you want to remove `<span class="documentation_title"></span>`? This will also remove all of its content.</p>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
