@@ -10,7 +10,7 @@
     include_once("../../processes/partial_helper.php");  
     include_once("../view_helper.php");  
     include_once("../../config/constants.php");
-    $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Employee Handbook";
+    $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Chronicles of Narnia: The Lion, The Witch, and The Wardrobe";
     
     /** TODO: Backend should provide the $document_id */
     $document_id = time() + rand();

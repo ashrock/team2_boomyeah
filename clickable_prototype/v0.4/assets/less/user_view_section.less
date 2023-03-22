@@ -17,17 +17,23 @@
         background: @by_white;
         box-shadow: @by_box_shadow;
         padding: 0px 16px;
-        position: fixed;
+        pointer-events: initial;
+        position: fixed !important;
         width: 100%;
         z-index: 100000;
 
-        #select_section_form{
-            .select-wrapper{
-                .dropdown-trigger{
-                    margin: 0px !important;
+        .header_mobile{
+            #select_section_form{
+                flex-grow: 1;
+                .select-wrapper{
+                    .dropdown-trigger{
+                        margin: 0px !important;
+                        text-align: center;
+                    }
                 }
-            }
+            }    
         }
+        
     }
 }
 #wrapper{
@@ -200,11 +206,10 @@
 }
 
 .show_comments_btn{
-    color: @by_mobile_link;
+    color: @by_primary;
     display: none !important;
-    font: 12px/18px @readex_regular;
+    font: 12px/18px @readex_medium;
     margin-top: 16px;
-    text-align: right;
 
     @media (max-width: 632px) {
         display: block !important;
@@ -330,6 +335,26 @@
             .comment_content{
                 align-items: flex-start !important;
             }
+            .edit_comment_form{
+                .edit_form_btns{
+                    margin-top: 0px !important;
+                    .edit_form_btn{
+                        border: none !important;
+                        font: 12px/24px @readex_regular !important;
+                        margin-right: 10px;
+                        padding: 5px 0px !important;
+
+                        &:hover{
+                            opacity: 0.7;
+                        }
+                        &.cancel_btn{
+                            background: transparent;
+                            border: none;
+                            color: @by_text;
+                        }
+                    }
+                }
+            }
         }
 
         &.active_comment_item{
@@ -338,12 +363,13 @@
             }
         }
         .user_image{
+            border-radius: 18px;
             height: 36px;
             margin-right: 18px;
             width: 36px;
         }
         .edit_comment_form{
-            align-items: center;
+            align-items: flex-start;
             border-radius: 8px;
             display: flex;
             flex-grow: 1;
@@ -355,6 +381,9 @@
             }
             .comment_contents{
                 flex-grow: 1;
+            }
+            .user_image{
+                margin-top: 6px;
             }
 
             .comment_field{

@@ -358,7 +358,7 @@
         # Triggered by: (POST) modules/get_posts
         # Requires: $tab_id
         # Returns: { status: true/false, result: { tab_id, html }, error: null }
-        # Last updated at: March 17, 2023
+        # Last updated at: March 22, 2023
         # Owner: Jovic
         public function getPosts($tab_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -371,8 +371,7 @@
                         (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM posts
                     INNER JOIN users ON users.id = posts.user_id
-                    WHERE posts.tab_id = ?
-                    ORDER BY posts.id DESC;", $tab_id
+                    WHERE posts.tab_id = ?;", $tab_id
                 );
 
                 if($get_posts->num_rows()){

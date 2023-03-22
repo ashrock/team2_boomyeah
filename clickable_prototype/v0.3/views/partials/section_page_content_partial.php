@@ -1,4 +1,4 @@
-<?php foreach($modules as $module) {  ?>
+<?php foreach($modules as $module_key => $module) {  ?>
     <div class="section_page_content" id="module_<?= $module["id"] ?>">
         <ul class="section_page_tabs">
             <?php

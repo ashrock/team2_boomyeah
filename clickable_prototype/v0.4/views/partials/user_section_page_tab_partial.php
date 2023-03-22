@@ -9,8 +9,8 @@
         <p id="tab_content_<?= $module_tab["id"] ?>" class="tab_content"><?= $module_tab["content"] ?></p>
         
         <?php if($module_tab["is_comments_allowed"]) { ?>
-            <a href="#" data-target="mobile_comments_slideout" data-tab_id="<?= $module_tab["id"] ?>" class="show_comments_btn sidenav-trigger">Comments</a>
-            <a class="fetch_tab_posts_btn" href="#tab_posts_<?= $module_tab["id"] ?>" data-tab_id="<?= $module_tab["id"] ?>">Comments</a>
+            <a href="#" data-target="mobile_comments_slideout" data-tab_id="<?= $module_tab["id"] ?>" class="show_comments_btn sidenav-trigger">Comments (<?= $module_tab["cache_posts_count"] ?>)</a>
+            <a class="fetch_tab_posts_btn" href="#tab_posts_<?= $module_tab["id"] ?>" data-tab_id="<?= $module_tab["id"] ?>">Comments (<?= $module_tab["cache_posts_count"] ?>)</a>
             <div class="tab_comments comment_container">
                 <form action="<?= $base_url ?>processes/manage_documentation.php" method="POST" class="add_comment_form add_post_form">
                     <input type="hidden" name="action" value="add_tab_post">

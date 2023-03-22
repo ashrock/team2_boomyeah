@@ -37,7 +37,7 @@
         <?php if(!in_array($request_uri, ["admin_documentation.php", "user_documentation.php"])){ ?>
             <a href="#" data-target="mobile_nav" class="mobile sidenav-trigger"></a>
         <?php } ?>
-        <ul id="mobile_nav" class="sidenav">
+        <!-- <ul id="mobile_nav" class="sidenav">
             <a href="#" data-target="mobile_nav" class="sidenav-trigger"></a>
             <li><img src="<?= add_file("assets/images/global_logo.svg") ?>" alt="mobile_logo"></li>
             <li><span>Documentations</span></li>
@@ -54,7 +54,8 @@
                 <option value="terms">Terms of Employment</option>
                 <option value="general">General Policies & Procedures</option>
             </select>
-        </form>
+        </form> -->
+        <div class="row_placeholder"></div>
         <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/user_profile.png" alt="user_profile" class="user_profile" >
     </div>
 </div>
