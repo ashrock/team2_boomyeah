@@ -32,8 +32,8 @@
                 <div id="section_summary">
                     <div class="breadcrumbs">
                         <ul id="breadcrumbs_list">
-                            <li class="breadcrumb_item"><a href="/docs/edit">Documentations</a></li class="breadcrumb_item">
-                            <li class="breadcrumb_item"><a href="/docs/<?= $documentation['id'] ?>/edit"><?= $documentation["title"] ?></a></li class="breadcrumb_item">
+                            <li class="breadcrumb_item"><a href="/docs/edit">Documentations</a></li>
+                            <li class="breadcrumb_item"><a href="/docs/<?= $documentation['id'] ?>/edit"><?= $documentation["title"] ?></a></li>
                             <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
                         </ul>
                         <div class="row_placeholder"></div>
