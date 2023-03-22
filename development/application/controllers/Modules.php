@@ -171,17 +171,17 @@
 			echo json_encode($response_data);
 		}
 
-		# DOCU: This function will call editPost() from Module Model to process updating of Tab record
+		# DOCU: This function will call editPost() / editComment() from Module Model to process updating of post/comment
 		# Triggered by: (POST) modules/update_post
-		# Requires: $_POST["post_id", "post_comment"]
+		# Requires: $_POST["post_id", "comment_id", "post_comment"]
 		# Returns: { status: true/false, result: { post_id, post_comment_id, html }, error: null }
-		# Last updated at: Mar. 16, 2023
-		# Owner: Jovic
-		public function editPost(){
+		# Last updated at: Mar. 21, 2023
+		# Owner: Jovic, Updated by: Erick
+		public function editPostComment(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
 
 			try {
-				$response_data = $this->Module->editPost($_POST);
+				$response_data = (empty($_POST["comment_id"])) ? $this->Module->editPost($_POST) : $this->Module->editComment($_POST);
 			}
 			catch (Exception $e) {
 				$response_data["error"] = $e->getMessage();

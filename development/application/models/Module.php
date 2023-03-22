@@ -428,8 +428,8 @@
         # Triggered by: (POST) modules/add_post
         # Requires: $params { post_id, post_comment }
         # Returns: { status: true/false, result: { post_id, post_comment_id, html }, error: null }
-        # Last updated at: March 16, 2023
-        # Owner: Jovic
+        # Last updated at: March 23, 2023
+        # Owner: Jovic, Updated by: Erick
         public function editPost($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -442,9 +442,9 @@
 
                     if($get_post["status"]){
                         $response_data = $get_post;
-                        $response_data["result"]["post_id"]         = $params["post_id"];
-                        $response_data["result"]["post_comment_id"] = $params["post_id"];
-                        
+                        $response_data["result"]["post_id"] = $params["post_id"];
+
+
                         $this->db->trans_complete();
                     }
                 }
@@ -712,7 +712,8 @@
                     $comments = $comments->result_array();
 
                     $response_data["result"]["post_comment_id"] = $comments[0]["post_comment_id"];
-                    $response_data["result"]["html"]  = $this->load->view("partials/comment_container_partial.php", array("comment_items" => $comments), true);
+                    $response_data["result"]["comment_id"] = $comments[0]["comment_id"];
+                    $response_data["result"]["html"] = $this->load->view("partials/comment_container_partial.php", array("comment_items" => $comments), true);
                 }
 
                 $response_data["status"] = true;
@@ -746,6 +747,32 @@
                         
                         $response_data = $this->getComments($comment_id);
                     }
+                }
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will update Comment record and generate html
+        # Triggered by: (POST) modules/edit_post_comment
+        # Requires: $params { post_id, comment_id, post_comment }
+        # Returns: { status: true/false, result: { comment_id, post_comment_id, html }, error: null }
+        # Last updated at: March 21, 2023
+        # Owner: Erick
+        public function editComment($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $this->db->trans_start();
+                $update_post = $this->db->query("UPDATE comments SET message = ?, updated_at = NOW() WHERE id = ?;", array($params["post_comment"], $params["comment_id"]));
+
+                if($update_post){
+                    $response_data = $this->getComments($params["comment_id"]);
+                    $this->db->trans_complete();
                 }
             }
             catch (Exception $e) {
