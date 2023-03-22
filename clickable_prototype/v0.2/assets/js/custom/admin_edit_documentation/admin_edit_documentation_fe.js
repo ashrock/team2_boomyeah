@@ -52,8 +52,9 @@ function setSectionsContentHeight(){
     let details_offset = documentation_details_props.height;
     let is_sections_visible = (header_offset + (screen_height / 3)) < screen_height;
     let sections_offset = (is_sections_visible) ? details_offset : 0;
+    sections_offset = 0;
 
-    ux("#documentation_details").conditionalClass("fixed", is_sections_visible);
+    /* ux("#documentation_details").conditionalClass("fixed", is_sections_visible); */
     ux("#sections_content").self().style.paddingTop = `${sections_offset}px`;
 }
 

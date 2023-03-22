@@ -16,7 +16,7 @@
     $document_id = time();
     $document_data = array(
         "document_id" => $document_id,
-        "document_title" => "Employee Handbook",
+        "document_title" => "Chronicles of Narnia: The Lion, The Witch, and The Wardrobe",
         "is_private" => TRUE
     );
 
@@ -53,12 +53,11 @@
         <div class="container">
             <ul id="breadcrumb_list">
                 <li class="breadcrumb_item"><a href="user_documentation.php">Documentation</a></li>
-                <li class="breadcrumb_item mobile_breadcrumb"><a href="user_documentation.php">&lt;</a></li>
-                <li class="breadcrumb_item active">Employee Handbook</li>
+                <li class="breadcrumb_item active"><?= $document_data["document_title"] ?></li>
             </ul>
             <div class="divider"></div>
             <div id="doc_title_access">
-                <h1 id="doc_title">Employee Handbook</h1>
+                <h1 id="doc_title"><?= $document_data["document_title"] ?></h1>
             </div>
             <p class="doc_text_content">This handbook replaces and supersedes all prior employee handbooks regarding employment or HR matters effective January 01, 2021. The policies and practices included in this handbook may be modified at any time.<br/> Your department has additional specific procedures for many of the general policies stated in the handbook. You are expected to learn your department's procedures and comply with them. You are also expected to conform to the professional standards of your occupation. Please direct any questions to your supervisor, department head, or to the Human Resources Management and Development Office.</p>
             <div class="section_header">
@@ -69,7 +68,8 @@
                     <?php foreach($sections_data["fetch_section_user_data"] as $section_data) { ?>
                         <div class="section_block">
                             <div class="section_details">
-                                <input type="text" name="section_title" value="<?= $section_data["title"] ?>" id="" class="section_title tooltipped" data-tooltip="<?= $section_data["title"] ?>"">
+                                <div class="section_title tooltipped" data-tooltip="<?= $section_data["title"] ?>"><?= $section_data["title"] ?></div>
+                                <!-- <input type="text" name="section_title" value="<?= $section_data["title"] ?>" id="" class="section_title tooltipped" data-tooltip="<?= $section_data["title"] ?>"> -->
                             </div>
                         </div>
                     <?php } ?>

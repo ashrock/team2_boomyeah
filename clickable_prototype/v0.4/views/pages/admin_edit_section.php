@@ -10,7 +10,7 @@
     include_once("../../processes/partial_helper.php");  
     include_once("../view_helper.php");  
     include_once("../../config/constants.php");
-    $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Employee Handbook";
+    $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Chronicles of Narnia: The Lion, The Witch, and The Wardrobe";
     $section_title = (isset($_GET["section_title"])) ? htmlspecialchars_decode( $_GET["section_title"] ) : "About Company";
 
     $edit_section_module_file_path = "../../assets/json/edit_section_module_data.json";
