@@ -37,7 +37,7 @@
                             <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
                         </ul>
                         <div class="row_placeholder"></div>
-                        <a href="../default_data/preview_section.html" id="preview_section_btn">Preview</a>
+                        <a href="/docs/<?= "{$documentation['id']}/{$section["id"]}" ?>" id="preview_section_btn">Preview</a>
                     </div>
                     <div class="section_details">
                         <h1 id="section_title"><?= $section["title"] ?></h1>
@@ -49,16 +49,7 @@
             </form>
                 <div id="section_pages">
                     <?php
-                        // foreach($modules as $module){
-                            # $modules_array = array("modules" => array($module_data));
-                            // if($modules_array){
-                                $this->load->view("partials/section_page_content_partial.php", array("modules" => $modules));
-                            // }
-                            // else{
-                            //     //when no data display nothing
-                            // }
-                        // }
-                        // var_dump($modules);
+                        $this->load->view("partials/section_page_content_partial.php", array("modules" => $modules));
                     ?>
                 </div>
             <form id="add_module_form" action="/modules/add" method="POST">
@@ -74,6 +65,9 @@
                 <input type="hidden" name="action" value="reorder_tabs">
                 <input type="hidden" name="module_id" class="module_id">
                 <input type="hidden" name="tab_ids_order" class="tab_ids_order">
+            </form>
+            <form id="upload_file_form" action="/files/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" id="uploaded_file" name="uploaded_file">
             </form>
             <div id="clone_section_page">
                 <?php $this->load->view("partials/clone_section_page.php"); ?>

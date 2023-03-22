@@ -85,17 +85,22 @@ $route['modules/add_tab']['POST']     = 'modules/addTab';
 $route['modules/update']['POST']      = 'modules/updateModule';
 $route['modules/remove_tab']['POST']  = 'modules/removeTab';
 $route['modules/reorder_tab']['POST'] = 'modules/reorderTab';
+$route['files/upload']['POST']        = 'files/uploadFile';
 
 /* GET | User Documentation Routes */
 $route['docs']['GET']               = 'documentations/userDocumentations';
 $route['docs/(:any)']['GET']        = 'documentations/userDocumentation/$1';
 $route['docs/(:any)/(:any)']['GET'] = 'documentations/userSection/$1/$2';
 
-/* POST | User View Section Routes */
+/* POST | User View Section Post Feature Routes */
 $route['modules/get_posts']['POST']   = 'modules/getPosts';
 $route['modules/add_post']['POST']    = 'modules/addPost';
-$route['modules/edit_post']['POST']   = 'modules/editPost';
+$route['modules/edit_post_comment']['POST']   = 'modules/editPostComment';
 $route['modules/remove_post']['POST'] = 'modules/removePost';
+
+/* POST | User View Section Comment Feature Routes */
+$route['modules/get_comments']['POST']    = 'modules/getComments';
+$route['modules/add_comment']['POST']    = 'modules/addComment';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

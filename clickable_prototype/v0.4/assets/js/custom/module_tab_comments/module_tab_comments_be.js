@@ -48,7 +48,7 @@ function onSubmitMobilePostForm(event){
             if(tab_id){
                 comments_list.append(response_data.result.html);
             } else {
-                let comment_item = mobile_comments_slideout.find(`.comment_${post_id}`);
+                let comment_item = mobile_comments_slideout.find(`.post_comment_${post_id}`);
                 let replies_list = comment_item.find(`.replies_list`);
                 
                 if(! replies_list.self().classList.contains("show")){
@@ -62,6 +62,7 @@ function onSubmitMobilePostForm(event){
             post_form.find(".action").val("add_tab_post");
             post_form.self().reset();
             post_form.find(".comment_message").self().blur();
+            post_form.find(".comment_message").self().removeAttribute("style");
             post_form.find(".comment_message_content label").text("Write a comment");
         }
 
@@ -89,6 +90,7 @@ function onSubmitPostForm(event){
 
             post_form.self().reset();
             post_form.find(".comment_message").self().blur();
+            post_form.find(".comment_message").self().removeAttribute("style");
         }
 
     }, "json");
@@ -158,10 +160,11 @@ function onSubmitEditForm(event){
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
             let {post_comment_id, post_id} = response_data.result;
-            let item_id = `.comment_${post_comment_id}`;
-
+            let item_id = `.post_comment_${post_comment_id}`;
+            
             if(!post_id){
                 /** Replace post comment HTML */
+                item_id = `.comment_${post_comment_id}`;
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).replaceWith(response_data.result.html);
                 });
@@ -189,7 +192,7 @@ function onAddPostComment(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let comment_id = `.comment_${response_data.result.post_id}`;
+            let comment_id = `.post_comment_${response_data.result.post_id}`;
             let comments_list = ux(comment_id).find(".replies_list");
             let toggle_replies_btn = ux(comment_id).find(".toggle_replies_btn");
             
@@ -201,6 +204,7 @@ function onAddPostComment(event){
 
             post_form.self().reset();
             post_form.find(".comment_message").self().blur();
+            post_form.find(".comment_message").self().removeAttribute("style");
         }
 
     }, "json");
@@ -233,7 +237,7 @@ function onFetchPostComments(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let comment_id = `.comment_${response_data.result.post_id}`;
+            let comment_id = `.post_comment_${response_data.result.post_id}`;
             ux("body").findAll(comment_id).forEach((comment_item) => {
                 addAnimation(ux(comment_item).find(".replies_list").self(), "animate__fadeOut");
                 
@@ -269,15 +273,14 @@ function showEditComment(event){
         edit_comment_form.find(".action").val((is_post) ? "edit_post" : "edit_comment");
         edit_comment_form.find((is_post) ? ".post_id" : ".comment_id").val(comment_id);
 
-        if((CLIENT_WIDTH > MOBILE_WIDTH)){
-            comment_content.self().before(edit_comment_form.self());
-            comment_message_field.self().focus();
-        } else {
+        if((CLIENT_WIDTH < MOBILE_WIDTH)){
             is_mobile_reply_open = true;
-            comment_content.self().before(edit_comment_form.self());
-            comment_message_field.self().focus();
             ux(".mobile_tab_comments").addClass("hidden");
         }
+        
+        comment_content.self().before(edit_comment_form.self());
+        comment_message_field.self().focus();
+        comment_message_field.trigger("keyup");
 
         closeCommentActions();
     }
@@ -457,7 +460,7 @@ async function onSubmitComment(post_form, is_reply = false){
 
         post_form.reset();
         comment_message_field.self().blur();
-        comment_message_field.self().setAttribute("style","");
+        comment_message_field.self().removeAttribute("style");
     }
     return false;
 }

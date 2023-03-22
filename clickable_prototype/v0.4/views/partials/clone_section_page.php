@@ -47,9 +47,9 @@
             </div>
         </div>
         <div class="edit_form_btns">
-            <div class="row_placeholder"></div>
-            <button type="button" class="cancel_btn edit_form_btn">Cancel</button>
             <button type="submit" class="update_btn edit_form_btn">Update</button>
+            <button type="button" class="cancel_btn edit_form_btn">Cancel</button>
+            <div class="row_placeholder"></div>
         </div>
     </div>
 </form>

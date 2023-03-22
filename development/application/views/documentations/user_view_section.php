@@ -32,6 +32,9 @@
                         <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
                     </ul>
                     <div class="row_placeholder"></div>
+<?php if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){ ?> 
+                    <a href="/docs/<?= "{$documentation['id']}/{$section["id"]}/edit" ?>" id="preview_section_btn">Back to Edit</a>
+<?php } ?>
                 </div>
                 <div class="section_details">
                     <h1 id="section_title"><?= $section["title"] ?></h1>
@@ -44,6 +47,8 @@
                 <?php
                     $this->load->view("partials/user_section_page_content_partial.php", array("modules" => $modules));
                 ?>
+                </div>
+                <!-- Mobile View: Progress bar corresponds to the section_page_content not the section_page_tab  -->
             </div>
             <div id="mobile_section_pages_controls">
                 <div id="page_btns">
@@ -72,14 +77,17 @@
         </div>
         <div class="mobile_tab_comments tab_comments comment_container">
             <form action="/" method="POST" class="mobile_add_comment_form add_comment_form">
-                <div class="comment_field">
+            <div class="comment_field">
+                    <input type="hidden" name="action" value="add_tab_post" class="action">
+                    <input type="hidden" name="tab_id" class="tab_id" value="">
+                    <input type="hidden" name="post_id" class="post_id" value="">
                     <div class="comment_message_content input-field col s12">
-                        <label for="post_comment_4">Write a comment</label>
-                        <textarea name="post_comment" id="post_comment_4" class="materialize-textarea comment_message"></textarea>
+                        <label for="mobile_comment_message">Write a comment</label>
+                        <textarea name="post_comment" id="mobile_comment_message" class="materialize-textarea comment_message"></textarea>
                     </div>
                 </div>
                 <div class="comment_btn">
-                    <button type="button" class="mobile_comment_btn"></button>
+                    <button type="submit" class="mobile_comment_btn"></button>
                 </div>
             </form>
         </div>
@@ -87,12 +95,16 @@
     <div id="modals_container">
         <?php $this->load->view("partials/confirm_action_modals.php"); ?>
     </div>
-    <form id="fetch_tab_posts_form" action="/modules/getPosts" method="POST" class="hidden">
+    <form id="fetch_tab_posts_form" action="/modules/get_posts" method="POST" class="hidden">
+        <input type="hidden" name="action" value="fetch_tab_posts">
+        <input type="hidden" name="tab_id" class="tab_id">
+    </form>
+    <form id="fetch_mobile_posts_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_tab_posts">
         <input type="hidden" name="tab_id" class="tab_id">
     </form>
 
-    <form id="fetch_post_comments_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+    <form id="fetch_post_comments_form" action="/modules/get_comments" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_post_comments">
         <input type="hidden" name="post_id" class="post_id">
     </form>

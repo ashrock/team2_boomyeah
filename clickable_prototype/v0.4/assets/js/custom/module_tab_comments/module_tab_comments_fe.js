@@ -61,24 +61,7 @@ let is_mobile_reply_open = false;
                         mobile_comments_slideout.addClass("active");
                     }
                 }
-            } else {
-                let swipe_amount = swipe_value - event_swipe_value;
-                
-                /** Check swipe only on section pages */
-                if(event.target.closest("#section_pages") || event.target.closest("#mobile_section_pages_controls")){
-                    if(Math.abs(swipe_amount) > (SWIPE_OFFSET / 2)){
-                        animateSwipe(swipe_direction);
-                    }
-                    
-                    if(Math.abs(swipe_amount) > SWIPE_OFFSET){
-                        swipe_timeout = setTimeout(() => {
-                            onSwipe(swipe_direction);
-                        }, 148);
-                    }
-                }
-
             }
-
         });
         
         ux("body")

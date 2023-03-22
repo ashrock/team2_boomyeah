@@ -190,11 +190,11 @@
 			echo json_encode($response_data);
 		}
 
-		# DOCU: This function will call deleteDocumentation() from Documentation model
+		# DOCU: This function will call removeDocumentation() from Documentation model
 		# Triggered by: (POST) docs/remove
 		# Requires: $_POST["remove_documentation_id", "remove_is_archive"]
 		# Returns: { status: true/false, result: { documentation_id }, error: null }
-		# Last updated at: March 7, 2023
+		# Last updated at: March 20, 2023
 		# Owner: Jovic
 		public function removeDocumentation(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
@@ -204,7 +204,7 @@
 				$this->isUserAllowed();
 
 				if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
-					$response_data = $this->Documentation->deleteDocumentation($_POST);
+					$response_data = $this->Documentation->removeDocumentation($_POST);
 				}
 				else {
 					throw new Exception("You are not allowed to do this action!");

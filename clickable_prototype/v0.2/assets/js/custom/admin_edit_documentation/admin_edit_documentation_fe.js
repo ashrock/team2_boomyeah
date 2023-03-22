@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".duplicate_icon", duplicateSection)
         .on("click", ".remove_icon", setRemoveSectionBlock)
         .on("click", "#remove_confirm", confirmRemoveSectionBlock)
-        .on("click", ".section_block, .section_title", redirectToEditSection)
+        .on("click", ".section_block", redirectToEditSection)
         .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
         .on("keydown", ".section_block .section_title", (event) => editSectionTitle(event, true))
@@ -52,8 +52,9 @@ function setSectionsContentHeight(){
     let details_offset = documentation_details_props.height;
     let is_sections_visible = (header_offset + (screen_height / 3)) < screen_height;
     let sections_offset = (is_sections_visible) ? details_offset : 0;
+    sections_offset = 0;
 
-    ux("#documentation_details").conditionalClass("fixed", is_sections_visible);
+    /* ux("#documentation_details").conditionalClass("fixed", is_sections_visible); */
     ux("#sections_content").self().style.paddingTop = `${sections_offset}px`;
 }
 
@@ -202,6 +203,7 @@ function redirectToEditSection(event){
         event.target.closest("li")){
         return;
     }
+
     alert("Redirecting to the admin edit section page will be added in v0.3.");
 }
 

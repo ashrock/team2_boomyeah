@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("submit", "#remove_tab_form", onConfirmRemoveTab)
         .on("submit", "#reorder_tabs_form", onReorderTabs)
         .on("submit", ".update_module_tab_form", onUpdateModuleTab)
-        .on("click", ".section_page_tabs .add_page_btn", addNewTab);
+        .on("click", ".section_page_tabs .add_page_btn", addNewTab)
+        .on("change", "#uploaded_file", submitUploadForm)
 });
 
 function onEditSectionData(event){
@@ -252,4 +253,16 @@ function reorderModuleTabs(section_tabs_list){
     reorder_tabs_form.find(".module_id").val(module_id);
     reorder_tabs_form.find(".tab_ids_order").val(tab_ids_order);
     reorder_tabs_form.trigger("submit");
+}
+
+function submitUploadForm(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    let post_form = ux("#upload_file_form");
+    
+    ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+        console.log(response_data);
+    }, "json");
+    
+    return false;
 }
