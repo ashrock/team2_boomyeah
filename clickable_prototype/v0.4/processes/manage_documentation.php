@@ -8,6 +8,8 @@
     $documentation_data_file = "../assets/json/documentation_data.json";
     $edit_section_module_file_path = "../assets/json/edit_section_module_data.json";
     $tab_posts_file_path = "../assets/json/tab_posts_data.json";
+    $uploaded_files_data_path = "../assets/json/uploaded_files/uploaded_files_data.json";
+    $uploaded_files_data = load_json_file($uploaded_files_data_path);
     $sections_data = load_json_file($sections_data_file_path);
     $documentation_data = load_json_file($documentation_data_file);
     $edit_section_module_data = load_json_file($edit_section_module_file_path);
@@ -788,6 +790,85 @@
                 $response_data["status"]    = true;
                 $response_data["result"]    = array(
                     "comment_id"   => $comment_id
+                );
+                break;
+            }
+
+            case "upload_a_file" : {
+                $uploaded_files = $_FILES["upload_file"];
+
+                // Specify the directory where you want to save the uploaded files
+                $upload_dir = "../assets/json/uploaded_files/";
+
+                // Iterate over the uploaded files and move them to the upload directory
+                foreach ($uploaded_files["tmp_name"] as $key => $tmp_name) {
+                    $file_name  = $uploaded_files["name"][$key];
+                    $file_size  = $uploaded_files["size"][$key];
+                    $file_type  = $uploaded_files["type"][$key];
+                    $file_error = $uploaded_files["error"][$key];
+
+                    // Check if the file was uploaded without errors
+                    if ($file_error == UPLOAD_ERR_OK) {
+                        // Move the file to the upload directory
+                        $uploaded_file_path = $upload_dir . $file_name;
+                        move_uploaded_file($tmp_name, $uploaded_file_path);
+                    
+                        $new_uploaded_file = array(
+                            "file_id"    => time() + rand(),
+                            "file_name"  => $file_name,
+                            "file_size"  => $file_size,
+                            "file_type"  => $file_type,
+                            "is_used"    => intval(rand(0, 1))
+                        );
+
+                        array_push($uploaded_files_data["fetch_uploaded_files_data"], $new_uploaded_file);
+                        file_put_contents($uploaded_files_data_path, json_encode($uploaded_files_data));
+
+                    } 
+                    else {
+                        // Output an error message if the file was not uploaded
+                        $response_data["error"] = "Error uploading file '$file_name': $file_error";
+                    }
+                }
+
+                $response_data["status"] = true;
+                $response_data["result"] = array(
+                    "html"          => get_include_contents("../views/partials/upload_section_items_partial.php", $uploaded_files_data),
+                    "files_counter" => count($uploaded_files_data["fetch_uploaded_files_data"])
+                );
+                break;
+            }
+
+            case "remove_uploaded_file" : {
+                $file_id    = intval($_POST["file_id"]);
+                $file_name  = $_POST["file_name"];
+                $upload_dir = "../assets/json/uploaded_files/";
+
+                foreach($uploaded_files_data["fetch_uploaded_files_data"] as $key => &$file){
+                    if($file["file_id"] === $file_id){
+                        unset($uploaded_files_data["fetch_uploaded_files_data"][$key]);
+                        break;
+                    }
+                }
+                file_put_contents($uploaded_files_data_path, json_encode($uploaded_files_data));
+
+                if (file_exists($upload_dir . $file_name)) { // check if the file exists
+                    if (unlink($upload_dir . $file_name)) { // attempt to delete the file
+                        // echo "File deleted successfully.";
+                    } 
+                    else {
+                        $response_data["error"] = "Error deleting file.";
+                    }
+                } 
+                else {
+                    $response_data["failed_msg"] = "File does not exist.";
+                }
+
+                $response_data["status"] = true;
+                $response_data["result"] = array(
+                    "file_id"       => $file_id,
+                    "html"          => get_include_contents("../views/partials/upload_section_items_partial.php", $uploaded_files_data),
+                    "files_counter" => count($uploaded_files_data["fetch_uploaded_files_data"])
                 );
                 break;
             }

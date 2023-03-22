@@ -70,6 +70,7 @@
 
             #files_counter{
                 color: @by_light_steel_blue;
+                margin-left: 7px;
             }
             &::before{
                 background: url(https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/handouts_sprite.svg) no-repeat 0px 0px;
@@ -123,15 +124,41 @@
                         height: 18px;
                         margin-right: 8px;
                         position: relative;
-                 
                         width: 15px;
                    }
+                    &:disabled{
+                        cursor: not-allowed;
+                    }
                 }
                 label{
                     font: 500 italic 16px/19px @readex_regular;
                     color: @by_light_steel_blue;
                     letter-spacing: 0.25px;
                     margin-left: 16px;
+                }
+                .uploading_event {
+                    &::before {
+                        animation: rotate 2s linear infinite;
+                        background: url(https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/uploading_and_empty_icon.svg) no-repeat 0 -3px !important;
+                        width: 18px !important;
+                    }
+
+                    &::after {
+                        animation: dot-animation 1.5s linear infinite;
+                        content: "...";
+                        position: relative;
+                    }
+                    
+                    @keyframes rotate {
+                        from { transform: rotate(0); }
+                        to { transform: rotate(360deg); }
+                    }
+
+                    @keyframes dot-animation {
+                        0% { content: "."; }
+                        33% { content: ".."; }
+                        66% { content: "..."; }
+                    }
                 }
             }
             #files_list{
@@ -172,6 +199,21 @@
                     }
                     &:not(:last-child) {
                         border-bottom: 1px solid @by_input_border;
+                    }
+
+                    .no_uploaded_files{
+                        align-items: center;
+                        color: @by_light_steel_blue;
+                        display: flex;
+                        font: 400 16px/20px @readex_regular;
+                        &::before{
+                            background: url(https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/uploading_and_empty_icon.svg) no-repeat -20px 0px;
+                            content: "";
+                            display: inline-block;
+                            margin-right: 13px;
+                            height: 24px;
+                            width: 24px;
+                        }
                     }
                     .actions_list{
                         align-items: center;
@@ -243,7 +285,6 @@
                     }
                 }
             }
-        
         }
     }
 
@@ -256,6 +297,39 @@
 
 .faded{
     opacity: 0;
+}
+
+#modals_container{
+    #confirm_remove_uploaded_file{
+        h4{
+          margin-top: 17px;
+        }
+    }
+    #error_uploaded_file{
+        .modal{
+            max-width: 443px;
+            display: flex !important;
+            justify-content: space-between;
+            .error_title{
+           
+                margin: 16px 0 29px;
+       
+                &::before{
+                    background: url(https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/handouts_sprite.svg) no-repeat -100px 0px;
+                    content: "";
+                    display: inline-block;
+                    height: 24px;
+                    margin-right: 9px;
+                    width: 24px;
+                    position: relative;
+                    top: 3px;
+                }
+            }
+            .no_btn{
+                color: @by_primary !important;
+            }
+        }
+    }
 }
 
 @import url(./view_section_content.less);

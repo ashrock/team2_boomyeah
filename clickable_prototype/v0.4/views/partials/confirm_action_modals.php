@@ -32,3 +32,31 @@
         </div>
     </div>
 </div>
+<div id="confirm_remove_uploaded_file" class="confirm_action_modal">
+    <div id="confirm_remove_uploaded_file_modal" class="modal">
+        <div class="modal-content">
+            <h4>Confirmation</h4>
+            <p></p>
+        </div>
+        <div class="modal-footer">
+            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" id="remove_uploaded_file_form">
+                <input type="hidden" name="action" value="remove_uploaded_file">
+                <input type="hidden" name="file_id" value="" class="file_id">
+                <input type="hidden" name="file_name" value="" class="file_name">
+                <button type="button" class="modal-close waves-effect btn-flat no_btn">No</button>
+                <button type="submit" class="modal-close waves-effect btn-flat yes_btn">Yes</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="error_uploaded_file" class="confirm_action_modal">
+    <div id="error_uploaded_file_modal" class="modal">
+        <div class="modal-content">
+            <h4 class="error_title"></h4>
+            <p class="error_file_name"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-close waves-effect btn-flat no_btn">Close</button>
+        </div>
+    </div>
+</div>

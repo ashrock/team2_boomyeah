@@ -15,6 +15,9 @@
 
     $edit_section_module_file_path = "../../assets/json/edit_section_module_data.json";
     $edit_section_module_data = load_json_file($edit_section_module_file_path);
+
+    $uploaded_files_file_path = "../../assets/json/uploaded_files/uploaded_files_data.json";
+    $uploaded_files_data = load_json_file($uploaded_files_file_path);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,45 +83,9 @@ Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Phili
                 <button id="add_page_tabs_btn" type="submit">+ Add New</button>
             </form>
             <div id="upload_file_section">
-                <a href="#!" class="fetch_files_btn open">Files <span id="files_counter">(2)</span></a>
-                <div class="files_upload_content">
-                    <form id="upload_files_form" action="" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="upload_a_file">
-                        <input type="file" name="upload_file[]" style="display: none;" multiple accept="image/*,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" maxlength="26214400">
-                        <button id="file_upload_btn" type="button">Upload Files</button>
-                        <label for="">Maximun size: 25mb</label>
-                    </form>
-                    <ul id="files_list">
-                        <li>
-                            <a href="#!" class="file_type docs_type">BoomYEAH_User_Test.pdf</a>
-                            <ul class="actions_list">
-                                <li>
-                                    <input type="hidden" value="samplelink.com"">
-                                    <a href="#!" class="copy_link_icon"></a>
-                                    <span class="tooltip_hover">Copy Link</span>
-                                </li>
-                                <li>
-                                    <a href="#!" class="delete_icon" data-file_id=""></a>
-                                    <span class="tooltip_hover">Delete</span>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#!" class="file_type img_type">BoomYEAH_Image_Test.png</a>
-                            <ul class="actions_list">
-                                <li>
-                                    <input type="hidden" value="otherlinkexample.com"">
-                                    <a href="nolink.com" class="copy_link_icon"></a>
-                                    <span class="tooltip_hover">Copy Link</span>
-                                </li>
-                                <li>
-                                    <a href="#!" class="delete_icon"></a>
-                                    <span class="tooltip_hover">Delete</span>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+                <?php
+                    load_view("../partials/upload_section_partial.php", $uploaded_files_data);
+                ?>       
             </div>
             <form id="add_module_tab_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
                 <input type="hidden" name="action" value="add_module_tab">
@@ -142,5 +109,6 @@ Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Phili
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_be.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/module_upload_files/module_upload_files_fe.js")?>"></script>
+    <script src="<?= add_file("assets/js/custom/module_upload_files/module_upload_files_be.js")?>"></script>
 </body>
 </html>
