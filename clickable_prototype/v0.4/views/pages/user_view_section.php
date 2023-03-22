@@ -15,7 +15,7 @@
 
     $edit_section_module_file_path = "../../assets/json/edit_section_module_data.json";
     $user_view_section_module_data = load_json_file($edit_section_module_file_path);
-    $view_type = (isset($_GET["view_type"]))?  htmlspecialchars_decode( $_GET["view_type"] ) : "Edit View";
+    $view_type = (isset($_GET["view_type"])) ?  htmlspecialchars_decode( $_GET["view_type"] ) : "Edit View";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +47,9 @@
                         <li class="breadcrumb_item active"><span><?= $section_title ?></span></li>
                     </ul>
                     <div class="row_placeholder"></div>
-                    <a href="<?= BASE_FILE_URL?>views/pages/admin_edit_section.php" id="preview_section_btn">Back to edit</a>
+                    <?php if(isset($_GET["view_type"])){ ?>
+                        <a href="<?= BASE_FILE_URL?>views/pages/admin_edit_section.php" id="preview_section_btn">Back to edit</a>
+                    <?php } ?>
                 </div>
                 <div class="section_details">
                     <h1 id="section_title"><?= $section_title ?></h1>

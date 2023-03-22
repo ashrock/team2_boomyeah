@@ -93,3 +93,4 @@ defined('FALSE_VALUE') OR define('FALSE_VALUE', 0);
 defined('ZERO_VALUE') OR define('ZERO_VALUE', 0);
 defined('YES') OR define('YES', 1);
 defined('NO') OR define('NO', 0);
+defined('MAX_FIZE_SIZE') OR define('MAX_FILE_SIZE', 25000000);

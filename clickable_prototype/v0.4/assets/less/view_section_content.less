@@ -27,6 +27,7 @@
         display: flex;
         align-items: center;
         *{
+            color: @by_text;
             font: 16px/12px @readex_regular;
         }
         #breadcrumbs_list{
@@ -67,9 +68,9 @@
         }
     }
     .section_details{
-        padding: 24px;
+        padding: 24px 24px 28px;
         #section_title{
-            font: 24px/30px @readex_regular;
+            font: 24px/24px @readex_regular;
             margin: 0px 0px 16px;
 
             @media (max-width: 632px) {
@@ -110,7 +111,7 @@
             &:last-child{
                 border-bottom-left-radius: 10px;
                 border-bottom-right-radius: 10px;
-    
+                padding-bottom: 24px;
                 .tab_title{   
                     &::after{
                         display: none;
@@ -124,7 +125,7 @@
             border-top-right-radius: 10px;
             color: @by_off_gray;
             display: block !important;
-            padding: 24px 18px 0px;
+            padding: 20px 18px 0px;
         }
     }
     .section_page_tabs{
@@ -304,8 +305,8 @@
         }
             
         figure, iframe{
-            max-width: calc(100%) !important;
             margin: 0px 0px 10px;
+            width: calc(100%) !important;
 
             img{
                 max-width: inherit;

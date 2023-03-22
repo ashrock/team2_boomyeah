@@ -32,8 +32,8 @@
                 <div id="section_summary">
                     <div class="breadcrumbs">
                         <ul id="breadcrumbs_list">
-                            <li class="breadcrumb_item"><a href="/docs/edit">Documentations</a></li class="breadcrumb_item">
-                            <li class="breadcrumb_item"><a href="/docs/<?= $documentation['id'] ?>/edit"><?= $documentation["title"] ?></a></li class="breadcrumb_item">
+                            <li class="breadcrumb_item"><a href="/docs/edit">Documentations</a></li>
+                            <li class="breadcrumb_item"><a href="/docs/<?= $documentation['id'] ?>/edit"><?= $documentation["title"] ?></a></li>
                             <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
                         </ul>
                         <div class="row_placeholder"></div>
@@ -67,7 +67,9 @@
                 <input type="hidden" name="tab_ids_order" class="tab_ids_order">
             </form>
             <form id="upload_file_form" action="/files/upload" method="POST" enctype="multipart/form-data">
-                <input type="file" id="uploaded_file" name="uploaded_file">
+                <input type="hidden" name="documentation_id" value="<?= $documentation["id"] ?>">
+                <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
+                <input type="file" id="uploaded_file" name="uploaded_file[]" multiple>
             </form>
             <div id="clone_section_page">
                 <?php $this->load->view("partials/clone_section_page.php"); ?>

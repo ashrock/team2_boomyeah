@@ -10,7 +10,7 @@
     include_once("../../processes/partial_helper.php");  
     include_once("../view_helper.php");  
     include_once("../../config/constants.php");
-    $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Employee Handbook";
+    $document_title = (isset($_GET["document_title"])) ? htmlspecialchars_decode( $_GET["document_title"] ) : "Chronicles of Narnia: The Lion, The Witch, and The Wardrobe";
     $section_title = (isset($_GET["section_title"])) ? htmlspecialchars_decode( $_GET["section_title"] ) : "About Company";
 
     $edit_section_module_file_path = "../../assets/json/edit_section_module_data.json";
@@ -44,8 +44,8 @@
                 <div id="section_summary">
                     <div class="breadcrumbs">
                         <ul id="breadcrumbs_list">
-                            <li class="breadcrumb_item"><a href="admin_documentation.php">Documentations</a></li class="breadcrumb_item">
-                            <li class="breadcrumb_item"><a href="admin_edit_documentation.php">Employee Handbook</a></li class="breadcrumb_item">
+                            <li class="breadcrumb_item"><a href="admin_documentation.php">Documentations</a></li>
+                            <li class="breadcrumb_item"><a href="admin_edit_documentation.php">Employee Handbook</a></li>
                             <li class="breadcrumb_item active"><span>About Company</span></li>
                         </ul>
                         <div class="row_placeholder"></div>
