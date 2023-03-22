@@ -3,7 +3,8 @@
 
     foreach($comment_items as $comment_item) { 
 ?>
-<li class="comment_item comment_container comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>" id="comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">
+<li class="comment_item comment_container <?= isset($comment_item["post_id"]) ? 'post_' : '' ?>comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>" 
+    id="<?= isset($comment_item["post_id"]) ? 'post_' : '' ?>comment_<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">
     <div class="comment_content">
         <img src="<?= isset($comment_item["post_id"]) ? $comment_item["user_profile_pic"] : $comment_item["commenter_profile_pic"] ?>" 
             alt="<?= isset($comment_item["post_id"]) ? $comment_item["first_name"] : $comment_item["commenter_first_name"] ?>" class="user_image"/> 
@@ -51,7 +52,7 @@
         <div class="reply_actions">
             <button type="button" class="toggle_reply_form_btn" data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>">Reply</button>
         <?php if($comment_item["cache_comments_count"]) { ?>
-            <button type="button" class="toggle_replies_btn"data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"><b>Show <span class="reply_count"><?= count($comment_item["comments"]) ?> <?= count($comment_item["comments"]) == 1 ? "reply" : "replies" ?></span></b></button>
+            <button type="button" class="toggle_replies_btn"data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"><b>Show <span class="reply_count"><?= $comment_item["cache_comments_count"] ?> <?= $comment_item["cache_comments_count"] == 1 ? "reply" : "replies" ?></span></b></button>
         <?php }else{ ?>
             <button type="button" class="toggle_replies_btn"data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"><b><span class="reply_count">No</span> replies</span></b></button>
         <?php } ?>
