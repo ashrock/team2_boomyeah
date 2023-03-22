@@ -167,18 +167,20 @@ function onSubmitEditForm(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let {post_comment_id, post_id} = response_data.result;
-            let item_id = `#comment_${post_comment_id}`;
+            let {comment_id, post_id} = response_data.result;
+            let item_id = `#comment_${comment_id}`;
 
-            if(post_id){
+            if(comment_id){
                 /** Replace post HTML */
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).replaceWith(response_data.result.html);
                 });
             } else {
+                item_id = `#post_comment_${post_id}`;
+
                 let response_html = stringToHtmlContent(response_data.result.html);
                 let comment_content = ux(response_html).find(".comment_content").self();
-                
+
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).find(".comment_content").self().replaceWith(comment_content);
                     ux(comment_item).find(".edit_comment_form").self() && ux(comment_item).find(".edit_comment_form").remove();
@@ -242,8 +244,10 @@ function onFetchPostComments(event){
     let post_form = ux(event.target);
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
+        console.log('response_data', response_data)
         if(response_data.status){
-            let comment_id = `.post_comment_${response_data.result.post_id}`;
+            let comment_id = `.post_comment_${response_data.result.post_comment_id}`;
+            
             ux("body").findAll(comment_id).forEach((comment_item) => {
                 addAnimation(ux(comment_item).find(".replies_list").self(), "animate__fadeOut");
                 
@@ -369,6 +373,7 @@ function showConfirmaDeleteComment(event){
 
         remove_comment_modal.find((is_post) ? ".comment_id" : ".post_id").val("");
         remove_comment_modal.find((is_post) ? ".post_id" : ".comment_id").val(comment_id);
+        remove_comment_modal.find(".parent_id").val( ux(event_target).data("parent_id") );
         remove_comment_modal.find(".action").val((is_post) ? "remove_post" : "remove_comment");
 
         /** Determine active_comment_item */

@@ -95,7 +95,7 @@ $route['docs/(:any)/(:any)']['GET'] = 'documentations/userSection/$1/$2';
 /* POST | User View Section Post Feature Routes */
 $route['modules/get_posts']['POST']   = 'modules/getPosts';
 $route['modules/add_post']['POST']    = 'modules/addPost';
-$route['modules/edit_post']['POST']   = 'modules/editPost';
+$route['modules/edit_post_comment']['POST']   = 'modules/editPostComment';
 $route['modules/remove_post']['POST'] = 'modules/removePost';
 
 /* POST | User View Section Comment Feature Routes */
