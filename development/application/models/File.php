@@ -22,24 +22,19 @@
                 for($index=0; $index<$files_count; $index++){
                     # Check if file is a PDF and file size is applicable
                     if($params["files"]["size"][$index] <= MAX_FILE_SIZE){
-                        if($params["files"]["type"][$index] === "application/pdf"){
-                            # Generate file name {documentation_id}_{section_id}{delimiter}{file_name}
-                            $timestamp = date('Y-m-d H:i:s');
-                            $file_type = pathinfo($params["files"]["name"][$index], PATHINFO_EXTENSION);
-                            $file_name = pathinfo($params["files"]["name"][$index], PATHINFO_FILENAME);
+                        # Generate file name {documentation_id}_{section_id}{delimiter}{file_name}
+                        $timestamp = date('Y-m-d H:i:s');
+                        $file_type = pathinfo($params["files"]["name"][$index], PATHINFO_EXTENSION);
+                        $file_name = pathinfo($params["files"]["name"][$index], PATHINFO_FILENAME);
 
-                            $file_name = "{$file_name}_{$timestamp}.{$file_type}";
-                            $file_path = ENVIRONMENT . "/{$file_name}";
+                        $file_name = "{$file_name}_{$timestamp}.{$file_type}";
+                        $file_path = ENVIRONMENT . "/{$file_name}";
 
-                            array_push($files_to_upload, array(
-                                "file_name" => $params["files"]["name"][$index],
-                                "file_path" => $file_path,
-                                "tmp_file"  => $params["files"]["tmp_name"][$index]
-                            ));
-                        }
-                        else{
-                            throw new Exception("Invalid file type.");
-                        }
+                        array_push($files_to_upload, array(
+                            "file_name" => $params["files"]["name"][$index],
+                            "file_path" => $file_path,
+                            "tmp_file"  => $params["files"]["tmp_name"][$index]
+                        ));
                     }
                     else{
                         $response_data["result"]["file"] = $params["files"]["name"][$index];
