@@ -44,8 +44,8 @@
                 <div id="section_summary">
                     <div class="breadcrumbs">
                         <ul id="breadcrumbs_list">
-                            <li class="breadcrumb_item"><a href="admin_documentation.php">Documentations</a></li class="breadcrumb_item">
-                            <li class="breadcrumb_item"><a href="admin_edit_documentation.php">Employee Handbook</a></li class="breadcrumb_item">
+                            <li class="breadcrumb_item"><a href="admin_documentation.php">Documentations</a></li>
+                            <li class="breadcrumb_item"><a href="admin_edit_documentation.php">Employee Handbook</a></li>
                             <li class="breadcrumb_item active"><span>About Company</span></li>
                         </ul>
                         <div class="row_placeholder"></div>

@@ -991,6 +991,7 @@ body::-webkit-scrollbar-thumb {
   .section_page_content .section_page_tab:last-child {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    padding-bottom: 24px;
   }
   .section_page_content .section_page_tab:last-child .tab_title::after {
     display: none;
@@ -1178,8 +1179,8 @@ body::-webkit-scrollbar-thumb {
 }
 .section_page_content .section_page_tab figure,
 .section_page_content .section_page_tab iframe {
-  max-width: calc(100%) !important;
   margin: 0px 0px 10px;
+  width: calc(100%) !important;
 }
 .section_page_content .section_page_tab figure img,
 .section_page_content .section_page_tab iframe img {

@@ -895,6 +895,7 @@ body {
 }
 .container #breadcrumb_list .breadcrumb_item.active {
   color: #6C7177;
+  line-height: 18px;
 }
 .container #breadcrumb_list .breadcrumb_item.active::after {
   display: none;
@@ -922,6 +923,7 @@ body {
 @media screen and (max-width: 632px) {
   .container {
     padding-top: 13px;
+    width: initial !important;
   }
   .container .divider {
     display: none;
@@ -1229,6 +1231,25 @@ body {
   }
   .container #breadcrumb_list li::after {
     background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/admin_edit_docs_sprite.svg') no-repeat 0 0px !important;
+  }
+  .container #breadcrumb_list li.mobile_breadcrumb::after {
+    display: none;
+  }
+  .container #breadcrumb_list li.mobile_breadcrumb a:before {
+    border: solid #6C7177;
+    border-width: 0 0px 2px 2px;
+    display: inline-block;
+    padding: 3px;
+    content: "";
+    margin-right: 12px;
+    position: relative;
+    top: -1px;
+    transition: transform 0.3s ease-in-out;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }
+  .container #breadcrumb_list li.active {
+    line-height: 18px;
   }
   .container .divider {
     display: none;
