@@ -84,10 +84,9 @@
             }
         }
         #comments_list_container{
-            background: @by_comments_bg;
+            background: @by_white;
             flex-grow: 1;
             overflow: auto;
-            padding: 20px;
 
             #user_comments_list{
                 border-radius: 12px;
@@ -122,7 +121,8 @@
             margin: 0px;
             padding: 16px;
             width: 100%;
-
+            box-shadow: 0px 0px 12px @by_translucent_bg;
+            z-index: 9;
             &.hidden{
                 display: none !important;
             }
@@ -309,6 +309,10 @@
                 margin-top: 10px;
                 .comment_content{
                     align-items: flex-start;
+                    padding: 12px !important;
+                }
+                .user_image{
+                    margin-right: 12px;
                 }
     
                 .reply_actions{
