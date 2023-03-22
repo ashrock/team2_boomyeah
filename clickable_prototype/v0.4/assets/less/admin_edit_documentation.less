@@ -78,7 +78,7 @@ body{
         }
 
         #doc_title_access {
-            margin: 0 0px 50px;
+            margin: 0 0px 48px;
             gap: 8px;
             flex-wrap: wrap;
             .switch {
@@ -150,7 +150,7 @@ body{
                             width: 5px;
                         }
                         &.active{
-                            color: @by_black;
+                            color: @by_text;
                             &::after{
                                 display: none;
                             }
@@ -165,18 +165,16 @@ body{
                     background-color: @by_bg;
                     position: absolute;
                     left: 0;
-                    margin-bottom: 24px;
                 }
                 #doc_title_access{
-                    align-items: center;
+                    align-items: flex-start;
                     display: flex;
                     justify-content: flex-start;
-                    margin: 62px 0 34px;
-                    height: 36px;
+                    margin: 48px 0 24px;
+                    min-height: 36px;
                     #doc_title {
                         font: 20px/24px @readex_medium;
                         margin: 0;
-                        max-width: 630px;
                     }
                     .switch{
                         margin-left: 24px;
@@ -196,6 +194,9 @@ body{
                             input:checked+.lever:before,
                             input:checked+.lever:after{
                                 left: 24px;
+                            }
+                            .toggle_text{
+                                color: @by_text;
                             }
                             .lever{
                                 background-color: #B5C4E4;
@@ -219,6 +220,7 @@ body{
                         }
                     }
                     #invite_collaborator_btn{
+                        width: 190px;
                         &.hidden{
                             display: none;
                         }
@@ -251,8 +253,7 @@ body{
                     border: 1px solid @by_bg;
                     color: @by_text;
                     font: 16px/24px @readex_regular;
-                    margin: 0 0 34px;
-                    max-width: 893px;
+                    margin: 0 0 32px;
                     padding: 10px;
                     position: relative;
                     width: 100%;
@@ -485,7 +486,7 @@ body{
                 display: block;
                 height: 16px;
                 margin-right: 13px;
-                width: 10px;
+                min-width: 10px;
             }
             .section_title {
                 border-bottom: 1px solid transparent;
@@ -598,7 +599,7 @@ body{
   width: 100%;
 }
 #confirmation_modal_remove .modal{
-    max-height: 233px;
+    min-height: 233px;
 }
 #confirmation_modal_remove .modal .modal-content,
 #confirmation_modal_remove_invited_user .modal .modal-content {

@@ -130,12 +130,12 @@ function(){
         let tab_title_ux = section_page_tab.find(".tab_title");
 
         if(tab_title.value.length > 1){
-            /* saveTabChanges(section_page_tab); */
             clearTimeout(keyup_timeout);
             tab_title_ux.removeClass("error");
+
             keyup_timeout = setTimeout(() => {
                 ux(tab_title.closest(".update_module_tab_form")).trigger("submit");
-            }, 1000);
+            }, 380);
         }
         else{
             clearTimeout(keyup_timeout);

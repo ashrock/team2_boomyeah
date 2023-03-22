@@ -7,6 +7,8 @@ let is_mobile_reply_open = false;
 
     document.addEventListener("DOMContentLoaded", async (event) => {
         let document_element = event.target;
+
+        M.FormSelect.init(ux(".section_dropdown").self());
         
         ux("#section_pages").findAll("ul.comments_list").forEach((comments_list) => {
             if(!comments_list.classList.contains("replies_list")){
@@ -32,7 +34,7 @@ let is_mobile_reply_open = false;
         });
         document.addEventListener("touchend", function (event){
             swipe_value = 0;
-            animateSwipe();
+            // animateSwipe();
         });
         
         document.addEventListener("touchmove", function (event){
@@ -59,34 +61,15 @@ let is_mobile_reply_open = false;
                         mobile_comments_slideout.addClass("active");
                     }
                 }
-            } else {
-                let swipe_amount = swipe_value - event_swipe_value;
-                
-                /** Check swipe only on section pages */
-                if(event.target.closest("#section_pages") || event.target.closest("#mobile_section_pages_controls")){
-                    if(Math.abs(swipe_amount) > (SWIPE_OFFSET / 2)){
-                        animateSwipe(swipe_direction);
-                    }
-                    
-                    if(Math.abs(swipe_amount) > SWIPE_OFFSET){
-                        swipe_timeout = setTimeout(() => {
-                            onSwipe(swipe_direction);
-                        }, 148);
-                    }
-                }
-
             }
-
         });
         
         ux("body")
             .on("keydown", ".comment_message", onCommentMessageKeypress)
-            .on("click", ".show_comments_btn", showTabComments)
             .on("click", ".toggle_reply_form_btn", showReplyForm)
-            .on("click", ".mobile_comment_btn", (event) => {
-                event.stopImmediatePropagation();
-                onSubmitComment(event.target.closest(".mobile_add_comment_form"))
-            });
+            ;
+
+        M.Sidenav.init(ux("#mobile_comments_slideout").self());
     });
     
     async function animateSwipe(swipe_direction = ""){
@@ -162,26 +145,8 @@ let is_mobile_reply_open = false;
             let mobile_add_comment_form = ux(".mobile_add_comment_form");
             mobile_add_comment_form.find("label").text(label_text);
             mobile_add_comment_form.find("textarea").self().focus();
-        }
-    }
-
-    async function showTabComments(event){
-        event.preventDefault();
-        let mobile_comments_slideout = ux("#mobile_comments_slideout");
-        mobile_comments_slideout.find("#user_comments_list").self().innerHtml = "";
-
-        if(!mobile_comments_slideout.self().classList.contains("active")){
-            // await include("#user_comments_list" , `${relative_view_path}/global/user_view_section_comments.html`);
-            mobile_comments_slideout.addClass("active");
-            is_comments_displayed = true;
-
-            ux("#mobile_comments_slideout").findAll("ul.comments_list").forEach((comments_list) => {
-                if(!comments_list.classList.contains("replies_list")){
-                    ux(comments_list).findAll(".comment_container").forEach((comment_container) => {
-                        showRepliesCount(comment_container);
-                    });
-                }
-            });
+            mobile_add_comment_form.find(".action").val("add_post_comment");
+            mobile_add_comment_form.find(".post_id").val(ux(event.target).data("target_comment"));
         }
     }
 
@@ -192,18 +157,28 @@ let is_mobile_reply_open = false;
             let viewport_width = document.documentElement.clientWidth;
 
             if(viewport_width > MOBILE_WIDTH){
-                if(event_target.classList.contains("active")){
-                    event_target.classList.remove("active");
-                } else {
-                    event_target.classList.add("active");
-                }
+                ux(event_target).conditionalClass("active", !event_target.classList.contains("active"));
             } else {
                 event.stopImmediatePropagation();
 
                 if(ux(".active_comment_item").self()){
                     ux(".active_comment_item").removeClass("active_comment_item");
                 }
-                ux("#comment_actions_container").addClass("active");
+
+                let comment_id = ux(event_target).data("target_comment");
+                let is_post = ux(event_target).data("is_post");
+
+                let comment_actions = ux("#comment_actions_container");
+                let edit_btn = comment_actions.find(".edit_btn");
+                let remove_btn = comment_actions.find(".remove_btn");
+                
+                edit_btn.attr("data-target_comment", comment_id);
+                edit_btn.attr("data-is_post", is_post);
+                
+                comment_actions.addClass("active");
+                remove_btn.attr("data-target_comment", comment_id);
+                remove_btn.attr("data-is_post", is_post);
+                
                 ux(event_target.closest(".comment_item")).addClass("active_comment_item");
             }
         }

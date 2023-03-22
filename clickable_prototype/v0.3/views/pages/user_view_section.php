@@ -15,7 +15,7 @@
 
     $edit_section_module_file_path = "../../assets/json/edit_section_module_data.json";
     $user_view_section_module_data = load_json_file($edit_section_module_file_path);
-    $view_type = (isset($_GET["view_type"]))?  htmlspecialchars_decode( $_GET["view_type"] ) : "Edit View";
+    $view_type = (isset($_GET["view_type"])) ?  htmlspecialchars_decode( $_GET["view_type"] ) : "Edit View";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +47,9 @@
                         <li class="breadcrumb_item active"><span><?= $section_title ?></span></li>
                     </ul>
                     <div class="row_placeholder"></div>
-                    <a href="<?= BASE_FILE_URL?>views/pages/admin_edit_section.php" id="preview_section_btn">Back to edit</a>
+                    <?php if(isset($_GET["view_type"])){ ?>
+                        <a href="<?= BASE_FILE_URL?>views/pages/admin_edit_section.php" id="preview_section_btn">Back to edit</a>
+                    <?php } ?>
                 </div>
                 <div class="section_details">
                     <h1 id="section_title"><?= $section_title ?></h1>
@@ -56,8 +58,8 @@
             </div>
             <div id="section_pages">
                 <?php
-                    foreach($user_view_section_module_data["fetch_admin_module_data"] as $module_data){
-                        $modules_array = array("modules" => array($module_data));
+                    foreach($user_view_section_module_data["fetch_admin_module_data"] as $module_key => $module_data){
+                        $modules_array = array("modules" => array($module_data), "module_count" => $module_key + 1, "total_modules" => count($user_view_section_module_data["fetch_admin_module_data"]));
                         if($modules_array){
                             load_view("../partials/user_section_page_content_partial.php", $modules_array);
                         }
@@ -70,13 +72,10 @@
                 <!-- Mobile View: Progress bar corresponds to the section_page_content not the section_page_tab  -->
             </div>
             <div id="mobile_section_pages_controls">
+                <div class="row_placeholder"></div>
                 <div id="page_btns">
-                    <div class="row_placeholder"></div>
                     <button id="prev_page_btn" type="button" class="page_btn hidden"></button>
                     <button id="next_page_btn" type="button" class="page_btn"></button>
-                </div>
-                <div id="section_page_progress">
-                    <div class="progress"></div>
                 </div>
             </div>
             <div id="clone_section_page">
@@ -95,15 +94,18 @@
             <ul id="user_comments_list" class="comments_list"></ul>
         </div>
         <div class="mobile_tab_comments tab_comments comment_container">
-            <form action="/" method="POST" class="mobile_add_comment_form add_comment_form">
+            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="mobile_add_comment_form add_comment_form">
                 <div class="comment_field">
+                    <input type="hidden" name="action" value="add_tab_post" class="action">
+                    <input type="hidden" name="tab_id" class="tab_id" value="">
+                    <input type="hidden" name="post_id" class="post_id" value="">
                     <div class="comment_message_content input-field col s12">
-                        <label for="post_comment_4">Write a comment</label>
-                        <textarea name="post_comment" id="post_comment_4" class="materialize-textarea comment_message"></textarea>
+                        <label for="mobile_comment_message">Write a comment</label>
+                        <textarea name="post_comment" id="mobile_comment_message" class="materialize-textarea comment_message"></textarea>
                     </div>
                 </div>
                 <div class="comment_btn">
-                    <button type="button" class="mobile_comment_btn"></button>
+                    <button type="submit" class="mobile_comment_btn"></button>
                 </div>
             </form>
         </div>
@@ -113,6 +115,11 @@
     </div>
     
     <form id="fetch_tab_posts_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+        <input type="hidden" name="action" value="fetch_tab_posts" class="action">
+        <input type="hidden" name="tab_id" class="tab_id">
+    </form>
+    
+    <form id="fetch_mobile_posts_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_tab_posts">
         <input type="hidden" name="tab_id" class="tab_id">
     </form>
