@@ -1,4 +1,6 @@
-<?php foreach($modules as $module_key => $module) {  
+<?php 
+    $module_count = 0;
+    foreach($modules as $module_key => $module) {
     # This is used to remove [] if tab_ids_order came from JSON_ARRAYAGG(). It will return null if tab_ids_order is from column
     $tab_ids_order = json_decode($module["tab_ids_order"]);
 
@@ -13,7 +15,7 @@
     }    
 ?>
     <div class="section_page_content <?= $module_key == 1 ? 'active' : '' ?>" id="module_<?= $module["module_id"] ?>">
-        <div class="mobile_module_header">Module <?#= $module_count ?>/<?#= $total_modules ?></div>
+        <div class="mobile_module_header">Module <?= $module_count += 1 ?>/<?= count($modules) ?></div>
         <ul class="section_page_tabs">
             <?php
                 /** DOCU: $views_path is specified for this file in order for the partial be loaded from FE and BE side */

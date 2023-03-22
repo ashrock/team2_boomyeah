@@ -62,6 +62,7 @@ function onSubmitMobilePostForm(event){
             post_form.find(".action").val("add_tab_post");
             post_form.self().reset();
             post_form.find(".comment_message").self().blur();
+            post_form.find(".comment_message").self().removeAttribute("style");
             post_form.find(".comment_message_content label").text("Write a comment");
         }
 
@@ -98,6 +99,7 @@ function onSubmitPostForm(event){
 
             post_form.self().reset();
             post_form.find(".comment_message").self().blur();
+            post_form.find(".comment_message").self().removeAttribute("style");
         }
 
     }, "json");
@@ -213,6 +215,7 @@ function onAddPostComment(event){
 
             post_form.self().reset();
             post_form.find(".comment_message").self().blur();
+            post_form.find(".comment_message").self().removeAttribute("style");
         }
 
     }, "json");
@@ -282,15 +285,14 @@ function showEditComment(event){
         edit_comment_form.find(".action").val((is_post) ? "edit_post" : "edit_comment");
         edit_comment_form.find((is_post) ? ".post_id" : ".comment_id").val(comment_id);
 
-        if((CLIENT_WIDTH > MOBILE_WIDTH)){
-            comment_content.self().before(edit_comment_form.self());
-            comment_message_field.self().focus();
-        } else {
+        if((CLIENT_WIDTH < MOBILE_WIDTH)){
             is_mobile_reply_open = true;
-            comment_content.self().before(edit_comment_form.self());
-            comment_message_field.self().focus();
             ux(".mobile_tab_comments").addClass("hidden");
         }
+        
+        comment_content.self().before(edit_comment_form.self());
+        comment_message_field.self().focus();
+        comment_message_field.trigger("keyup");
 
         closeCommentActions();
     }
@@ -471,7 +473,7 @@ async function onSubmitComment(post_form, is_reply = false){
 
         post_form.reset();
         comment_message_field.self().blur();
-        comment_message_field.self().setAttribute("style","");
+        comment_message_field.self().removeAttribute("style");
     }
     return false;
 }
