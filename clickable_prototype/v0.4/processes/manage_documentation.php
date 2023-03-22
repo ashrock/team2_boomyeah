@@ -797,19 +797,27 @@
             case "upload_a_file" : {
                 $uploaded_files = $_FILES["upload_file"];
 
-                // Specify the directory where you want to save the uploaded files
+                /**
+                 *  Specify the directory where you want to save the uploaded files
+                 */
                 $upload_dir = "../assets/json/uploaded_files/";
 
-                // Iterate over the uploaded files and move them to the upload directory
+                /**
+                 * Iterate over the uploaded files and move them to the upload directory
+                 */
                 foreach ($uploaded_files["tmp_name"] as $key => $tmp_name) {
                     $file_name  = $uploaded_files["name"][$key];
                     $file_size  = $uploaded_files["size"][$key];
                     $file_type  = $uploaded_files["type"][$key];
                     $file_error = $uploaded_files["error"][$key];
 
-                    // Check if the file was uploaded without errors
+                    /**
+                     * Check if the file was uploaded without errors
+                     */
                     if ($file_error == UPLOAD_ERR_OK) {
-                        // Move the file to the upload directory
+                       /**
+                        *  Move the file to the upload directory
+                        */
                         $uploaded_file_path = $upload_dir . $file_name;
                         move_uploaded_file($tmp_name, $uploaded_file_path);
                     
@@ -824,9 +832,10 @@
                         array_push($uploaded_files_data["fetch_uploaded_files_data"], $new_uploaded_file);
                         file_put_contents($uploaded_files_data_path, json_encode($uploaded_files_data));
 
-                    } 
-                    else {
-                        // Output an error message if the file was not uploaded
+                    } else {
+                        /**
+                         * Output an error message if the file was not uploaded
+                         */
                         $response_data["error"] = "Error uploading file '$file_name': $file_error";
                     }
                 }
@@ -852,15 +861,13 @@
                 }
                 file_put_contents($uploaded_files_data_path, json_encode($uploaded_files_data));
 
-                if (file_exists($upload_dir . $file_name)) { // check if the file exists
-                    if (unlink($upload_dir . $file_name)) { // attempt to delete the file
+                if (file_exists($upload_dir . $file_name)) { 
+                    if (unlink($upload_dir . $file_name)) {
                         // echo "File deleted successfully.";
-                    } 
-                    else {
+                    } else {
                         $response_data["error"] = "Error deleting file.";
                     }
-                } 
-                else {
+                } else {
                     $response_data["failed_msg"] = "File does not exist.";
                 }
 

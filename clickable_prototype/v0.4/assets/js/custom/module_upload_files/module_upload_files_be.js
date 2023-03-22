@@ -21,10 +21,9 @@ function onConfirmRemoveFile(event){
 
             addAnimation(uploaded_file, "animate__fadeOut");
 
-            if(counter !== 0){
+            if(counter){
                file_counter.text(`(${counter})`);
-            }
-            else{
+            } else {
                 file_counter.self().hidden = true;
                 ux("#files_list").html(response_data.result.html);
             }
@@ -46,15 +45,15 @@ function onUploadFiles(event){
     ux().post(upload_files_form.attr("action"), upload_files_form.serialize(), async (response_data) => {
         if(response_data.status){
             let uploaded_files_html = response_data.result.html;
-            let counter             = response_data.result.files_counter;
-            let files_counter       = upload_files_section.find("#files_counter");
+            let files_counter       = response_data.result.files_counter;
+            let files_counter_text  = upload_files_section.find("#files_counter");
             let files_list          = upload_files_section.find("#files_list");
 
             if(uploaded_files_html){
                 setTimeout(() =>{
                     files_list.html(uploaded_files_html);
-                    files_counter.text(`(${counter})`);
-                    files_counter.self().hidden = false;
+                    files_counter_text.text(`(${files_counter})`);
+                    files_counter_text.self().hidden = false;
                 }, 2000);
             }
         }

@@ -28,11 +28,10 @@
         remove_uploaded_file_modal.find(".file_id").val(file_id);
         remove_uploaded_file_modal.find(".file_name").val(file_name);
 
-        if(file_is_used === "1"){
-            remove_uploaded_file_modal.find("p").text(`Are you sure you want to remove "${file_name}"? Other tabs are using this file.`);
-        }
-        else{
-            remove_uploaded_file_modal.find("p").text(`Are you sure you want to remove "${file_name}"?`);
+        if(parseInt(file_is_used)){
+            remove_uploaded_file_modal.find(".remove_file_question_text").text(`Are you sure you want to remove "${file_name}"? Other tabs are using this file.`);
+        } else {
+            remove_uploaded_file_modal.find(".remove_file_question_text").text(`Are you sure you want to remove "${file_name}"?`);
         }
     
         modal_instance.open();
@@ -110,13 +109,15 @@
             return;
         }   
         else if(!invalid_files.length && files.length){
-            // Submit the form
+            /**
+             * Submit the form
+             */
             let upload_files_form = ux(event.target.closest("#upload_files_form"));
             let upload_files_btn  = upload_files_form.find("#file_upload_btn");
             upload_files_form.trigger("submit");
             
             upload_files_btn.addClass("uploading_event");
-            upload_files_btn.text("Uploading")
+            upload_files_btn.text("Uploading");
             upload_files_btn.self().disabled = true;
             
             setTimeout(() => {

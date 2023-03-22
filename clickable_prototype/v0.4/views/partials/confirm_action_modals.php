@@ -36,7 +36,7 @@
     <div id="confirm_remove_uploaded_file_modal" class="modal">
         <div class="modal-content">
             <h4>Confirmation</h4>
-            <p></p>
+            <p class="remove_file_question_text"></p>
         </div>
         <div class="modal-footer">
             <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" id="remove_uploaded_file_form">
