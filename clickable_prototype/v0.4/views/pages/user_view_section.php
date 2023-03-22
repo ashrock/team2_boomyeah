@@ -52,7 +52,10 @@
                     <?php } ?>
                 </div>
                 <div class="section_details">
-                    <h1 id="section_title"><?= $section_title ?></h1>
+                    <div id="section_title_content">
+                        <a class="mobile_document_link" href="<?= BASE_FILE_URL?>views/pages/user_view_documentation.php"></a>
+                        <h1 id="section_title"><?= $section_title ?></h1>
+                    </div>
                     <p id="section_short_description">Village 88 Inc. is a US-Delaware corporation which focuses on incubating companies and providing IT consultancy services to companies in the US. V88 also has a remote branch in San Fernando, La Union, Philippines registered in Securities and Exchange Commission as 457Avenue Inc.</br></br>Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Philippines in 2013. It is the company’s vision to provide world-class IT education to brilliant individuals with less IT-career opportunity due to lack of industry experience or exposure. So far, Village 88, Inc. (V88) has produced 30+ talented software engineers from the Philippines who now worked with the company in incubating and launching businesses that bring a positive impact to the world.</br></br>Since 2011, V88 has incubated Coding Dojo, Hacker Hero, Data Compass, and helped start numerous start-ups including Alumnify, SpotTrender, MatrixDS, and others.</p>
                 </div>
             </div>

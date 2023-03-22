@@ -58,11 +58,13 @@ body {
             }
             &.active{
                 color: @by_text;
-                line-height: 18px;
 
                 &::after{
                     display: none;
                 }
+            }
+            &.mobile_breadcrumb{
+                display: none;
             }
         }
         
@@ -186,7 +188,7 @@ body {
     .section_container {
         display: flex;
         flex-wrap: wrap;
-        gap: 14px;
+        gap: 8px;
         margin: 18px auto;
 
         &.hidden {
