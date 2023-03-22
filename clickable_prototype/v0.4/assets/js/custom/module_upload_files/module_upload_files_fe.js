@@ -59,7 +59,7 @@
     function submitSelectedFiles(event) {
         event.preventDefault();
         let files              = event.target.files;
-        let max_file_size      = 25 * 1024 * 1024; // 25 MB in bytes
+        let max_file_size      = 25 * 1024 * 1024; /** 25 MB in bytes */
         let allowed_file_types = [
             'image/jpeg', 
             'image/png', 
