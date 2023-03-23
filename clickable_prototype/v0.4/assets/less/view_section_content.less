@@ -117,6 +117,10 @@
                         display: none;
                     }
                 }
+
+                &.show{
+                    padding: 12px 24px 24px !important;
+                }
             }
         }
         .mobile_module_header{
@@ -203,6 +207,10 @@
         flex-direction: column;
         margin-bottom: 24px;
         padding: 24px;
+
+        *{
+            font-family: @readex_light;
+        }
 
         @media (max-width: 632px) {
             border-radius: 0px;
@@ -299,7 +307,7 @@
             margin: 0px 0px 16px;
             padding: 0px;
         }
-        p.tab_content{
+        .tab_content{
             color: @by_text;
             font: 16px/24px @readex_light;
 
@@ -328,6 +336,8 @@
                 background: @by_toolbar;
                 border-radius: 8px;
                 border: none;
+                display: flex;
+                flex-direction: row-reverse;
             }
             .rx-editor-container{
                 .rx-editor{
