@@ -989,6 +989,10 @@ body::-webkit-scrollbar-thumb {
 #edit_section_content #upload_file_section .files_upload_content #files_list li .file_type.docs_type::before {
   background-position: -49px -3px;
 }
+#edit_section_content #upload_file_section .files_upload_content #files_list li .file_link {
+  width: 1px !important;
+  opacity: 0 !important;
+}
 #edit_section_content #upload_file_section .files_upload_content #files_list li:hover .actions_list {
   display: flex;
 }
@@ -1140,7 +1144,7 @@ body::-webkit-scrollbar-thumb {
     display: none !important;
   }
   #section_summary .breadcrumbs + .section_details {
-    padding: 16px;
+    padding: 24px 16px;
   }
 }
 #section_summary .breadcrumbs {
@@ -1238,12 +1242,24 @@ body::-webkit-scrollbar-thumb {
   .section_page_content .section_page_tabs {
     display: none !important;
   }
-  .section_page_content .section_page_tabs + .section_page_tab {
+  .section_page_content .section_page_tab {
+    border-radius: 0px;
+  }
+  .section_page_content .section_page_tab:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding-bottom: 24px;
+  }
+  .section_page_content .section_page_tab:last-child .tab_title::after {
+    display: none;
+  }
+  .section_page_content .mobile_module_header {
+    background: #FFFFFF;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     color: #B5C4E4;
     display: block !important;
-    padding: 24px 18px 0px;
+    padding: 20px 18px 0px;
   }
 }
 .section_page_content .section_page_tabs {
@@ -1326,7 +1342,7 @@ body::-webkit-scrollbar-thumb {
     border-radius: 10px !important;
   }
   .section_page_content .section_page_tab.show {
-    padding: 12px 24px 24px;
+    padding: 12px 24px 8px;
   }
   .section_page_content .section_page_tab.show .tab_title {
     color: #001D32;
