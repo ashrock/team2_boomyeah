@@ -20,7 +20,7 @@
 </div>
 <div id="header_container">
     <div class="header">
-        <a href="./admin_documentation.html"><img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/global_logo.svg" class="global_logo" alt="global_logo"></a>
+        <a href="<?php $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? "/docs/edit" : "/docs" ?>"><img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/global_logo.svg" class="global_logo" alt="global_logo"></a>
         <div class="user_profile">
             <div class="user_settings">
                 <img src="<?= $_SESSION["user_profile_pic"]; ?>" alt="user_profile" id="user_profile_pic" referrerpolicy="no-referrer">
