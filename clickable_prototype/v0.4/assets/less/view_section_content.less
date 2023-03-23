@@ -141,6 +141,7 @@
             position: relative;
             display: inline-flex;
             margin-top: 5px;
+            max-width: 164px;
             a{
                 background: @by_section_tab;
                 border-top-left-radius: 10px;
@@ -150,7 +151,10 @@
                 font-family: @readex_regular;
                 height: 48px;
                 line-height: 48px;
-                padding: 0px 42px 0px 24px;
+                overflow: hidden;
+                padding: 0px 24px 0px;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             .remove_tab_btn{
                 background: transparent;
@@ -159,7 +163,7 @@
                 cursor: pointer;
                 font-size: 23px;
                 height: 47px;
-                margin-right: 16px;
+                padding-right: 16px;
                 position: absolute;
                 right: 0px;
             }
