@@ -47,11 +47,16 @@
                     </div>
                 </div>
             </form>
-                <div id="section_pages">
-                    <?php
-                        $this->load->view("partials/section_page_content_partial.php", array("modules" => $modules));
-                    ?>
-                </div>
+            <div id="section_pages">
+                <?php
+                    $this->load->view("partials/section_page_content_partial.php", array("modules" => $modules));
+                ?>
+            </div>
+            <div id="upload_file_section">
+                <?php
+                    # partial/upload_section_partial.php
+                ?>       
+            </div>
             <form id="add_module_form" action="/modules/add" method="POST">
                 <input type="hidden" name="action" value="add_module">
                 <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
@@ -82,5 +87,7 @@
     <script src="<?= add_file("assets/js/vendor/redactorx.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_be.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/module_upload_files/module_upload_files_fe.js")?>"></script>
+    <script src="<?= add_file("assets/js/custom/module_upload_files/module_upload_files_be.js")?>"></script>
 </body>
 </html>
