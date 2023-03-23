@@ -108,6 +108,7 @@
         
         .section_page_tab{
             border-radius: 0px;
+            min-height: initial;
             &:last-child{
                 border-bottom-left-radius: 10px;
                 border-bottom-right-radius: 10px;
@@ -206,6 +207,7 @@
         display: none;
         flex-direction: column;
         margin-bottom: 24px;
+        min-height: 360px;
         padding: 24px;
 
         *{
@@ -308,11 +310,30 @@
             padding: 0px;
         }
         .tab_content{
-            color: @by_text;
-            font: 16px/24px @readex_light;
-
             @media (max-width: 632px) {
                 font: 12px/16px @readex_regular;
+            }
+            h1, h2, h3, h4, h5, ol, ul, p{
+                color: @by_black;
+                margin: 0px 0px 24px;
+            }
+            h1{
+                font: 48px/46px @readex_medium;
+            }
+            h2{
+                font: 40px/38px @readex_medium;
+            }
+            h3{
+                font: 32px/30px @readex_medium;
+            }
+            h4{
+                font: 24px/24px @readex_medium;
+            }
+            h5{
+                font: 16px/24px @readex_medium;
+            }
+            ol, ul{
+                font: 16px/24px @readex_light;
             }
         }
             
@@ -342,6 +363,31 @@
             .rx-editor-container{
                 .rx-editor{
                     padding: 16px 0px !important;
+                    color: @by_text;
+                    font: 16px/24px @readex_light;
+
+                    h1, h2, h3, h4, h5, ol, ul, p{
+                        color: @by_black;
+                        margin: 0px 0px 24px;
+                    }
+                    h1{
+                        font: 48px/46px @readex_medium;
+                    }
+                    h2{
+                        font: 40px/38px @readex_medium;
+                    }
+                    h3{
+                        font: 32px/30px @readex_medium;
+                    }
+                    h4{
+                        font: 24px/24px @readex_medium;
+                    }
+                    h5{
+                        font: 16px/24px @readex_medium;
+                    }
+                    ol, ul{
+                        font: 16px/24px @readex_light;
+                    }
                 }
             }
         }
@@ -349,6 +395,13 @@
             align-items: center;
             display: flex;
             height: 20px;
+            .checkbox_label{
+                .checkbox_text{
+                    color: @by_gray;
+                    font: 14px/20px @readex_regular;
+                }
+            }
+
             .saving_indicator{
                 color: @by_primary;
                 height: 20px;

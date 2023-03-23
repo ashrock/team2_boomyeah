@@ -833,6 +833,9 @@ body::-webkit-scrollbar-thumb {
 #edit_section_content .section_details .add_description:focus-within {
   box-shadow: 0 1px 4px 2px rgba(181, 196, 228, 0.25);
 }
+#edit_section_content .section_page_tabs .page_tab_item a {
+  padding-right: 54px !important;
+}
 #edit_section_content #add_page_tabs_btn {
   border-radius: 20px;
   border: 1px solid #2563EB;
@@ -1244,6 +1247,7 @@ body::-webkit-scrollbar-thumb {
   }
   .section_page_content .section_page_tab {
     border-radius: 0px;
+    min-height: initial;
   }
   .section_page_content .section_page_tab:last-child {
     border-bottom-left-radius: 10px;
@@ -1289,7 +1293,10 @@ body::-webkit-scrollbar-thumb {
   font-family: 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   height: 48px;
   line-height: 48px;
-  padding: 0px 42px 0px 24px;
+  overflow: hidden;
+  padding: 0px 24px 0px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .section_page_content .section_page_tabs .page_tab_item .remove_tab_btn {
   background: transparent;
@@ -1332,6 +1339,7 @@ body::-webkit-scrollbar-thumb {
   display: none;
   flex-direction: column;
   margin-bottom: 24px;
+  min-height: 360px;
   padding: 24px;
 }
 .section_page_content .section_page_tab * {
@@ -1432,14 +1440,40 @@ body::-webkit-scrollbar-thumb {
   margin: 0px 0px 16px;
   padding: 0px;
 }
-.section_page_content .section_page_tab .tab_content {
-  color: #6C7177;
-  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
-}
 @media (max-width: 632px) {
   .section_page_content .section_page_tab .tab_content {
     font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   }
+}
+.section_page_content .section_page_tab .tab_content h1,
+.section_page_content .section_page_tab .tab_content h2,
+.section_page_content .section_page_tab .tab_content h3,
+.section_page_content .section_page_tab .tab_content h4,
+.section_page_content .section_page_tab .tab_content h5,
+.section_page_content .section_page_tab .tab_content ol,
+.section_page_content .section_page_tab .tab_content ul,
+.section_page_content .section_page_tab .tab_content p {
+  color: #0F172A;
+  margin: 0px 0px 24px;
+}
+.section_page_content .section_page_tab .tab_content h1 {
+  font: 48px/46px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .tab_content h2 {
+  font: 40px/38px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .tab_content h3 {
+  font: 32px/30px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .tab_content h4 {
+  font: 24px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .tab_content h5 {
+  font: 16px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .tab_content ol,
+.section_page_content .section_page_tab .tab_content ul {
+  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
 }
 .section_page_content .section_page_tab figure,
 .section_page_content .section_page_tab iframe {
@@ -1466,11 +1500,47 @@ body::-webkit-scrollbar-thumb {
 }
 .section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor {
   padding: 16px 0px !important;
+  color: #6C7177;
+  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor h1,
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor h2,
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor h3,
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor h4,
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor h5,
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor ol,
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor ul,
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor p {
+  color: #0F172A;
+  margin: 0px 0px 24px;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor h1 {
+  font: 48px/46px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor h2 {
+  font: 40px/38px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor h3 {
+  font: 32px/30px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor h4 {
+  font: 24px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor h5 {
+  font: 16px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor ol,
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor ul {
+  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
 }
 .section_page_content .section_page_tab .tab_footer {
   align-items: center;
   display: flex;
   height: 20px;
+}
+.section_page_content .section_page_tab .tab_footer .checkbox_label .checkbox_text {
+  color: #78716C;
+  font: 14px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
 }
 .section_page_content .section_page_tab .tab_footer .saving_indicator {
   color: #2563EB;
