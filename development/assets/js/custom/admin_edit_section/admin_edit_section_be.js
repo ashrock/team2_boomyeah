@@ -218,10 +218,13 @@ function initializeRedactor(selector){
         editor: {
             minHeight: "360px"
         },
+        styles: false,
+        addbar: false,
+        format: ['h1', 'h2', 'h3', 'h4', 'ul', 'ol'],
         buttons: {
-            context: ['bold', 'italic', 'deleted', 'link'],
-            topbar: ['undo', 'redo']
+            topbar: ["image", "embed", "table", "quote", "pre", "line", "undo", "redo"],
         },
+        toolbarFixed: false,
         subscribe: {
             "editor.change" : function(event) {
                 ux(selector).closest(".update_module_tab_form").trigger("submit");
