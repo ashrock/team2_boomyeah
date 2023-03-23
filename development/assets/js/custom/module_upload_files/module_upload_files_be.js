@@ -49,7 +49,9 @@ function onUploadFiles(event){
             let files_counter_text  = upload_files_section.find("#files_counter");
             let files_list          = upload_files_section.find("#files_list");
 
+            // Update files count
             files_counter = files_counter + parseInt(files_counter_text.data("files_count"));
+            files_counter_text.attr("data-files_count", files_counter);
 
             if(uploaded_files_html){
                 setTimeout(() =>{
