@@ -44,14 +44,16 @@ function onUploadFiles(event){
 
     ux().post(upload_files_form.attr("action"), upload_files_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let uploaded_files_html = response_data.result.html;
-            let files_counter       = response_data.result.files_counter;
+            let uploaded_files_html = response_data.result.html; // upload_section_items_partial.php
+            let files_counter       = parseInt(response_data.result.files_uploaded);
             let files_counter_text  = upload_files_section.find("#files_counter");
             let files_list          = upload_files_section.find("#files_list");
 
+            files_counter = files_counter + parseInt(files_counter_text.data("files_count"));
+
             if(uploaded_files_html){
                 setTimeout(() =>{
-                    files_list.html(uploaded_files_html);
+                    files_list.find(".no_uploaded_files").length ? files_list.html(uploaded_files_html) : files_list.append(uploaded_files_html);
                     files_counter_text.text(`(${files_counter})`);
                     files_counter_text.self().hidden = false;
                 }, 2000);

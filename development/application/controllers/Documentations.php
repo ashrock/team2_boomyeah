@@ -258,9 +258,16 @@
 				$sections = $this->Section->getSection($section_id);
 
 				if($sections["status"] && $sections["result"]){
-					$modules  = $this->Section->getSectionTabs($section_id);
-	
-					$this->load->view('documentations/admin_edit_section', array("documentation" => $documentation["result"], "section" => $sections["result"], "modules" => $modules["result"]));
+					# Fetch modules
+					$modules = $this->Section->getSectionTabs($section_id);
+
+					# Fetch files
+					$this->load->model("File");
+					$files = $this->File->getFiles(array("section_id" => $section_id));
+
+					if($files["status"]){
+						$this->load->view('documentations/admin_edit_section', array("documentation" => $documentation["result"], "section" => $sections["result"], "modules" => $modules["result"], "files" => $files["result"]));					
+					}
 				}
 				else{
 					echo $sections["error"];
