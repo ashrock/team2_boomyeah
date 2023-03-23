@@ -18,6 +18,7 @@
                 $files_to_upload = array();
                 $file_urls      = array();
                 $files_count    = count($params["files"]["name"]);
+                $upload_results = array();
 
                 # Validate files
                 for($index=0; $index<$files_count; $index++){
@@ -74,13 +75,11 @@
                                 "ACL"    => "public-read"
                             ]);
             
-                            if(!$upload_to_s3){
-                                throw new Exception("An error occurred while uploading.");
+                            if($upload_to_s3["@metadata"]["statusCode"] === 200){
+                                # Generate values_clause and bind_params for insert query   
+                                array_push($values_clause, "(?, ?, ?, ?, NOW(), NOW())");
+                                array_push($bind_params, $params["section_id"], $file["file_name"], "https://boomyeah-docs-2.s3.amazonaws.com/{$file["file_path"]}", $file["mime_type"]);
                             }
-    
-                            # Generate values_clause and bind_params for insert query   
-                            array_push($values_clause, "(?, ?, ?, ?, NOW(), NOW())");
-                            array_push($bind_params, $params["section_id"], $file["file_name"], "https://boomyeah-docs-2.s3.amazonaws.com/{$file["file_path"]}", $file["mime_type"]);
                         }
                         catch (Aws\S3\Exception\S3Exception $e) {
                             $response_data["result"]["file"] = $file["file_name"];
