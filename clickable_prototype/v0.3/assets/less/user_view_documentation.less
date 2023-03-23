@@ -64,6 +64,9 @@ body {
                     display: none;
                 }
             }
+            &.mobile_breadcrumb{
+                display: none;
+            }
         }
         
     }
@@ -79,7 +82,7 @@ body {
         align-items: center;
         display: flex;
         justify-content: flex-start;
-        margin: 48px 0 24px;
+        margin: 48px 0 8px;
         min-height: 36px;
 
         #doc_title {
@@ -102,7 +105,7 @@ body {
     .doc_text_content {
         color: @by_text;
         font: 16px/24px @readex_regular;
-        margin: 0 0 40px;
+        margin: 0 0 32px;
         max-width: 893px;
         width: 100%;
 
@@ -408,6 +411,7 @@ body {
                 }
 
                 &.mobile_breadcrumb{
+                    display: block;
                     &::after{
                         display: none;
                     }

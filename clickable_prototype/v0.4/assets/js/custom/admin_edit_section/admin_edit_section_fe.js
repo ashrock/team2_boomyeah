@@ -6,10 +6,6 @@ function(){
     let module_scroll_checkpoints = [];
 
     document.addEventListener("DOMContentLoaded", async ()=> {
-        if(!ux("#add_page_tabs_btn").self()){
-            ux("#prev_page_btn").on("click", ()=> { openSectionTab(-1) });
-            ux("#next_page_btn").on("click", ()=> { openSectionTab(1) });
-        }
 
         ux("body")
             .on("click", ".section_page_tabs .page_tab_item a", (event) =>{
@@ -62,27 +58,33 @@ function(){
             let module_coords = module_item.getBoundingClientRect();
             module_scroll_checkpoints.push((module_coords.top - 80));
         });
+       
         
-        window.addEventListener("scroll", async (event) => {
-            let scroll_top_offset = document.body.getBoundingClientRect().top;
-            await ux("#prev_page_btn").addClass("hidden");
-            await ux(".section_page_content.active").removeClass("active");
-            let section_pages = ux("#section_pages").findAll(".section_page_content");
-
-            for(scroll_index in module_scroll_checkpoints){
-                let scroll_value = (module_scroll_checkpoints[scroll_index] - 64) * -1;
-
-                if(scroll_value > scroll_top_offset){
-                    active_scroll_offset = scroll_index;
+        if(!ux("#add_page_tabs_btn").self()){
+            ux("#prev_page_btn").on("click", ()=> { openSectionTab(-1) });
+            ux("#next_page_btn").on("click", ()=> { openSectionTab(1) });
+            
+            window.addEventListener("scroll", async (event) => {
+                let scroll_top_offset = document.body.getBoundingClientRect().top;
+                await ux("#prev_page_btn").addClass("hidden");
+                await ux(".section_page_content.active").removeClass("active");
+                let section_pages = ux("#section_pages").findAll(".section_page_content");
+    
+                for(scroll_index in module_scroll_checkpoints){
+                    let scroll_value = (module_scroll_checkpoints[scroll_index] - 64) * -1;
+    
+                    if(scroll_value > scroll_top_offset){
+                        active_scroll_offset = scroll_index;
+                    }
+    
+                    if(active_scroll_offset > 0){
+                        ux("#prev_page_btn").removeClass("hidden");
+                    }
                 }
-
-                if(active_scroll_offset > 0){
-                    ux("#prev_page_btn").removeClass("hidden");
-                }
-            }
-
-            ux(section_pages[active_scroll_offset]).addClass("active");
-        });
+    
+                ux(section_pages[active_scroll_offset]).addClass("active");
+            });
+        }
 
         window.scrollTo(0, 0);
     });

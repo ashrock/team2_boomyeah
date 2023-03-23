@@ -15,6 +15,9 @@
 
     $edit_section_module_file_path = "../../assets/json/edit_section_module_data.json";
     $edit_section_module_data = load_json_file($edit_section_module_file_path);
+
+    $uploaded_files_file_path = "../../assets/json/uploaded_files/uploaded_files_data.json";
+    $uploaded_files_data = load_json_file($uploaded_files_file_path);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,6 +82,11 @@ Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Phili
                 <input type="hidden" name="action" value="add_module">
                 <button id="add_page_tabs_btn" type="submit">+ Add New</button>
             </form>
+            <div id="upload_file_section">
+                <?php
+                    load_view("../partials/upload_section_partial.php", $uploaded_files_data);
+                ?>       
+            </div>
             <form id="add_module_tab_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
                 <input type="hidden" name="action" value="add_module_tab">
                 <input type="hidden" name="module_id" class="module_id">
@@ -91,6 +99,7 @@ Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Phili
             <div id="clone_section_page">
                 <?php include_once("../partials/clone_section_page.php"); ?>
             </div>
+   
             <div id="modals_container">
                 <?php include_once("../partials/confirm_action_modals.php"); ?>
             </div>
@@ -99,5 +108,7 @@ Village 88 Inc. was founded in 2011 while 457Avenue Inc. registered in the Phili
     <script src="<?= add_file("assets/js/vendor/redactorx.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_be.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/module_upload_files/module_upload_files_fe.js")?>"></script>
+    <script src="<?= add_file("assets/js/custom/module_upload_files/module_upload_files_be.js")?>"></script>
 </body>
 </html>
