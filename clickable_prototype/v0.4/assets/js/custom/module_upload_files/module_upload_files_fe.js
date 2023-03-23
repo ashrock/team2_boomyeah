@@ -41,19 +41,21 @@
         event.preventDefault();
         let actions_list = ux(event.target.closest(".actions_list"));
         let tooltip_hover = actions_list.find(".tooltip_hover");
-        let link_input = actions_list.find("[type=hidden]").val();
+        let link_input = actions_list.find(".file_link");
         
         tooltip_hover.text("Copied!");
         tooltip_hover.addClass("copied_link");
 
-        navigator.clipboard.writeText(link_input);
+        link_input.self().select();
+        document.execCommand("Copy");
+
         setTimeout(() => {
             addAnimation(tooltip_hover.html(), "animate__fadeOut");
             setTimeout(() => {
                 tooltip_hover.text("Copy Link");
                 tooltip_hover.removeClass("copied_link");
-            }, 500)
-        }, 1000);
+            }, 480)
+        }, 800);
     }
 
     function submitSelectedFiles(event) {
