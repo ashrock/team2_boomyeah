@@ -1278,6 +1278,7 @@ body::-webkit-scrollbar-thumb {
   position: relative;
   display: inline-flex;
   margin-top: 5px;
+  max-width: 164px;
 }
 .section_page_content .section_page_tabs .page_tab_item a {
   background: #D5E3FF;
@@ -1297,7 +1298,7 @@ body::-webkit-scrollbar-thumb {
   cursor: pointer;
   font-size: 23px;
   height: 47px;
-  margin-right: 16px;
+  padding-right: 16px;
   position: absolute;
   right: 0px;
 }
