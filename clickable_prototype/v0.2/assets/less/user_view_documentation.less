@@ -62,6 +62,9 @@ body {
                     display: none;
                 }
             }
+            &.mobile_breadcrumb{
+                display: none;
+            }
         }
         
     }
@@ -77,7 +80,7 @@ body {
         align-items: center;
         display: flex;
         justify-content: flex-start;
-        margin: 48px 0 24px;
+        margin: 48px 0 8px;
         min-height: 36px;
 
         #doc_title {
@@ -99,7 +102,7 @@ body {
     .doc_text_content {
         color: @by_text;
         font: 16px/24px @readex_regular;
-        margin: 0 0 40px;
+        margin: 0 0 32px;
         max-width: 893px;
         width: 100%;
 
@@ -402,6 +405,28 @@ body {
                 }
                 &::after{
                     background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/admin_edit_docs_sprite.svg') no-repeat 0 0px !important;
+                }
+
+                &.mobile_breadcrumb{
+                    display: block;
+                    &::after{
+                        display: none;
+                    }
+                    a{
+                        &:before{
+                            border: solid @by_text;
+                            border-width: 0 0px 2px 2px;
+                            display: inline-block;
+                            padding: 3px;
+                            content: "";
+                            margin-right: 12px;
+                            position: relative;
+                            top: -1px;
+                            transition: transform 0.3s ease-in-out;
+                            transform: rotate(45deg);
+                            -webkit-transform: rotate(45deg);
+                        }
+                    }
                 }
             }
         }

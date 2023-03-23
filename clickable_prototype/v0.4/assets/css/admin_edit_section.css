@@ -1342,7 +1342,7 @@ body::-webkit-scrollbar-thumb {
     border-radius: 10px !important;
   }
   .section_page_content .section_page_tab.show {
-    padding: 12px 24px 24px;
+    padding: 12px 24px 8px;
   }
   .section_page_content .section_page_tab.show .tab_title {
     color: #001D32;
