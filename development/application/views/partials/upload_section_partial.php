@@ -4,7 +4,7 @@
     <form id="upload_files_form" action="/files/upload" method="POST" enctype="multipart/form-data">
         <input type="file" id="file_upload_contents" name="upload_file[]" hidden multiple>
         <button id="file_upload_btn" class="" type="button">Upload Files</button>
-        <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
+        <input type="hidden" name="section_id" value="<?= $section_id ?>">
         <label for="">Maximum size: 25mb</label>
     </form>
     <ul id="files_list">

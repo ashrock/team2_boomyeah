@@ -54,7 +54,7 @@
             </div>
             <div id="upload_file_section">
                 <?php
-                    $this->load->view("partials/upload_section_partial.php", array("fetch_uploaded_files_data" => $files));
+                    $this->load->view("partials/upload_section_partial.php", array("section_id" => $section["id"], "fetch_uploaded_files_data" => $files));
                 ?>       
             </div>
             <form id="add_module_form" action="/modules/add" method="POST">

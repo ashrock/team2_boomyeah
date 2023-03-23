@@ -44,7 +44,7 @@
                         $response_data["result"]["file"] = $params["files"]["name"][$index];
                         $response_data["result"]["size"] = $params["files"]["size"][$index];
 
-                        throw new Exception("File size is too large.");
+                        $response_data["error"] = "File size is too large." ;
                     }
                 }
 
