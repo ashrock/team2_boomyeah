@@ -16,9 +16,9 @@
             try {
                 $this->db->trans_start();
                 $files_to_upload = array();
-                $file_urls      = array();
-                $files_count    = count($params["files"]["name"]);
-                $upload_results = array();
+                $file_urls       = array();
+                $files_count     = count($params["files"]["name"]);
+                $upload_results  = array();
 
                 # Validate files
                 for($index=0; $index<$files_count; $index++){
@@ -166,30 +166,79 @@
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try{
+                $this->db->trans_start();
+
                 # Instantiate an Amazon S3 client.
                 $this->config->load("api_config");
-
-                $s3Client = new S3Client([
-                    'version' => 'latest',
-                    'region'  => $this->config->item("s3_region"),
-                    'credentials' => [
-                        'key'    => $this->config->item("s3_accessKeyId"),
-                        'secret' => $this->config->item("s3_secretKey")
-                    ]
-                ]);
-
-                # Delete file in S3
-                $s3Client->deleteObject([
-                    "Bucket" => $this->config->item("s3_bucket"),
-                    "Key"    => $params["file_url"]
-                ]);
 
                 $remove_file = $this->db->query("DELETE FROM files WHERE id = ?;", $params["file_id"]);
 
                 if($remove_file){
+                    $s3Client = new S3Client([
+                        'version' => 'latest',
+                        'region'  => $this->config->item("s3_region"),
+                        'credentials' => [
+                            'key'    => $this->config->item("s3_accessKeyId"),
+                            'secret' => $this->config->item("s3_secretKey")
+                        ]
+                    ]);
+    
+                    # Delete file in S3
+                    $s3Client->deleteObject([
+                        "Bucket" => $this->config->item("s3_bucket"),
+                        "Key"    => $params["file_url"]
+                    ]);
+
                     $response_data["status"]            = true;
                     $response_data["result"]["file_id"] = $params["file_id"];
+                    $this->db->trans_complete();
                 }
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        public function removeFiles($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try{
+                $this->db->trans_start();
+
+                # Delete files in DB
+                if($params["file_ids"]){
+                    $remove_files = $this->db->query("DELETE FROM files WHERE id IN ?;", array($params["file_ids"]));
+
+                    if($remove_files){
+                        # Instantiate an Amazon S3 client.
+                        $this->config->load("api_config");
+
+                        $s3Client = new S3Client([
+                            'version' => 'latest',
+                            'region'  => $this->config->item("s3_region"),
+                            'credentials' => [
+                                'key'    => $this->config->item("s3_accessKeyId"),
+                                'secret' => $this->config->item("s3_secretKey")
+                            ]
+                        ]);
+
+                        # Delete files in S3
+                        if($params["file_urls"]){
+                            foreach($params["file_urls"] as $file_url){
+                                $s3Client->deleteObject([
+                                    "Bucket" => $this->config->item("s3_bucket"),
+                                    "Key"    => $file_url
+                                ]);
+                            }
+                        }
+                    }
+                }
+
+                $response_data["status"] = true;
+                $this->db->trans_complete();
             }
             catch (Exception $e) {
                 $this->db->trans_rollback();
