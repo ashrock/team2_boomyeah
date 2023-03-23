@@ -54,7 +54,7 @@
             </div>
             <div id="upload_file_section">
                 <?php
-                    # partial/upload_section_partial.php
+                    $this->load->view("partials/upload_section_partial.php", array("section_id" => $section["id"], "fetch_uploaded_files_data" => $files));
                 ?>       
             </div>
             <form id="add_module_form" action="/modules/add" method="POST">
@@ -70,11 +70,6 @@
                 <input type="hidden" name="action" value="reorder_tabs">
                 <input type="hidden" name="module_id" class="module_id">
                 <input type="hidden" name="tab_ids_order" class="tab_ids_order">
-            </form>
-            <form id="upload_file_form" action="/files/upload" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="documentation_id" value="<?= $documentation["id"] ?>">
-                <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
-                <input type="file" id="uploaded_file" name="uploaded_file[]" multiple>
             </form>
             <div id="clone_section_page">
                 <?php $this->load->view("partials/clone_section_page.php"); ?>
