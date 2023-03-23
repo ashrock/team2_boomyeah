@@ -5,7 +5,7 @@
         <input type="hidden" name="action" value="upload_a_file">
         <input type="file" id="file_upload_contents" name="upload_file[]" hidden multiple>
         <button id="file_upload_btn" class="" type="button">Upload Files</button>
-        <label for="">Maximun size: 25mb</label>
+        <label for="">Maximum size: 25mb</label>
     </form>
     <ul id="files_list">
         <?php
