@@ -8,7 +8,7 @@
         # Triggered by: (POST) files/upload
         # Requires: $params {"files", "section_id"}
         # Returns: { status: true/false, result: { html, files_uploaded }, error: null }
-        # Last updated at: March 23, 2023
+        # Last updated at: March 24, 2023
         # Owner: Jovic
         public function uploadFile($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -25,7 +25,7 @@
                     # Check if file is a PDF and file size is applicable
                     if($params["files"]["size"][$index] <= MAX_FILE_SIZE){
                         # Generate file name {documentation_id}_{section_id}{delimiter}{file_name}
-                        $timestamp = date('Y-m-d H:i:s');
+                        $timestamp = strtotime(date('Y-m-d H:i:s'));
                         $file_type = pathinfo($params["files"]["name"][$index], PATHINFO_EXTENSION);
                         $file_name = pathinfo($params["files"]["name"][$index], PATHINFO_FILENAME);
 
@@ -69,7 +69,7 @@
                         try{
                             $upload_to_s3 = $s3Client->putObject([
                                 "Bucket" => $this->config->item("s3_bucket"),
-                                "Key"    => $file["s3_name"],
+                                "Key"    => ENVIRONMENT . "/{$file["s3_name"]}",
                                 "Body"   => fopen($file["tmp_file"], "r"),
                                 "ACL"    => "public-read"
                             ]);
@@ -156,11 +156,11 @@
             return $response_data;
         }
 
-        # DOCU: This function will remove files in S3 and DB
+        # DOCU: This function will remove file in S3 and DB
         # Triggered by: (POST) files/remove
         # Requires: $params {"file_id", "file_url"}
         # Returns: { status: true/false, result: array(), error: null }
-        # Last updated at: March 23, 2023
+        # Last updated at: March 24, 2023
         # Owner: Jovic
         public function removeFile($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -186,7 +186,7 @@
                     # Delete file in S3
                     $s3Client->deleteObject([
                         "Bucket" => $this->config->item("s3_bucket"),
-                        "Key"    => $params["file_url"]
+                        "Key"    => ENVIRONMENT . "/{$params["file_url"]}"
                     ]);
 
                     $response_data["status"]            = true;
@@ -202,6 +202,12 @@
             return $response_data;
         }
 
+        # DOCU: This function will remove files in S3 and DB
+        # Triggered by: (POST) files/remove
+        # Requires: $params {"file_ids", "file_urls"}
+        # Returns: { status: true/false, result: array(), error: null }
+        # Last updated at: March 24, 2023
+        # Owner: Jovic
         public function removeFiles($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -230,7 +236,7 @@
                             foreach($params["file_urls"] as $file_url){
                                 $s3Client->deleteObject([
                                     "Bucket" => $this->config->item("s3_bucket"),
-                                    "Key"    => $file_url
+                                    "Key"    => ENVIRONMENT . "/{$file_url}"
                                 ]);
                             }
                         }
