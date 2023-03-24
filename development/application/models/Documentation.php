@@ -6,7 +6,7 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentationd_id
         # Returns: { status: true/false, result: documentation record (Array), error: null }
-        # Last updated at: March 15, 2023
+        # Last updated at: March 24, 2023
         # Owner: Jovic
         public function getDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -15,7 +15,7 @@
                 $get_documentation = $this->db->query("SELECT id, user_id, title, description, section_ids_order, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?;", $documentation_id);
 
                 if($get_documentation->num_rows()){
-                    $get_documentation = $get_documentation->result_array()[0];
+                    $get_documentation = $get_documentation->result_array()[FIRST_INDEX];
 
                     # Check if User has access to Documentation
                     if($_SESSION["user_level_id"] == USER_LEVEL["USER"] && $get_documentation["is_private"] == TRUE_VALUE){
@@ -150,13 +150,13 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, documentation_id }
         # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
-        # Last updated at: March 10, 2023
+        # Last updated at: March 24, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $document = $this->db->query("SELECT * FROM documentations WHERE id = ?", $params["documentation_id"])->result_array()[0];
+                $document = $this->db->query("SELECT * FROM documentations WHERE id = ?", $params["documentation_id"])->result_array()[FIRST_INDEX];
                 
                 # Check document id if existing
                 if(isset($document["id"])){
@@ -177,7 +177,7 @@
                             $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->result_array();
 
                             $response_data["status"] = true;
-                            $response_data["result"]["documentation_id"] = $updated_document[0]['id'];
+                            $response_data["result"]["documentation_id"] = $updated_document[FIRST_INDEX]['id'];
                             $response_data["result"]["update_type"]      = $params["update_type"];
 
                             # Check if changing of privacy of documentation
@@ -322,7 +322,7 @@
         # Triggered by: (POST) docs/remove
         # Requires: $params { remove_documentation_id, remove_is_archive }, $_SESSION["workspace_id"]
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 20, 2023
+        # Last updated at: March 24, 2023
         # Owner: Jovic
         public function removeDocumentation($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -353,7 +353,7 @@
                 ", $params["remove_documentation_id"]);
 
                 if($get_documentation->num_rows()){
-                    $get_documentation = $get_documentation->result_array()[0];
+                    $get_documentation = $get_documentation->result_array()[FIRST_INDEX];
 
                     $this->load->model("Collaborator");
                     $this->load->model("Module");

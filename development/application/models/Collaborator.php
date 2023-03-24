@@ -133,7 +133,7 @@
                             "compare_values"    => $collaborator_emails
                         ));
 
-                        $existing_emails = json_decode($get_users["result"][0]["user_emails"], false);
+                        $existing_emails = json_decode($get_users["result"][FIRST_INDEX]["user_emails"], false);
 
                         # Remove existing users from collaborator_emails
                         $new_users = ($existing_emails) ? array_diff($collaborator_emails, $existing_emails) : $collaborator_emails;
@@ -160,7 +160,7 @@
 
                             if($get_users["status"]){
                                 # Collect ids of new and existing users
-                                $user_ids = json_decode($get_users["result"][0]["user_ids"]);
+                                $user_ids = json_decode($get_users["result"][FIRST_INDEX]["user_ids"]);
                             }
                         }
 
