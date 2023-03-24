@@ -44,6 +44,8 @@
         let tooltip_hover = actions_list.find(".tooltip_hover");
         let link_input = actions_list.find(".file_link");
         
+        ux("#link_file_to_tab_form").find(".file_id").val( ux(event.target).data("file_id") );
+
         tooltip_hover.text("Copied!");
         tooltip_hover.addClass("copied_link");
 

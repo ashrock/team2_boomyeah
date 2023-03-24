@@ -87,6 +87,7 @@ $route['modules/remove_tab']['POST']  = 'modules/removeTab';
 $route['modules/reorder_tab']['POST'] = 'modules/reorderTab';
 $route['files/upload']['POST']        = 'files/uploadFile';
 $route['files/remove']['POST']        = 'files/removeFile';
+$route['modules/link_file_tab']['POST'] = 'modules/linkFileTab';
 
 /* GET | User Documentation Routes */
 $route['docs']['GET']               = 'documentations/userDocumentations';

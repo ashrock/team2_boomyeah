@@ -117,6 +117,32 @@
             return $response_data;
         }
 
+        # DOCU: This function will fetch file record data
+        # Triggered by: Amy model that will fetch a single file
+        # Requires: $file_id
+        # Returns: { status: true/false, result: {file_record}, error: null }
+        # Last updated at: March 24, 2023
+        # Owner: Erick
+        public function getFile($file_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try{
+                $get_file = $this->db->query("SELECT section_id, id AS file_id, file_name, file_url, mime_type, tab_ids FROM files WHERE id =?", $file_id);
+
+                if($get_file->num_rows()){
+                    $response_data["result"] = $get_file->result_array()[0];
+                }
+
+                $response_data["status"] = true;
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
         # DOCU: This function will fetch files based on params given
         # Triggered by: (POST) files/upload, (GET) docs/(:any)/(:any)/edit
         # Requires: $params {"section_id"}
@@ -137,7 +163,7 @@
                 }
 
                 $get_files = $this->db->query("
-                    SELECT section_id, id AS file_id, file_name, file_url, mime_type
+                    SELECT section_id, id AS file_id, file_name, file_url, mime_type, (tab_ids IS NOT NULL) AS is_used
                     FROM files
                     {$where_clause};
                 ", $bind_params);
