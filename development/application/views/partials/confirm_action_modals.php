@@ -40,10 +40,10 @@
             <p class="remove_file_question_text"></p>
         </div>
         <div class="modal-footer">
-            <form action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" id="remove_uploaded_file_form">
+            <form action="/files/remove" method="POST" id="remove_uploaded_file_form">
                 <input type="hidden" name="action" value="remove_uploaded_file">
                 <input type="hidden" name="file_id" value="" class="file_id">
-                <input type="hidden" name="file_name" value="" class="file_name">
+                <input type="hidden" name="file_url" value="" class="file_url">
                 <button type="button" class="modal-close waves-effect btn-flat no_btn">No</button>
                 <button type="submit" class="modal-close waves-effect btn-flat yes_btn">Yes</button>
             </form>
