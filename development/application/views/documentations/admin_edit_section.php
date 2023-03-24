@@ -71,6 +71,10 @@
                 <input type="hidden" name="module_id" class="module_id">
                 <input type="hidden" name="tab_ids_order" class="tab_ids_order">
             </form>
+            <form id="link_file_to_tab_form" action="/modules/link_file_tab" method="POST">
+                <input type="hidden" name="tab_id" class="tab_id" value="">
+                <input type="hidden" name="file_id" class="file_id" value="">
+            </form>
             <div id="clone_section_page">
                 <?php $this->load->view("partials/clone_section_page.php"); ?>
             </div>
