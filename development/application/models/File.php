@@ -22,7 +22,7 @@
 
                 # Validate files
                 for($index=0; $index<$files_count; $index++){
-                    # Check if file is a PDF and file size is applicable
+                    # Check if file size is applicable
                     if($params["files"]["size"][$index] <= MAX_FILE_SIZE){
                         # Generate file name {documentation_id}_{section_id}{delimiter}{file_name}
                         $timestamp = strtotime(date('Y-m-d H:i:s'));
@@ -38,7 +38,7 @@
                             "mime_type" => mime_content_type($params["files"]["tmp_name"][$index])
                         ));
 
-                        array_push($file_urls, $file_name);
+                        array_push($file_urls, "https://boomyeah-docs-2.s3.amazonaws.com/" . ENVIRONMENT . "/{$file_name}");
                     }
                     else{
                         $response_data["result"]["file"] = $params["files"]["name"][$index];
@@ -75,9 +75,9 @@
                             ]);
             
                             if($upload_to_s3["@metadata"]["statusCode"] === 200){
-                                # Generate values_clause and bind_params for insert query   
+                                # Generate values_clause and bind_params for insert query
                                 array_push($values_clause, "(?, ?, ?, ?, NOW(), NOW())");
-                                array_push($bind_params, $params["section_id"], $file["file_name"], $file["s3_name"], $file["mime_type"]);
+                                array_push($bind_params, $params["section_id"], $file["file_name"], "https://boomyeah-docs-2.s3.amazonaws.com/" . ENVIRONMENT . "/{$file["s3_name"]}", $file["mime_type"]);
                             }
                         }
                         catch (Aws\S3\Exception\S3Exception $e) {
@@ -130,7 +130,7 @@
                 $get_file = $this->db->query("SELECT section_id, id AS file_id, file_name, file_url, mime_type, tab_ids FROM files WHERE id =?", $file_id);
 
                 if($get_file->num_rows()){
-                    $response_data["result"] = $get_file->result_array()[0];
+                    $response_data["result"] = $get_file->result_array()[FIRST_INDEX];
                 }
 
                 $response_data["status"] = true;
@@ -210,9 +210,10 @@
                     ]);
     
                     # Delete file in S3
+                    $file = explode("https://boomyeah-docs-2.s3.amazonaws.com/", $params["file_url"])[1];
                     $s3Client->deleteObject([
                         "Bucket" => $this->config->item("s3_bucket"),
-                        "Key"    => ENVIRONMENT . "/{$params["file_url"]}"
+                        "Key"    => $file
                     ]);
 
                     $response_data["status"]            = true;
@@ -260,9 +261,10 @@
                         # Delete files in S3
                         if($params["file_urls"]){
                             foreach($params["file_urls"] as $file_url){
+                                $file = explode("https://boomyeah-docs-2.s3.amazonaws.com/", $file_url)[1];
                                 $s3Client->deleteObject([
                                     "Bucket" => $this->config->item("s3_bucket"),
-                                    "Key"    => ENVIRONMENT . "/{$file_url}"
+                                    "Key"    => $file
                                 ]);
                             }
                         }

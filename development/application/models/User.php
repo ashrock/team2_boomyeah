@@ -6,7 +6,7 @@
         # Triggered by: (GET) docs
         # Requires: object returned by Google Login API
         # Returns: { status: true/false, result: user_info, error: null }
-        # Last updated at: Mar. 15, 2023
+        # Last updated at: Mar. 24, 2023
         # Owner: Jovic, Updated by: Erick
         public function loginUser($userinfo){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -18,7 +18,7 @@
                 # Create User record
                 if(!$get_user->num_rows()){
                     $create_user = $this->db->query("INSERT INTO users (workspace_id, user_level_id, first_name, last_name, profile_picture, email, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW());", 
-                    array(1, USER_LEVEL["USER"], $userinfo["givenName"], $userinfo["familyName"], $userinfo["picture"], $userinfo["email"]));
+                    array(VILLAGE88, USER_LEVEL["USER"], $userinfo["givenName"], $userinfo["familyName"], $userinfo["picture"], $userinfo["email"]));
 
                     if($create_user){
                         $user_info = array(
@@ -34,7 +34,7 @@
                 }
                 else {
                     # Check if First Name and Last Name exists
-                    $user_info = $get_user->result_array()[0];
+                    $user_info = $get_user->result_array()[FIRST_INDEX];
 
                     if(!$user_info["first_name"] || !$user_info["last_name"]){
                         $update_user = $this->db->query("UPDATE users SET first_name = ?, last_name = ?, profile_picture = ?, updated_at = NOW() WHERE id = ?;",
@@ -71,7 +71,7 @@
                 $get_user = $this->db->query("SELECT id, user_level_id, first_name, last_name, email FROM users WHERE id = ?;", $user_id);
 
                 if($get_user->num_rows()){
-                    $response_data["result"] = $get_user->result_array()[0];
+                    $response_data["result"] = $get_user->result_array()[FIRST_INDEX];
                 }
                 
                 $response_data["status"] = true;
@@ -112,7 +112,7 @@
         # Triggered by: (POST) collaborators/add
         # Requires: $params { new_users_email, collaborator_emails }
         # Returns: { status: true/false, result: { ids }, error: null }
-        # Last updated at: Mar. 9, 2023
+        # Last updated at: Mar. 24, 2023
         # Owner: Jovic
         public function createUsers($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -140,7 +140,7 @@
 
                     if($get_users["status"]){
                         $response_data["status"]        = true;
-                        $response_data["result"]["ids"] = json_decode($get_users["result"][0]["user_ids"]);
+                        $response_data["result"]["ids"] = json_decode($get_users["result"][FIRST_INDEX]["user_ids"]);
 
                         $this->db->trans_complete();
                     }

@@ -86,11 +86,13 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 /* BOOMYEAH V2 CONSTANTS */
 defined('BASE_URL') OR define('BASE_URL', "http://internaldocumentation.localhost.com:8888/");
+defined('VILLAGE88') OR define('VILLAGE88', 1);
 defined('USER_LEVEL') OR define('USER_LEVEL', array("ADMIN" => 9, "USER" => 1));
 defined('COLLABORATOR_LEVEL') OR define('COLLABORATOR_LEVEL', array("VIEWER" => 1, "EDITOR" => 2));
 defined('TRUE_VALUE') OR define('TRUE_VALUE', 1);
 defined('FALSE_VALUE') OR define('FALSE_VALUE', 0);
 defined('ZERO_VALUE') OR define('ZERO_VALUE', 0);
+defined('FIRST_INDEX') OR define('FIRST_INDEX', 0);
 defined('YES') OR define('YES', 1);
 defined('NO') OR define('NO', 0);
 defined('MAX_FIZE_SIZE') OR define('MAX_FILE_SIZE', 25000000);
