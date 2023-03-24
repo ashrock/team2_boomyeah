@@ -282,17 +282,22 @@
 		# DOCU: This function will call getDocumentation from Documentation Model and render user_view_documentation page
 		# Triggered by: (GET) docs/(:any)
 		# Requires: $documentation_id
-		# Last updated at: Mar. 14, 2023
+		# Last updated at: Mar. 24, 2023
 		# Owner: Jovic
 		public function userDocumentation($documentation_id){
 			$documentation = $this->Documentation->getDocumentation($documentation_id);
 			
 			if($documentation["status"] && $documentation["result"]){
-				# Fetch sections
-				$this->load->model("Section");
-				$sections = $this->Section->getSections($documentation_id);
-
-				$this->load->view('documentations/user_view_documentation', array("document_data" => $documentation["result"], "sections" => $sections["result"]));
+				if($documentation["result"]["is_archived"] == FALSE_VALUE){
+					# Fetch sections
+					$this->load->model("Section");
+					$sections = $this->Section->getSections($documentation_id);
+	
+					$this->load->view('documentations/user_view_documentation', array("document_data" => $documentation["result"], "sections" => $sections["result"]));
+				}
+				else{
+					redirect("/docs");
+				}
 			}
 			else{
 				# Confirm if we need to show error or just redirect back to dashboard
@@ -303,23 +308,28 @@
 		# DOCU: This function will call getDocumentation from Documentation Model and render user_view_section page
 		# Triggered by: (GET) docs/(:any)/(:any)
 		# Requires: $documentation_id, $section_id
-		# Last updated at: Mar. 15, 2023
+		# Last updated at: Mar. 24, 2023
 		# Owner: Jovic
 		public function userSection($documentation_id, $section_id){
 			$documentation = $this->Documentation->getDocumentation($documentation_id);
 			
 			if($documentation["status"] && $documentation["result"]){
-				# Fetch sections
-				$this->load->model("Section");
-				$sections = $this->Section->getSection($section_id);
+				if($documentation["result"]["is_archived"] == FALSE_VALUE){
+					# Fetch sections
+					$this->load->model("Section");
+					$sections = $this->Section->getSection($section_id);
 
-				if($sections["status"] && $sections["result"]){
-					$modules = $this->Section->getSectionTabs($section_id);
-	
-					$this->load->view('documentations/user_view_section', array("documentation" => $documentation["result"], "section" => $sections["result"], "modules" => $modules["result"]));
+					if($sections["status"] && $sections["result"]){
+						$modules = $this->Section->getSectionTabs($section_id);
+		
+						$this->load->view('documentations/user_view_section', array("documentation" => $documentation["result"], "section" => $sections["result"], "modules" => $modules["result"]));
+					}
+					else{
+						echo $sections["error"];
+					}
 				}
 				else{
-					echo $sections["error"];
+					redirect("/docs");
 				}
 			}
 			else{
@@ -353,11 +363,15 @@
 		# DOCU: This function will check if user is allowed to visit a page or do an action.
 		# Triggered by: GET and POST functions in Documentations Controller
 		# Requires: $_SESSION["user_level_id"]; $is_admin_page
-		# Last updated at: Mar. 6, 2023
+		# Last updated at: Mar. 24, 2023
 		# Owner: Jovic
 		private function isUserAllowed($is_admin_page = true){
-			if($is_admin_page && $_SESSION["user_level_id"] == USER_LEVEL["USER"]){
+			if(($is_admin_page && $_SESSION["user_level_id"] == USER_LEVEL["USER"])){
 				redirect("/docs");
+			}
+
+			if(!$is_admin_page && $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
+				redirect("/docs/edit");
 			}
 		}
 	}
