@@ -7,12 +7,12 @@
                 <a href="<?= $uploaded_file["file_url"]?>" download class="file_type <?= getFileType($uploaded_file["mime_type"]) ?>"><?= $uploaded_file["file_name"]?></a>
                 <ul class="actions_list">
                     <li>
-                        <input type="text" readonly class="file_link" value="<?= "https://boomyeah-docs-2.s3.amazonaws.com/{$uploaded_file["file_url"]}"?>">
-                        <a href="#" class="copy_link_icon"></a>
+                        <input type="text" readonly class="file_link" value="<?= $uploaded_file["file_url"] ?>">
+                        <a href="#" class="copy_link_icon" data-file_id="<?= $uploaded_file["file_id"]?>"></a>
                         <span class="tooltip_hover">Copy Link</span>
                     </li>
                     <li>
-                        <a href="#" class="delete_icon" data-section_id="<?= $uploaded_file["section_id"] ?>" data-file_id="<?= $uploaded_file["file_id"]?>" data-file_name="<?= $uploaded_file["file_name"]?>" data-file_url="<?= $uploaded_file["file_url"]?>" data-file_is_used="<?php # $uploaded_file["is_used"] ?>"></a>
+                        <a href="#" class="delete_icon delete_file_<?= $uploaded_file["file_id"]?>" data-section_id="<?= $uploaded_file["section_id"] ?>" data-file_id="<?= $uploaded_file["file_id"]?>" data-file_name="<?= $uploaded_file["file_name"]?>" data-file_url="<?= $uploaded_file["file_url"]?>" data-file_is_used="<?= $uploaded_file["is_used"] ?>"></a>
                         <span class="tooltip_hover">Delete</span>
                     </li>
                 </ul>
