@@ -200,6 +200,7 @@
         display: none;
     }
     .section_page_tab{
+        align-content: flex-start;
         background: @by_white;
         border-radius: 10px;
         border-top-left-radius: 0px;
@@ -207,7 +208,6 @@
         display: none;
         flex-direction: column;
         margin-bottom: 24px;
-        min-height: 360px;
         padding: 24px;
 
         *{
@@ -227,6 +227,7 @@
 
             &.show{
                 padding: 12px 24px 8px;
+                min-height: 0px !important;
 
                 .tab_title{
                     color: @by_mobile_title;
@@ -284,6 +285,7 @@
         }
         &.show{
             display: flex;
+            min-height: 360px;
         }
         input.tab_title{
             background: transparent;

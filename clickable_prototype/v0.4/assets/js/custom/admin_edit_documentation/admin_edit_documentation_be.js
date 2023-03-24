@@ -68,8 +68,6 @@ function onSubmitRemoveSectionForm(event){
                 section_block.remove();
                 appearEmptySection();
             });
-        } else {
-
         }
     }, "json");
 
@@ -88,8 +86,6 @@ function onSubmitDuplicateSectionForm(event){
 
             addAnimation(`#section_${duplicate_section_id}`, "animate__fadeIn animate__slower");
             initializeMaterializeDropdown(ux(`#section_${duplicate_section_id}`).find(".dropdown-trigger").self());
-        } else {
-
         }
     }, "json");
 
@@ -106,8 +102,6 @@ function onSubmitUpdateSectionForm(event){
             await ux(`#section_${section_id}`).replaceWith(response_data.result.html);
             addAnimation(`#section_${section_id}`, "animated_blinkBorder");
             initializeMaterializeDropdown(ux(`#section_${section_id}`).find(".dropdown-trigger").self());
-        } else {
-
         }
     }, "json");
 
