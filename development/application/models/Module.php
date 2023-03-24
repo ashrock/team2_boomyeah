@@ -165,7 +165,7 @@
 
                     $insert_tab_record = $this->db->query("
                         INSERT INTO tabs (module_id, user_id, title, is_comments_allowed, cache_posts_count, created_at, updated_at) 
-                        VALUES (?, ?, ?, ?, ?, NOW(), NOW())", array($module_id, $_SESSION["user_id"], "Untitled Tab", NO, ZERO_VALUE)
+                        VALUES (?, ?, ?, ?, ?, NOW(), NOW())", array($module_id, $_SESSION["user_id"], "Untitled", NO, ZERO_VALUE)
                     );
 
                     $new_tab_id = $this->db->insert_id($insert_tab_record);
@@ -772,6 +772,44 @@
                 if($update_post){
                     $response_data = $this->getComments($params["comment_id"]);
                     $this->db->trans_complete();
+                }
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will link file into a tabs to determine files are being used in a tab
+        # Triggered by: (POST) modules/link_file_tab
+        # Requires: $params { file_id, tab_id  }
+        # Returns: { status: true/false, result: { file_id }, error: null }
+        # Last updated at: March 24, 2023
+        # Owner: Erick
+        public function linkFileTab($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $this->load->model("File");
+                $file = $this->File->getFile($params["file_id"]);
+
+                if($file["status"]){
+                    $tab_ids = $file["result"]["tab_ids"];
+                    $explode_tab_ids = explode(",", $tab_ids);
+
+                    /* Check if the file is not yet associated to tabs to prevent duplicate tab_ids */
+                    if(!(in_array(strval($params["tab_id"]), $explode_tab_ids))){
+                        $new_tab_ids = ($tab_ids) ? $tab_ids.','.$params["tab_id"] : $params["tab_id"];
+                        $update_file_tab_ids = $this->db->query("UPDATE files SET tab_ids = ? WHERE id = ?;", array($new_tab_ids, $params["file_id"]));
+    
+                        if($update_file_tab_ids){
+                            $response_data["result"]["file_id"] = $file["result"]["file_id"];
+                        }
+                    }
+
+                    $response_data["status"] = true;
                 }
             }
             catch (Exception $e) {

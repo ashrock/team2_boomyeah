@@ -248,6 +248,25 @@
 			echo json_encode($response_data);
 		}
 
+		# DOCU: This function will call linkFileTab() from Module Model to process linking files to a tab
+		# Triggered by: (POST) modules/link_file_tab
+		# Requires: $_POST["tab_id", "file_id"]
+		# Returns: { status: true/false, result: { file_id }, error: null }
+		# Last updated at: Mar. 24, 2023
+		# Owner: Erick
+		public function linkFileTab(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				$response_data = $this->Module->linkFileTab($_POST);
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+
 		# DOCU: This function will check if user is allowed to visit a page or do an action.
 		# Triggered by: GET and POST functions in Documentations Controller
 		# Requires: $_SESSION["user_level_id"]; $is_admin_page
