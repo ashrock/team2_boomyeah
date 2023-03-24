@@ -336,12 +336,15 @@
                     SELECT
                         documentations.id AS documentation_id,
                         JSON_ARRAYAGG(sections.id) AS section_ids,
+                        JSON_ARRAYAGG(files.id) AS file_ids,
+                        JSON_ARRAYAGG(files.file_url) AS file_urls,
                         JSON_ARRAYAGG(modules.id) AS module_ids,
                         JSON_ARRAYAGG(tabs.id) AS tab_ids,
                         JSON_ARRAYAGG(posts.id) AS post_ids,
                         JSON_ARRAYAGG(comments.id) AS comment_ids
                     FROM documentations
                     LEFT JOIN sections ON sections.documentation_id = documentations.id
+                    LEFT JOIN files ON files.section_id = sections.id
                     LEFT JOIN modules ON modules.section_id = sections.id
                     LEFT JOIN tabs ON tabs.module_id = modules.id
                     LEFT JOIN posts ON posts.tab_id = tabs.id
@@ -380,10 +383,14 @@
                         }
                     }
 
+                    # Delete files in S3 and DB
+                    $this->load->model("File");
+                    $remove_files = $this->File->removeFiles(array("file_ids" => array_filter(json_decode($get_documentation["file_ids"])), "file_urls" => array_filter(json_decode($get_documentation["file_urls"]))));
+
                     # Delete sections
                     $remove_sections = $this->Section->removeSections($params["remove_documentation_id"]);
     
-                    if(($remove_collaborators["status"] && $remove_sections["status"]) || ($remove_records["status"])){
+                    if(($remove_collaborators["status"] && $remove_sections["status"] && $remove_files["status"]) || ($remove_records["status"])){
                         $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $params["remove_documentation_id"]);
         
                         if($this->db->affected_rows()){

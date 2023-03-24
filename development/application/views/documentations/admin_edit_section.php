@@ -52,16 +52,16 @@
                     $this->load->view("partials/section_page_content_partial.php", array("modules" => $modules));
                 ?>
             </div>
-            <div id="upload_file_section">
-                <?php
-                    $this->load->view("partials/upload_section_partial.php", array("section_id" => $section["id"], "fetch_uploaded_files_data" => $files));
-                ?>       
-            </div>
             <form id="add_module_form" action="/modules/add" method="POST">
                 <input type="hidden" name="action" value="add_module">
                 <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
                 <button id="add_page_tabs_btn" type="submit">+ Add New</button>
             </form>
+            <div id="upload_file_section">
+                <?php
+                    $this->load->view("partials/upload_section_partial.php", array("section_id" => $section["id"], "fetch_uploaded_files_data" => $files));
+                ?>       
+            </div>
             <form id="add_module_tab_form" action="/modules/add_tab" method="POST" class="hidden">
                 <input type="hidden" name="action" value="add_module_tab">
                 <input type="hidden" name="module_id" class="module_id">

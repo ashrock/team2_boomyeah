@@ -7,7 +7,7 @@
         # DOCU: This function will upload files to S3 and create Files record in DB
         # Triggered by: (POST) files/upload
         # Requires: $params {"files", "section_id"}
-        # Returns: { status: true/false, result: array(), error: null }
+        # Returns: { status: true/false, result: { html, files_uploaded }, error: null }
         # Last updated at: March 23, 2023
         # Owner: Jovic
         public function uploadFile($params){
@@ -16,8 +16,9 @@
             try {
                 $this->db->trans_start();
                 $files_to_upload = array();
-                $file_urls      = array();
-                $files_count    = count($params["files"]["name"]);
+                $file_urls       = array();
+                $files_count     = count($params["files"]["name"]);
+                $upload_results  = array();
 
                 # Validate files
                 for($index=0; $index<$files_count; $index++){
@@ -29,16 +30,15 @@
                         $file_name = pathinfo($params["files"]["name"][$index], PATHINFO_FILENAME);
 
                         $file_name = "{$file_name}_{$timestamp}.{$file_type}";
-                        $file_path = ENVIRONMENT . "/{$file_name}";
 
                         array_push($files_to_upload, array(
                             "file_name" => $params["files"]["name"][$index],
-                            "file_path" => $file_path,
+                            "s3_name"   => $file_name,
                             "tmp_file"  => $params["files"]["tmp_name"][$index],
                             "mime_type" => mime_content_type($params["files"]["tmp_name"][$index])
                         ));
 
-                        array_push($file_urls, "https://boomyeah-docs-2.s3.amazonaws.com/{$file_path}");
+                        array_push($file_urls, $file_name);
                     }
                     else{
                         $response_data["result"]["file"] = $params["files"]["name"][$index];
@@ -69,18 +69,16 @@
                         try{
                             $upload_to_s3 = $s3Client->putObject([
                                 "Bucket" => $this->config->item("s3_bucket"),
-                                "Key"    => $file["file_path"],
+                                "Key"    => $file["s3_name"],
                                 "Body"   => fopen($file["tmp_file"], "r"),
                                 "ACL"    => "public-read"
                             ]);
             
-                            if(!$upload_to_s3){
-                                throw new Exception("An error occurred while uploading.");
+                            if($upload_to_s3["@metadata"]["statusCode"] === 200){
+                                # Generate values_clause and bind_params for insert query   
+                                array_push($values_clause, "(?, ?, ?, ?, NOW(), NOW())");
+                                array_push($bind_params, $params["section_id"], $file["file_name"], $file["s3_name"], $file["mime_type"]);
                             }
-    
-                            # Generate values_clause and bind_params for insert query   
-                            array_push($values_clause, "(?, ?, ?, ?, NOW(), NOW())");
-                            array_push($bind_params, $params["section_id"], $file["file_name"], "https://boomyeah-docs-2.s3.amazonaws.com/{$file["file_path"]}", $file["mime_type"]);
                         }
                         catch (Aws\S3\Exception\S3Exception $e) {
                             $response_data["result"]["file"] = $file["file_name"];
@@ -139,7 +137,7 @@
                 }
 
                 $get_files = $this->db->query("
-                    SELECT id AS file_id, file_name, file_url, mime_type
+                    SELECT section_id, id AS file_id, file_name, file_url, mime_type
                     FROM files
                     {$where_clause};
                 ", $bind_params);
@@ -149,6 +147,98 @@
                 }
 
                 $response_data["status"] = true;
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will remove files in S3 and DB
+        # Triggered by: (POST) files/remove
+        # Requires: $params {"file_id", "file_url"}
+        # Returns: { status: true/false, result: array(), error: null }
+        # Last updated at: March 23, 2023
+        # Owner: Jovic
+        public function removeFile($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try{
+                $this->db->trans_start();
+
+                # Instantiate an Amazon S3 client.
+                $this->config->load("api_config");
+
+                $remove_file = $this->db->query("DELETE FROM files WHERE id = ?;", $params["file_id"]);
+
+                if($remove_file){
+                    $s3Client = new S3Client([
+                        'version' => 'latest',
+                        'region'  => $this->config->item("s3_region"),
+                        'credentials' => [
+                            'key'    => $this->config->item("s3_accessKeyId"),
+                            'secret' => $this->config->item("s3_secretKey")
+                        ]
+                    ]);
+    
+                    # Delete file in S3
+                    $s3Client->deleteObject([
+                        "Bucket" => $this->config->item("s3_bucket"),
+                        "Key"    => $params["file_url"]
+                    ]);
+
+                    $response_data["status"]            = true;
+                    $response_data["result"]["file_id"] = $params["file_id"];
+                    $this->db->trans_complete();
+                }
+            }
+            catch (Exception $e) {
+                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        public function removeFiles($params){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try{
+                $this->db->trans_start();
+
+                # Delete files in DB
+                if($params["file_ids"]){
+                    $remove_files = $this->db->query("DELETE FROM files WHERE id IN ?;", array($params["file_ids"]));
+
+                    if($remove_files){
+                        # Instantiate an Amazon S3 client.
+                        $this->config->load("api_config");
+
+                        $s3Client = new S3Client([
+                            'version' => 'latest',
+                            'region'  => $this->config->item("s3_region"),
+                            'credentials' => [
+                                'key'    => $this->config->item("s3_accessKeyId"),
+                                'secret' => $this->config->item("s3_secretKey")
+                            ]
+                        ]);
+
+                        # Delete files in S3
+                        if($params["file_urls"]){
+                            foreach($params["file_urls"] as $file_url){
+                                $s3Client->deleteObject([
+                                    "Bucket" => $this->config->item("s3_bucket"),
+                                    "Key"    => $file_url
+                                ]);
+                            }
+                        }
+                    }
+                }
+
+                $response_data["status"] = true;
+                $this->db->trans_complete();
             }
             catch (Exception $e) {
                 $this->db->trans_rollback();
