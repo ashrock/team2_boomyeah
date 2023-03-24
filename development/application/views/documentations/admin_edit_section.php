@@ -37,7 +37,7 @@
                             <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
                         </ul>
                         <div class="row_placeholder"></div>
-                        <a href="/docs/<?= "{$documentation['id']}/{$section["id"]}" ?>" id="preview_section_btn">Preview</a>
+                        <a href="/docs/<?= "{$documentation['id']}/{$section["id"]}" ?>" target="_blank" id="preview_section_btn">Preview</a>
                     </div>
                     <div class="section_details">
                         <h1 id="section_title"><?= $section["title"] ?></h1>

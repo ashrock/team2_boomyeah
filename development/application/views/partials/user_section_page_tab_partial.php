@@ -3,7 +3,7 @@
 ?>
     <div class="section_page_tab" id="tab_<?= $tab->id ?>">
         <h3 class="tab_title"><?= $tab->title ?></h3>
-        <p id="tab_content_<?= $tab->id ?>" class="tab_content"><?= $tab->content ?></p>
+        <div id="tab_content_<?= $tab->id ?>" class="tab_content"><?= $tab->content ?></div>
         
 <?php if((int) $tab->is_comments_allowed) { ?>
         <a href="#" data-target="mobile_comments_slideout" class="show_comments_btn sidenav-trigger" data-cache_posts_count="<?= $tab->cache_posts_count ?>">Comments (<?= (int) $tab->cache_posts_count ?>)</a>
