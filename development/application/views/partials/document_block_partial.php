@@ -53,7 +53,7 @@
                 <div class="document_details">
                     <h2><?= $documentation['title'] ?></h2>
                     <?php if($documentation['is_private']){ ?>
-                        <button class="invite_collaborators_btn"><?= $documentation['cache_collaborators_count'] ?></button> 
+                        <button class="invite_collaborators_btn"><?= $documentation['cache_collaborators_count'] + 1 ?></button> 
                     <?php  } ?>
                 </div>
                 <?php if($documentation['is_private']){ ?>
