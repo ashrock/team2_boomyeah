@@ -369,48 +369,108 @@
                
                 # Check section if existing
                 if($section["status"]){
-                    # TODO: For v.03, remove modules, tabs that is associated on sections table.
+                    # Fetch record_ids related to Section
+                    $get_record_ids = $this->db->query("
+                        SELECT
+                            JSON_ARRAYAGG(modules.id) AS module_ids,
+                            JSON_ARRAYAGG(tabs.id) AS tab_ids,
+                            JSON_ARRAYAGG(posts.id) AS post_ids,
+                            JSON_ARRAYAGG(comments.id) AS comment_ids
+                        FROM sections
+                        LEFT JOIN modules ON modules.section_id = sections.id
+                        LEFT JOIN tabs ON tabs.module_id = modules.id
+                        LEFT JOIN posts ON posts.tab_id = tabs.id
+                        LEFT JOIN comments ON comments.post_id = posts.id
+                        WHERE sections.id = ?;", $params["section_id"]
+                    );
 
-                    $delete_section = $this->db->query("DELETE FROM sections WHERE id = ?;", $params["section_id"]);
-
-                    if($delete_section){
-                        # Fetch section_ids_order
-                        $this->load->model("Documentation");
-                        $documentation = $this->Documentation->getDocumentation($params["documentation_id"]);
+                    if($get_record_ids->num_rows()){
+                        $get_record_ids = $get_record_ids->result_array()[FIRST_INDEX];
     
-                        if($documentation["status"]){
-                            # Check of section_ids_order exists
-                            if($documentation["result"]["section_ids_order"]){
-                                # Remove section_id from section_ids_order and update documentation record
-                                $sections_order = explode(",", $documentation["result"]["section_ids_order"]);
-                                $section_index  = array_search($params["section_id"], $sections_order);
-                                
-                                if($section_index !== FALSE){
-                                    unset($sections_order[$section_index]);
-                                    $sections_count = count($sections_order);
-                                    $sections_order = ($sections_count) ? implode(",", $sections_order) : "";
+                        $this->load->model("Module");
+                        $related_tables = array(
+                            "comments" => "comment_ids",
+                            "posts"    => "post_ids",
+                            "tabs"     => "tab_ids",
+                            "modules"  => "module_ids"
+                        );
     
-                                    # Update documentations section_ids_order
-                                    $update_docs_section_order = $this->db->query("UPDATE documentations SET section_ids_order = ? WHERE id = ?", array($sections_order, $params["documentation_id"]));
-                                
-                                    if(!$update_docs_section_order){
-                                        throw new Exception("Error updating Documentation");
-                                    }
-                                }
-                                else{
-                                    $this->db->trans_rollback();
-                                    throw new Exception("Unable to delete section, the section is not included in the section_ids_order field.");
+                        # Delete comments, posts, tabs, and modules
+                        foreach($related_tables as $key => $value){
+                            # Check if record ids is not null
+                            $record_ids = array_filter(json_decode($get_record_ids[$value]));
+    
+                            if($record_ids){
+                                $remove_records = $this->Module->removeRecords(array("table" => $key, "ids" => $record_ids));
+                            
+                                if(!$remove_records["status"]){
+                                    throw new Exception($remove_records["error"]);
                                 }
                             }
-
-                            # Commit changes to DB
-                            $this->db->trans_complete();
-    
-                            $response_data["status"] = true;
-                            $response_data["result"]["section_id"] = $section["result"]["id"];
                         }
-                        else{
-                            throw new Exception($documentation["error"]);
+
+                        # Get files of Section
+                        $this->load->model("File");
+                        $get_files = $this->File->getFiles(array("section_id" => $params["section_id"]));
+
+                        if($get_files["status"] && $get_files["result"]){
+                            $file_ids   = array();
+                            $file_urls  = array();
+
+                            foreach($get_files["result"] as $file){
+                                array_push($file_ids, $file["file_id"]);
+                                array_push($file_urls, $file["file_url"]);
+                            }
+                            
+                            # Delete files in DB and S3
+                            $delete_files = $this->File->removeFiles(array("file_ids" => $file_ids, "file_urls" => $file_urls));
+
+                            if(!$delete_files["status"]){
+                                throw new Exception($delete_files["error"]);
+                            }
+                        }
+
+                        $delete_section = $this->db->query("DELETE FROM sections WHERE id = ?;", $params["section_id"]);
+    
+                        if($delete_section){
+                            # Fetch section_ids_order
+                            $this->load->model("Documentation");
+                            $documentation = $this->Documentation->getDocumentation($params["documentation_id"]);
+        
+                            if($documentation["status"]){
+                                # Check of section_ids_order exists
+                                if($documentation["result"]["section_ids_order"]){
+                                    # Remove section_id from section_ids_order and update documentation record
+                                    $sections_order = explode(",", $documentation["result"]["section_ids_order"]);
+                                    $section_index  = array_search($params["section_id"], $sections_order);
+                                    
+                                    if($section_index !== FALSE){
+                                        unset($sections_order[$section_index]);
+                                        $sections_count = count($sections_order);
+                                        $sections_order = ($sections_count) ? implode(",", $sections_order) : "";
+        
+                                        # Update documentations section_ids_order
+                                        $update_docs_section_order = $this->db->query("UPDATE documentations SET section_ids_order = ? WHERE id = ?", array($sections_order, $params["documentation_id"]));
+                                    
+                                        if(!$update_docs_section_order){
+                                            throw new Exception("Error updating Documentation");
+                                        }
+                                    }
+                                    else{
+                                        $this->db->trans_rollback();
+                                        throw new Exception("Unable to delete section, the section is not included in the section_ids_order field.");
+                                    }
+                                }
+    
+                                # Commit changes to DB
+                                $this->db->trans_complete();
+        
+                                $response_data["status"] = true;
+                                $response_data["result"]["section_id"] = $section["result"]["id"];
+                            }
+                            else{
+                                throw new Exception($documentation["error"]);
+                            }
                         }
                     }
                 }

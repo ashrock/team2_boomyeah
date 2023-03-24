@@ -242,7 +242,7 @@
                 $this->db->trans_start();
 
                 # Delete files in DB
-                if($params["file_ids"]){
+                if($params["file_ids"] && $params["file_urls"]){
                     $remove_files = $this->db->query("DELETE FROM files WHERE id IN ?;", array($params["file_ids"]));
 
                     if($remove_files){
@@ -259,14 +259,12 @@
                         ]);
 
                         # Delete files in S3
-                        if($params["file_urls"]){
-                            foreach($params["file_urls"] as $file_url){
-                                $file = explode("https://boomyeah-docs-2.s3.amazonaws.com/", $file_url)[1];
-                                $s3Client->deleteObject([
-                                    "Bucket" => $this->config->item("s3_bucket"),
-                                    "Key"    => $file
-                                ]);
-                            }
+                        foreach($params["file_urls"] as $file_url){
+                            $file = explode("https://boomyeah-docs-2.s3.amazonaws.com/", $file_url)[1];
+                            $s3Client->deleteObject([
+                                "Bucket" => $this->config->item("s3_bucket"),
+                                "Key"    => $file
+                            ]);
                         }
                     }
                 }
