@@ -119,13 +119,6 @@
             update_module_tab_form.trigger("submit");
         }
     
-        function updateSectionProgress(){
-            let sections = ux("#section_pages").findAll(".section_page_content");
-            let section_items = Array.from(sections);
-            let total_progress = `${ Math.round(((target_index + 1) / section_items.length) * 100)}%`;
-            ux("#section_page_progress .progress").self().style.width = total_progress;
-        }
-    
         function onUpdateTabTitle(event){
             let tab_title = event.target;
             let section_page_tab = ux(tab_title.closest(".section_page_tab"));
