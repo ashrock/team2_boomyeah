@@ -196,8 +196,8 @@ function onAddPostComment(event){
             let comments_list = ux(comment_id).find(".replies_list");
             let toggle_replies_btn = ux(comment_id).find(".toggle_replies_btn");
             
-            if(!toggle_replies_btn.self().classList.contains("hidden")){
-                toggle_replies_btn.find("b").trigger("click");
+            if(!comments_list.findAll(".comment_item").length){
+                toggle_replies_btn.find("b").self().click();
             } else {
                 comments_list.append(response_data.result.html);
             }
@@ -219,7 +219,7 @@ function showRepliesList(event){
     let replies_list  = ux(comment_item).find(".replies_list");
     let post_id = ux(show_replies_btn).data("target_comment");
     
-    if(!replies_list.self().classList.contains("show")){
+    if(!replies_list.findAll(".comment_item").length || !replies_list.self().classList.contains("show")){
         addAnimation(replies_list.self(), "animate__zoomIn");
 
         let post_comments_form = ux("#fetch_post_comments_form");
