@@ -130,7 +130,7 @@
                 $get_file = $this->db->query("SELECT section_id, id AS file_id, file_name, file_url, mime_type, tab_ids FROM files WHERE id =?", $file_id);
 
                 if($get_file->num_rows()){
-                    $response_data["result"] = $get_file->result_array()[0];
+                    $response_data["result"] = $get_file->result_array()[FIRST_INDEX];
                 }
 
                 $response_data["status"] = true;

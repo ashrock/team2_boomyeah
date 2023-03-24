@@ -1,13 +1,15 @@
 <?php
     $this->load->helper("file_type");
 
+    $link_header = "https://boomyeah-docs-2.s3.amazonaws.com/" . ENVIRONMENT . "/";
+
     if(count($fetch_uploaded_files_data)) { 
         foreach($fetch_uploaded_files_data as $uploaded_file){ ?>
             <li class="file_<?= $uploaded_file["file_id"] ?>">
                 <a href="<?= $uploaded_file["file_url"]?>" download class="file_type <?= getFileType($uploaded_file["mime_type"]) ?>"><?= $uploaded_file["file_name"]?></a>
                 <ul class="actions_list">
                     <li>
-                        <input type="text" readonly class="file_link" value="<?= $uploaded_file["file_url"] ?>">
+                        <input type="text" readonly class="file_link" value="<?= $link_header . $uploaded_file["file_url"] ?>">
                         <a href="#" class="copy_link_icon" data-file_id="<?= $uploaded_file["file_id"]?>"></a>
                         <span class="tooltip_hover">Copy Link</span>
                     </li>
