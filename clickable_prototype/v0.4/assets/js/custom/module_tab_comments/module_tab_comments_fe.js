@@ -34,32 +34,24 @@ let is_mobile_reply_open = false;
         });
         document.addEventListener("touchend", function (event){
             swipe_value = 0;
-            // animateSwipe();
         });
         
         document.addEventListener("touchmove", function (event){
             clearTimeout(swipe_timeout);
             let event_swipe_value = (event.touches.item(0).clientX);
             let mobile_comments_slideout = ux("#mobile_comments_slideout");
-            let swipe_direction = (swipe_value > (event_swipe_value)) ? "left" : "right";
 
-            if(is_comments_displayed){
-                if(swipe_value > (event_swipe_value + SWIPE_OFFSET)){
-                    if(mobile_comments_slideout.self().classList.contains("active")){
-                        mobile_comments_slideout.removeClass("active");
-                        let mobile_comment_message = mobile_comments_slideout.find(".mobile_add_comment_form .comment_message");
-                        mobile_comment_message.self().value = "";
-                        mobile_comment_message.self().blur();
-                        
-                        /** Wait for comments sidenav to completely hide */
-                        setTimeout(() => {
-                            is_comments_displayed = false;
-                        }, 480);
-                    }
-                } else {
-                    if(!mobile_comments_slideout.self().classList.contains("active")){
-                        mobile_comments_slideout.addClass("active");
-                    }
+            if(is_comments_displayed && swipe_value > (event_swipe_value + SWIPE_OFFSET)){
+                if(mobile_comments_slideout.self().classList.contains("active")){
+                    mobile_comments_slideout.removeClass("active");
+                    let mobile_comment_message = mobile_comments_slideout.find(".mobile_add_comment_form .comment_message");
+                    mobile_comment_message.self().value = "";
+                    mobile_comment_message.self().blur();
+                    
+                    /** Wait for comments sidenav to completely hide */
+                    setTimeout(() => {
+                        is_comments_displayed = false;
+                    }, 480);
                 }
             }
         });
@@ -71,33 +63,6 @@ let is_mobile_reply_open = false;
 
         M.Sidenav.init(ux("#mobile_comments_slideout").self());
     });
-    
-    async function animateSwipe(swipe_direction = ""){
-        let active_section_page = ux("#section_pages .section_page_content.active");
-        await active_section_page.removeClass("right");
-        await active_section_page.removeClass("left");
-        
-        if(swipe_direction){
-            active_section_page.addClass(swipe_direction);
-
-            if(swipe_direction == "left"){
-                ux("#prev_page_btn").removeClass("onload");
-            }
-        }
-    }
-
-    function onSwipe(swipe_direction){
-        if(!is_comments_displayed){
-            /** Move to prev/next section tab */
-            if(swipe_direction == "right" && !ux("#prev_page_btn").self().classList.contains("hidden")){
-                ux("#prev_page_btn").self().click();
-            }
-
-            if(swipe_direction == "left" && !ux("#next_page_btn").self().classList.contains("hidden")){
-                ux("#next_page_btn").self().click();
-            }
-        }
-    }
     
     function onElementClick(event){
         let event_target = event.target;

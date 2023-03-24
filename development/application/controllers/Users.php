@@ -40,7 +40,7 @@ class Users extends CI_Controller {
 
 					if($register_user["status"]){
 						# Sample admin session
-						$_SESSION["workspace_id"]  = 1;
+						$_SESSION["workspace_id"] = VILLLAGE88;
 						
 						# Set user session
 						$_SESSION["user_id"]          = $register_user["result"]["user_info"]["id"];
