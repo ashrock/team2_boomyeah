@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("submit", "#reorder_tabs_form", onReorderTabs)
         .on("submit", ".update_module_tab_form", onUpdateModuleTab)
         .on("click", ".section_page_tabs .add_page_btn", addNewTab)
+        .on("submit", "#link_file_to_tab_form", submitLinkFileToTab)
 });
 
 function onEditSectionData(event){
@@ -228,6 +229,18 @@ function initializeRedactor(selector){
         subscribe: {
             "editor.change" : function(event) {
                 ux(selector).closest(".update_module_tab_form").trigger("submit");
+            },
+            'editor.paste': function(event) {
+                let link_file_form = ux("#link_file_to_tab_form");
+                let file_id = link_file_form.find(".file_id").val();
+                let pasted_text = ux(event.params.$nodes.nodes[0]).text();
+                
+                link_file_form.find(".tab_id").val( ux(selector).closest(".update_module_tab_form").find(".tab_id").val() );
+
+                /* Check if the admin pasted text if from the uploaded files. */
+                if(pasted_text && pasted_text.includes("boomyeah-docs-2.s3")){
+                    link_file_form.trigger("submit");
+                }
             }
         }
     });
@@ -255,4 +268,18 @@ function reorderModuleTabs(section_tabs_list){
     reorder_tabs_form.find(".module_id").val(module_id);
     reorder_tabs_form.find(".tab_ids_order").val(tab_ids_order);
     reorder_tabs_form.trigger("submit");
+}
+
+function submitLinkFileToTab(event){
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    let post_form = ux("#link_file_to_tab_form");
+
+    ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+        if(response_data.status){
+            ux(".delete_file_" + response_data.result.file_id).attr("data-file_is_used", 1);
+        }
+    }, "json");
+    
+    return false;
 }
