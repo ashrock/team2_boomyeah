@@ -285,6 +285,9 @@
 		# Last updated at: Mar. 24, 2023
 		# Owner: Jovic
 		public function userDocumentation($documentation_id){
+			# Check if user is allowed to do action
+			$this->isUserAllowed(false);
+
 			$documentation = $this->Documentation->getDocumentation($documentation_id);
 			
 			if($documentation["status"] && $documentation["result"]){
