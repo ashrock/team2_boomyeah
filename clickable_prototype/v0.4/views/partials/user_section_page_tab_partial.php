@@ -6,9 +6,10 @@
 <?php foreach($module_tabs_json as $module_tab) { ?>
     <div class="section_page_tab" id="tab_<?= $module_tab["id"] ?>">
         <h3 class="tab_title"><?= $module_tab["title"] ?></h3>
-        <p id="tab_content_<?= $module_tab["id"] ?>" class="tab_content"><?= $module_tab["content"] ?></p>
+        <div id="tab_content_<?= $module_tab["id"] ?>" class="tab_content"><?= $module_tab["content"] ?></div>
         
         <?php if($module_tab["is_comments_allowed"]) { ?>
+            <div class="column_placeholder"></div>
             <a href="#" data-target="mobile_comments_slideout" data-tab_id="<?= $module_tab["id"] ?>" class="show_comments_btn sidenav-trigger">Comments (<?= $module_tab["cache_posts_count"] ?>)</a>
             <a class="fetch_tab_posts_btn" href="#tab_posts_<?= $module_tab["id"] ?>" data-tab_id="<?= $module_tab["id"] ?>">Comments (<?= $module_tab["cache_posts_count"] ?>)</a>
             <div class="tab_comments comment_container">

@@ -37,7 +37,7 @@
                             <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
                         </ul>
                         <div class="row_placeholder"></div>
-                        <a href="/docs/<?= "{$documentation['id']}/{$section["id"]}" ?>" id="preview_section_btn">Preview</a>
+                        <a href="/docs/<?= "{$documentation['id']}/{$section["id"]}" ?>" target="_blank" id="preview_section_btn">Preview</a>
                     </div>
                     <div class="section_details">
                         <h1 id="section_title"><?= $section["title"] ?></h1>
@@ -52,16 +52,16 @@
                     $this->load->view("partials/section_page_content_partial.php", array("modules" => $modules));
                 ?>
             </div>
-            <div id="upload_file_section">
-                <?php
-                    $this->load->view("partials/upload_section_partial.php", array("section_id" => $section["id"], "fetch_uploaded_files_data" => $files));
-                ?>       
-            </div>
             <form id="add_module_form" action="/modules/add" method="POST">
                 <input type="hidden" name="action" value="add_module">
                 <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
                 <button id="add_page_tabs_btn" type="submit">+ Add New</button>
             </form>
+            <div id="upload_file_section">
+                <?php
+                    $this->load->view("partials/upload_section_partial.php", array("section_id" => $section["id"], "fetch_uploaded_files_data" => $files));
+                ?>       
+            </div>
             <form id="add_module_tab_form" action="/modules/add_tab" method="POST" class="hidden">
                 <input type="hidden" name="action" value="add_module_tab">
                 <input type="hidden" name="module_id" class="module_id">

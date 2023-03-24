@@ -5,7 +5,7 @@
         if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) { ?>
             <div id="document_<?= $documentation["id"] ?>" class="document_block">
                 <form action="/docs/update" method="POST" class="document_details edit_title_form" autocomplete="off">
-                    <input type="text" name="update_value" value="<?= $documentation["title"] ?>" class="document_title" readonly="" autocomplete="nope">
+                    <input type="text" name="update_value" value="<?= htmlspecialchars($documentation["title"]) ?>" class="document_title" readonly="" autocomplete="nope">
                     <input type="hidden" name="action" value="update_documentation">
                     <input type="hidden" name="update_type" value="title">
                     <input type="hidden" name="documentation_id" value="<?= $documentation["id"] ?>">

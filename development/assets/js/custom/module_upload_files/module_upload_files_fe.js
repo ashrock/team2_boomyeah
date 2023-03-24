@@ -20,13 +20,14 @@
         event.preventDefault();
         let remove_uploaded_file_btn   = event.target;
         let file_name                  = ux(remove_uploaded_file_btn).data("file_name");
+        let file_url                   = ux(remove_uploaded_file_btn).data("file_url");
         let file_id                    = ux(remove_uploaded_file_btn).data("file_id");
         let remove_uploaded_file_modal = ux("#confirm_remove_uploaded_file_modal");
         let modal_instance             = M.Modal.getInstance(remove_uploaded_file_modal);
         let file_is_used               = ux(remove_uploaded_file_btn).data("file_is_used");
 
         remove_uploaded_file_modal.find(".file_id").val(file_id);
-        remove_uploaded_file_modal.find(".file_name").val(file_name);
+        remove_uploaded_file_modal.find(".file_url").val(file_url);
 
         if(parseInt(file_is_used)){
             remove_uploaded_file_modal.find(".remove_file_question_text").text(`Are you sure you want to remove "${file_name}"? Other tabs are using this file.`);

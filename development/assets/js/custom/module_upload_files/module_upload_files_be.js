@@ -15,11 +15,13 @@ function onConfirmRemoveFile(event){
     ux().post(remove_file_form.attr("action"), remove_file_form.serialize(), async (response_data) => {
         if(response_data.status){
             let file_id       = response_data.result.file_id;
-            let counter       = response_data.result.files_counter;
             let uploaded_file = ux(`.file_${file_id}`).self();
-            let file_counter  =  ux("#files_counter");
+            let file_counter  = ux("#files_counter");
+            let counter       = parseInt(file_counter.data("files_count"));
+            counter -= 1;
 
             addAnimation(uploaded_file, "animate__fadeOut");
+            file_counter.attr("data-files_count", counter);
 
             if(counter){
                file_counter.text(`(${counter})`);
@@ -49,15 +51,13 @@ function onUploadFiles(event){
             let files_counter_text  = upload_files_section.find("#files_counter");
             let files_list          = upload_files_section.find("#files_list");
 
+            parseInt(files_counter_text.data("files_count")) ? files_list.append(uploaded_files_html) : files_list.html(uploaded_files_html);
+            
+            // Update files count
             files_counter = files_counter + parseInt(files_counter_text.data("files_count"));
-
-            if(uploaded_files_html){
-                setTimeout(() =>{
-                    files_list.find(".no_uploaded_files").length ? files_list.html(uploaded_files_html) : files_list.append(uploaded_files_html);
-                    files_counter_text.text(`(${files_counter})`);
-                    files_counter_text.self().hidden = false;
-                }, 2000);
-            }
+            files_counter_text.attr("data-files_count", files_counter);
+            files_counter_text.text(`(${files_counter})`);
+            files_counter_text.self().hidden = false;
         }
     }, "json");
     return false;
