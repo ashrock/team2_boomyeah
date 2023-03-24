@@ -16,7 +16,7 @@
                 
                 if($get_module->num_rows()){                    
                     $response_data["status"] = true;
-                    $response_data["result"] = $get_module->result_array()[0];
+                    $response_data["result"] = $get_module->result_array()[FIRST_INDEX];
                 }
                 else{
                     throw new Exception("No module found.");
@@ -62,7 +62,7 @@
                 
                 if($get_tab->num_rows()){                    
                     $response_data["status"] = true;
-                    $response_data["result"] = $get_tab->result_array()[0];
+                    $response_data["result"] = $get_tab->result_array()[FIRST_INDEX];
                 }
                 else{
                     throw new Exception("No module found.");
@@ -339,7 +339,7 @@
                 );
 
                 if($get_post->num_rows()){
-                    $get_post = $get_post->result_array()[0];
+                    $get_post = $get_post->result_array()[FIRST_INDEX];
 
                     $response_data["result"]["tab_id"] = $get_post["tab_id"];
                     $response_data["result"]["html"]   = $this->load->view("partials/comment_container_partial.php", array("comment_items" => [$get_post]), true);
@@ -519,7 +519,7 @@
 
                 if($get_section_ids->num_rows()){
                     # Fetch documentation modules
-                    $section_ids = json_decode($get_section_ids->result_array()[0]["section_ids"]);
+                    $section_ids = json_decode($get_section_ids->result_array()[FIRST_INDEX]["section_ids"]);
                     $get_modules = $this->db->query("SELECT COUNT(id) AS modules_count FROM modules WHERE section_id IN ? GROUP BY section_id;", array($section_ids));
     
                     if($get_modules->num_rows()){
@@ -544,7 +544,7 @@
     
                             if($get_created_modules->num_rows()){
                                 $response_data["status"] = true;
-                                $response_data["result"]["module_ids"] = json_decode($get_created_modules->result_array()[0]["module_ids"]);
+                                $response_data["result"]["module_ids"] = json_decode($get_created_modules->result_array()[FIRST_INDEX]["module_ids"]);
                             }
     
                             $response_data["status"] = true;
@@ -710,8 +710,8 @@
                 if($comments->num_rows()){
                     $comments = $comments->result_array();
 
-                    $response_data["result"]["post_comment_id"] = $comments[0]["post_comment_id"];
-                    $response_data["result"]["comment_id"] = $comments[0]["comment_id"];
+                    $response_data["result"]["post_comment_id"] = $comments[FIRST_INDEX]["post_comment_id"];
+                    $response_data["result"]["comment_id"] = $comments[FIRST_INDEX]["comment_id"];
                     $response_data["result"]["html"] = $this->load->view("partials/comment_container_partial.php", array("comment_items" => $comments), true);
                 }
 

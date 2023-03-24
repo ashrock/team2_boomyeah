@@ -45,7 +45,7 @@
         # Triggered by: Any models that needs to fetch data of a section
         # Requires: $section_id
         # Returns: { status: true/false, result: { section_data }, error: null }
-        # Last updated at: March 8, 2023
+        # Last updated at: March 24, 2023
         # Owner: Erick
         public function getSection($section_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -55,7 +55,7 @@
                 
                 if($get_section->num_rows()){                    
                     $response_data["status"] = true;
-                    $response_data["result"] = $get_section->result_array()[0];
+                    $response_data["result"] = $get_section->result_array()[FIRST_INDEX];
                 }
                 else{
                     throw new Exception("No section found.");
@@ -75,7 +75,7 @@
         # Returns: { status: true/false, result: { section_tabs data }, error: null }
         # Last updated at: March 20, 2023
         # Owner: Jovic, Updated by: Erick, Jovic
-        public function getSectionTabs($section_id, $module_id = 0){
+        public function getSectionTabs($section_id, $module_id = ZERO_VALUE){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
@@ -222,7 +222,7 @@
 
                     if($get_sections->num_rows()){
                         $response_data["status"] = true;
-                        $response_data["result"]["section_ids"] = json_decode($get_sections->result_array()[0]["section_ids"]);
+                        $response_data["result"]["section_ids"] = json_decode($get_sections->result_array()[FIRST_INDEX]["section_ids"]);
                     }
                 }
             }
