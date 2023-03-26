@@ -237,7 +237,6 @@
                             padding: 0;
                             position: relative;
                             .copy_link_icon::before, .delete_icon::before{
-                                background: url(https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/handouts_sprite.svg) no-repeat;
                                 content: "";
                                 display: inline-block;
                                 height: 24px;
@@ -288,6 +287,9 @@
                                         display: none;
                                     }
                                 }
+                            }
+                            &:first-of-type .tooltip_hover {
+                                top: -17px;
                             }
                             &:hover .tooltip_hover {
                                 opacity: 1;
