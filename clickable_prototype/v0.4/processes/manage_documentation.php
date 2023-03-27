@@ -3,7 +3,7 @@
     include_once("../config/constants.php");
     include_once("./partial_helper.php");
 
-    //load the initial data from the json file
+    /** load the initial data from the json file */
     $sections_data_file_path = "../assets/json/sections_data.json";
     $documentation_data_file = "../assets/json/documentation_data.json";
     $edit_section_module_file_path = "../assets/json/edit_section_module_data.json";
@@ -20,33 +20,31 @@
 
         switch ($_POST["action"]) {
             case "get_documentations": {
-                // Declare initial variables and values
+                /**  Declare initial variables and values */
                 $get_documentations_html = "";
 
-                //manipulating the initial data
+                /** manipulating the initial data */
                 $filtered_documentations = [];
                 if($_POST["is_archived"] == "{$_NO}") {
                     $filtered_documentations = array_filter($documentation_data["fetch_admin_data"], function($data) {
                         return $data["is_archived"] == 0;
                     });
-                }
-                else {
+                } else {
                     $filtered_documentations = array_filter($documentation_data["fetch_admin_data"], function($data) {
                         return $data["is_archived"] == 1;
                     });
                 }
 
-                //creating the html for the ajax
+                /* creating the html for the ajax */
                 if(count($filtered_documentations)){
                     foreach ($filtered_documentations as $fetch_admin_data) {
                         $get_documentations_html .= get_include_contents("../views/partials/document_block_partial.php", $fetch_admin_data);
                     }
-                }
-                else{
+                } else {
                     $message = ($_POST["is_archived"] == "{$_NO}") ? "You have no documentations yet." : "You have no archived documentations yet.";
                     $get_documentations_html = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
                 }
-                // AJAX response
+                /* AJAXresponse */
                 $response_data["status"]         = true;
                 $response_data["result"]["html"] = $get_documentations_html;
 
@@ -54,7 +52,7 @@
             }
             case "remove_documentation": {
                 if($_SESSION["user_level_id"] == $_USER_LEVEL["admin"]){
-                    //remove the data base on the specified id
+                    /* remove the data base on the specified id */
                     foreach ($documentation_data["fetch_admin_data"] as $key => $data) {
                         if ($data["id"] == $_POST["remove_documentation_id"]) {
                             unset($documentation_data["fetch_admin_data"][$key]);
@@ -62,27 +60,26 @@
                         }
                     }
 
-                    //update the data to the json file
+                    /* updatethedatatothejsonfile */
                     file_put_contents($documentation_data_file, json_encode($documentation_data));
 
-                    //get the number of documentations
+                    /* get the number of documentations */
                     $count_documentations = count(array_filter($documentation_data['fetch_admin_data'], function ($obj) {
                         return $obj['is_archived'] == 0;
                     }));
 
-                    //determine if going to display the no documentations or archived
+                    /* determine if going to display the no documentations or archived */
                     if(($_POST["remove_is_archived"] == "{$_NO}" && $count_documentations == 0) || ($_POST["remove_is_archived"] == "{$_YES}" && $_POST["archived_documentations"] == "0")){
                         $message = ($_POST["remove_is_archived"] == "{$_NO}") ? "You have no documentations yet." : "You have no archived documentations yet.";
                         $response_data["result"]["is_archived"]            = $_POST["remove_is_archived"];
                         $response_data["result"]["no_documentations_html"] = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
                     }
 
-                    //AJAX response
+                  /*   AJAXresponse */
                     $response_data["status"]                     = true;
                     $response_data["result"]["documentation_id"] = $_POST["remove_documentation_id"];
 
-                } 
-                else {
+                } else {
                     $response_data["error"] = "You are not allowed to do this action!";
                 }
 
@@ -90,7 +87,7 @@
             }
             case "create_documentation": {
                 if(isset($_POST["document_title"])){
-                    //Manipulate the received data
+                    /* Manipulate the received data */
                     $document_title = $_POST["document_title"];
                     $new_data = array(
                         "id"                        => count($documentation_data["fetch_admin_data"]) + 1,
@@ -100,7 +97,7 @@
                         "cache_collaborators_count" => $_ZERO_VALUE
                     );
 
-                    //update the data to the json file
+                    /* update the data to the json file */
                     array_push($documentation_data["fetch_admin_data"], $new_data);
                     file_put_contents($documentation_data_file, json_encode($documentation_data));
 
@@ -154,8 +151,7 @@
                             $response_data["result"]["no_documentations_html"] = get_include_contents("../views/partials/no_documentations_partial.php", array("message" => $message));
                         }
                       
-                    }
-                    else if($_POST["update_type"] == "title" ){
+                    } else if($_POST["update_type"] == "title" ) {
                         foreach ($documentation_data["fetch_admin_data"] as &$item) {
                             if ($item["id"] == $_POST['documentation_id']) {
                                 $item["title"] = $update_value;
@@ -164,26 +160,25 @@
                         }
                     }
 
-                    //update the data to the json file
+                    /* update the data to the json file */
                     file_put_contents($documentation_data_file, json_encode($documentation_data));
 
-                    //AJAX response
+                    /* AJAX response */
                     $response_data["status"]                     = true;
                     $response_data["result"]["documentation_id"] = $_POST["documentation_id"];
                     $response_data["result"]["update_type"]      = $_POST["update_type"];
                     $response_data["result"]["is_archived"]      = $_POST["update_value"];
-                }
-                else{
+                } else {
                     $response_data["error"] = "Missing required params: documentation_id and update_type.";
                 }
 
                 break;
             }
             case "duplicate_documentation": {
-                // Fetch documentation
+                /* Fetch documentation */
                 $documentation_id = $_POST['documentation_id'];
 
-                //find the document data to be duplicated base on its id
+                /* find the document data to be duplicated base on its id */
                 $to_be_duplicated_block = array_filter($documentation_data["fetch_admin_data"], function($item) use ($documentation_id) {
                     return $item["id"] == $documentation_id;
                 });
@@ -198,26 +193,25 @@
                         "title"                 => $new_title
                     ]);
 
-                    //pass the data to the jquery so that it updates the DOM
+                    /* pass the data to the jquery so that it updates the DOM */
                     $documentation_html = get_include_contents("../views/partials/document_block_partial.php", $new_document_data);
                    
-                    //update json file
+                    /* update json file */
                     array_push($documentation_data["fetch_admin_data"], $new_document_data);
                     file_put_contents($documentation_data_file, json_encode($documentation_data));
 
-                    //AJAX response
+                    /* AJAX response */
                     $response_data["status"]                     = true;
                     $response_data["result"]["documentation_id"] = $new_document_id;
                     $response_data["result"]["html"]             = $documentation_html;
-                }
-                else {
+                } else {
                     $response_data["error"] = "An error occurred while trying to duplicate documentation.";
                 }
 
                 break;
             }
             case "reorder_documentations": {
-                //reorder the arrangement of the array based on the string $_POST['documentations_order']
+                /* reorder the arrangement of the array based on the string $_POST['documentations_order'] */
                 $documentations_order = explode(",", $_POST['documentations_order']);
                 $reordered_documentations_array = array();
                 foreach ($documentations_order as $order) {
@@ -230,10 +224,10 @@
                 }
                 $documentation_data["fetch_admin_data"] = $reordered_documentations_array;
 
-                //update json file
+                /* update json file */
                 file_put_contents($documentation_data_file, json_encode($documentation_data));
                 
-                //AJAX response
+                /* AJAX response */
                 $response_data["status"] = true;
             }
             case "update_documentation_privacy": {
@@ -275,15 +269,14 @@
                 }  
              
                 if($updated_section_data) {
-                    // do something with the updated section
+                    /* do something with the updated section */
                     file_put_contents($sections_data_file_path, json_encode($sections_data));
                     $response_data["status"]             = true;
                     $section_data["id"]                  = $_POST["section_id"];
                     $section_data[$_POST["update_type"]] = $_POST["update_value"];
                     $response_data["result"]["html"]     = get_include_contents("../views/partials/section_block_partial.php", $updated_section_data);
-                } 
-                else {
-                    // handle the case where no matching section is found
+                } else {
+                    /* handle the case where no matching section is found */
                     $response_data["error"] = "There's no record found.";
                 }
                 break;
@@ -309,8 +302,7 @@
                     $response_data["status"]               = true;
                     $response_data["result"]["html"]       = get_include_contents("../views/partials/section_block_partial.php", $duplicated_section_data);
                     $response_data["result"]["section_id"] = $duplicated_section_data["id"];
-                }
-                else{
+                } else {
                     $response_data["error"] = "There's no record found.";
                 }
       
@@ -415,8 +407,6 @@
                 $response_data["result"]["sections_order"] = $sections_order;
                 break;
             }
-
-
             case "add_module" : {
                 $module_id   = time() + rand();
                 $tab_id      = time() + rand();
@@ -486,9 +476,8 @@
                                     unset($module_data["module_tabs_json"][$tab_key]);
                                 }
                             }
-                        }
-                        else{
-                            // Remove the entire module object
+                        } else {
+                            /* Remove the entire module object */
                             unset($edit_section_module_data["fetch_admin_module_data"][$module_key]);
                         }
                         break;
@@ -556,7 +545,7 @@
                     }
                 }
                 
-                //update json file
+                /** update json file */
                 file_put_contents($edit_section_module_file_path, json_encode($edit_section_module_data));
                 
                 $response_data["status"]                   = true;
@@ -797,27 +786,19 @@
             case "upload_a_file" : {
                 $uploaded_files = $_FILES["upload_file"];
 
-                /**
-                 *  Specify the directory where you want to save the uploaded files
-                 */
+                /** *  Specify the directory where you want to save the uploaded files */
                 $upload_dir = "../assets/json/uploaded_files/";
 
-                /**
-                 * Iterate over the uploaded files and move them to the upload directory
-                 */
+                /** * Iterate over the uploaded files and move them to the upload directory */
                 foreach ($uploaded_files["tmp_name"] as $key => $tmp_name) {
                     $file_name  = $uploaded_files["name"][$key];
                     $file_size  = $uploaded_files["size"][$key];
                     $file_type  = $uploaded_files["type"][$key];
                     $file_error = $uploaded_files["error"][$key];
 
-                    /**
-                     * Check if the file was uploaded without errors
-                     */
+                    /** * Check if the file was uploaded without errors */
                     if ($file_error == UPLOAD_ERR_OK) {
-                       /**
-                        *  Move the file to the upload directory
-                        */
+                       /** *  Move the file to the upload directory */
                         $uploaded_file_path = $upload_dir . $file_name;
                         move_uploaded_file($tmp_name, $uploaded_file_path);
                     
@@ -833,9 +814,7 @@
                         file_put_contents($uploaded_files_data_path, json_encode($uploaded_files_data));
 
                     } else {
-                        /**
-                         * Output an error message if the file was not uploaded
-                         */
+                        /** * Output an error message if the file was not uploaded */
                         $response_data["error"] = "Error uploading file '$file_name': $file_error";
                     }
                 }

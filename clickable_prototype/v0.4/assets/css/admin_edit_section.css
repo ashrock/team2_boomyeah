@@ -1030,7 +1030,6 @@ body::-webkit-scrollbar-thumb {
 }
 #edit_section_content #upload_file_section .files_upload_content #files_list li .actions_list li .copy_link_icon::before,
 #edit_section_content #upload_file_section .files_upload_content #files_list li .actions_list li .delete_icon::before {
-  background: url(https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/handouts_sprite.svg) no-repeat;
   content: "";
   display: inline-block;
   height: 24px;
@@ -1081,6 +1080,9 @@ body::-webkit-scrollbar-thumb {
 }
 #edit_section_content #upload_file_section .files_upload_content #files_list li .actions_list li .tooltip_hover.copied_link::after {
   display: none;
+}
+#edit_section_content #upload_file_section .files_upload_content #files_list li .actions_list li:first-of-type .tooltip_hover {
+  top: -17px;
 }
 #edit_section_content #upload_file_section .files_upload_content #files_list li .actions_list li:hover .tooltip_hover {
   opacity: 1;
