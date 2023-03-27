@@ -691,7 +691,6 @@ textarea {
 }
 .confirm_action_modal {
   padding: 10px 0px;
-  display: none;
 }
 #confirmation_modal .modal,
 #confirmation_modal_private .modal,
@@ -704,11 +703,16 @@ textarea {
   overflow: hidden;
   width: 100%;
   z-index: 10003 !important;
+  display: none;
 }
 #confirmation_modal .modal.show,
 #confirmation_modal_private .modal.show,
 .confirm_action_modal .modal.show,
-#error_uploaded_file .modal.show {
+#error_uploaded_file .modal.show,
+#confirmation_modal .modal.open,
+#confirmation_modal_private .modal.open,
+.confirm_action_modal .modal.open,
+#error_uploaded_file .modal.open {
   display: flex !important;
 }
 #confirmation_modal .modal + .modal-overlay,
