@@ -45,13 +45,21 @@
         # Triggered by: Any models that needs to fetch data of a section
         # Requires: $section_id
         # Returns: { status: true/false, result: { section_data }, error: null }
-        # Last updated at: March 24, 2023
-        # Owner: Erick
-        public function getSection($section_id){
+        # Last updated at: March 27, 2023
+        # Owner: Erick, Updated by: Jovic
+        public function getSection($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $get_section = $this->db->query("SELECT id, documentation_id, title, description FROM sections WHERE id = ?", $section_id);
+                $where_clause = "id = ?";
+                $bind_params  = $params["section_id"];
+
+                if(isset($params["documentation_id"])){
+                    $where_clause = "id = ? AND documentation_id = ?";
+                    $bind_params  = $params;
+                }
+
+                $get_section = $this->db->query("SELECT id, documentation_id, title, description FROM sections WHERE {$where_clause}", $bind_params);
                 
                 if($get_section->num_rows()){                    
                     $response_data["status"] = true;
@@ -137,7 +145,7 @@
         # Triggered by: (POST) sections/add
         # Requires: $params { documentation_id, user_id, section_title }
         # Returns: { status: true/false, result: { html }, error: null }
-        # Last updated at: March 20, 2023
+        # Last updated at: March 27, 2023
         # Owner: Erick, Updated by: Jovic
         public function addSection($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -178,7 +186,7 @@
                             }
                         }
                         
-                        $new_section = $this->getSection($new_section_id);
+                        $new_section = $this->getSection(array("section_id" => $new_section_id));
 
                         if($new_section["status"]){
                             $response_data["status"]               = true;
@@ -237,13 +245,13 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, section_id }
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 15, 2023
+        # Last updated at: March 27, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateSection($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $section = $this->getSection($params["section_id"]);
+                $section = $this->getSection(array("section_id" => $params["section_id"]));
                 
                 # Check section if existing
                 if($section["status"]){
@@ -269,14 +277,14 @@
         # Triggered by: (POST) sections/duplicate
         # Requires: $params { section_id }
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 24, 2023
+        # Last updated at: March 27, 2023
         # Owner: Erick, Updated by: Jovic
         public function duplicateSection($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 $this->db->trans_start();
-                $section = $this->getSection($params["section_id"]);
+                $section = $this->getSection(array("section_id" => $params["section_id"]));
                 
                 # Check document id if existing
                 if($section["status"]){
@@ -315,7 +323,8 @@
                             $update_docs_section_order = $this->db->query("UPDATE documentations SET section_ids_order = ? WHERE id = ?", array($new_sections_order, $section_data["documentation_id"]));
 
                             if($update_docs_section_order){
-                                $new_section = $this->getSection($new_section_id);
+                                # Duplicate Module
+                                $new_section = $this->getSection(array("section_id" => $new_section_id));
 
                                 if($new_section["status"]){
                                     $this->load->model("Module");
@@ -324,20 +333,19 @@
                                         "new_section_id" => $new_section_id
                                     ));
                                     
+                                    # Check if there are any Module duplicated then proceed to duplicating Tabs
                                     if($duplicate_modules["status"] && $duplicate_modules["result"]["module_ids"] ){
                                         # Create tabs
                                         $duplicate_tabs = $this->Module->duplicateTabs(array(
                                             "section_id" => $params["section_id"], 
                                             "module_ids" => $duplicate_modules["result"]["module_ids"]
                                         ));
-
-                                        if($duplicate_tabs["status"]){
-                                            $this->db->trans_complete();
-                                            $response_data["status"] = true;
-                                            $response_data["result"]["section_id"] = $new_section_id;
-                                            $response_data["result"]["html"] = $this->load->view('partials/section_block_partial.php', array("all_sections" => array($new_section["result"])), true);
-                                        }
                                     }
+
+                                    $this->db->trans_complete();
+                                    $response_data["status"] = true;
+                                    $response_data["result"]["section_id"] = $new_section_id;
+                                    $response_data["result"]["html"] = $this->load->view('partials/section_block_partial.php', array("all_sections" => array($new_section["result"])), true);
                                 }
                             }
                         }
@@ -356,7 +364,7 @@
         # Triggered by: (POST) docs/remove
         # Requires: $params { documentation_id, section_id }
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 24, 2023
+        # Last updated at: March 27, 2023
         # Owner: Erick, Updated by: Jovic
         public function removeSection($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -365,7 +373,7 @@
                 # Start DB transaction
                 $this->db->trans_start();
 
-                $section = $this->getSection($params["section_id"]);
+                $section = $this->getSection(array("section_id" => $params["section_id"]));
                
                 # Check section if existing
                 if($section["status"]){
