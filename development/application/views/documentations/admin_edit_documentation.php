@@ -123,9 +123,9 @@
 
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_documentation/admin_edit_documentation_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_documentation/admin_edit_documentation_be.js") ?>"></script>
     <script src="<?= add_file("assets/js/invite_modal.js") ?>"></script>
-    <script src="<?= add_file("assets/js/hotkeys.js") ?>"></script>
 </body>
 </html> 

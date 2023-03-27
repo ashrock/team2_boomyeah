@@ -112,15 +112,20 @@ function onFetchTabPosts(event){
     event.stopImmediatePropagation();
     event.preventDefault();
     let post_form = ux(event.target);
-    
+    let post_tab_id = post_form.find(".tab_id").val();
+
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let tab_id = `#tab_${response_data.result.tab_id}`;
-            addAnimation(ux(tab_id).find(".tab_comments .comments_list").self(), "animate__zoomIn");
+            let tab_id = `#tab_${post_tab_id}`;
+            let comments_list = ux(tab_id).find(".tab_comments .comments_list");
             
-            setTimeout(() => {
-                ux(tab_id).find(".tab_comments .comments_list").prepend(response_data.result.html);
-            }, 200);
+            if(comments_list.self() && response_data.result.hasOwnProperty("html")){
+                addAnimation(comments_list.self(), "animate__zoomIn");
+                
+                setTimeout(() => {
+                    comments_list.prepend(response_data.result.html);
+                }, 200);
+            }
         }
     }, "json");
     
