@@ -244,7 +244,7 @@
 		# DOCU: This function will call getDocumentation from Documentation Model, getSection and getSectionTabs from Section Model
 		# Triggered by: (GET) docs/(:any)/(:any)/edit
 		# Requires: $documentation_id, $section_id
-		# Last updated at: Mar. 15, 2023
+		# Last updated at: Mar. 27, 2023
 		# Owner: Jovic
 		public function getSection($documentation_id, $section_id){
 			$documentation = $this->Documentation->getDocumentation($documentation_id);
@@ -255,7 +255,7 @@
 			if($documentation["status"] && $documentation["result"]){
 				# Fetch sections
 				$this->load->model("Section");
-				$sections = $this->Section->getSection($section_id);
+				$sections = $this->Section->getSection(array("section_id" => $section_id, "documentation_id" => $documentation_id));
 
 				if($sections["status"] && $sections["result"]){
 					# Fetch modules
@@ -311,7 +311,7 @@
 		# DOCU: This function will call getDocumentation from Documentation Model and render user_view_section page
 		# Triggered by: (GET) docs/(:any)/(:any)
 		# Requires: $documentation_id, $section_id
-		# Last updated at: Mar. 24, 2023
+		# Last updated at: Mar. 27, 2023
 		# Owner: Jovic
 		public function userSection($documentation_id, $section_id){
 			$documentation = $this->Documentation->getDocumentation($documentation_id);
@@ -320,7 +320,7 @@
 				if($documentation["result"]["is_archived"] == FALSE_VALUE){
 					# Fetch sections
 					$this->load->model("Section");
-					$sections = $this->Section->getSection($section_id);
+					$sections = $this->Section->getSection(array("section_id" => $section_id, "documentation_id" => $documentation_id));
 
 					if($sections["status"] && $sections["result"]){
 						$modules = $this->Section->getSectionTabs($section_id);
