@@ -758,7 +758,6 @@ textarea{
 }
 .confirm_action_modal{
     padding: 10px 0px;
-    display: none;
 }
 #confirmation_modal, #confirmation_modal_private, .confirm_action_modal, #error_uploaded_file{
     .modal{
@@ -769,8 +768,9 @@ textarea{
         overflow: hidden;
         width: 100%;
         z-index: 10003 !important;
+        display: none;
 
-        &.show{
+        &.show, &.open{
             display: flex !important;
         }
 
