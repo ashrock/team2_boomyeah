@@ -98,6 +98,11 @@ textarea{
             display: flex;
             justify-content: space-between;
             .user_settings{
+                #user_profile_pic{
+                    border-radius: 20px;
+                    height: 40px;
+                    width: 40px;
+                }
                 #logout{
                     background: url("../images/header_sprite.svg") no-repeat;
                     background-position: -40px 0px;
@@ -751,8 +756,9 @@ textarea{
 }
 .confirm_action_modal{
     padding: 10px 0px;
+    display: none;
 }
-#confirmation_modal, #confirmation_modal_private, .confirm_action_modal{
+#confirmation_modal, #confirmation_modal_private, .confirm_action_modal, #error_uploaded_file{
     .modal{
         border-radius: 8px;
         flex-direction: column;
@@ -764,7 +770,6 @@ textarea{
 
         &.show{
             display: flex !important;
-
         }
 
         & + .modal-overlay{
