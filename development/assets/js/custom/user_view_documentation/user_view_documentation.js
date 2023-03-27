@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", async () => {
     ux(".section_block").onEach("click", function(event){
-        location.href += `/${event.target.id.split("_")[1]}`;
+        let event_target = event.target;
+        
+        if(event.target.closest(".section_block")){
+            event_target = event.target.closest(".section_block");
+        }
+
+        location.href += `/${event_target.id.split("_")[1]}`;
     });
 
     initializeMaterializeDropdown();
