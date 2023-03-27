@@ -39,8 +39,7 @@
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
-    <script src="<?= add_file("assets/js/hotkeys.js") ?>"></script>
-    <script src="<?= add_file("assets/js/user_documentation.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/user_documentation/user_documentation.js") ?>"></script>
 </body>
 
 </html>

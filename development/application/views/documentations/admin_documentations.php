@@ -82,7 +82,6 @@
     <script src="<?= add_file("assets/js/invite_modal.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_documentation/admin_documentation_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_documentation/admin_documentation_be.js") ?>"></script>
-    <script src="<?= add_file("assets/js/hotkeys.js") ?>"></script>
 </body>
 
 </html>
