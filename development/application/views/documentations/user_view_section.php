@@ -42,7 +42,7 @@
                         <h1 id="section_title"><?= $section["title"] ?></h1>
                     </div>
                     <div class="add_description">
-                        <textarea name="section_short_description" id="section_short_description" placeholder="Add Description"><?= $section["description"] ?></textarea>
+                        <div name="section_short_description" id="section_short_description"><?= $section["description"] ?></div>
                     </div>
                 </div>
             </div>
