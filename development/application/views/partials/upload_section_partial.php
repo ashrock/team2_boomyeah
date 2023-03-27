@@ -1,5 +1,5 @@
 
-<a href="#!" class="fetch_files_btn">Files <span id="files_counter" data-files_count=<?= count($fetch_uploaded_files_data) ?> <?= (!count($fetch_uploaded_files_data))? "hidden" : "" ?>>(<?= count($fetch_uploaded_files_data)?>)</span></a>
+<a href="#!" class="fetch_files_btn">Files <span id="files_counter" data-files_count=<?= count($fetch_uploaded_files_data) ?>>(<?= count($fetch_uploaded_files_data)?>)</span></a>
 <div class="files_upload_content">
     <form id="upload_files_form" action="/files/upload" method="POST" enctype="multipart/form-data">
         <input type="file" id="file_upload_contents" name="upload_file[]" hidden multiple>

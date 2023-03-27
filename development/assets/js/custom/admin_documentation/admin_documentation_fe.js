@@ -167,7 +167,8 @@ async function setRemoveDocumentationValue(event){
 }
 
 function redirectToDocumentView(event){
-    console.log(event);
+    let event_target = event.target;
+
     if(event.target.classList.contains("set_privacy_btn") || 
         event.target.classList.contains("more_action_btn") || 
         event.target.classList.contains("invite_collaborators_btn") || 
@@ -175,7 +176,11 @@ function redirectToDocumentView(event){
             return;
     }
 
-    let document_id = event.target.id.split("_")[1];
+    if(event.target.closest(".document_block")){
+        event_target = event.target.closest(".document_block");
+    }
+    
+    let document_id = event_target.id.split("_")[1];
     location.href = `/docs/${document_id}/edit`;
 }
 
