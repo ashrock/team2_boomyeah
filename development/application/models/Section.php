@@ -323,6 +323,7 @@
                             $update_docs_section_order = $this->db->query("UPDATE documentations SET section_ids_order = ? WHERE id = ?", array($new_sections_order, $section_data["documentation_id"]));
 
                             if($update_docs_section_order){
+                                # Duplicate Module
                                 $new_section = $this->getSection(array("section_id" => $new_section_id));
 
                                 if($new_section["status"]){
@@ -332,20 +333,19 @@
                                         "new_section_id" => $new_section_id
                                     ));
                                     
+                                    # Check if there are any Module duplicated then proceed to duplicating Tabs
                                     if($duplicate_modules["status"] && $duplicate_modules["result"]["module_ids"] ){
                                         # Create tabs
                                         $duplicate_tabs = $this->Module->duplicateTabs(array(
                                             "section_id" => $params["section_id"], 
                                             "module_ids" => $duplicate_modules["result"]["module_ids"]
                                         ));
-
-                                        if($duplicate_tabs["status"]){
-                                            $this->db->trans_complete();
-                                            $response_data["status"] = true;
-                                            $response_data["result"]["section_id"] = $new_section_id;
-                                            $response_data["result"]["html"] = $this->load->view('partials/section_block_partial.php', array("all_sections" => array($new_section["result"])), true);
-                                        }
                                     }
+
+                                    $this->db->trans_complete();
+                                    $response_data["status"] = true;
+                                    $response_data["result"]["section_id"] = $new_section_id;
+                                    $response_data["result"]["html"] = $this->load->view('partials/section_block_partial.php', array("all_sections" => array($new_section["result"])), true);
                                 }
                             }
                         }
