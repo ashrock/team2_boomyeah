@@ -55,6 +55,11 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
+#header_container .header .user_profile .user_settings #user_profile_pic {
+  border-radius: 20px;
+  height: 40px;
+  width: 40px;
+}
 #header_container .header .user_profile .user_settings #logout {
   background: url("../images/header_sprite.svg") no-repeat;
   background-position: -40px 0px;

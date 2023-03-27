@@ -80,15 +80,15 @@
         # Triggered by: (POST) module/add
         # Requires: $params { section_id }
         # Returns: { status: true/false, result: { module_id, html }, error: null }
-        # Last updated at: March 15, 2023
-        # Owner: Erick
+        # Last updated at: March 27, 2023
+        # Owner: Erick, Updated by: Jovic
         public function addModule($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 # Fetch section
                 $this->load->model("Section");
-                $section = $this->Section->getSection($params["section_id"]);
+                $section = $this->Section->getSection(array("section_id" => $params["section_id"]));
 
                 if($section["status"]){
                     $insert_module_record = $this->db->query(
