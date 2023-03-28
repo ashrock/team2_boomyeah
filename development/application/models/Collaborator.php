@@ -218,7 +218,7 @@
         # Triggered by: (POST) collaborators/update
         # Requires: $params { invited_user_id, collaborator_id, update_type, update_value, email }
         # Returns: { status: true/false, result: { collaborator_level_id }, error: null }
-        # Last updated at: March 9, 2023
+        # Last updated at: March 28, 2023
         # Owner: Jovic
         public function updateCollaborator($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -230,6 +230,7 @@
 
                 if($update_collaborator){
                     $response_data["status"] = true;
+                    $response_data["result"]["invited_user_id"]       = $params["invited_user_id"];
                     $response_data["result"]["collaborator_level_id"] = $params["update_value"];
 
                     $this->db->trans_complete();
