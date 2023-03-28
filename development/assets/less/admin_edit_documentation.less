@@ -585,56 +585,54 @@ body{
 
 @import url(./invite_modal.less);
 
-#invite_modal_container .invite_wrapper .modal .invite_collab .select-wrapper {
-    margin-left: auto !important;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px @by_bg inset !important;
+    -webkit-text-fill-color: @by_black !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
+#confirmation_modal,
+#confirmation_modal_private,
+#confirmation_modal_archive,
+#confirmation_modal_remove,
+#confirmation_modal_remove_invited_user{
+    .modal{
+        border-radius: 8px;
+        max-width: 343px;
+        overflow: hidden;
+        width: 100%;
+        .modal-content{
+            padding: 14px 24px;
+            h4{
+                color: @by_black;
+                font: 20px/32px @readex_regular;
+            }
+            p{
+                color: @by_text;
+                font: 16px/24px @readex_regular;
+            }
+        }
+        .modal-footer{
+            height: auto;
+            padding: 0px 24px 24px;
 
-#invite_modal_container .invite_wrapper .modal .invite_collab #email_address:focus::placeholder {
-    color: transparent;
-}
-
-#confirmation_modal_remove .modal,
-#confirmation_modal_remove_invited_user .modal {
-  border-radius: 8px;
-  max-width: 343px;
-  overflow: hidden;
-  width: 100%;
-}
-#confirmation_modal_remove .modal{
-    min-height: 233px;
-}
-#confirmation_modal_remove .modal .modal-content,
-#confirmation_modal_remove_invited_user .modal .modal-content {
-  padding: 14px 24px;
-}
-#confirmation_modal_remove .modal .modal-content h4,
-#confirmation_modal_remove_invited_user .modal .modal-content h4 {
-  color: #0F172A;
-  font: 20px/32px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-}
-#confirmation_modal_remove .modal .modal-content p,
-#confirmation_modal_remove_invited_user .modal .modal-content p {
-  color: #6C7177;
-  font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-}
-#confirmation_modal_remove .modal .modal-footer,
-#confirmation_modal_remove_invited_user .modal .modal-footer {
-  padding: 15px 30px;
-  height: fit-content;
-}
-#confirmation_modal_remove .modal .modal-footer .no_btn,
-#confirmation_modal_remove_invited_user .modal .modal-footer .no_btn {
-  color: #DA4D4D;
-  font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  text-transform: none !important;
-}
-#confirmation_modal_remove .modal .modal-footer .yes_btn,
-#confirmation_modal_remove_invited_user .modal .modal-footer .yes_btn {
-  border: 1px solid #2563EB;
-  border-radius: 20px;
-  color: #2563EB;
-  font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  padding: 5px 16px;
-  text-transform: none !important;
-  transform: translateY(-6px);
+            a, button{
+                margin: 0;
+            }
+            .no_btn{
+                color: @by_error;
+                font: 16px/36px @readex_regular;
+                text-transform: none !important;
+            }
+            .yes_btn{
+                border: 1px solid @by_primary;
+                border-radius: 20px;
+                color: @by_primary;
+                font: 16px/24px @readex_regular;
+                padding: 5px 16px;
+                text-transform: none !important;
+            }
+        }
+    }
 }
