@@ -213,8 +213,6 @@ function onSubmitUpdateInvitedUser(event){
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
             let collaborator_id = `#invited_user_${response_data.result.invited_user_id}`;
-            let invited_user_element = ux(collaborator_id);
-            await invited_user_element.replaceWith(response_data.result.html);
             addAnimation(collaborator_id, "animated_blinkBorder");
             
             setTimeout(() => {
@@ -224,7 +222,7 @@ function onSubmitUpdateInvitedUser(event){
                 });
             });
         } else {
-
+            alert(response_data.error);
         }
     }, "json");
 
@@ -250,7 +248,7 @@ function onSubmitRemoveInvitedUser(event){
                 }
             }, false);
         } else {
-
+            alert(response_data.error);
         }
     }, "json");
 
