@@ -54,7 +54,7 @@
             <input type="hidden" name="action" value="add_post_comment">
             <input type="hidden" name="post_id" class="post_id" value="<?= $comment_item["post_id"] ?>">
             <div class="comment_details">
-                <img src="<?= isset($comment_item["post_id"]) ? $comment_item["user_profile_pic"] : $comment_item["commenter_profile_pic"] ?>" class="user_image"/>
+                <img src="<?= $_SESSION["user_profile_pic"] ?>" class="user_image"/>
                 <div class="comment_field">
                     <div class="comment_message_content input-field col s12">
                         <label for="post_comment_<?= $comment_item["post_id"] ?>">Write a reply</label>
