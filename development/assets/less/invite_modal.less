@@ -35,33 +35,33 @@ div::-webkit-scrollbar-thumb {
 
                         }
                         p, select {
-                            font: 12px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+                            font: 12px/24px @readex_medium;
                             margin-left: auto;
 
                         }
                     }
                 }
                 .dropdown-trigger  {
-                    font: 12px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
-                    color: #A1A1AA !important;
+                    font: 12px/24px @readex_medium !important;
+                    color: @by_light !important;
                     max-width: 70px !important;
                     border-bottom: none !important;
                     top: 4px !important;
                     
                     &:focus {
-                        border-bottom: 1px solid #039BE5 !important; 
+                        border-bottom: 1px solid transparent !important; 
                     }
                 }
                 .dropdown-content{
                     left: -30px !important;
                 
                     li span{
-                        font: 12px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
-                        color: #A1A1AA !important;
+                        font: 12px/24px @readex_regular !important;
+                        color: @by_light !important;
                     }
                 
                     li:last-child span {
-                        color: #DA4D4D !important;
+                        color: @by_error !important;
                     }
                 }
                 .select-wrapper {
