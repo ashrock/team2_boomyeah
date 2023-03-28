@@ -206,9 +206,11 @@
             let tab_title = tab_item.innerText.substring(0, tab_item.innerText.length - 1);
             let tab_id = ux(tab_item).data("tab_id");
             let module_id = ux(tab_item).data("module_id");
+            let section_id = ux(tab_item).data("section_id");
             let remove_tab_form = ux("#remove_tab_form");
             remove_tab_form.find(".tab_id").val( tab_id.replace("tab_", "") );
             remove_tab_form.find(".module_id").val( module_id );
+            remove_tab_form.find(".section_id").val( section_id );
             
             let remove_tab_modal = ux("#confirm_remove_tab_modal");
             remove_tab_modal.find(".tab_title").text(tab_title.trim());

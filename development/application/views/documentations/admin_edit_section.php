@@ -64,6 +64,7 @@
             </div>
             <form id="add_module_tab_form" action="/modules/add_tab" method="POST" class="hidden">
                 <input type="hidden" name="action" value="add_module_tab">
+                <input type="hidden" name="section_id" class="section_id" value="<?= $section["id"] ?>">
                 <input type="hidden" name="module_id" class="module_id">
             </form>
             <form id="reorder_tabs_form" action="/modules/reorder_tab" method="POST" class="hidden">
