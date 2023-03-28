@@ -167,30 +167,17 @@ textarea {
     display: none;
   }
 }
-#mobile_container .header_mobile {
-  align-items: center;
-  display: flex;
-  height: 56px;
-  justify-content: space-between;
-}
-#mobile_container .header_mobile .mobile {
-  background: url("../images/mobile_nav_sprite.svg") no-repeat;
-  background-position: 1px 0px;
-  display: block;
-  height: 28px;
-  width: 28px;
-}
-#mobile_container .header_mobile #mobile_nav {
+#mobile_container #mobile_nav {
   background: #001D32 !important;
 }
-#mobile_container .header_mobile #mobile_nav li {
+#mobile_container #mobile_nav ul li {
   margin: 0 16px;
 }
-#mobile_container .header_mobile #mobile_nav li a {
+#mobile_container #mobile_nav ul li a {
   color: #B4C5FF;
   padding: 0 0;
 }
-#mobile_container .header_mobile #mobile_nav li a:hover {
+#mobile_container #mobile_nav ul li a:hover {
   background: #E8F2FF;
   border-radius: 0px 40px 40px 0px;
   color: #2563EB;
@@ -199,7 +186,7 @@ textarea {
   position: relative;
   width: 113%;
 }
-#mobile_container .header_mobile #mobile_nav li a:hover::after {
+#mobile_container #mobile_nav ul li a:hover.private::after {
   background: url("../images/mobile_nav_sprite.svg") no-repeat;
   background-position: -88px 2px;
   content: '';
@@ -210,8 +197,26 @@ textarea {
   top: 10px;
   width: 28px;
 }
-#mobile_container .header_mobile #mobile_nav li span {
+#mobile_container #mobile_nav ul li span {
   color: #FFFFFF;
+}
+#mobile_container .header_mobile {
+  align-items: center;
+  display: flex;
+  height: 56px;
+  justify-content: space-between;
+}
+#mobile_container .header_mobile .user_profile {
+  border-radius: 20px;
+  height: 40px;
+  width: 40px;
+}
+#mobile_container .header_mobile .mobile {
+  background: url("../images/mobile_nav_sprite.svg") no-repeat;
+  background-position: 1px 0px;
+  display: block;
+  height: 28px;
+  width: 28px;
 }
 #mobile_container .header_mobile form input {
   border-bottom: 0;
@@ -1304,7 +1309,6 @@ body::-webkit-scrollbar-thumb {
   position: relative;
   display: inline-flex;
   margin-top: 5px;
-  max-width: 1024px;
 }
 .section_page_content .section_page_tabs .page_tab_item a {
   background: #D5E3FF;
@@ -1313,9 +1317,9 @@ body::-webkit-scrollbar-thumb {
   color: #2563EB;
   display: block;
   font-family: 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  height: 48px;
   line-height: 48px;
   padding: 0px 24px 0px;
-  word-break: break-all;
 }
 .section_page_content .section_page_tabs .page_tab_item .remove_tab_btn {
   background: transparent;
@@ -1351,6 +1355,7 @@ body::-webkit-scrollbar-thumb {
   display: none;
 }
 .section_page_content .section_page_tab {
+  align-content: flex-start;
   background: #FFFFFF;
   border-radius: 10px;
   border-top-left-radius: 0px;
@@ -1358,7 +1363,6 @@ body::-webkit-scrollbar-thumb {
   display: none;
   flex-direction: column;
   margin-bottom: 24px;
-  min-height: 360px;
   padding: 24px;
 }
 .section_page_content .section_page_tab * {
@@ -1377,6 +1381,7 @@ body::-webkit-scrollbar-thumb {
   }
   .section_page_content .section_page_tab.show {
     padding: 12px 24px 8px;
+    min-height: 0px !important;
   }
   .section_page_content .section_page_tab.show .tab_title {
     color: #001D32;
@@ -1436,6 +1441,7 @@ body::-webkit-scrollbar-thumb {
 }
 .section_page_content .section_page_tab.show {
   display: flex;
+  min-height: 360px;
 }
 .section_page_content .section_page_tab .module_title {
   margin-bottom: 16px;
@@ -1461,7 +1467,7 @@ body::-webkit-scrollbar-thumb {
   font-size: 16px;
   height: 54px;
   line-height: 52px;
-  margin-bottom: 4px;
+  margin-bottom: 16px;
   padding: 0px 16px;
 }
 .section_page_content .section_page_tab input.tab_title:focus {
@@ -1512,6 +1518,7 @@ body::-webkit-scrollbar-thumb {
 .section_page_content .section_page_tab .tab_content ol,
 .section_page_content .section_page_tab .tab_content ul {
   font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  padding-left: 18px;
 }
 .section_page_content .section_page_tab figure,
 .section_page_content .section_page_tab iframe {
@@ -1570,6 +1577,7 @@ body::-webkit-scrollbar-thumb {
 .section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor ol,
 .section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor ul {
   font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  padding-left: 18px;
 }
 .section_page_content .section_page_tab .tab_footer {
   align-items: center;
