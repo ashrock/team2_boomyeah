@@ -151,7 +151,7 @@
         # Triggered by: (POST) module/add_tab
         # Requires: $params { section_id }
         # Returns: { status: true/false, result: { module_id, tab_id, html_tab, html_content }, error: null }
-        # Last updated at: March 20, 2023
+        # Last updated at: March 28, 2023
         # Owner: Erick, Updated by: Jovic
         public function addTab($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -189,8 +189,8 @@
                         $response_data["result"] = array(
                             "module_id"     => $module_id,
                             "tab_id"        => $new_tab_id,
-                            "html_tab"      => $this->load->view("partials/page_tab_item_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true),
-                            "html_content"  => $this->load->view("partials/section_page_tab_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true)
+                            "html_tab"      => $this->load->view("partials/page_tab_item_partial.php", array("section_id" => $params["section_id"], "module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true),
+                            "html_content"  => $this->load->view("partials/section_page_tab_partial.php", array("section_id" => $params["section_id"], "module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true)
                         );
                     }
                 }
@@ -235,8 +235,8 @@
         # Triggered by: (POST) module/remove_tab
         # Requires: $params { tab_id }
         # Returns: { status: true/false, result: { tab_id }, error: null }
-        # Last updated at: March 16, 2023
-        # Owner: Erick
+        # Last updated at: March 28, 2023
+        # Owner: Erick, Updated by: Jovic
         public function removeTab($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -270,6 +270,29 @@
                                     $delete_module = $this->db->query("DELETE FROM modules WHERE id = ?;", $tab["result"]["module_id"]);
                                 }
 
+                                # Check if we need to remove tab_id in Files record
+                                $this->load->model("File");
+                                $get_file = $this->File->getFile(array("section_id" => $params["section_id"]));
+                                
+                                if($get_file["status"] && $get_file["result"]["tab_ids"]){
+                                    $tab_ids = explode(",", $get_file["result"]["tab_ids"]);
+
+                                    # Remove tab_id if it's in File record's tab_ids
+                                    $tab_index = array_search($params["tab_id"], $tab_ids);
+
+                                    if($tab_index !== FALSE){
+                                        unset($tab_ids[$tab_index]);
+
+                                        # Convert array to comma-separated value then update File record
+                                        $tab_ids = implode(",", $tab_ids);
+                                        $update_file = $this->db->query("UPDATE files SET tab_ids = ? WHERE id = ?;", array($tab_ids, $get_file["result"]["file_id"]));
+
+                                        if(!$update_file){
+                                            throw new Exception("Error updating File");
+                                        }
+                                    }
+                                }
+
                                 # Commit changes to DB
                                 $this->db->trans_complete();
 
@@ -278,13 +301,13 @@
                             }
                         }
                         else{
-                            $this->db->trans_rollback();
-                            throw new Exception("Unable to delete tab, the tab is not included in thetab)ids_order field.");
+                            throw new Exception("Unable to delete tab, the tab is not included in the tab_ids_order field.");
                         }
                     }
                 }
             }
             catch (Exception $e) {
+                $this->db->trans_rollback();
                 $response_data["error"] = $e->getMessage();
             }
 
@@ -806,7 +829,7 @@
 
             try {
                 $this->load->model("File");
-                $file = $this->File->getFile($params["file_id"]);
+                $file = $this->File->getFile(array("file_id" => $params["file_id"]));
 
                 if($file["status"]){
                     $tab_ids = $file["result"]["tab_ids"];
