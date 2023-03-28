@@ -848,10 +848,10 @@ body::-webkit-scrollbar-thumb {
   }
 }
 #edit_section_content .section_details .add_description {
-  position: relative;
-  border: 1px solid #D5E3FF;
   border-radius: 8px;
+  border: 1px solid #D5E3FF;
   padding: 16px;
+  position: relative;
 }
 #edit_section_content .section_details .add_description textarea {
   max-width: 955px;
@@ -919,21 +919,21 @@ body::-webkit-scrollbar-thumb {
   display: none !important;
 }
 #edit_section_content #upload_file_section .files_upload_content #upload_files_form {
-  margin: 24px 0 18px;
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  margin: 24px 0 18px;
 }
 #edit_section_content #upload_file_section .files_upload_content #upload_files_form #file_upload_btn {
+  align-items: center;
   background: none;
   border-radius: 10px;
   border: 1px solid #2563EB;
   color: #2563EB;
   cursor: pointer;
+  display: flex;
   font: 400 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   height: 38px;
-  display: flex;
-  align-items: center;
   justify-content: center;
   width: 209px;
 }
@@ -1444,7 +1444,7 @@ body::-webkit-scrollbar-thumb {
   min-height: 360px;
 }
 .section_page_content .section_page_tab .module_title {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 .section_page_content .section_page_tab .module_title input.tab_title + .character_count {
   display: none;
@@ -1453,6 +1453,7 @@ body::-webkit-scrollbar-thumb {
   display: block;
 }
 .section_page_content .section_page_tab .module_title .character_count {
+  margin-bottom: 4px;
   text-align: right;
 }
 .section_page_content .section_page_tab .module_title .character_count::before {
@@ -1467,7 +1468,7 @@ body::-webkit-scrollbar-thumb {
   font-size: 16px;
   height: 54px;
   line-height: 52px;
-  margin-bottom: 16px;
+  margin-bottom: 4px;
   padding: 0px 16px;
 }
 .section_page_content .section_page_tab input.tab_title:focus {

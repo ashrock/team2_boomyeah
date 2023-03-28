@@ -13,7 +13,7 @@
     }
 ?>
     <div class="section_page_content" id="module_<?= $module['module_id'] ?>">
-        <ul class="section_page_tabs">
+        <ul class="section_page_tabs" data-module_id="<?= $module['module_id'] ?>">
             <?php
                 # DOCU: $views_path is specified for this file in order for the partial be loaded from FE and BE side
                 if($tab_ids_order){
