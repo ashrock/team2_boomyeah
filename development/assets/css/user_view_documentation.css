@@ -173,6 +173,11 @@ textarea {
   height: 56px;
   justify-content: space-between;
 }
+#mobile_container .header_mobile .user_profile {
+  border-radius: 20px;
+  height: 40px;
+  width: 40px;
+}
 #mobile_container .header_mobile .mobile {
   background: url("../images/mobile_nav_sprite.svg") no-repeat;
   background-position: 1px 0px;
@@ -691,7 +696,6 @@ textarea {
 }
 .confirm_action_modal {
   padding: 10px 0px;
-  display: none;
 }
 #confirmation_modal .modal,
 #confirmation_modal_private .modal,
@@ -704,11 +708,16 @@ textarea {
   overflow: hidden;
   width: 100%;
   z-index: 10003 !important;
+  display: none;
 }
 #confirmation_modal .modal.show,
 #confirmation_modal_private .modal.show,
 .confirm_action_modal .modal.show,
-#error_uploaded_file .modal.show {
+#error_uploaded_file .modal.show,
+#confirmation_modal .modal.open,
+#confirmation_modal_private .modal.open,
+.confirm_action_modal .modal.open,
+#error_uploaded_file .modal.open {
   display: flex !important;
 }
 #confirmation_modal .modal + .modal-overlay,
@@ -1284,7 +1293,8 @@ body {
     font: 14px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
   }
   .container .section_container .section_block {
-    height: 52px;
+    height: initial;
+    min-height: 52px;
     margin: 0;
   }
   .container .section_container .section_block .section_details .section_title {

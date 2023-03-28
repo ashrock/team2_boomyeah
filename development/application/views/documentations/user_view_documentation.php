@@ -27,6 +27,7 @@
         <div class="container">
             <ul id="breadcrumb_list">
                 <li class="breadcrumb_item"><a href="/docs">Documentation</a></li>
+                <li class="breadcrumb_item mobile_breadcrumb"><a href="/docs"></a></li>
                 <li class="breadcrumb_item active"><?= $document_data["title"] ?></li>
             </ul>
             <div class="divider"></div>

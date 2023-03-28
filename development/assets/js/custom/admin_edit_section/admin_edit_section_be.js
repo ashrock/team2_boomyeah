@@ -223,7 +223,8 @@ function initializeRedactor(selector){
         addbar: false,
         format: ['h1', 'h2', 'h3', 'h4', 'ul', 'ol'],
         buttons: {
-            topbar: ["image", "embed", "table", "quote", "pre", "line", "undo", "redo"],
+            addbar: ["undo", "redo"],
+            topbar: ["image", "embed", "table", "quote", "pre", "line"],
         },
         toolbarFixed: false,
         subscribe: {

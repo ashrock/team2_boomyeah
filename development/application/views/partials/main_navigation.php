@@ -20,7 +20,9 @@
 </div>
 <div id="header_container">
     <div class="header">
-        <a href="<?php $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? "/docs/edit" : "/docs" ?>"><img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/global_logo.svg" class="global_logo" alt="global_logo"></a>
+        <a href="<?php $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? "/docs/edit" : "/docs" ?>">
+            <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/global_logo.svg" class="global_logo" alt="global_logo">
+        </a>
         <div class="user_profile">
             <div class="user_settings">
                 <img src="<?= $_SESSION["user_profile_pic"]; ?>" alt="user_profile" id="user_profile_pic" referrerpolicy="no-referrer">
@@ -38,6 +40,14 @@
             <a href="#" data-target="mobile_nav" class="mobile sidenav-trigger"></a>
         <?php } ?>
         <div class="row_placeholder"></div>
-        <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/user_profile.png" alt="user_profile" class="user_profile" >
+        <img src="<?= $_SESSION["user_profile_pic"]; ?>" alt="user_profile" class="user_profile" referrerpolicy="no-referrer">
     </div>
+    <ul id="mobile_nav" class="sidenav">
+        <li><a href="#!">About Company</a></li>
+        <li><a href="#!">Terms of Employment</a></li>
+        <li><a href="#!">General Policies & Procedures</a></li>
+        <li><a href="#!">Career & Personnel Develop...</a></li>
+        <li><a href="#!">Important Notes</a></li>
+        <li><a href="#!">Compensation & Benefits</a></li>
+    </ul>
 </div>
