@@ -214,20 +214,9 @@ textarea{
 }
 
 #mobile_container{
-    .header_mobile{
-        align-items: center;
-        display: flex;
-        height: 56px;
-        justify-content: space-between;
-        .mobile{
-            background: url("../images/mobile_nav_sprite.svg") no-repeat;
-            background-position: 1px 0px;
-            display: block;
-            height: 28px;
-            width: 28px;
-        }
-        #mobile_nav{
-            background: @by_mobilebg !important;
+    #mobile_nav{
+        background: @by_mobilebg !important;
+        ul{
             li{
                 margin: 0 16px;
                 a{
@@ -241,7 +230,7 @@ textarea{
                         padding-left: 30px;
                         position: relative;
                         width: 113%;
-                        &::after{
+                        &.private::after{
                             background: url("../images/mobile_nav_sprite.svg") no-repeat;
                             background-position: -88px 2px;
                             content: '';
@@ -259,6 +248,24 @@ textarea{
                     color: @by_white;
                 }
             }
+        }
+    }
+    .header_mobile{
+        align-items: center;
+        display: flex;
+        height: 56px;
+        justify-content: space-between;
+        .user_profile{
+            border-radius: 20px;
+            height: 40px;
+            width: 40px;
+        }
+        .mobile{
+            background: url("../images/mobile_nav_sprite.svg") no-repeat;
+            background-position: 1px 0px;
+            display: block;
+            height: 28px;
+            width: 28px;
         }
         form{
             input{

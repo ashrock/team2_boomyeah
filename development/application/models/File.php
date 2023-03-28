@@ -121,13 +121,22 @@
         # Triggered by: Amy model that will fetch a single file
         # Requires: $file_id
         # Returns: { status: true/false, result: {file_record}, error: null }
-        # Last updated at: March 24, 2023
-        # Owner: Erick
-        public function getFile($file_id){
+        # Last updated at: March 28, 2023
+        # Owner: Erick, Updated by: Jovic
+        public function getFile($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try{
-                $get_file = $this->db->query("SELECT section_id, id AS file_id, file_name, file_url, mime_type, tab_ids FROM files WHERE id =?", $file_id);
+                if(isset($params["file_id"])){
+                    $where_clause = "id = ?;";
+                    $bind_params  = $params["file_id"];
+                }
+                else{
+                    $where_clause = "section_id = ?;";
+                    $bind_params  = $params["section_id"];
+                }
+
+                $get_file = $this->db->query("SELECT section_id, id AS file_id, file_name, file_url, mime_type, tab_ids FROM files WHERE {$where_clause}", $bind_params);
 
                 if($get_file->num_rows()){
                     $response_data["result"] = $get_file->result_array()[FIRST_INDEX];

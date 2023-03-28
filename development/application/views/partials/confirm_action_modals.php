@@ -25,6 +25,7 @@
         <div class="modal-footer">
             <form action="/modules/remove_tab" method="POST" id="remove_tab_form">
                 <input type="hidden" name="action" value="remove_module_tab">
+                <input type="hidden" name="section_id" value="" class="section_id">
                 <input type="hidden" name="module_id" value="" class="module_id">
                 <input type="hidden" name="tab_id" value="" class="tab_id">
                 <button type="button" class="modal-close waves-effect btn-flat no_btn">No</button>
