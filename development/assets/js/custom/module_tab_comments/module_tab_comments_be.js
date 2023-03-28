@@ -112,15 +112,20 @@ function onFetchTabPosts(event){
     event.stopImmediatePropagation();
     event.preventDefault();
     let post_form = ux(event.target);
-    
+    let post_tab_id = post_form.find(".tab_id").val();
+
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let tab_id = `#tab_${response_data.result.tab_id}`;
-            addAnimation(ux(tab_id).find(".tab_comments .comments_list").self(), "animate__zoomIn");
+            let tab_id = `#tab_${post_tab_id}`;
+            let comments_list = ux(tab_id).find(".tab_comments .comments_list");
             
-            setTimeout(() => {
-                ux(tab_id).find(".tab_comments .comments_list").prepend(response_data.result.html);
-            }, 200);
+            if(comments_list.self() && response_data.result.hasOwnProperty("html")){
+                addAnimation(comments_list.self(), "animate__zoomIn");
+                
+                setTimeout(() => {
+                    comments_list.prepend(response_data.result.html);
+                }, 200);
+            }
         }
     }, "json");
     
@@ -169,20 +174,19 @@ function onSubmitEditForm(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let {comment_id, post_id} = response_data.result;
-            let item_id = `#comment_${comment_id}`;
-
-            if(comment_id){
-                /** Replace post HTML */
+            let {post_comment_id, post_id} = response_data.result;
+            let item_id = `.post_comment_${post_comment_id}`;
+            
+            if(!post_id){
+                /** Replace post comment HTML */
+                item_id = `.comment_${post_comment_id}`;
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).replaceWith(response_data.result.html);
                 });
             } else {
-                item_id = `#post_comment_${post_id}`;
-
                 let response_html = stringToHtmlContent(response_data.result.html);
                 let comment_content = ux(response_html).find(".comment_content").self();
-
+                
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).find(".comment_content").self().replaceWith(comment_content);
                     ux(comment_item).find(".edit_comment_form").self() && ux(comment_item).find(".edit_comment_form").remove();
@@ -207,8 +211,8 @@ function onAddPostComment(event){
             let comments_list = ux(comment_id).find(".replies_list");
             let toggle_replies_btn = ux(comment_id).find(".toggle_replies_btn");
 
-            if(!toggle_replies_btn.self().classList.contains("hidden")){
-                toggle_replies_btn.find("b").trigger("click");
+            if(!comments_list.findAll(".comment_item").length){
+                toggle_replies_btn.find("b").self().click();
             } else {
                 comments_list.append(response_data.result.html);
             }
@@ -230,7 +234,7 @@ function showRepliesList(event){
     let replies_list  = ux(comment_item).find(".replies_list");
     let post_id = ux(show_replies_btn).data("target_comment");
     
-    if(!replies_list.self().classList.contains("show")){
+    if(!replies_list.findAll(".comment_item").length || !replies_list.self().classList.contains("show")){
         addAnimation(replies_list.self(), "animate__zoomIn");
 
         let post_comments_form = ux("#fetch_post_comments_form");

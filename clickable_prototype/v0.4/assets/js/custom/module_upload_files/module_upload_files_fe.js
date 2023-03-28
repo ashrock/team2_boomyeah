@@ -1,10 +1,24 @@
 (function(){
+    let allowed_file_types = [
+        'image/jpeg', 
+        'image/png', 
+        'image/gif',
+        'image/svg+xml',
+        'image/bmp',
+        'application/pdf', 
+        'application/msword', 
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+        'application/vnd.ms-excel', 
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
+        'application/vnd.ms-powerpoint', 
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    ];
+
     document.addEventListener("DOMContentLoaded", async () => {
         ux("#upload_file_section")
             .on("click", ".fetch_files_btn", (event) => {
                 let is_expanded = event.target.classList.contains("open");
                 ux(".fetch_files_btn").conditionalClass("open", !is_expanded);
-          
             })
             .on("click", "#file_upload_btn", (event) => {
                 let file_input = event.target.previousElementSibling;
@@ -60,60 +74,39 @@
 
     function submitSelectedFiles(event) {
         event.preventDefault();
-        let files              = event.target.files;
-        let max_file_size      = 25 * 1024 * 1024; /** 25 MB in bytes */
-        let allowed_file_types = [
-            'image/jpeg', 
-            'image/png', 
-            'image/gif',
-            'image/svg+xml',
-            'image/bmp',
-            'application/pdf', 
-            'application/msword', 
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
-            'application/vnd.ms-excel', 
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
-            'application/vnd.ms-powerpoint', 
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-        ];
-          
+        let files                      = event.target.files;
+        let max_file_size              = 25 * 1024 * 1024; /** 25 MB in bytes */
         let invalid_files              = [];
         let invalid_file_type_msg      = "";
         let invalid_file_size_msg      = "";
         let invalid_file_type_size_msg = "";
-      
-        let error_uploaded_file_modal = ux("#error_uploaded_file_modal");
-        let error_title               = error_uploaded_file_modal.find(".error_title");
-        let error_file_name           = error_uploaded_file_modal.find(".error_file_name");
-        let modal_instance            = M.Modal.getInstance(error_uploaded_file_modal);
+        let error_uploaded_file_modal  = ux("#error_uploaded_file_modal");
+        let error_title                = error_uploaded_file_modal.find(".error_title");
+        let error_file_name            = error_uploaded_file_modal.find(".error_file_name");
+        let modal_instance             = M.Modal.getInstance(error_uploaded_file_modal);
       
         Array.from(files).forEach((file) => {
             if(file.size > max_file_size && !allowed_file_types.includes(file.type)){
                 invalid_files.push(file.name);
                 invalid_file_type_size_msg = "This file exceeds max limit of 25mb & is unsupported file format.";
-            }
-            else if (file.size > max_file_size) {
+            } else if (file.size > max_file_size) {
                 invalid_files.push(file.name);
                 invalid_file_size_msg = "This file exceeds max limit of 25mb.";
-            }
-            else if (!allowed_file_types.includes(file.type)) {
+            } else if (!allowed_file_types.includes(file.type)) {
                 invalid_files.push(file.name);
                 invalid_file_type_msg = "This is an unsupported file format.";
             }
         });
         
-        if (invalid_files.length > 0) {
+        if (invalid_files.length) {
             let error_msg = invalid_file_type_size_msg || invalid_file_type_msg || invalid_file_size_msg;
             error_title.text(error_msg);
             error_file_name.text(invalid_files.join(", "));
             modal_instance.open();
             event.target.value = ''; 
             return;
-        }   
-        else if(!invalid_files.length && files.length){
-            /**
-             * Submit the form
-             */
+        } else if(!invalid_files.length && files.length) {
+            /** * Submit the form */
             let upload_files_form = ux(event.target.closest("#upload_files_form"));
             let upload_files_btn  = upload_files_form.find("#file_upload_btn");
             upload_files_form.trigger("submit");
@@ -129,6 +122,4 @@
             }, 2000);
         }
     }
-      
-    
 })();

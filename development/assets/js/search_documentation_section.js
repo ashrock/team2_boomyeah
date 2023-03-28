@@ -1,5 +1,0 @@
-(function(){
-    document.addEventListener("DOMContentLoaded", () => {
-        
-    });
-})();

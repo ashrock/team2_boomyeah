@@ -42,7 +42,7 @@
                         <h1 id="section_title"><?= $section["title"] ?></h1>
                     </div>
                     <div class="add_description">
-                        <textarea name="section_short_description" id="section_short_description" placeholder="Add Description"><?= $section["description"] ?></textarea>
+                        <div name="section_short_description" id="section_short_description"><?= $section["description"] ?></div>
                     </div>
                 </div>
             </div>
@@ -112,6 +112,7 @@
         <input type="hidden" name="post_id" class="post_id">
     </form>
     <script src="<?= add_file("assets/js/vendor/redactorx.min.js") ?>"></script>
+    <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_be.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/module_tab_comments/module_tab_comments_fe.js") ?>"></script>

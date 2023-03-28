@@ -16,7 +16,7 @@
                 
                 if($get_module->num_rows()){                    
                     $response_data["status"] = true;
-                    $response_data["result"] = $get_module->result_array()[0];
+                    $response_data["result"] = $get_module->result_array()[FIRST_INDEX];
                 }
                 else{
                     throw new Exception("No module found.");
@@ -62,7 +62,7 @@
                 
                 if($get_tab->num_rows()){                    
                     $response_data["status"] = true;
-                    $response_data["result"] = $get_tab->result_array()[0];
+                    $response_data["result"] = $get_tab->result_array()[FIRST_INDEX];
                 }
                 else{
                     throw new Exception("No module found.");
@@ -80,15 +80,15 @@
         # Triggered by: (POST) module/add
         # Requires: $params { section_id }
         # Returns: { status: true/false, result: { module_id, html }, error: null }
-        # Last updated at: March 15, 2023
-        # Owner: Erick
+        # Last updated at: March 27, 2023
+        # Owner: Erick, Updated by: Jovic
         public function addModule($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 # Fetch section
                 $this->load->model("Section");
-                $section = $this->Section->getSection($params["section_id"]);
+                $section = $this->Section->getSection(array("section_id" => $params["section_id"]));
 
                 if($section["status"]){
                     $insert_module_record = $this->db->query(
@@ -339,7 +339,7 @@
                 );
 
                 if($get_post->num_rows()){
-                    $get_post = $get_post->result_array()[0];
+                    $get_post = $get_post->result_array()[FIRST_INDEX];
 
                     $response_data["result"]["tab_id"] = $get_post["tab_id"];
                     $response_data["result"]["html"]   = $this->load->view("partials/comment_container_partial.php", array("comment_items" => [$get_post]), true);
@@ -508,47 +508,56 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $params { documentation_id, duplicate_section_ids }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 20, 2023
+        # Last updated at: March 24, 2023
         # Owner: Jovic
         public function duplicateModules($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                # Fetch documentation section_ids
-                $get_section_ids = $this->db->query("SELECT JSON_ARRAYAGG(id) AS section_ids FROM sections WHERE documentation_id = ?;", $params["documentation_id"]);
+                # Check if documentation_id is present
+                if(isset($params["documentation_id"])){
+                    # Fetch documentation section_ids
+                    $get_section_ids = $this->db->query("SELECT JSON_ARRAYAGG(id) AS section_ids FROM sections WHERE documentation_id = ?;", $params["documentation_id"]);
+    
+                    if($get_section_ids->num_rows()){
+                        # Fetch documentation modules
+                        $section_ids = json_decode($get_section_ids->result_array()[FIRST_INDEX]["section_ids"]);
+                    }
+                }
+                else{
+                    $section_ids = array($params["section_id"]);
+                    $params["duplicate_section_ids"] = array($params["new_section_id"]);
+                }
 
-                if($get_section_ids->num_rows()){
-                    # Fetch documentation modules
-                    $section_ids = json_decode($get_section_ids->result_array()[0]["section_ids"]);
-                    $get_modules = $this->db->query("SELECT COUNT(id) AS modules_count FROM modules WHERE section_id IN ? GROUP BY section_id;", array($section_ids));
-    
-                    if($get_modules->num_rows()){
-                        # create values_clause for creating modules for duplicated documentation
-                        $get_modules   = $get_modules->result_array();
-                        $values_clause = array();
-                        $bind_params   = array();
-    
-                        for($modules_index = 0; $modules_index < count($get_modules); $modules_index++){
-                            for($index = 0; $index < $get_modules[$modules_index]["modules_count"]; $index++){
-                                array_push($values_clause, "(?, ?, NOW(), NOW())");
-                                array_push($bind_params, $params["duplicate_section_ids"][$modules_index], $_SESSION["user_id"]);
-                            }
+                # Fetch documentation modules
+                $get_modules = $this->db->query("SELECT COUNT(id) AS modules_count FROM modules WHERE section_id IN ? GROUP BY section_id;", array($section_ids));
+
+                if($get_modules->num_rows()){
+                    # create values_clause for creating modules for duplicated documentation
+                    $get_modules   = $get_modules->result_array();
+                    $values_clause = array();
+                    $bind_params   = array();
+
+                    for($modules_index = 0; $modules_index < count($get_modules); $modules_index++){
+                        for($index = 0; $index < $get_modules[$modules_index]["modules_count"]; $index++){
+                            array_push($values_clause, "(?, ?, NOW(), NOW())");
+                            array_push($bind_params, $params["duplicate_section_ids"][$modules_index], $_SESSION["user_id"]);
                         }
-    
-                        # Finalize values_clause
-                        $values_clause = implode(",", $values_clause);
-                        $create_modules = $this->db->query("INSERT INTO modules (section_id, user_id, created_at, updated_at) VALUES {$values_clause};", $bind_params);
-                    
-                        if($create_modules){
-                            $get_created_modules = $this->db->query("SELECT JSON_ARRAYAGG(id) AS module_ids FROM modules WHERE section_id IN ?;", array($params["duplicate_section_ids"]));
-    
-                            if($get_created_modules->num_rows()){
-                                $response_data["status"] = true;
-                                $response_data["result"]["module_ids"] = json_decode($get_created_modules->result_array()[0]["module_ids"]);
-                            }
-    
+                    }
+
+                    # Finalize values_clause
+                    $values_clause = implode(",", $values_clause);
+                    $create_modules = $this->db->query("INSERT INTO modules (section_id, user_id, created_at, updated_at) VALUES {$values_clause};", $bind_params);
+                
+                    if($create_modules){
+                        $get_created_modules = $this->db->query("SELECT JSON_ARRAYAGG(id) AS module_ids FROM modules WHERE section_id IN ?;", array($params["duplicate_section_ids"]));
+
+                        if($get_created_modules->num_rows()){
                             $response_data["status"] = true;
+                            $response_data["result"]["module_ids"] = json_decode($get_created_modules->result_array()[FIRST_INDEX]["module_ids"]);
                         }
+
+                        $response_data["status"] = true;
                     }
                 }
             }
@@ -563,13 +572,22 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $params { documentation_id, module_ids }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 20, 2023
+        # Last updated at: March 24, 2023
         # Owner: Jovic
         public function duplicateTabs($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                # Fetch all modules and tabs of Documentation
+                # Fetch all modules and tabs of Documentation or Section
+                if(isset($params["documentation_id"])){
+                    $where_statement = "sections.documentation_id = ?";
+                    $bind_param      = $params["documentation_id"];
+                }
+                else{
+                    $where_statement = "sections.id = ?";
+                    $bind_param      = $params["section_id"];
+                }
+                
                 $get_tabs = $this->db->query("
                     SELECT
                         modules.id AS module_id, 
@@ -600,10 +618,10 @@
                         FROM tabs
                         GROUP BY tabs.module_id
                     ) AS module_tabs ON module_tabs.module_id = modules.id
-                    WHERE sections.documentation_id = ?
-                    GROUP BY modules.id;", $params["documentation_id"]
+                    WHERE {$where_statement}
+                    GROUP BY modules.id;", $bind_param
                 );
-                
+
                 if($get_tabs->num_rows()){
                     $get_tabs = $get_tabs->result_array();
 
@@ -614,12 +632,7 @@
                     for($index = 0; $index < count($params["module_ids"]); $index++) {
                         # json_decode is used to remove brackets from tab_ids_order
                         # tab_ids_order has brackets if we're fetching tab_ids from a duplicated Documentation
-                        $tab_ids = json_decode($get_tabs[$index]["tab_ids_order"]);
-                        
-                        if(!$tab_ids){
-                            # explode tab_ids_order is used if Documentaion's tab_ids_order column is not NULL
-                            $tab_ids = explode(",", $get_tabs[$index]["tab_ids_order"]);
-                        }
+                        $tab_ids = (strpos($get_tabs[$index]["tab_ids_order"], "]") > ZERO_VALUE) ? json_decode($get_tabs[$index]["tab_ids_order"]) : explode(",", $get_tabs[$index]["tab_ids_order"]);
 
                         $tabs_json = json_decode($get_tabs[$index]["module_tabs_json"]);
 
@@ -710,8 +723,8 @@
                 if($comments->num_rows()){
                     $comments = $comments->result_array();
 
-                    $response_data["result"]["post_comment_id"] = $comments[0]["post_comment_id"];
-                    $response_data["result"]["comment_id"] = $comments[0]["comment_id"];
+                    $response_data["result"]["post_comment_id"] = $comments[FIRST_INDEX]["post_comment_id"];
+                    $response_data["result"]["comment_id"] = $comments[FIRST_INDEX]["comment_id"];
                     $response_data["result"]["html"] = $this->load->view("partials/comment_container_partial.php", array("comment_items" => $comments), true);
                 }
 

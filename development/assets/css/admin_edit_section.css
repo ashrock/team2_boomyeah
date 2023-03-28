@@ -55,6 +55,11 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
+#header_container .header .user_profile .user_settings #user_profile_pic {
+  border-radius: 20px;
+  height: 40px;
+  width: 40px;
+}
 #header_container .header .user_profile .user_settings #logout {
   background: url("../images/header_sprite.svg") no-repeat;
   background-position: -40px 0px;
@@ -66,15 +71,15 @@ textarea {
   transform: translate(8px, -10px);
   width: 28px;
 }
-#header_container .header .user_profile .user_settings #dropdown_logout {
+#header_container .header .user_profile .user_settings #user_dropdown {
   height: 40px;
   overflow: hidden;
 }
-#header_container .header .user_profile .user_settings #dropdown_logout li {
+#header_container .header .user_profile .user_settings #user_dropdown li {
   background: #F4F7FA;
   border-radius: 8px;
 }
-#header_container .header .user_profile .user_settings #dropdown_logout li .log_out_btn {
+#header_container .header .user_profile .user_settings #user_dropdown li .log_out_btn {
   color: #78716C;
   font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   padding: 12px 0;
@@ -82,7 +87,7 @@ textarea {
   text-align: center;
   z-index: 9999;
 }
-#header_container .header .user_profile .user_settings #dropdown_logout li:hover {
+#header_container .header .user_profile .user_settings #user_dropdown li:hover {
   background: #E8F2FF;
 }
 @media screen and (max-width: 632px) {
@@ -281,10 +286,11 @@ textarea {
   padding: 24px 0px;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab .dropdown-trigger {
-  font: 12px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
-  color: #A1A1AA !important;
-  max-width: 70px !important;
   border-bottom: none !important;
+  color: #A1A1AA !important;
+  font: 12px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
+  height: initial;
+  max-width: 70px !important;
   top: 4px !important;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab .dropdown-content {
@@ -688,7 +694,8 @@ textarea {
 }
 #confirmation_modal .modal,
 #confirmation_modal_private .modal,
-.confirm_action_modal .modal {
+.confirm_action_modal .modal,
+#error_uploaded_file .modal {
   border-radius: 8px;
   flex-direction: column;
   max-width: 343px;
@@ -696,59 +703,74 @@ textarea {
   overflow: hidden;
   width: 100%;
   z-index: 10003 !important;
+  display: none;
 }
 #confirmation_modal .modal.show,
 #confirmation_modal_private .modal.show,
-.confirm_action_modal .modal.show {
+.confirm_action_modal .modal.show,
+#error_uploaded_file .modal.show,
+#confirmation_modal .modal.open,
+#confirmation_modal_private .modal.open,
+.confirm_action_modal .modal.open,
+#error_uploaded_file .modal.open {
   display: flex !important;
 }
 #confirmation_modal .modal + .modal-overlay,
 #confirmation_modal_private .modal + .modal-overlay,
-.confirm_action_modal .modal + .modal-overlay {
+.confirm_action_modal .modal + .modal-overlay,
+#error_uploaded_file .modal + .modal-overlay {
   z-index: 10002 !important;
 }
 #confirmation_modal .modal .modal-content,
 #confirmation_modal_private .modal .modal-content,
-.confirm_action_modal .modal .modal-content {
+.confirm_action_modal .modal .modal-content,
+#error_uploaded_file .modal .modal-content {
   flex-grow: 1;
   padding: 14px 24px;
 }
 #confirmation_modal .modal .modal-content h4,
 #confirmation_modal_private .modal .modal-content h4,
-.confirm_action_modal .modal .modal-content h4 {
+.confirm_action_modal .modal .modal-content h4,
+#error_uploaded_file .modal .modal-content h4 {
   color: #0F172A;
   font: 20px/32px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
 }
 #confirmation_modal .modal .modal-content p,
 #confirmation_modal_private .modal .modal-content p,
-.confirm_action_modal .modal .modal-content p {
+.confirm_action_modal .modal .modal-content p,
+#error_uploaded_file .modal .modal-content p {
   color: #6C7177;
   font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
 }
 #confirmation_modal .modal .modal-footer,
 #confirmation_modal_private .modal .modal-footer,
-.confirm_action_modal .modal .modal-footer {
+.confirm_action_modal .modal .modal-footer,
+#error_uploaded_file .modal .modal-footer {
   height: auto;
   padding: 0px 24px 24px;
 }
 #confirmation_modal .modal .modal-footer a,
 #confirmation_modal_private .modal .modal-footer a,
 .confirm_action_modal .modal .modal-footer a,
+#error_uploaded_file .modal .modal-footer a,
 #confirmation_modal .modal .modal-footer button,
 #confirmation_modal_private .modal .modal-footer button,
-.confirm_action_modal .modal .modal-footer button {
+.confirm_action_modal .modal .modal-footer button,
+#error_uploaded_file .modal .modal-footer button {
   margin: 0;
 }
 #confirmation_modal .modal .modal-footer .no_btn,
 #confirmation_modal_private .modal .modal-footer .no_btn,
-.confirm_action_modal .modal .modal-footer .no_btn {
+.confirm_action_modal .modal .modal-footer .no_btn,
+#error_uploaded_file .modal .modal-footer .no_btn {
   color: #DA4D4D;
   font: 16px/36px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   text-transform: none !important;
 }
 #confirmation_modal .modal .modal-footer .yes_btn,
 #confirmation_modal_private .modal .modal-footer .yes_btn,
-.confirm_action_modal .modal .modal-footer .yes_btn {
+.confirm_action_modal .modal .modal-footer .yes_btn,
+#error_uploaded_file .modal .modal-footer .yes_btn {
   border: 1px solid #2563EB;
   border-radius: 20px;
   color: #2563EB;
@@ -1096,7 +1118,7 @@ body::-webkit-scrollbar-thumb {
 }
 #modals_container #error_uploaded_file .modal {
   max-width: 443px;
-  display: flex !important;
+  display: flex;
   justify-content: space-between;
 }
 #modals_container #error_uploaded_file .modal .error_title {
@@ -1282,7 +1304,7 @@ body::-webkit-scrollbar-thumb {
   position: relative;
   display: inline-flex;
   margin-top: 5px;
-  max-width: 164px;
+  max-width: 1024px;
 }
 .section_page_content .section_page_tabs .page_tab_item a {
   background: #D5E3FF;
@@ -1291,12 +1313,9 @@ body::-webkit-scrollbar-thumb {
   color: #2563EB;
   display: block;
   font-family: 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  height: 48px;
   line-height: 48px;
-  overflow: hidden;
   padding: 0px 24px 0px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-break: break-all;
 }
 .section_page_content .section_page_tabs .page_tab_item .remove_tab_btn {
   background: transparent;
@@ -1439,6 +1458,9 @@ body::-webkit-scrollbar-thumb {
   font: 20px/18px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0px 0px 16px;
   padding: 0px;
+}
+.section_page_content .section_page_tab .tab_content {
+  flex-grow: 1;
 }
 @media (max-width: 632px) {
   .section_page_content .section_page_tab .tab_content {
