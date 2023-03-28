@@ -21,7 +21,10 @@
     <script src="<?= add_file("assets/js/constants.js") ?>"></script>
 </head>
 <body>
-    <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php"); ?></div>
+    <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php", array("all_sections" => array(
+            array("id" => (time() + rand()), "title" => "Section ". (time() + rand())),
+            array("id" => (time() + rand()), "title" => "Section ". (time() + rand())),
+        ))); ?></div>
     <div id="wrapper" class="container">
         <div id="view_section_content">
             <div id="section_summary">

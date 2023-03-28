@@ -22,7 +22,10 @@
 </head>
 <body>
     <!--- Add #main_navigation --->
-    <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php"); ?></div>
+    <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php", array("all_documentations" => array(
+            array("id" => (time() + rand()), "title" => "Documentation ". (time() + rand())),
+            array("id" => (time() + rand()), "title" => "Documentation ". (time() + rand())),
+        ))); ?></div>
     <div id="wrapper">
         <div class="container">
             <ul id="breadcrumb_list">
