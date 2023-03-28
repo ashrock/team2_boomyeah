@@ -146,7 +146,7 @@
             position: relative;
             display: inline-flex;
             margin-top: 5px;
-            max-width: 1024px;
+            max-width: 164px;
             a{
                 background: @by_section_tab;
                 border-top-left-radius: 10px;
@@ -154,9 +154,12 @@
                 color: @by_primary;
                 display: block;
                 font-family: @readex_regular;
+                height: 48px;
                 line-height: 48px;
+                overflow: hidden;
                 padding: 0px 24px 0px;
-                word-break: break-all;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             .remove_tab_btn{
                 background: transparent;
@@ -197,6 +200,7 @@
         display: none;
     }
     .section_page_tab{
+        align-content: flex-start;
         background: @by_white;
         border-radius: 10px;
         border-top-left-radius: 0px;
@@ -204,7 +208,6 @@
         display: none;
         flex-direction: column;
         margin-bottom: 24px;
-        min-height: 360px;
         padding: 24px;
 
         *{
@@ -224,6 +227,7 @@
 
             &.show{
                 padding: 12px 24px 8px;
+                min-height: 0px !important;
 
                 .tab_title{
                     color: @by_mobile_title;
@@ -281,6 +285,25 @@
         }
         &.show{
             display: flex;
+            min-height: 360px;
+        }
+        .module_title{
+            margin-bottom: 16px;
+            input.tab_title{
+                & + .character_count{
+                    display: none;
+                }
+                &:focus + .character_count{
+                    display: block;
+                }
+            }
+            .character_count{
+                text-align: right;
+                &::before{
+                    content: attr(data-length);
+                    display: inline-block;
+                }
+            }
         }
         input.tab_title{
             background: transparent;
@@ -307,7 +330,6 @@
             padding: 0px;
         }
         .tab_content{
-            flex-grow: 1;
             @media (max-width: 632px) {
                 font: 12px/16px @readex_regular;
             }

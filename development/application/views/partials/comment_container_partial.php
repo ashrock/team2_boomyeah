@@ -16,31 +16,23 @@
                 <div class="comment_actions">
                     <button 
                         type="button"
-                        class="comment_actions_toggle"
                         data-is_post="<?= intval(isset($comment_item["post_id"])) ?>" 
                         data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"
-                    >
-                    </button>
+                        class="comment_actions_toggle"></button>
                     <div class="comment_actions_menu">
                         <button 
                             type="button"
-                            class="comment_action_btn edit_btn"
                             data-is_post="<?= intval(isset($comment_item["post_id"])) ?>"
                             data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>" 
                             data-is_post="<?= isset($comment_item["post_id"]) ?>"
                             data-parent_id="<?= isset($comment_item["tab_id"]) ? $comment_item["tab_id"] : $comment_item["post_comment_id"] ?>"
-                        >
-                            Edit
-                        </button>
+                            class="comment_action_btn edit_btn">Edit</button>
                         <button
                             type="button"
-                            class="comment_action_btn remove_btn"
                             data-target_comment="<?= isset($comment_item["post_id"]) ? $comment_item["post_id"] : $comment_item["comment_id"] ?>"
                             data-is_post="<?= isset($comment_item["post_id"]) ?>"
                             data-parent_id="<?= isset($comment_item["tab_id"]) ? $comment_item["tab_id"] : $comment_item["post_comment_id"] ?>"
-                        >
-                            Remove
-                        </button>
+                            class="comment_action_btn remove_btn">Remove</button>
                     </div>
                 </div>
 <?php }?>
