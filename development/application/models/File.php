@@ -8,7 +8,7 @@
         # Triggered by: (POST) files/upload
         # Requires: $params {"files", "section_id"}
         # Returns: { status: true/false, result: { html, files_uploaded }, error: null }
-        # Last updated at: March 24, 2023
+        # Last updated at: March 28, 2023
         # Owner: Jovic
         public function uploadFile($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -28,6 +28,7 @@
                         $timestamp = strtotime(date('Y-m-d H:i:s'));
                         $file_type = pathinfo($params["files"]["name"][$index], PATHINFO_EXTENSION);
                         $file_name = pathinfo($params["files"]["name"][$index], PATHINFO_FILENAME);
+                        $file_name = str_replace(" ", "_", $file_name);
 
                         $file_name = "{$file_name}_{$timestamp}.{$file_type}";
 
@@ -163,12 +164,19 @@
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try{
-                $where_clause = "WHERE section_id = ?";
-                $bind_params  = $params["section_id"];
+                if(isset($params["section_id"])){
+                    $where_clause = "WHERE section_id = ?";
+                    $bind_params  = $params["section_id"];
 
-                if(isset($params["file_urls"])){
-                    $where_clause .= " AND file_url IN ?";
-                    $bind_params = array($params["section_id"], array_values($params["file_urls"]));
+                    if(isset($params["file_urls"])){
+                        $where_clause .= " AND file_url IN ?";
+                        $bind_params = array($params["section_id"], array_values($params["file_urls"]));
+                    }
+                }
+
+                if(isset($params["tab_id"])){
+                    $where_clause = "WHERE tab_ids REGEXP ?";
+                    $bind_params  = "[[:<:]]{$params['tab_id']}[[:>:]]";
                 }
 
                 $get_files = $this->db->query("
