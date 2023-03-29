@@ -114,17 +114,6 @@ body{
                 min-width: 226px;
                 width: 100%;
             }
-            &::before{
-                background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat -12px -4px;
-                content: "";
-                display: inline-block;
-                height: 18px;
-                position: absolute;
-                right: 12px;
-                top: 22px;
-                width: 18px;
-                z-index: 1;
-            }
             &::after {
                 background-color: @by_bg;
                 content: '';
@@ -150,6 +139,18 @@ body{
                 position: absolute;
                 width: 100%;
             }
+            #add_documentation_btn{
+                background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat -12px -4px;
+                border: none !important;
+                content: "";
+                cursor: pointer;
+                display: inline-block;
+                height: 18px;
+                position: absolute;
+                right: 12px;
+                top: 22px;
+                width: 18px;
+            }
 
             input:-internal-autofill-selected {
                 background-color: @by_bg;
@@ -160,7 +161,6 @@ body{
                 background-color: transparent;
                 border-bottom: 2px solid @by_primary;
                 box-shadow: 0 1px 0 0 @by_primary;
-                z-index: 999;
             }
             label.active{
                 color: @by_primary;

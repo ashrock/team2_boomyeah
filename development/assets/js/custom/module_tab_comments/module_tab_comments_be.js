@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         .on("submit", "#fetch_mobile_posts_form", onFetchMobilePosts)
         .on("submit", "#fetch_tab_posts_form", onFetchTabPosts)
         .on("submit", ".mobile_add_comment_form", onSubmitMobilePostForm)
+        .on("submit", ".mobile_add_reply_form", onSubmitMobilePostForm)
         .on("submit", ".add_post_form", onSubmitPostForm)
         .on("submit", ".add_reply_form", onAddPostComment)
 
@@ -41,14 +42,14 @@ function onSubmitMobilePostForm(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let {tab_id, post_id, html} = response_data.result;
+            let {tab_id, post_id, post_comment_id, html} = response_data.result;
             let mobile_comments_slideout = ux("#mobile_comments_slideout");
             let comments_list = mobile_comments_slideout.find("#user_comments_list");
 
             if(tab_id){
                 comments_list.append(response_data.result.html);
             } else {
-                let comment_item = mobile_comments_slideout.find(`.post_comment_${post_id}`);
+                let comment_item = mobile_comments_slideout.find(`.post_comment_${post_comment_id}`);
                 let replies_list = comment_item.find(`.replies_list`);
                 
                 if(! replies_list.self().classList.contains("show")){
@@ -61,9 +62,11 @@ function onSubmitMobilePostForm(event){
 
             post_form.find(".action").val("add_tab_post");
             post_form.self().reset();
+            post_form.removeClass("show");
             post_form.find(".comment_message").self().blur();
             post_form.find(".comment_message").self().removeAttribute("style");
             post_form.find(".comment_message_content label").text("Write a comment");
+            ux(".mobile_add_comment_form").addClass("show");
         }
 
     }, "json");

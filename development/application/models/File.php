@@ -15,10 +15,8 @@
 
             try {
                 $this->db->trans_start();
-                $files_to_upload = array();
-                $file_urls       = array();
+                $files_to_upload = $file_urls = $upload_results = array();
                 $files_count     = count($params["files"]["name"]);
-                $upload_results  = array();
 
                 # Validate files
                 for($index=0; $index<$files_count; $index++){
@@ -62,8 +60,7 @@
                 ]);
 
                 # Upload files
-                $values_clause = array();
-                $bind_params   = array();
+                $values_clause = $bind_params = array();
 
                 if($files_to_upload){
                     foreach($files_to_upload as $file){
