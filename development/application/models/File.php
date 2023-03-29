@@ -157,7 +157,7 @@
         # Requires: $params {"section_id"}
         # Optionals: $params {"file_url"}
         # Returns: { status: true/false, result: array(), error: null }
-        # Last updated at: March 23, 2023
+        # Last updated at: March 28, 2023
         # Owner: Jovic
         public function getFiles($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -172,7 +172,7 @@
                 }
 
                 $get_files = $this->db->query("
-                    SELECT section_id, id AS file_id, file_name, file_url, mime_type, (tab_ids IS NOT NULL) AS is_used
+                    SELECT section_id, id AS file_id, file_name, file_url, mime_type, tab_ids, (tab_ids IS NOT NULL) AS is_used
                     FROM files
                     {$where_clause};
                 ", $bind_params);

@@ -153,5 +153,79 @@
 
             return $response_data;
         }
+
+        # DOCU: This function get the user_token to be use on auto login
+        # Triggered by: (GET) /
+        # Requires: $token
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: Mar. 29, 2023
+        # Owner: Erick
+        public function getUserToken($token){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $get_user_by_token = $this->db->query("
+                    SELECT users.* FROM user_tokens
+                    INNER JOIN users ON users.id = user_tokens.user_id
+                    WHERE token = ? LIMIT 1
+                ", $token);
+
+                if($get_user_by_token->num_rows()){
+                    $response_data["status"] = true;
+                    $user_details = $get_user_by_token->result_array()[0];
+
+                    $_SESSION["workspace_id"]     = VILLAGE88;
+                    $_SESSION["user_id"]          = $user_details["id"];
+                    $_SESSION["user_level_id"]    = $user_details["user_level_id"];
+                    $_SESSION["first_name"]       = $user_details["first_name"];
+                    $_SESSION["last_name"]        = $user_details["last_name"];
+                    $_SESSION["email"]            = $user_details["email"];
+                    $_SESSION["user_profile_pic"] = $user_details["profile_picture"];
+                    
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function create data in user_tokens for auto login
+        # Triggered by: (GET) /
+        # Requires: $user_id
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: Mar. 29, 2023
+        # Owner: Erick
+        public function createUserToken($user_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $delete_record = $this->db->query("DELETE FROM user_tokens WHERE user_id = ?", $_SESSION["user_id"]);
+
+                $ciphering_value = $this->config->item("ciphering_value");   
+                $iv_length = openssl_cipher_iv_length($ciphering_value);  
+                $encryption_iv_value = random_bytes($iv_length);  
+
+                # Encrypt the token to be save
+                $random_token = bin2hex(random_bytes(16));
+                $encrypted_token = openssl_encrypt($random_token.$user_id, $ciphering_value, $this->config->item("encryption_key"), ZERO_VALUE, $encryption_iv_value);    
+                
+                # Cookie will expire 1 month after
+                $expired_at = time() + 60 * 60 * 24 * 30;
+                setcookie('remember_me', $encrypted_token, $expired_at, '', '', '', true);
+
+                $create_user_token = $this->db->query("INSERT INTO user_tokens (user_id, token, created_at, updated_at) VALUES (?, ?, NOW(), NOW())", array($_SESSION["user_id"], $encrypted_token));
+
+                if($create_user_token){
+                    $response_data["status"] = true;
+                }
+            }
+            catch (Exception $e) {
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
     }
 ?>
