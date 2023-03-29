@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", function(){
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
         .on("submit", "#duplicate_documentation_form", onSubmitDuplicateForm)
         .on("click", ".duplicate_icon", duplicateDocumentation)
+        .on("click", "#add_documentation_btn", (event) => {
+            ux("#add_documentation_form").trigger("submit");
+        })
         .on("click", ".set_to_private_icon", async function(event){
             event.stopImmediatePropagation();
             event.preventDefault();
@@ -91,16 +94,20 @@ async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type
 function onSubmitAddDocumentationForm(event){
     event.preventDefault();
     let add_document_form = ux(event.target);
-    const input_document_title = ux("#input_add_documentation").val();
+    let input_document_title = ux("#input_add_documentation").val();
 
     if(input_document_title){
         /** Use AJAX to generate new documentation */
         ux().post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
+                if(response_data.result.html){
+                    ux("#documentations").html(response_data.result.html);
+                }
+
                 /* Redirect in admin edit document page. */
                 ux("#add_documentation_form").self().reset();
-                // location.href = "admin_edit_documentation.php?document_title="+ encodeURI(input_document_title);
-                location.href = `/docs/${response_data.result.documentation_id}/edit`;
+                
+                // location.href = `/docs/${response_data.result.documentation_id}/edit`;
             }
             else{
                 let add_documentation_input = ux(".group_add_documentation");

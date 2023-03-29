@@ -155,8 +155,12 @@
             &.hidden{
                 display: none !important;
             }
-            .mobile_add_comment_form{
-                display: flex;
+            .mobile_add_comment_form, .mobile_add_reply_form{
+                display: none;
+                
+                &.show{
+                    display: flex;
+                }
                 .comment_field{
                     flex-grow: 1;
 

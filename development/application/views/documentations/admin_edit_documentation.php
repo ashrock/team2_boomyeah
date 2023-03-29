@@ -55,9 +55,9 @@
                                     <input type="hidden" name="documentation_id" value="<?= $document_data["id"] ?>">
                                     <input type="hidden" name="action" value="create_section">
                                     <div class="group_add_section input-field">
-                                        <button id="submit_add_section_btn" type="submit"></button>
                                         <input name="section_title" id="input_add_section" type="text" class="section_title validate" autofocus>
                                         <label for="input_add_section">Add Section</label>
+                                        <button id="submit_add_section_btn" type="submit"></button>
                                     </div>
                                 </form>
                                 <div class="section_header">

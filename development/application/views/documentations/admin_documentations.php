@@ -38,6 +38,7 @@
                     <input id="input_add_documentation" type="text" class="validate" name="document_title" autofocus autocomplete="nope">
                     <input type="hidden" name="action" value="create_documentation">
                     <label for="input_add_documentation">Add Documentation</label>
+                    <button id="add_documentation_btn" type="submit"></button>
                 </div>
                 <span id="save_status" hidden>Saving...</span>
             </form>
