@@ -209,20 +209,87 @@
         # Triggered by: (POST) module/update
         # Requires: $params {action, module_title, module_content, is_comments_allowed, tab_id }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 28, 2023
+        # Last updated at: March 29, 2023
         # Owner: Jovic
         public function updateModule($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
+                # Start DB transaction
+                $this->db->trans_start();
                 $update_tab = $this->db->query("UPDATE tabs SET title = ?, content = ?, is_comments_allowed = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?;", 
                 array($params["module_title"], $params["module_content"], $params["is_comments_allowed"], $_SESSION["user_id"], $params["tab_id"]));
 
                 if($update_tab){
+                    # Check if module_content has links
+                    preg_match_all('~(?<=href=").*?(?=")~', $params["module_content"], $included_files);
+                    
+                    if($included_files){
+                        $included_files = array_unique($included_files[0]);
+                        
+                        # Fetch Files whose tab_ids contains $params["tab_id"] 
+                        $get_files = $this->db->query("SELECT JSON_ARRAYAGG(id) AS file_ids, JSON_ARRAYAGG(file_url) AS file_urls, JSON_ARRAYAGG(tab_ids) AS file_tab_ids FROM files WHERE tab_ids REGEXP ?;", "[[:<:]]{$params["tab_id"]}[[:>:]]");
+                        
+                        if($get_files->num_rows()){
+                            $get_files = $get_files->result_array()[0];
+
+                            # Prepare needed arrays
+                            $file_ids     = json_decode($get_files["file_ids"]);
+                            $file_urls    = json_decode($get_files["file_urls"]);
+                            $file_tab_ids = json_decode($get_files["file_tab_ids"]);
+
+                            # Check files to remove
+                            if($file_urls){
+                                # Check for removed file_urls
+                                $files_to_remove = array_diff($file_urls, $included_files);
+    
+                                if($files_to_remove){
+                                    $values_clause = array();
+                                    $bind_params   = array();
+    
+                                    # Prepare query values
+                                    foreach($files_to_remove as $key => $file){
+                                        # Get index of file
+                                        $file_index = array_search($file, $file_urls);
+                                        $tab_ids = explode(",", $file_tab_ids[$file_index]);
+    
+                                        # Remove tab_id if it's in File record's tab_ids
+                                        $tab_index = array_search($params["tab_id"], $tab_ids);
+                
+                                        if($tab_index !== FALSE){
+                                            unset($tab_ids[$tab_index]);
+                
+                                            # Convert array to comma-separated value then update File record
+                                            $tab_ids = implode(",", $tab_ids);
+                                            array_push($values_clause, "(?, ?)");
+                                            array_push($bind_params, $file_ids[$file_index], $tab_ids);
+                                        }
+                                    }
+                
+                                    $values_clause = implode(",", $values_clause);
+                                    $update_files = $this->db->query("INSERT INTO files (id, tab_ids) VALUES {$values_clause} ON DUPLICATE KEY UPDATE tab_ids = VALUES(tab_ids)", $bind_params);
+                
+                                    if(!$update_files){
+                                        throw new Exception("Error updating File records");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        # Delete tab_id from File records' tab_ids
+                        $remove_file_tab_id = $this->removeFileTabId($params["tab_id"]);
+                    }
+
+                    # Commit changes to DB
+                    $this->db->trans_complete();
+                    
                     $response_data["status"] = true;
+                    $response_data["result"]["module_content"] = $params["module_content"];
                 }
             }
             catch (Exception $e) {
+                $this->db->trans_rollback();
                 $response_data["error"] = $e->getMessage();
             }
 
@@ -269,43 +336,16 @@
                                 }
 
                                 # Check if we need to remove tab_id in Files record
-                                $this->load->model("File");
-                                $get_files = $this->File->getFiles(array("section_id" => $params["section_id"]));
-                                
-                                if($get_files["status"] && $get_files["result"]){
-                                    $values_clause = array();
-                                    $bind_params   = array();
+                                $remove_file_tab_id = $this->removeFileTabId($params["tab_id"]);
 
-                                    # Prepare query values
-                                    foreach($get_files["result"] as $file){
-                                        $tab_ids = explode(",", $file["tab_ids"]);
-
-                                        # Remove tab_id if it's in File record's tab_ids
-                                        $tab_index = array_search($params["tab_id"], $tab_ids);
+                                if($remove_file_tab_id["status"]){
+                                    # Commit changes to DB
+                                    $this->db->trans_complete();
     
-                                        if($tab_index !== FALSE){
-                                            unset($tab_ids[$tab_index]);
-    
-                                            # Convert array to comma-separated value then update File record
-                                            $tab_ids = implode(",", $tab_ids);
-                                            array_push($values_clause, "(?, ?)");
-                                            array_push($bind_params, $file["file_id"], $tab_ids);
-                                        }
-                                    }
-
-                                    $values_clause = implode(", ", $values_clause);
-                                    $update_files = $this->db->query("INSERT INTO files (id, tab_ids) VALUES {$values_clause} ON DUPLICATE KEY UPDATE tab_ids = VALUES(tab_ids)", $bind_params);
-
-                                    if(!$update_files){
-                                        throw new Exception("Error updating File records");
-                                    }
+                                    $response_data["status"] = true;
+                                    $response_data["result"]["tab_id"] = $tab["result"]["id"];
+                                    $response_data["result"]["remove_file_tab_id"] = $remove_file_tab_id;
                                 }
-
-                                # Commit changes to DB
-                                $this->db->trans_complete();
-
-                                $response_data["status"] = true;
-                                $response_data["result"]["tab_id"] = $tab["result"]["id"];
                             }
                         }
                         else{
@@ -857,7 +897,57 @@
                 }
             }
             catch (Exception $e) {
-                $this->db->trans_rollback();
+                $response_data["error"] = $e->getMessage();
+            }
+
+            return $response_data;
+        }
+
+        # DOCU: This function will remove tab_id from tab_ids in Files table
+        # Triggered by: updateModule(), removeTab()
+        # Requires: $tab_id
+        # Returns: { status: true/false, result: {}, error: null }
+        # Last updated at: March 28, 2023
+        # Owner: Jovic
+        private function removeFileTabId($tab_id){
+            $response_data = array("status" => false, "result" => array(), "error" => null);
+
+            try {
+                $this->load->model("File");
+                $get_files = $this->File->getFiles(array("tab_id" => $tab_id));
+
+                if($get_files["status"] && $get_files["result"]){
+                    $values_clause = array();
+                    $bind_params   = array();
+
+                    # Prepare query values
+                    foreach($get_files["result"] as $file){
+                        $tab_ids = explode(",", $file["tab_ids"]);
+
+                        # Remove tab_id if it's in File record's tab_ids
+                        $tab_index = array_search($tab_id, $tab_ids);
+
+                        if($tab_index !== FALSE){
+                            unset($tab_ids[$tab_index]);
+
+                            # Convert array to comma-separated value then update File record
+                            $tab_ids = implode(",", $tab_ids);
+                            array_push($values_clause, "(?, ?)");
+                            array_push($bind_params, $file["file_id"], $tab_ids);
+                        }
+                    }
+
+                    $values_clause = implode(",", $values_clause);
+                    $update_files = $this->db->query("INSERT INTO files (id, tab_ids) VALUES {$values_clause} ON DUPLICATE KEY UPDATE tab_ids = VALUES(tab_ids)", $bind_params);
+
+                    if(!$update_files){
+                        throw new Exception("Error updating File records");
+                    }
+                }
+
+                $response_data["status"] = true;
+            }
+            catch (Exception $e) {
                 $response_data["error"] = $e->getMessage();
             }
 
