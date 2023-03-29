@@ -285,7 +285,6 @@
                     $this->db->trans_complete();
                     
                     $response_data["status"] = true;
-                    $response_data["result"]["module_content"] = $params["module_content"];
                 }
             }
             catch (Exception $e) {
