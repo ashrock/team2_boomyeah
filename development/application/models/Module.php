@@ -109,7 +109,7 @@
                         # Create new tab after creating a new module
                         $insert_tab_record = $this->db->query("
                             INSERT INTO tabs (module_id, user_id, title, is_comments_allowed, cache_posts_count, created_at, updated_at) 
-                            VALUES (?, ?, ?, ?, ?, NOW(), NOW())", array($new_module_id , $_SESSION["user_id"], "Untitled Tab", NO, ZERO_VALUE)
+                            VALUES (?, ?, ?, ?, ?, NOW(), NOW())", array($new_module_id , $_SESSION["user_id"], "Untitled", NO, ZERO_VALUE)
                         );
 
                         $new_tab_id = $this->db->insert_id($insert_tab_record);
