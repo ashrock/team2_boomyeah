@@ -3,6 +3,7 @@
 ?>
     <div class="section_page_tab" id="tab_<?= $tab->id ?>">
         <form action="/modules/update" class="update_module_tab_form" method="POST">
+            <input type="hidden" name="section_id" value="<?= $section_id ?>" class="section_id">
             <input type="hidden" name="module_id" value="<?= $tab->module_id ?>" class="module_id">
             <input type="hidden" name="tab_id" value="<?= $tab->id ?>" class="tab_id">
             <div class="module_title">
