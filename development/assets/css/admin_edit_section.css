@@ -1123,7 +1123,6 @@ body::-webkit-scrollbar-thumb {
 }
 #modals_container #error_uploaded_file .modal {
   max-width: 443px;
-  display: flex;
   justify-content: space-between;
 }
 #modals_container #error_uploaded_file .modal .error_title {
