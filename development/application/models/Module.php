@@ -225,13 +225,13 @@
                     preg_match_all('~(?<=href=").*?(?=")~', $params["module_content"], $included_files);
                     
                     if($included_files){
-                        $included_files = array_unique($included_files[0]);
+                        $included_files = array_unique($included_files[FIRST_INDEX]);
                         
                         # Fetch Files whose tab_ids contains $params["tab_id"] 
                         $get_files = $this->db->query("SELECT JSON_ARRAYAGG(id) AS file_ids, JSON_ARRAYAGG(file_url) AS file_urls, JSON_ARRAYAGG(tab_ids) AS file_tab_ids FROM files WHERE tab_ids REGEXP ?;", "[[:<:]]{$params["tab_id"]}[[:>:]]");
                         
                         if($get_files->num_rows()){
-                            $get_files = $get_files->result_array()[0];
+                            $get_files = $get_files->result_array()[FIRST_INDEX];
 
                             # Prepare needed arrays
                             $file_ids     = json_decode($get_files["file_ids"]);
@@ -244,8 +244,7 @@
                                 $files_to_remove = array_diff($file_urls, $included_files);
     
                                 if($files_to_remove){
-                                    $values_clause = array();
-                                    $bind_params   = array();
+                                    $values_clause = $bind_params = array();
     
                                     # Prepare query values
                                     foreach($files_to_remove as $key => $file){
@@ -605,8 +604,7 @@
                 if($get_modules->num_rows()){
                     # create values_clause for creating modules for duplicated documentation
                     $get_modules   = $get_modules->result_array();
-                    $values_clause = array();
-                    $bind_params   = array();
+                    $values_clause = $bind_params = array();
 
                     for($modules_index = 0; $modules_index < count($get_modules); $modules_index++){
                         for($index = 0; $index < $get_modules[$modules_index]["modules_count"]; $index++){
@@ -696,8 +694,7 @@
                     $get_tabs = $get_tabs->result_array();
 
                     # Loop through Duplicated Modules to start Duplicating Tabs of Documentation
-                    $values_clause = array();
-                    $bind_params   = array();
+                    $values_clause = $bind_params = array();
 
                     for($index = 0; $index < count($params["module_ids"]); $index++) {
                         # json_decode is used to remove brackets from tab_ids_order
@@ -916,8 +913,7 @@
                 $get_files = $this->File->getFiles(array("tab_id" => $tab_id));
 
                 if($get_files["status"] && $get_files["result"]){
-                    $values_clause = array();
-                    $bind_params   = array();
+                    $values_clause = $bind_params = array();
 
                     # Prepare query values
                     foreach($get_files["result"] as $file){

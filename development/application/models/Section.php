@@ -423,8 +423,7 @@
                         $get_files = $this->File->getFiles(array("section_id" => $params["section_id"]));
 
                         if($get_files["status"] && $get_files["result"]){
-                            $file_ids   = array();
-                            $file_urls  = array();
+                            $file_ids = $file_urls = array();
 
                             foreach($get_files["result"] as $file){
                                 array_push($file_ids, $file["file_id"]);
