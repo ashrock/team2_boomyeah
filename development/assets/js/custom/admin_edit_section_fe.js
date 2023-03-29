@@ -117,7 +117,7 @@ function(){
         let tab_title = event.target;
         let section_page_tab = ux(tab_title.closest(".section_page_tab"));
         let tab_id = section_page_tab.attr("id");
-        let tab_title_value = (tab_title.value.length > 0) ? tab_title.value : "Untitled Tab*";
+        let tab_title_value = (tab_title.value.length > 0) ? tab_title.value : "Untitled*";
         ux(`.page_tab_item[data-tab_id="${tab_id}"] a`).text(tab_title_value);
         
         if(tab_title.value.length > 0){
