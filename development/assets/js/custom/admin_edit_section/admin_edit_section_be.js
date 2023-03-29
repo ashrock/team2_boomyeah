@@ -232,27 +232,10 @@ function initializeRedactor(selector){
                 ux(selector).closest(".update_module_tab_form").trigger("submit");
             },
             "editor.paste": function(event) {
-                let link_file_form = ux("#link_file_to_tab_form");
-                let file_id = link_file_form.find(".file_id").val();
-                let pasted_text = ux(event.params.$nodes.nodes[0]).text();
-                
-                link_file_form.find(".tab_id").val( ux(selector).closest(".update_module_tab_form").find(".tab_id").val() );
-
-                /* Check if the admin pasted text if from the uploaded files. */
-                if(pasted_text && pasted_text.includes("boomyeah-docs-2.s3")){
-                    link_file_form.trigger("submit");
-                }
+                triggerLinkFileTab({ type: "PASTE", selector, event });
             },
             "link.add": (event) => {
-                let link_file_form = ux("#link_file_to_tab_form");
-                let pasted_link = event.params.url;
-
-                link_file_form.find(".tab_id").val( ux(selector).closest(".update_module_tab_form").find(".tab_id").val() );
-
-                /* Check if the admin pasted text if from the uploaded files. */
-                if(pasted_link && pasted_link.includes("boomyeah-docs-2.s3")){
-                    link_file_form.trigger("submit");
-                }
+                triggerLinkFileTab({ type: "HYPERLINK", selector, event });
             }
         }
     });
@@ -269,6 +252,20 @@ function initializeRedactor(selector){
         });
     }
 }
+
+function triggerLinkFileTab(link_params){
+    let { type, selector, event } = link_params;
+    let link_file_form = ux("#link_file_to_tab_form");
+    let pasted_link    = type == "PASTE" ? ux(event.params.$nodes.nodes[0]).text() : event.params.url;
+
+    link_file_form.find(".tab_id").val( ux(selector).closest(".update_module_tab_form").find(".tab_id").val() );
+
+    /* Check if the admin pasted text if from the uploaded files. */
+    if(pasted_link && pasted_link.includes("boomyeah-docs-2.s3")){
+        link_file_form.trigger("submit");
+    }
+}
+
 function reorderModuleTabs(section_tabs_list){
     let tab_ids = [];
     let module_id = ux(section_tabs_list).data("module_id");
