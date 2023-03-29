@@ -203,9 +203,13 @@
             try {
                 $delete_record = $this->db->query("DELETE FROM user_tokens WHERE user_id = ?", $_SESSION["user_id"]);
 
+                $ciphering_value = $this->config->item("ciphering_value");   
+                $iv_length = openssl_cipher_iv_length($ciphering_value);  
+                $encryption_iv_value = random_bytes($iv_length);  
+
                 # Encrypt the token to be save
                 $random_token = bin2hex(random_bytes(16));
-                $encrypted_token = openssl_encrypt($random_token.$user_id, $this->config->item("ciphering_value"), $this->config->item("encryption_key"));    
+                $encrypted_token = openssl_encrypt($random_token.$user_id, $ciphering_value, $this->config->item("encryption_key"), ZERO_VALUE, $encryption_iv_value);    
                 
                 # Cookie will expire 1 month after
                 $expired_at = time() + 60 * 60 * 24 * 30;
