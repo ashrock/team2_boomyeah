@@ -142,11 +142,13 @@ let is_mobile_reply_open = false;
             is_mobile_reply_open = true;
 
             ux(comment_item).addClass("active_comment_item");
-            let mobile_add_comment_form = ux(".mobile_add_comment_form");
-            mobile_add_comment_form.find("label").text(label_text);
-            mobile_add_comment_form.find("textarea").self().focus();
-            mobile_add_comment_form.find(".action").val("add_post_comment");
-            mobile_add_comment_form.find(".post_id").val(ux(event.target).data("target_comment"));
+            let mobile_add_reply_form = ux(".mobile_add_reply_form");
+            mobile_add_reply_form.addClass("show");
+            ux(".mobile_add_comment_form").removeClass("show");
+            mobile_add_reply_form.find("label").text(label_text);
+            mobile_add_reply_form.find("textarea").self().focus();
+            mobile_add_reply_form.find(".action").val("add_post_comment");
+            mobile_add_reply_form.find(".post_id").val(ux(event.target).data("target_comment"));
         }
     }
 
