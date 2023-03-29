@@ -209,19 +209,17 @@
         # Triggered by: (POST) module/update
         # Requires: $params {action, module_title, module_content, is_comments_allowed, tab_id }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 15, 2023
+        # Last updated at: March 28, 2023
         # Owner: Jovic
         public function updateModule($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                if($params["action"] == "update_module_tab"){
-                    $update_tab = $this->db->query("UPDATE tabs SET title = ?, content = ?, is_comments_allowed = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?;", 
-                    array($params["module_title"], $params["module_content"], $params["is_comments_allowed"], $_SESSION["user_id"], $params["tab_id"]));
+                $update_tab = $this->db->query("UPDATE tabs SET title = ?, content = ?, is_comments_allowed = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?;", 
+                array($params["module_title"], $params["module_content"], $params["is_comments_allowed"], $_SESSION["user_id"], $params["tab_id"]));
 
-                    if($update_tab){
-                        $response_data["status"] = true;
-                    }
+                if($update_tab){
+                    $response_data["status"] = true;
                 }
             }
             catch (Exception $e) {
@@ -272,24 +270,34 @@
 
                                 # Check if we need to remove tab_id in Files record
                                 $this->load->model("File");
-                                $get_file = $this->File->getFile(array("section_id" => $params["section_id"]));
+                                $get_files = $this->File->getFiles(array("section_id" => $params["section_id"]));
                                 
-                                if($get_file["status"] && $get_file["result"]["tab_ids"]){
-                                    $tab_ids = explode(",", $get_file["result"]["tab_ids"]);
+                                if($get_files["status"] && $get_files["result"]){
+                                    $values_clause = array();
+                                    $bind_params   = array();
 
-                                    # Remove tab_id if it's in File record's tab_ids
-                                    $tab_index = array_search($params["tab_id"], $tab_ids);
+                                    # Prepare query values
+                                    foreach($get_files["result"] as $file){
+                                        $tab_ids = explode(",", $file["tab_ids"]);
 
-                                    if($tab_index !== FALSE){
-                                        unset($tab_ids[$tab_index]);
-
-                                        # Convert array to comma-separated value then update File record
-                                        $tab_ids = implode(",", $tab_ids);
-                                        $update_file = $this->db->query("UPDATE files SET tab_ids = ? WHERE id = ?;", array($tab_ids, $get_file["result"]["file_id"]));
-
-                                        if(!$update_file){
-                                            throw new Exception("Error updating File");
+                                        # Remove tab_id if it's in File record's tab_ids
+                                        $tab_index = array_search($params["tab_id"], $tab_ids);
+    
+                                        if($tab_index !== FALSE){
+                                            unset($tab_ids[$tab_index]);
+    
+                                            # Convert array to comma-separated value then update File record
+                                            $tab_ids = implode(",", $tab_ids);
+                                            array_push($values_clause, "(?, ?)");
+                                            array_push($bind_params, $file["file_id"], $tab_ids);
                                         }
+                                    }
+
+                                    $values_clause = implode(", ", $values_clause);
+                                    $update_files = $this->db->query("INSERT INTO files (id, tab_ids) VALUES {$values_clause} ON DUPLICATE KEY UPDATE tab_ids = VALUES(tab_ids)", $bind_params);
+
+                                    if(!$update_files){
+                                        throw new Exception("Error updating File records");
                                     }
                                 }
 

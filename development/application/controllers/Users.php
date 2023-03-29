@@ -49,24 +49,47 @@ class Users extends CI_Controller {
 						$_SESSION["last_name"]        = $register_user["result"]["user_info"]["last_name"];
 						$_SESSION["email"]            = $register_user["result"]["user_info"]["email"];
 						$_SESSION["user_profile_pic"] = $register_user["result"]["user_info"]["profile_picture"];
-	
+						
+						if(!isset($_COOKIE['remember_me'])){
+							$remember_me_token = $this->User->createUserToken($_SESSION["user_id"]);
+						}
+
 						redirect(($register_user["result"]["user_info"]["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
 					}
 				}
 			}
 			else{
-				# Create Auth URL for user login
-				$this->load->view('users/login', array("google_login_url" => $google_client->createAuthUrl()));
+				# Check the remember_me in cookie
+				if(isset($_COOKIE['remember_me'])){
+					$user_token = $this->User->getUserToken($_COOKIE['remember_me']);
+					redirect(($register_user["result"]["user_info"]["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
+				}
+				else{
+					# Create Auth URL for user login
+					$this->load->view('users/login', array("google_login_url" => $google_client->createAuthUrl()));
+				}
 			}
 		}
 		else{
+			# Check the remember_me in cookie
+			if(isset($_COOKIE['remember_me'])){
+				$user_token = $this->User->getUserToken($_COOKIE['remember_me']);
+			}
+			
 			# Redirect User to documentations page depending on User level
-			redirect(($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
+			redirect( ( $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
 		}
 	}
 
+	# DOCU: This function will logout user, delete coookies and session
+	# Triggered by: (GET) /logout
+	# Last updated at: Mar. 29, 2023
+	# Owner: Erick
 	public function logout(){
 		session_destroy();
+
+		unset($_COOKIE['remember_me']); 
+    	setcookie('remember_me', null, -1, '/'); 
 
 		redirect(base_url());
 	}
