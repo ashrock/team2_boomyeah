@@ -98,7 +98,6 @@
                 $get_user = $this->db->query("SELECT {$fields_to_select} FROM users WHERE {$params['field_to_compare']} IN ?;", array($params["compare_values"]));
 
                 $response_data["result"] = $get_user->result_array();
-                
                 $response_data["status"] = true;
             }
             catch (Exception $e) {
@@ -172,7 +171,7 @@
 
                 if($get_user_by_token->num_rows()){
                     $response_data["status"] = true;
-                    $user_details = $get_user_by_token->result_array()[0];
+                    $user_details = $get_user_by_token->result_array()[FIRST_INDEX];
 
                     $_SESSION["workspace_id"]     = VILLAGE88;
                     $_SESSION["user_id"]          = $user_details["id"];
