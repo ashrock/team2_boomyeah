@@ -6,13 +6,20 @@
         # Triggered by: Any models that needs to fetch data of a module
         # Requires: $module_id
         # Returns: { status: true/false, result: { module_data }, error: null }
-        # Last updated at: March 15, 2023
-        # Owner: Erick
+        # Last updated at: March 29, 2023
+        # Owner: Erick, Updated by: Jovic
         public function getModule($module_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $get_module = $this->db->query("SELECT id, tab_ids_order FROM modules WHERE id = ?", $module_id);
+                $get_module = $this->db->query("
+                    SELECT 
+                        modules.id, modules.tab_ids_order,
+                        JSON_ARRAYAGG(tabs.id) AS tab_ids
+                    FROM modules
+                    INNER JOIN tabs ON tabs.module_id = modules.id
+                    WHERE modules.id = ?;
+                ", $module_id);
                 
                 if($get_module->num_rows()){                    
                     $response_data["status"] = true;
@@ -225,13 +232,13 @@
                     preg_match_all('~(?<=href=").*?(?=")~', $params["module_content"], $included_files);
                     
                     if($included_files){
-                        $included_files = array_unique($included_files[0]);
+                        $included_files = array_unique($included_files[FIRST_INDEX]);
                         
                         # Fetch Files whose tab_ids contains $params["tab_id"] 
                         $get_files = $this->db->query("SELECT JSON_ARRAYAGG(id) AS file_ids, JSON_ARRAYAGG(file_url) AS file_urls, JSON_ARRAYAGG(tab_ids) AS file_tab_ids FROM files WHERE tab_ids REGEXP ?;", "[[:<:]]{$params["tab_id"]}[[:>:]]");
                         
                         if($get_files->num_rows()){
-                            $get_files = $get_files->result_array()[0];
+                            $get_files = $get_files->result_array()[FIRST_INDEX];
 
                             # Prepare needed arrays
                             $file_ids     = json_decode($get_files["file_ids"]);
@@ -244,8 +251,7 @@
                                 $files_to_remove = array_diff($file_urls, $included_files);
     
                                 if($files_to_remove){
-                                    $values_clause = array();
-                                    $bind_params   = array();
+                                    $values_clause = $bind_params = array();
     
                                     # Prepare query values
                                     foreach($files_to_remove as $key => $file){
@@ -299,7 +305,7 @@
         # Triggered by: (POST) module/remove_tab
         # Requires: $params { tab_id }
         # Returns: { status: true/false, result: { tab_id }, error: null }
-        # Last updated at: March 28, 2023
+        # Last updated at: March 29, 2023
         # Owner: Erick, Updated by: Jovic
         public function removeTab($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -316,39 +322,51 @@
                     if($delete_section){
                         $module = $this->getModule($tab["result"]["module_id"]);
 
-                        # Remove section_id from section_ids_order and update documentation record
-                        $tabs_order = explode(",", $module["result"]["tab_ids_order"]);
-                        $tab_index  = array_search($params["tab_id"], $tabs_order);
-
-                        if($tab_index !== FALSE){
-                            unset($tabs_order[$tab_index]);
-                            $tabs_count = count($tabs_order);
-                            $tabs_order = ($tabs_count) ? implode(",", $tabs_order) : "";
-
-                            # Update documentations section_ids_order
-                            $update_module_tabs_order = $this->db->query("UPDATE modules SET tab_ids_order = ? WHERE id = ?", array($tabs_order, $tab["result"]["module_id"]));
+                        if($module["status"]){
+                            $tab_ids = json_decode($module["result"]["tab_ids"]);
                             
-                            if($update_module_tabs_order){
-                                # Check if we are deleting the last tab then remove the module also.
-                                if($tabs_count == ZERO_VALUE){
-                                    $delete_module = $this->db->query("DELETE FROM modules WHERE id = ?;", $tab["result"]["module_id"]);
-                                }
-
-                                # Check if we need to remove tab_id in Files record
-                                $remove_file_tab_id = $this->removeFileTabId($params["tab_id"]);
-
-                                if($remove_file_tab_id["status"]){
-                                    # Commit changes to DB
-                                    $this->db->trans_complete();
+                            # Update tab_ids_order if it exist
+                            if($module["result"]["tab_ids_order"]){
+                                # Remove section_id from section_ids_order and update documentation record
+                                $tabs_order = explode(",", $module["result"]["tab_ids_order"]);
+                                $tab_index  = array_search($params["tab_id"], $tabs_order);
     
-                                    $response_data["status"] = true;
-                                    $response_data["result"]["tab_id"] = $tab["result"]["id"];
-                                    $response_data["result"]["remove_file_tab_id"] = $remove_file_tab_id;
+                                if($tab_index !== FALSE){
+                                    unset($tabs_order[$tab_index]);
+                                    $tabs_order = count($tabs_order) ? implode(",", $tabs_order) : "";
+    
+                                    # Update documentations section_ids_order
+                                    $update_module_tabs_order = $this->db->query("UPDATE modules SET tab_ids_order = ? WHERE id = ?", array($tabs_order, $tab["result"]["module_id"]));
+    
+                                    if(!$update_module_tabs_order){
+                                        throw new Exception("Error updating tab_ids_order");
+                                    }
                                 }
                             }
-                        }
-                        else{
-                            throw new Exception("Unable to delete tab, the tab is not included in the tab_ids_order field.");
+                            
+                            # Check if we are deleting the last tab then remove the module also.
+                            if(!$tab_ids){
+                                $delete_module = $this->db->query("DELETE FROM modules WHERE id = ?;", $tab["result"]["module_id"]);
+    
+                                if(!$delete_module){
+                                    throw new Exception("Error deleting module");
+                                }
+                            }
+    
+                            # Check if we need to remove tab_id in Files record
+                            $remove_file_tab_id = $this->removeFileTabId($params["tab_id"]);
+    
+                            if($remove_file_tab_id["status"]){
+                                # Commit changes to DB
+                                $this->db->trans_complete();
+    
+                                $response_data["status"] = true;
+                                $response_data["result"]["tab_id"] = $tab["result"]["id"];
+                                $response_data["result"]["remove_file_tab_id"] = $remove_file_tab_id;
+                            }
+                            else{
+                                throw new Exception("Error removing Tab");
+                            }
                         }
                     }
                 }
@@ -605,8 +623,7 @@
                 if($get_modules->num_rows()){
                     # create values_clause for creating modules for duplicated documentation
                     $get_modules   = $get_modules->result_array();
-                    $values_clause = array();
-                    $bind_params   = array();
+                    $values_clause = $bind_params = array();
 
                     for($modules_index = 0; $modules_index < count($get_modules); $modules_index++){
                         for($index = 0; $index < $get_modules[$modules_index]["modules_count"]; $index++){
@@ -696,8 +713,7 @@
                     $get_tabs = $get_tabs->result_array();
 
                     # Loop through Duplicated Modules to start Duplicating Tabs of Documentation
-                    $values_clause = array();
-                    $bind_params   = array();
+                    $values_clause = $bind_params = array();
 
                     for($index = 0; $index < count($params["module_ids"]); $index++) {
                         # json_decode is used to remove brackets from tab_ids_order
@@ -916,8 +932,7 @@
                 $get_files = $this->File->getFiles(array("tab_id" => $tab_id));
 
                 if($get_files["status"] && $get_files["result"]){
-                    $values_clause = array();
-                    $bind_params   = array();
+                    $values_clause = $bind_params = array();
 
                     # Prepare query values
                     foreach($get_files["result"] as $file){
