@@ -25,10 +25,10 @@
     
     .section_details{
         .add_description{
-            position: relative;
-            border: 1px solid @by_input_border;
             border-radius: 8px;
+            border: 1px solid @by_input_border;
             padding: 16px;
+            position: relative;
             textarea{
                 max-width: 955px;
                 overflow: hidden;
@@ -105,34 +105,34 @@
         }
         .files_upload_content{
             #upload_files_form{
-                margin: 24px 0 18px;
+                align-items: center;
                 display: flex;
                 flex-direction: row;
-                align-items: center;
+                margin: 24px 0 18px;
                 #file_upload_btn{
+                    align-items: center;
                     background: none;
                     border-radius: 10px;
                     border: 1px solid @by_primary;
                     color: @by_primary;
                     cursor: pointer;
+                    display: flex;
                     font: 400 16px/20px @readex_regular;
                     height: 38px;
-                    display: flex;
-                    align-items: center;
                     justify-content: center;
                     width: 209px;
-                   &:hover{
-                        background: @by_input_border;
-                   }
-                   &::before{
-                        background: url(https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/handouts_sprite.svg) no-repeat -29px -3px;
-                        content: "";
-                        display: inline-block;
-                        height: 18px;
-                        margin-right: 8px;
-                        position: relative;
-                        width: 15px;
-                   }
+                    &:hover{
+                            background: @by_input_border;
+                    }
+                    &::before{
+                            background: url(https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/handouts_sprite.svg) no-repeat -29px -3px;
+                            content: "";
+                            display: inline-block;
+                            height: 18px;
+                            margin-right: 8px;
+                            position: relative;
+                            width: 15px;
+                    }
                     &:disabled{
                         cursor: not-allowed;
                     }

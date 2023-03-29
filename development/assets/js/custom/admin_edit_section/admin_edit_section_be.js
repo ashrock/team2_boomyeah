@@ -250,6 +250,7 @@ function initializeRedactor(selector){
         document.querySelectorAll(".section_page_tabs").forEach((section_tabs_list) => {
             Sortable.create(section_tabs_list, {
                 draggable: ".page_tab_item",
+                /* group: "module_tabs", */
                 onEnd: () => {
                     reorderModuleTabs(section_tabs_list);
                 }
@@ -259,10 +260,9 @@ function initializeRedactor(selector){
 }
 function reorderModuleTabs(section_tabs_list){
     let tab_ids = [];
-    let module_id = null;
+    let module_id = ux(section_tabs_list).data("module_id");
     ux(section_tabs_list).findAll(".page_tab_item").forEach((page_tab_item) => {
         tab_ids.push( ux(page_tab_item).data("tab_id").replace("tab_", "") );
-        module_id = ux(page_tab_item).data("module_id");
     });
     let tab_ids_order = tab_ids.join(",");
     let reorder_tabs_form = ux("#reorder_tabs_form");

@@ -6,7 +6,7 @@
         <div id="tab_content_<?= $tab->id ?>" class="tab_content"><?= $tab->content ?></div>
         
 <?php if((int) $tab->is_comments_allowed) { ?>
-        <a href="#" data-target="mobile_comments_slideout" class="show_comments_btn sidenav-trigger" data-cache_posts_count="<?= $tab->cache_posts_count ?>">Comments (<?= (int) $tab->cache_posts_count ?>)</a>
+        <a href="#" data-target="mobile_comments_slideout" class="show_comments_btn sidenav-trigger" data-tab_id="<?= $tab->id ?>" data-cache_posts_count="<?= $tab->cache_posts_count ?>">Comments (<?= (int) $tab->cache_posts_count ?>)</a>
         <a class="fetch_tab_posts_btn" href="#tab_posts_<?= $tab->id ?>" data-tab_id="<?= $tab->id ?>" data-cache_posts_count="<?= $tab->cache_posts_count ?>">Comments (<?= (int) $tab->cache_posts_count ?>)</a>
         <div class="tab_comments comment_container">
             <form action="/modules/add_post" method="POST" class="add_comment_form add_post_form">

@@ -174,18 +174,19 @@ function onSubmitEditForm(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let {post_comment_id, post_id} = response_data.result;
-            let item_id = `.post_comment_${post_comment_id}`;
+            let {post_id, comment_id} = response_data.result;
+            let item_id = `.post_comment_${post_id}`;
             
             if(!post_id){
                 /** Replace post comment HTML */
-                item_id = `.comment_${post_comment_id}`;
+                item_id = `.comment_${comment_id}`;
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).replaceWith(response_data.result.html);
                 });
             } else {
                 let response_html = stringToHtmlContent(response_data.result.html);
                 let comment_content = ux(response_html).find(".comment_content").self();
+                console.log(item_id, comment_content)
                 
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).find(".comment_content").self().replaceWith(comment_content);
