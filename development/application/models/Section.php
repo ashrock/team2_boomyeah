@@ -81,7 +81,7 @@
         # Triggered by: (GET) docs/:documentation_id/:section_id/edit
         # Requires: $section_id
         # Returns: { status: true/false, result: { section_tabs data }, error: null }
-        # Last updated at: March 20, 2023
+        # Last updated at: March 28, 2023
         # Owner: Jovic, Updated by: Erick, Jovic
         public function getSectionTabs($section_id, $module_id = ZERO_VALUE){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -93,6 +93,7 @@
 
                 $get_section = $this->db->query("
                     SELECT
+                        sections.id AS section_id,
                         modules.id AS module_id, 
                         (CASE
                             WHEN modules.tab_ids_order IS NOT NULL THEN 

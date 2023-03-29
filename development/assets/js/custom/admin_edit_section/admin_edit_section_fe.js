@@ -121,11 +121,13 @@
     
         function onUpdateTabTitle(event){
             let tab_title = event.target;
+            let module_title = ux(tab_title.closest(".module_title"));
             let section_page_tab = ux(tab_title.closest(".section_page_tab"));
             let tab_id = section_page_tab.attr("id");
             let tab_title_value = (tab_title.value.length > 0) ? tab_title.value : "Untitled Tab*";
             ux(`.page_tab_item[data-tab_id="${tab_id}"] a`).text(tab_title_value);
             let tab_title_ux = section_page_tab.find(".tab_title");
+            module_title.find(".character_count").attr("data-length", tab_title.value.length);
     
             if(tab_title.value.length > 1){
                 clearTimeout(keyup_timeout);
@@ -204,9 +206,11 @@
             let tab_title = tab_item.innerText.substring(0, tab_item.innerText.length - 1);
             let tab_id = ux(tab_item).data("tab_id");
             let module_id = ux(tab_item).data("module_id");
+            let section_id = ux(tab_item).data("section_id");
             let remove_tab_form = ux("#remove_tab_form");
             remove_tab_form.find(".tab_id").val( tab_id.replace("tab_", "") );
             remove_tab_form.find(".module_id").val( module_id );
+            remove_tab_form.find(".section_id").val( section_id );
             
             let remove_tab_modal = ux("#confirm_remove_tab_modal");
             remove_tab_modal.find(".tab_title").text(tab_title.trim());

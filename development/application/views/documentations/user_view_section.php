@@ -21,7 +21,10 @@
     <script src="<?= add_file("assets/js/constants.js") ?>"></script>
 </head>
 <body>
-    <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php"); ?></div>
+    <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php", array("all_sections" => array(
+            array("id" => (time() + rand()), "title" => "Section ". (time() + rand())),
+            array("id" => (time() + rand()), "title" => "Section ". (time() + rand())),
+        ))); ?></div>
     <div id="wrapper" class="container">
         <div id="view_section_content">
             <div id="section_summary">
@@ -42,7 +45,7 @@
                         <h1 id="section_title"><?= $section["title"] ?></h1>
                     </div>
                     <div class="add_description">
-                        <div name="section_short_description" id="section_short_description"><?= $section["description"] ?></div>
+                        <p name="section_short_description" id="section_short_description"><?= $section["description"] ?></p>
                     </div>
                 </div>
             </div>
@@ -54,13 +57,10 @@
                 <!-- Mobile View: Progress bar corresponds to the section_page_content not the section_page_tab  -->
             </div>
             <div id="mobile_section_pages_controls">
+                <div class="row_placeholder"></div>
                 <div id="page_btns">
-                    <div class="row_placeholder"></div>
                     <button id="prev_page_btn" type="button" class="page_btn hidden"></button>
                     <button id="next_page_btn" type="button" class="page_btn"></button>
-                </div>
-                <div id="section_page_progress">
-                    <div class="progress"></div>
                 </div>
             </div>
             <div id="clone_section_page">
@@ -102,7 +102,7 @@
         <input type="hidden" name="action" value="fetch_tab_posts">
         <input type="hidden" name="tab_id" class="tab_id">
     </form>
-    <form id="fetch_mobile_posts_form" action="<?= BASE_FILE_URL ?>processes/manage_documentation.php" method="POST" class="hidden">
+    <form id="fetch_mobile_posts_form" action="/modules/get_posts" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_tab_posts">
         <input type="hidden" name="tab_id" class="tab_id">
     </form>

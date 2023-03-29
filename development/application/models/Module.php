@@ -151,7 +151,7 @@
         # Triggered by: (POST) module/add_tab
         # Requires: $params { section_id }
         # Returns: { status: true/false, result: { module_id, tab_id, html_tab, html_content }, error: null }
-        # Last updated at: March 20, 2023
+        # Last updated at: March 28, 2023
         # Owner: Erick, Updated by: Jovic
         public function addTab($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -189,8 +189,8 @@
                         $response_data["result"] = array(
                             "module_id"     => $module_id,
                             "tab_id"        => $new_tab_id,
-                            "html_tab"      => $this->load->view("partials/page_tab_item_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true),
-                            "html_content"  => $this->load->view("partials/section_page_tab_partial.php", array("module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true)
+                            "html_tab"      => $this->load->view("partials/page_tab_item_partial.php", array("section_id" => $params["section_id"], "module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true),
+                            "html_content"  => $this->load->view("partials/section_page_tab_partial.php", array("section_id" => $params["section_id"], "module_tabs_json" => $module_tabs_json, "tab_ids_order" => array($new_tab_id)), true)
                         );
                     }
                 }
@@ -209,19 +209,17 @@
         # Triggered by: (POST) module/update
         # Requires: $params {action, module_title, module_content, is_comments_allowed, tab_id }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 15, 2023
+        # Last updated at: March 28, 2023
         # Owner: Jovic
         public function updateModule($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                if($params["action"] == "update_module_tab"){
-                    $update_tab = $this->db->query("UPDATE tabs SET title = ?, content = ?, is_comments_allowed = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?;", 
-                    array($params["module_title"], $params["module_content"], $params["is_comments_allowed"], $_SESSION["user_id"], $params["tab_id"]));
+                $update_tab = $this->db->query("UPDATE tabs SET title = ?, content = ?, is_comments_allowed = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?;", 
+                array($params["module_title"], $params["module_content"], $params["is_comments_allowed"], $_SESSION["user_id"], $params["tab_id"]));
 
-                    if($update_tab){
-                        $response_data["status"] = true;
-                    }
+                if($update_tab){
+                    $response_data["status"] = true;
                 }
             }
             catch (Exception $e) {
@@ -235,8 +233,8 @@
         # Triggered by: (POST) module/remove_tab
         # Requires: $params { tab_id }
         # Returns: { status: true/false, result: { tab_id }, error: null }
-        # Last updated at: March 16, 2023
-        # Owner: Erick
+        # Last updated at: March 28, 2023
+        # Owner: Erick, Updated by: Jovic
         public function removeTab($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -270,6 +268,39 @@
                                     $delete_module = $this->db->query("DELETE FROM modules WHERE id = ?;", $tab["result"]["module_id"]);
                                 }
 
+                                # Check if we need to remove tab_id in Files record
+                                $this->load->model("File");
+                                $get_files = $this->File->getFiles(array("section_id" => $params["section_id"]));
+                                
+                                if($get_files["status"] && $get_files["result"]){
+                                    $values_clause = array();
+                                    $bind_params   = array();
+
+                                    # Prepare query values
+                                    foreach($get_files["result"] as $file){
+                                        $tab_ids = explode(",", $file["tab_ids"]);
+
+                                        # Remove tab_id if it's in File record's tab_ids
+                                        $tab_index = array_search($params["tab_id"], $tab_ids);
+    
+                                        if($tab_index !== FALSE){
+                                            unset($tab_ids[$tab_index]);
+    
+                                            # Convert array to comma-separated value then update File record
+                                            $tab_ids = implode(",", $tab_ids);
+                                            array_push($values_clause, "(?, ?)");
+                                            array_push($bind_params, $file["file_id"], $tab_ids);
+                                        }
+                                    }
+
+                                    $values_clause = implode(", ", $values_clause);
+                                    $update_files = $this->db->query("INSERT INTO files (id, tab_ids) VALUES {$values_clause} ON DUPLICATE KEY UPDATE tab_ids = VALUES(tab_ids)", $bind_params);
+
+                                    if(!$update_files){
+                                        throw new Exception("Error updating File records");
+                                    }
+                                }
+
                                 # Commit changes to DB
                                 $this->db->trans_complete();
 
@@ -278,13 +309,13 @@
                             }
                         }
                         else{
-                            $this->db->trans_rollback();
-                            throw new Exception("Unable to delete tab, the tab is not included in thetab)ids_order field.");
+                            throw new Exception("Unable to delete tab, the tab is not included in the tab_ids_order field.");
                         }
                     }
                 }
             }
             catch (Exception $e) {
+                $this->db->trans_rollback();
                 $response_data["error"] = $e->getMessage();
             }
 
@@ -806,7 +837,7 @@
 
             try {
                 $this->load->model("File");
-                $file = $this->File->getFile($params["file_id"]);
+                $file = $this->File->getFile(array("file_id" => $params["file_id"]));
 
                 if($file["status"]){
                     $tab_ids = $file["result"]["tab_ids"];
