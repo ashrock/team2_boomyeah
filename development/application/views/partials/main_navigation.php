@@ -7,10 +7,10 @@
     <ul id="slide-out" class="sidenav">
 <?php foreach($side_nav_links as $side_nav_link){ 
     if((preg_match("/^\/docs\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
-        $link = base_url() . "docs/{$side_nav_link["id"]}/edit";
+        $link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["id"]}";
     }
     else if((preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
-        $link = base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}/edit";
+        $link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}";
     }
 ?>
     <li><a href="<?= $link ?>"><?= $side_nav_link["title"] ?></a></li>
@@ -35,7 +35,7 @@
 </div>
 <div id="mobile_container">
     <div class="header_mobile">
-        <?php if(!in_array($request_uri, ["admin_documentation.php", "user_documentation.php"])){ ?>
+        <?php if(!in_array($_SERVER["REQUEST_URI"], ["admin_documentation.php", "user_documentation.php"])){ ?>
             <a href="#" data-target="mobile_nav" class="mobile sidenav-trigger"></a>
         <?php } ?>
         <div class="row_placeholder"></div>

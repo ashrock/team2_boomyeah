@@ -276,7 +276,7 @@
 					}
 				}
 				else{
-					echo $sections["error"];
+					echo $section["error"];
 				}
 			}
 			else{
@@ -288,7 +288,7 @@
 		# DOCU: This function will call getDocumentation from Documentation Model and render user_view_documentation page
 		# Triggered by: (GET) docs/(:any)
 		# Requires: $documentation_id
-		# Last updated at: Mar. 24, 2023
+		# Last updated at: Mar. 30, 2023
 		# Owner: Jovic
 		public function userDocumentation($documentation_id){
 			# Check if user is allowed to do action
@@ -298,11 +298,14 @@
 			
 			if($documentation["status"] && $documentation["result"]){
 				if($documentation["result"]["is_archived"] == FALSE_VALUE){
+					# Fetch documentations to be used in side nav
+					$documentations = $this->Documentation->getDocumentations($this->setGetDocumentationsParams());
+
 					# Fetch sections
 					$this->load->model("Section");
 					$sections = $this->Section->getSections($documentation_id);
 	
-					$this->load->view('documentations/user_view_documentation', array("document_data" => $documentation["result"], "sections" => $sections["result"]));
+					$this->load->view('documentations/user_view_documentation', array("side_nav_links" => $documentations["result"], "document_data" => $documentation["result"], "sections" => $sections["result"]));
 				}
 				else{
 					redirect("/docs");
@@ -317,24 +320,27 @@
 		# DOCU: This function will call getDocumentation from Documentation Model and render user_view_section page
 		# Triggered by: (GET) docs/(:any)/(:any)
 		# Requires: $documentation_id, $section_id
-		# Last updated at: Mar. 27, 2023
+		# Last updated at: Mar. 30, 2023
 		# Owner: Jovic
 		public function userSection($documentation_id, $section_id){
 			$documentation = $this->Documentation->getDocumentation($documentation_id);
 			
 			if($documentation["status"] && $documentation["result"]){
 				if($documentation["result"]["is_archived"] == FALSE_VALUE){
-					# Fetch sections
+					# Fetch sections to be used in side nav
 					$this->load->model("Section");
-					$sections = $this->Section->getSection(array("section_id" => $section_id, "documentation_id" => $documentation_id));
+					$sections = $this->Section->getSections($documentation_id);
 
-					if($sections["status"] && $sections["result"]){
+					# Fetch sections
+					$section = $this->Section->getSection(array("section_id" => $section_id, "documentation_id" => $documentation_id));
+
+					if($section["status"] && $section["result"]){
 						$modules = $this->Section->getSectionTabs($section_id);
 		
-						$this->load->view('documentations/user_view_section', array("documentation" => $documentation["result"], "section" => $sections["result"], "modules" => $modules["result"]));
+						$this->load->view('documentations/user_view_section', array("side_nav_links" => $sections["result"], "documentation" => $documentation["result"], "section" => $section["result"], "modules" => $modules["result"]));
 					}
 					else{
-						echo $sections["error"];
+						echo $section["error"];
 					}
 				}
 				else{
