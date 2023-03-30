@@ -163,6 +163,8 @@ textarea {
   flex-grow: 1;
 }
 #nav_documentation #slide-out ul {
+  max-height: calc(100% - 54px);
+  overflow: auto;
   padding-right: 40px;
 }
 #nav_documentation #slide-out li {
@@ -170,6 +172,7 @@ textarea {
   display: flex;
   font: 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   padding: 0px 0px 0px 24px;
+  position: relative;
   z-index: 9999;
 }
 #nav_documentation #slide-out li:hover {
@@ -197,7 +200,7 @@ textarea {
   display: inline-block;
   height: 28px;
   position: absolute;
-  right: 40px;
+  right: 0px;
   vertical-align: middle;
   width: 28px;
 }

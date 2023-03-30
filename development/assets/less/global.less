@@ -208,6 +208,8 @@ textarea{
 
         }
         ul{
+            max-height: calc(100% - 54px);
+            overflow: auto;
             padding-right: 40px;
         }
         li{
@@ -215,6 +217,7 @@ textarea{
             display: flex;
             font: 16px/20px @readex_regular;
             padding: 0px 0px 0px 24px;
+            position: relative;
             z-index: 9999;
             &:hover{
                 background: @by_hover;
@@ -240,7 +243,7 @@ textarea{
                     display: inline-block;
                     height: 28px;
                     position: absolute;
-                    right: 40px;
+                    right: 0px;
                     vertical-align: middle;
                     width: 28px;
                 }
