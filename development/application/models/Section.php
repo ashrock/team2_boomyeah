@@ -6,7 +6,7 @@
         # Triggered by: (GET) docs/:id/edit
         # Requires: $documentation_id
         # Returns: { status: true/false, result: sections records, error: null }
-        # Last updated at: March 10, 2023
+        # Last updated at: March 30, 2023
         # Owner: Jovic
         public function getSections($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -21,7 +21,7 @@
                     $order_by_clause = $get_documentation['result']['section_ids_order'] ? "ORDER BY FIELD (id, {$get_documentation['result']['section_ids_order']})" : "";
 
                     # Fetch sections
-                    $get_sections = $this->db->query("SELECT id, title, description FROM sections WHERE documentation_id = ? {$order_by_clause};", $documentation_id);
+                    $get_sections = $this->db->query("SELECT id, documentation_id, title, description FROM sections WHERE documentation_id = ? {$order_by_clause};", $documentation_id);
 
                     if($get_sections->num_rows()){
                         $response_data["result"] = $get_sections->result_array();

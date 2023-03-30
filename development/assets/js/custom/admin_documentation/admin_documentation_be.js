@@ -292,7 +292,14 @@ function getDocumentations(event){
 
     form.post(form.attr("action"), form.serialize(), (response_data) => {
         if(response_data.status){
-            let documentations_div = response_data.result.is_archived == "1" ? "archived_documents" : "documentations";
+            let documentations_div = "documentations";
+            document.getElementById("input_add_documentation").disabled = false;
+            
+            if(response_data.result.is_archived == "1"){
+                documentations_div = "archived_documents";
+                document.getElementById("input_add_documentation").disabled = true;
+            }
+
             document.getElementById(documentations_div).innerHTML = response_data.result.html;
         }
         else{

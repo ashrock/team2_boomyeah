@@ -48,28 +48,32 @@
         # Requires: $params { workspace_id, is_archived, user_level_id }, $_SESSION["user_id"]
         # Optionals: $params { documentation_ids_order }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: documentations record (Array), error: null }
-        # Last updated at: Mar. 7, 2023
+        # Last updated at: Mar. 30, 2023
         # Owner: Jovic
         public function getDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 // ! Binding an array value encloses it in a parenthesis which causes an error
-                $where_conditions = "is_archived = ? ";
+                $where_conditions = "documentations.is_archived = ? ";
                 $bind_params      = array($params["workspace_id"], $params["is_archived"]);
 
                 # Set conditions and param values when user is not an admin
                 if($params["user_level_id"] == USER_LEVEL["USER"]){
-                    $where_conditions .= "AND (is_private = ?  OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = ?)) ";
+                    $where_conditions .= "AND (documentations.is_private = ?  OR documentations.id IN (SELECT collaborators.documentation_id FROM collaborators WHERE collaborators.user_id = ?)) ";
                     array_push($bind_params, FALSE_VALUE, $_SESSION["user_id"]);
                 }
                 
                 # Only add ORDER BY clause to query if viewing active documentations
-                $documentation_order = ($params["is_archived"] || $params["documentation_ids_order"] == null) ? "" : "ORDER BY FIELD (id, {$params["documentation_ids_order"]})";
+                $documentation_order = ($params["is_archived"] || $params["documentation_ids_order"] == null) ? "" : "ORDER BY FIELD (documentations.id, {$params["documentation_ids_order"]})";
 
-                $get_documentations = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count
+                $get_documentations = $this->db->query("
+                    SELECT
+                        documentations.id, documentations.title, documentations.is_archived, documentations.is_private, documentations.cache_collaborators_count,
+                        CONCAT(users.first_name, ' ', users.last_name) AS documentation_owner
                     FROM documentations
-                    WHERE workspace_id = ? AND {$where_conditions}
+                    INNER JOIN users ON users.id = documentations.user_id
+                    WHERE documentations.workspace_id = ? AND {$where_conditions}
                     $documentation_order", $bind_params
                 );
 
