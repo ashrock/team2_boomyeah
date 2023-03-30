@@ -135,7 +135,17 @@
 
                     if($update_workspace_docs_order){
                         $response_data["status"] = true;
-                        $response_data["result"] = array("documentation_id" => $new_documentation_id);
+                        $response_data["result"]["html"] = $this->load->view(
+                            "partials/document_block_partial.php",
+                            array( "all_documentations" => [array(
+                                "id"                        => $new_documentation_id,
+                                "title"                     => $params["title"],
+                                "is_private"                => $is_private,
+                                "is_archived"               => NO,
+                                "cache_collaborators_count" => ZERO_VALUE
+                            )]), 
+                            true
+                        );
                     }
                 }
             }
