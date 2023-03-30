@@ -1,30 +1,25 @@
-<?php
-    $request_uri_array = explode("/", $_SERVER["REQUEST_URI"]);
-    $request_uri = $request_uri_array[count($request_uri_array) - 1];
-?>
 <div id="nav_documentation">
     <div class="nav_holder">
-        <?php 
-            if( ($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] && !stristr($_SERVER["REQUEST_URI"], "docs/edit")) 
-            ||  ($_SESSION["user_level_id"] != USER_LEVEL["ADMIN"] && $request_uri != "docs")){ ?>
+        <?php if(!in_array($_SERVER["REQUEST_URI"], ["/docs/edit", "/docs"])){ ?>
             <a href="#" data-target="slide-out" class="sidenav-trigger"></a>
         <?php } ?>
     </div>
+
     <div id="slide-out" class="sidenav">
-        <a href="<?= $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? "/docs/edit" : "/docs" ?>">
+        <a class="sidenav_logo" href="<?= $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? "/docs/edit" : "/docs" ?>">
             <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/global_logo.svg" class="global_logo" alt="global_logo">
         </a>
         <ul>
-        <?php if(isset($all_documentations)){ 
-                foreach($all_documentations as $documentation) {?>
-                <li><a href="/docs/<?= 461 ?>" class="private"><?= $documentation["title"] ?></a></li>
-        <?php   }
-            } else if(isset($all_sections)){ 
-                $documentation = (Object) array("id" => 461);
-                foreach($all_sections as $section) {?>
-                <li><a href="/docs/<?= $documentation->id ?>/<?= 75 ?>"><?= $section["title"] ?></a></li>
-        <?php   }
-            } ?>
+    <?php foreach($side_nav_links as $side_nav_link){ 
+        if((preg_match("/^\/docs\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+            $link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["id"]}";
+        }
+        else if((preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+            $link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}";
+        }
+    ?>
+        <li><a href="<?= $link ?>" class="<?= (isset($side_nav_link["is_private"]) && $side_nav_link["is_private"]) ? 'private' : '' ?>"><?= $side_nav_link["title"] ?></a><span></span></li>
+    <?php } ?>
         </ul>
     </div>
 </div>
@@ -46,7 +41,7 @@
 </div>
 <div id="mobile_container">
     <div class="header_mobile">
-        <?php if(!in_array($request_uri, ["admin_documentation.php", "user_documentation.php"])){ ?>
+        <?php if(!in_array($_SERVER["REQUEST_URI"], ["admin_documentation.php", "user_documentation.php"])){ ?>
             <a href="#" data-target="mobile_nav" class="mobile sidenav-trigger"></a>
         <?php } ?>
         <div class="row_placeholder"></div>
@@ -59,20 +54,21 @@
         </div>
     </div>
     <div id="mobile_nav" class="sidenav">
-        <a href="<?= $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? "/docs/edit" : "/docs" ?>">
+        <a class="sidenav_logo" href="<?= $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? "/docs/edit" : "/docs" ?>">
             <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/global_logo.svg" class="global_logo" alt="global_logo">
         </a>
+        <div id="mobile_nav_title"><?= (isset($view_page)) ? $view_page : '' ?></div>
         <ul>
-        <?php if(isset($all_documentations)){ 
-                foreach($all_documentations as $documentation) {?>
-                <li><a href="/docs/<?= 461 ?>" class="private"><?= $documentation["title"] ?></a></li>
-        <?php   }
-            } else if(isset($all_sections)){ 
-                $documentation = (Object) array("id" => 461);
-                foreach($all_sections as $section) {?>
-                <li><a href="/docs/<?= $documentation->id ?>/<?= 75 ?>"><?= $section["title"] ?></a></li>
-        <?php   }
-            } ?>
+        <?php foreach($side_nav_links as $side_nav_link){ 
+            if((preg_match("/^\/docs\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+                $link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["id"]}";
+            }
+            else if((preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+                $link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}";
+            }
+        ?>
+            <li><a href="<?= $link ?>" class="<?= (isset($side_nav_link["is_private"]) && $side_nav_link["is_private"]) ? 'private' : '' ?>"><?= $side_nav_link["title"] ?></a><span></span></li>
+        <?php } ?>  
         </ul>
     </div>
 </div>

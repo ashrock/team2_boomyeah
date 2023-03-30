@@ -186,24 +186,67 @@ textarea{
                 width: 416px;
             }
         }
+        .sidenav_logo{
+            align-items: center;
+            display: flex;
+            padding: 0px 0px 0px 14px;
+            &:before{
+                content:"";
+                background: url("../images/nav_sprite.svg") no-repeat;
+                background-position: -44px 0px;
+                display: block;
+                height: 28px;
+                margin-right: 16px;
+                width: 28px;
+                z-index: 999;
+            }
+            &:after{
+                content: "";
+                height: 24px;
+                flex-grow: 1;
+            }
+
+        }
+        ul{
+            padding-right: 40px;
+        }
         li{
+            align-items: center;
+            display: flex;
             font: 16px/20px @readex_regular;
+            padding: 0px 0px 0px 24px;
             z-index: 9999;
             &:hover{
                 background: @by_hover;
                 border-radius: 0px 20px 20px 0px;
-                max-width: 280px;
             }
             a{
                 color: @by_nav_text;
-                transform: translateX(26px);
+                flex-grow: 1;
+                overflow: hidden;
+                padding: 0px 40px 0px 0px;
+                text-overflow: ellipsis;
+                vertical-align: middle;
+                white-space: nowrap;
                 z-index: 9999;
                 &:hover{
-                    background: url('../images/nav_sprite.svg') no-repeat;
-                    background-position: -95px 11px;
+                    background: transparent !important;
                     color: @by_primary;
-                    display: block;
                 }
+                &.private + span{
+                    background: url("../images/mobile_nav_sprite.svg") no-repeat;
+                    background-position: -88px 2px;
+                    content: '';
+                    display: inline-block;
+                    height: 28px;
+                    vertical-align: middle;
+                    width: 28px;
+                    position: absolute;
+                    right: 40px;
+                }
+            }
+            span{
+                display: inline-block;
             }
         }
     }
@@ -217,35 +260,43 @@ textarea{
     #mobile_nav{
         background: @by_mobilebg !important;
         ul{
+            padding-right: 40px;
             li{
+                align-items: center;
+                display: flex;
                 margin: 0 16px;
                 position: relative;
+                &:hover{
+                    background: @by_hover;
+                    border-radius: 0px 40px 40px 0px;
+                }
                 a{
                     color: @by_nav_text;
+                    display: inline-block;
+                    flex-grow: 1;
+                    overflow: hidden;
                     padding: 0 0;
-                    &:hover{   
-                        background: @by_hover;
-                        border-radius: 0px 40px 40px 0px;
+                    text-overflow: ellipsis;
+                    vertical-align: middle;
+                    white-space: nowrap;
+                    z-index: 9999;
+                    &:hover{
+                        background: transparent !important;
                         color: @by_primary;
-                        margin-left: -31px;
-                        padding-left: 30px;
-                        position: relative;
-                        width: 113%;
                     }
-                    &.private::after{
+                    &.private + span{
                         background: url("../images/mobile_nav_sprite.svg") no-repeat;
                         background-position: -88px 2px;
                         content: '';
-                        display: block;
+                        display: inline-block;
                         height: 28px;
-                        position: absolute;
-                        right: 10px;
-                        top: 10px;
+                        vertical-align: middle;
                         width: 28px;
                     }
                 }
+                
                 span{
-                    color: @by_white;
+                    display: inline-block;
                 }
             }
         }
