@@ -549,7 +549,7 @@
         # Requires: $params { parent_id }, $_SESSION["user_id"]
         # Optionals: $params { post_id, comment_id }
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 17, 2023
+        # Last updated at: March 30, 2023
         # Owner: Jovic
         public function removePost($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -559,19 +559,23 @@
 
                 # Set query values for deleting record
                 $db_table        = "posts";
-                $db_value        = $params["post_id"];
+                $db_table_id     = $params["post_id"];
                 $db_update_table = "tabs";
                 $db_cache_column = "cache_posts_count";
                 
                 if($params["comment_id"]){
                     $db_table        = "comments";
-                    $db_value        = $params["comment_id"];
+                    $db_table_id     = $params["comment_id"];
                     $db_update_table = "posts";
                     $db_cache_column = "cache_comments_count";
-                    $response_data["error"] = "nandito ba?";
                 }
 
-                $delete_record = $this->db->query("DELETE FROM {$db_table} WHERE id = ? AND user_id = ?;", array($db_value, $_SESSION["user_id"]));
+                # Delete all comments if a post is being deleted
+                if($db_table == "posts"){
+                    $this->db->query("DELETE FROM comments WHERE post_id = ?;", $params["post_id"]);
+                }
+
+                $delete_record = $this->db->query("DELETE FROM {$db_table} WHERE id = ? AND user_id = ?;", array($db_table_id, $_SESSION["user_id"]));
 
                 if($delete_record){
                     # Update cache_posts_count/cache_comments_count
@@ -579,6 +583,7 @@
 
                     if($update_record){
                         $response_data["status"] = true;
+                        $response_data["result"]["delete_type"] = $db_table;
 
                         $this->db->trans_complete();
                     }
