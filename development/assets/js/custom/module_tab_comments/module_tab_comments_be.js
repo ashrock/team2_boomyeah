@@ -156,7 +156,8 @@ async function showTabComments(event){
     event.preventDefault();
     let mobile_comments_slideout = ux("#mobile_comments_slideout");
 
-    if(!mobile_comments_slideout.self().classList.contains("active")){
+    /* TODO: Remove active when comments div is closed */
+    // if(!mobile_comments_slideout.self().classList.contains("active")){
         let show_comments_btn = ux(event.target);
         let tab_id = show_comments_btn.data("tab_id");
         mobile_comments_slideout.find("#user_comments_list").self().innerHtml = "";
@@ -168,7 +169,7 @@ async function showTabComments(event){
         let fetch_mobile_posts_form = ux("#fetch_mobile_posts_form");
         fetch_mobile_posts_form.find(".tab_id").val(tab_id);
         fetch_mobile_posts_form.trigger("submit");
-    }
+    // }
 }
 
 function onFetchMobilePosts(event){
