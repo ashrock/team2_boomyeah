@@ -39,6 +39,11 @@ function onSubmitMobilePostForm(event){
     event.stopImmediatePropagation();
     event.preventDefault();
     let post_form = ux(event.target);
+
+    if(post_form.attr("action") == "/modules/add_post"){
+        let active_tab = ux(".section_page_content").find(".show");
+        post_form.find(".tab_id").val(active_tab.attr("id").split("tab_")[1]);
+    }
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
@@ -47,6 +52,18 @@ function onSubmitMobilePostForm(event){
             let comments_list = mobile_comments_slideout.find("#user_comments_list");
 
             if(tab_id){
+                let tab_element       = `#tab_${tab_id}`;
+                let toggle_btn        = ux(tab_element).find(".fetch_tab_posts_btn");
+                let show_comments_btn = ux(tab_element).find(".show_comments_btn");
+
+                /* Update cache_posts_count */
+                let posts_count = parseInt(toggle_btn.data("cache_posts_count"));
+                posts_count += 1;
+                toggle_btn.attr("data-cache_posts_count", posts_count);
+                toggle_btn.html(`Comments (${posts_count})`);
+                show_comments_btn.attr("data-cache_posts_count", posts_count);
+                show_comments_btn.html(`Comments (${posts_count})`);
+
                 comments_list.append(response_data.result.html);
             } else {
                 let comment_item = mobile_comments_slideout.find(`.post_comment_${post_comment_id}`);
@@ -379,11 +396,14 @@ function showConfirmaDeleteComment(event){
         let comment_id = ux(event_target).data("target_comment");
         let remove_comment_modal = ux("#confirm_remove_comment_modal");
         let modal_instance = M.Modal.getInstance(remove_comment_modal);
+        let active_tab = ux(".section_page_content").find(".show");
+        let parent_id = ux(event_target).data("parent_id") ? ux(event_target).data("parent_id") : active_tab.attr("id").split("tab_")[1];
         modal_instance.open();
+
 
         remove_comment_modal.find((is_post) ? ".comment_id" : ".post_id").val("");
         remove_comment_modal.find((is_post) ? ".post_id" : ".comment_id").val(comment_id);
-        remove_comment_modal.find(".parent_id").val( ux(event_target).data("parent_id") );
+        remove_comment_modal.find(".parent_id").val( parent_id );
         remove_comment_modal.find(".action").val((is_post) ? "remove_post" : "remove_comment");
 
         /** Determine active_comment_item */
@@ -398,6 +418,22 @@ function onConfirmDeleteComment(event){
 
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
+            if(response_data.result.delete_type == "posts"){
+                /* Update cache_posts_count */
+                let active_tab        = ux(".section_page_content").find(".show");
+                let tab_id            = active_tab.attr("id").split("tab_")[1];
+                let tab_element       = `#tab_${tab_id}`;
+                let toggle_btn        = ux(tab_element).find(".fetch_tab_posts_btn");
+                let show_comments_btn = ux(tab_element).find(".show_comments_btn");
+                let posts_count       = parseInt(toggle_btn.data("cache_posts_count"));
+
+                posts_count -= 1;
+                toggle_btn.attr("data-cache_posts_count", posts_count);
+                toggle_btn.html(`Comments (${posts_count})`);
+                show_comments_btn.attr("data-cache_posts_count", posts_count);
+                show_comments_btn.html(`Comments (${posts_count})`);
+            }
+
             /** Do these after form submission */
             let comment_container = null;
 
