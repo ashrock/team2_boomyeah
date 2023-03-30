@@ -1,6 +1,7 @@
 // out: false
 @import url(./variables.less);
 @by_section_tab: #D5E3FF;
+@by_light_steel_blue: #C6D0DD;
 
 #section_summary{
     background: @by_white;
@@ -284,18 +285,27 @@
             min-height: 360px;
         }
         .module_title{
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            position: relative;
             input.tab_title{
-                & + .character_count{
-                    display: none;
-                }
+                margin: 0px;
+
                 &:focus + .character_count{
-                    display: block;
+                    color: @by_text;
+                }
+                &.error + .character_count{
+                    color: @by_error;
                 }
             }
             .character_count{
-                margin-bottom: 4px;
+                color: @by_input_border;
+                line-height: 54px;
+                padding: 0px 16px;
+                position: absolute;
+                right: 0px;
                 text-align: right;
+                top: 0px;
+                transition: color 0.2s;
                 &::before{
                     content: attr(data-length);
                     display: inline-block;
@@ -310,8 +320,7 @@
             font-size: 16px;
             height: 54px;
             line-height: 52px;
-            margin-bottom: 4px;
-            padding: 0px 16px;
+            padding: 0px 56px 0px 16px;
 
             &:focus{
                 box-shadow: 0px 2px 0px @by_primary;

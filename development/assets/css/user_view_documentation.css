@@ -172,6 +172,7 @@ textarea {
 }
 #mobile_container #mobile_nav ul li {
   margin: 0 16px;
+  position: relative;
 }
 #mobile_container #mobile_nav ul li a {
   color: #B4C5FF;
@@ -186,7 +187,7 @@ textarea {
   position: relative;
   width: 113%;
 }
-#mobile_container #mobile_nav ul li a:hover.private::after {
+#mobile_container #mobile_nav ul li a.private::after {
   background: url("../images/mobile_nav_sprite.svg") no-repeat;
   background-position: -88px 2px;
   content: '';
