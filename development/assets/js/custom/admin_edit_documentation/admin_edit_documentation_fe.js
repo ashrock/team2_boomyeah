@@ -102,19 +102,6 @@ function documentDescriptionPlaceholder(){
     });
 }
 
-function setSectionsContentHeight(){
-    let screen_height = visible_screen_height;
-    let documentation_header_props = ux(".documentation_header").self().getBoundingClientRect();
-    let documentation_details_props = ux("#documentation_details").self().getBoundingClientRect();
-    let header_offset = documentation_header_props.height;
-    let details_offset = documentation_details_props.height;
-    let is_sections_visible = (header_offset + (screen_height / 3)) < screen_height;
-    let sections_offset = (is_sections_visible) ? details_offset : 0;
-
-    ux("#documentation_details").conditionalClass("fixed", is_sections_visible);
-    ux("#sections_content").self().style.paddingTop = `${sections_offset}px`;
-}
-
 function updateDocumentationData(update_type, update_value){
     let udpate_documentation_form = ux("#udpate_documentation_form");
     udpate_documentation_form.find(".update_type").val(update_type);
