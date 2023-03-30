@@ -156,8 +156,8 @@ async function showTabComments(event){
     event.preventDefault();
     let mobile_comments_slideout = ux("#mobile_comments_slideout");
 
-    /* TODO: Remove active when comments div is closed */
-    // if(!mobile_comments_slideout.self().classList.contains("active")){
+    /* Remove active when comments div is closed */
+    if(!mobile_comments_slideout.self().classList.contains("active")){
         let show_comments_btn = ux(event.target);
         let tab_id = show_comments_btn.data("tab_id");
         mobile_comments_slideout.find("#user_comments_list").self().innerHtml = "";
@@ -169,7 +169,7 @@ async function showTabComments(event){
         let fetch_mobile_posts_form = ux("#fetch_mobile_posts_form");
         fetch_mobile_posts_form.find(".tab_id").val(tab_id);
         fetch_mobile_posts_form.trigger("submit");
-    // }
+    }
 }
 
 function onFetchMobilePosts(event){
@@ -345,7 +345,8 @@ function onCommentMessageKeypress(event){
     let comment_message = event.target;
     let post_form = comment_message.closest(".add_comment_form");
     let edit_comment_form = comment_message.closest(".edit_comment_form");
-
+    let mobile_add_comment_form = comment_message.closest(".mobile_add_comment_form");
+    
     if(event.which === KEYS.ENTER){
         event.preventDefault();
 
@@ -353,7 +354,7 @@ function onCommentMessageKeypress(event){
         ux(submit_form).trigger("submit");
     }
     
-    if(event.which === KEYS.ESCAPE){
+    if(!mobile_add_comment_form && event.which === KEYS.ESCAPE){
         /** Close edit form */
         if(edit_comment_form){
             closeEditCommentForm(event);

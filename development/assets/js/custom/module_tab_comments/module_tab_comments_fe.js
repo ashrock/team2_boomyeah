@@ -1,10 +1,10 @@
 let is_mobile_reply_open = false;
+let is_comments_displayed = false;
 (function(){
     let swipe_value = 0;
     let swipe_timeout = null;
-    let is_comments_displayed = false;
     let has_scrolled = false;
-
+    
     document.addEventListener("DOMContentLoaded", async (event) => {
         let document_element = event.target;
 
