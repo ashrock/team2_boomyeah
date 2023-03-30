@@ -20,6 +20,6 @@
         <?php } ?>
 <?php } else { ?>
     <li>
-        <p class="no_uploaded_files">You have no uploaded files...</p>
+        <p class="no_uploaded_files">You have no uploaded files</p>
     </li>
 <?php } ?>

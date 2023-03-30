@@ -103,24 +103,18 @@ body{
         }
         .group_add_documentation{
             background-color: @by_bg;
+            border-bottom: 2px solid @by_primary;
             border-radius: 8px;
+            box-shadow: 0 1px 0 0 @by_primary;
             height: 56px;
             margin: 0;
             min-width: 316px;
             position: relative;
             width: 316px;
+            
             @media screen and (max-width: 622px) {
                 margin: 16px auto;
                 min-width: 226px;
-                width: 100%;
-            }
-            &::after {
-                background-color: @by_bg;
-                content: '';
-                display: inline-block;
-                height: 2px;
-                position: absolute;
-                top: 52px;
                 width: 100%;
             }
             label{
@@ -138,6 +132,8 @@ body{
                 height: 43px;
                 position: absolute;
                 width: 100%;
+                border: none !important;
+                box-shadow: none !important;
             }
             #add_documentation_btn{
                 background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat -12px -4px;
@@ -154,13 +150,6 @@ body{
 
             input:-internal-autofill-selected {
                 background-color: @by_bg;
-            }
-
-            input.valid,
-            input.validate {
-                background-color: transparent;
-                border-bottom: 2px solid @by_primary;
-                box-shadow: 0 1px 0 0 @by_primary;
             }
             label.active{
                 color: @by_primary;
@@ -183,7 +172,7 @@ body{
         }
         #input_add_documentation{
             margin-bottom: 0;
-            width: 304px;
+            width: 268px;
             @media screen and (max-width: 622px) {
                 width: 97%;
             }
