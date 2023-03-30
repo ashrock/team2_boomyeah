@@ -101,7 +101,8 @@ function onSubmitAddDocumentationForm(event){
         ux().post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
             if(response_data.status){
                 if(response_data.result.html){
-                    ux("#documentations").html(response_data.result.html);
+                    ux("#documentations").append(response_data.result.html);
+                    initializeMaterializeDropdown();
                 }
 
                 /* Redirect in admin edit document page. */
