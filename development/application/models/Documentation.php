@@ -95,7 +95,7 @@
         # Requires: $params { user_id, workspace_id, title }
         # Optionals: $params { is_duplicate, documentation_id }
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 7, 2023
+        # Last updated at: March 30, 2023
         # Owner: Erick, Updated by: Jovic
         public function addDocumentations($params){
             $response_data = array("status" => false, "result" => [], "error" => null);
@@ -139,6 +139,7 @@
 
                     if($update_workspace_docs_order){
                         $response_data["status"] = true;
+                        $response_data["result"]["documentation_id"] = $new_documentation_id;
                         $response_data["result"]["html"] = $this->load->view(
                             "partials/document_block_partial.php",
                             array( "all_documentations" => [array(
