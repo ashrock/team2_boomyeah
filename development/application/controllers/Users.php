@@ -62,7 +62,7 @@ class Users extends CI_Controller {
 				# Check the remember_me in cookie
 				if(isset($_COOKIE['remember_me'])){
 					$user_token = $this->User->getUserToken($_COOKIE['remember_me']);
-					redirect(($register_user["result"]["user_info"]["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
+					redirect(($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) ? "docs/edit" : "docs");
 				}
 				else{
 					# Create Auth URL for user login
