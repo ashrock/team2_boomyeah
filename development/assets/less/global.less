@@ -239,10 +239,10 @@ textarea{
                     content: '';
                     display: inline-block;
                     height: 28px;
-                    vertical-align: middle;
-                    width: 28px;
                     position: absolute;
                     right: 40px;
+                    vertical-align: middle;
+                    width: 28px;
                 }
             }
             span{
@@ -259,12 +259,19 @@ textarea{
 #mobile_container{
     #mobile_nav{
         background: @by_mobilebg !important;
+        #mobile_nav_title{
+            &:empty{
+                display: none;
+            }
+            color: @by_white;
+            font: 14px/40px @readex_medium;
+            padding: 0px 16px;
+        }
         ul{
             padding-right: 40px;
             li{
                 align-items: center;
                 display: flex;
-                margin: 0 16px;
                 position: relative;
                 &:hover{
                     background: @by_hover;
@@ -275,7 +282,7 @@ textarea{
                     display: inline-block;
                     flex-grow: 1;
                     overflow: hidden;
-                    padding: 0 0;
+                    padding: 0px 40px 0px 16px;
                     text-overflow: ellipsis;
                     vertical-align: middle;
                     white-space: nowrap;
@@ -290,6 +297,8 @@ textarea{
                         content: '';
                         display: inline-block;
                         height: 28px;
+                        position: absolute;
+                        right: 10px;
                         vertical-align: middle;
                         width: 28px;
                     }

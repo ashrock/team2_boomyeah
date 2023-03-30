@@ -196,10 +196,10 @@ textarea {
   content: '';
   display: inline-block;
   height: 28px;
-  vertical-align: middle;
-  width: 28px;
   position: absolute;
   right: 40px;
+  vertical-align: middle;
+  width: 28px;
 }
 #nav_documentation #slide-out li span {
   display: inline-block;
@@ -212,13 +212,20 @@ textarea {
 #mobile_container #mobile_nav {
   background: #001D32 !important;
 }
+#mobile_container #mobile_nav #mobile_nav_title {
+  color: #FFFFFF;
+  font: 14px/40px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  padding: 0px 16px;
+}
+#mobile_container #mobile_nav #mobile_nav_title:empty {
+  display: none;
+}
 #mobile_container #mobile_nav ul {
   padding-right: 40px;
 }
 #mobile_container #mobile_nav ul li {
   align-items: center;
   display: flex;
-  margin: 0 16px;
   position: relative;
 }
 #mobile_container #mobile_nav ul li:hover {
@@ -230,7 +237,7 @@ textarea {
   display: inline-block;
   flex-grow: 1;
   overflow: hidden;
-  padding: 0 0;
+  padding: 0px 40px 0px 16px;
   text-overflow: ellipsis;
   vertical-align: middle;
   white-space: nowrap;
@@ -246,6 +253,8 @@ textarea {
   content: '';
   display: inline-block;
   height: 28px;
+  position: absolute;
+  right: 10px;
   vertical-align: middle;
   width: 28px;
 }
