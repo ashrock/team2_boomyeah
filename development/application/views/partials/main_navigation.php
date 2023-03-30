@@ -1,20 +1,20 @@
-<?php
-    $request_uri = explode("/", $_SERVER["REQUEST_URI"]);
-    $request_uri = $request_uri[count($request_uri) - 1];
-?>
 <div id="nav_documentation">
     <div class="nav_holder">
-        <?php if(!in_array($request_uri, ["admin_documentation.php", "user_documentation.php"])){ ?>
+        <?php if(!in_array($_SERVER["REQUEST_URI"], ["/docs/edit", "/docs"])){ ?>
             <a href="#" data-target="slide-out" class="sidenav-trigger"></a>
         <?php } ?>
     </div>
     <ul id="slide-out" class="sidenav">
-        <li><a href="#!">About Company</a></li>
-        <li><a href="#!">Terms of Employment</a></li>
-        <li><a href="#!">General Policies & Procedures</a></li>
-        <li><a href="#!">Career & Personnel Develop...</a></li>
-        <li><a href="#!">Important Notes</a></li>
-        <li><a href="#!">Compensation & Benefits</a></li>
+<?php foreach($side_nav_links as $side_nav_link){ 
+    if((preg_match("/^\/docs\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+        $link = base_url() . "docs/{$side_nav_link["id"]}/edit";
+    }
+    else if((preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+        $link = base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}/edit";
+    }
+?>
+    <li><a href="<?= $link ?>"><?= $side_nav_link["title"] ?></a></li>
+<?php } ?>
     </ul>
 </div>
 <div id="header_container">
