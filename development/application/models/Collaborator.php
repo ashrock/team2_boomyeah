@@ -31,7 +31,7 @@
         # Triggered by: (GET) collaborators/get
         # Requires: $documentation_id
         # Returns: { status: true/false, result: { owner, html }, error: null }
-        # Last updated at: March 8, 2023
+        # Last updated at: March 30, 2023
         # Owner: Jovic
         public function getCollaborators($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -60,7 +60,7 @@
 
                 $get_collaborators = $this->db->query("
                     SELECT
-                        users.id, users.email,
+                        users.id, users.email, CONCAT(users.first_name, ' ', users.last_name) AS name, users.profile_picture,
                         collaborators.documentation_id, collaborators.id AS collaborator_id, collaborators.collaborator_level_id
                     FROM users
                     INNER JOIN collaborators ON collaborators.user_id = users.id
