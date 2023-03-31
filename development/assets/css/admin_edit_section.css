@@ -1386,6 +1386,12 @@ body::-webkit-scrollbar-thumb {
   .section_page_content .section_page_tab:last-child.show {
     padding: 12px 24px 24px !important;
   }
+  .section_page_content .section_page_tab pre,
+  .section_page_content .section_page_tab table {
+    max-width: 100%;
+    word-break: break-all;
+    white-space: pre-line;
+  }
   .section_page_content .mobile_module_header {
     background: #FFFFFF;
     border-top-left-radius: 10px;
@@ -1510,6 +1516,7 @@ body::-webkit-scrollbar-thumb {
   .section_page_content .section_page_tab .tab_title {
     color: #A8C8FF;
     cursor: pointer;
+    display: block;
     font: 14px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
     margin: 0px 0px 0px !important;
     vertical-align: top;
@@ -1586,6 +1593,7 @@ body::-webkit-scrollbar-thumb {
   min-height: 360px;
 }
 .section_page_content .section_page_tab h3.tab_title {
+  display: none;
   font: 20px/18px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0px 0px 16px;
   padding: 0px;
@@ -1596,6 +1604,17 @@ body::-webkit-scrollbar-thumb {
 @media (max-width: 632px) {
   .section_page_content .section_page_tab .tab_content {
     font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  }
+  .section_page_content .section_page_tab .tab_content p * {
+    font: inherit !important;
+  }
+  .section_page_content .section_page_tab .tab_content ol li,
+  .section_page_content .section_page_tab .tab_content ul li {
+    font: 12px/16px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif !important;
+  }
+  .section_page_content .section_page_tab .tab_content ol li *,
+  .section_page_content .section_page_tab .tab_content ul li * {
+    font: inherit !important;
   }
 }
 .section_page_content .section_page_tab .tab_content h1,
@@ -1610,23 +1629,23 @@ body::-webkit-scrollbar-thumb {
   margin: 0px 0px 24px;
 }
 .section_page_content .section_page_tab .tab_content h1 {
-  font: 48px/46px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 48px/46px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
 }
 .section_page_content .section_page_tab .tab_content h2 {
-  font: 40px/38px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 40px/38px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
 }
 .section_page_content .section_page_tab .tab_content h3 {
-  font: 32px/30px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 32px/30px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
 }
 .section_page_content .section_page_tab .tab_content h4 {
-  font: 24px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 24px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
 }
 .section_page_content .section_page_tab .tab_content h5 {
-  font: 16px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 16px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
 }
 .section_page_content .section_page_tab .tab_content ol,
 .section_page_content .section_page_tab .tab_content ul {
-  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif !important;
   padding-left: 18px;
 }
 .section_page_content .section_page_tab figure,
