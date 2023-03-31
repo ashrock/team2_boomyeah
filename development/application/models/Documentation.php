@@ -165,7 +165,7 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, documentation_id }
         # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
-        # Last updated at: March 24, 2023
+        # Last updated at: March 31, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -189,7 +189,14 @@
                         $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?", array($update_value, $_SESSION["user_id"], $params["documentation_id"]) );
                         
                         if($update_document){
-                            $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->result_array();
+                            $updated_document = $this->db->query("
+                                SELECT
+                                    documentations.id, documentations.title, documentations.is_archived, documentations.is_private, documentations.cache_collaborators_count,
+                                    CONCAT(users.first_name, ' ', users.last_name) AS documentation_owner
+                                FROM documentations
+                                INNER JOIN users ON users.id = documentations.user_id
+                                WHERE documentations.id = ?
+                            ", $params["documentation_id"])->result_array();
 
                             $response_data["status"] = true;
                             $response_data["result"]["documentation_id"] = $updated_document[FIRST_INDEX]['id'];
