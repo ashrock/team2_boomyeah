@@ -131,6 +131,7 @@ function onSubmitAddSectionForm(event){
                 initializeMaterializeDropdown(section_block.find(".dropdown-trigger").self());
                 addAnimation(`#section_${response_data.result.section_id}`, "animate__fadeIn animate__slower");
                 appearEmptySection();
+
                 post_form.self().reset();
                 ux("#input_add_section").self().blur();
                 await ux(`#section_${response_data.result.section_id}`).self().scrollIntoView();
