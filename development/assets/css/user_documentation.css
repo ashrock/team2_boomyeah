@@ -1131,8 +1131,9 @@ body::-webkit-scrollbar-thumb {
   display: flex;
   flex-grow: 1;
   flex-wrap: nowrap;
-  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  height: 32px;
+  font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  height: 16px;
+  justify-content: flex-end;
   margin: 0px 8px;
   opacity: 0.4;
   pointer-events: all;
