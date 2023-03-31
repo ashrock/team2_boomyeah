@@ -147,6 +147,7 @@
                                 "title"                     => $params["title"],
                                 "is_private"                => $is_private,
                                 "is_archived"               => NO,
+                                "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
                                 "cache_collaborators_count" => ZERO_VALUE
                             )]), 
                             true
