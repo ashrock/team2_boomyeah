@@ -257,7 +257,7 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]
         # Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-        # Last updated at: March 20, 2023
+        # Last updated at: March 31, 2023
         # Owner: Jovic
         public function duplicateDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -318,6 +318,7 @@
                                     "title"                     => $duplicate_title,
                                     "is_private"                => $get_documentation["result"]["is_private"],
                                     "is_archived"               => FALSE_VALUE,
+                                    "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
                                     "cache_collaborators_count" => ZERO_VALUE
                                 )]), 
                                 true
