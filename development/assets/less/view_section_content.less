@@ -123,6 +123,13 @@
                     padding: 12px 24px 24px !important;
                 }
             }
+
+            pre,
+            table{
+                max-width: 100%;
+                word-break: break-all;
+                white-space: pre-line;
+            }
         }
         .mobile_module_header{
             background: @by_white;
@@ -338,28 +345,43 @@
             flex-grow: 1;
             @media (max-width: 632px) {
                 font: 12px/16px @readex_regular;
+                p{
+                    *{
+                        font: inherit !important;
+                    }
+                }
+
+                ol, ul{
+                    li{
+                        font: 12px/16px @readex_light !important;
+
+                        *{
+                            font: inherit !important;
+                        }
+                    }
+                }
             }
             h1, h2, h3, h4, h5, ol, ul, p{
                 color: @by_black;
-                margin: 0px 0px 24px;
+                margin: 0px 0px 24px;;
             }
             h1{
-                font: 48px/46px @readex_medium;
+                font: 48px/46px @readex_medium !important;
             }
             h2{
-                font: 40px/38px @readex_medium;
+                font: 40px/38px @readex_medium !important;
             }
             h3{
-                font: 32px/30px @readex_medium;
+                font: 32px/30px @readex_medium !important;
             }
             h4{
-                font: 24px/24px @readex_medium;
+                font: 24px/24px @readex_medium !important;
             }
             h5{
-                font: 16px/24px @readex_medium;
+                font: 16px/24px @readex_medium !important;
             }
             ol, ul{
-                font: 16px/24px @readex_light;
+                font: 16px/24px @readex_light !important;
                 padding-left: 18px;
             }
         }
