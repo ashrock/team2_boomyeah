@@ -205,7 +205,6 @@ function onSubmitEditForm(event){
             } else {
                 let response_html = stringToHtmlContent(response_data.result.html);
                 let comment_content = ux(response_html).find(".comment_content").self();
-                console.log(item_id, comment_content)
                 
                 ux("body").findAll(item_id).forEach((comment_item) => {
                     ux(comment_item).find(".comment_content").self().replaceWith(comment_content);
