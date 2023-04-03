@@ -123,6 +123,13 @@
                     padding: 12px 24px 24px !important;
                 }
             }
+
+            pre,
+            table{
+                max-width: 100%;
+                word-break: break-all;
+                white-space: pre-line;
+            }
         }
         .mobile_module_header{
             background: @by_white;
@@ -254,6 +261,7 @@
             .tab_title{
                 color: @by_mobile_link;
                 cursor: pointer;
+                display: block !important;
                 font: 14px/16px @readex_regular !important;
                 margin: 0px 0px 0px !important;
                 vertical-align: top;
@@ -284,18 +292,27 @@
             min-height: 360px;
         }
         .module_title{
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            position: relative;
             input.tab_title{
-                & + .character_count{
-                    display: none;
-                }
+                margin: 0px;
+
                 &:focus + .character_count{
-                    display: block;
+                    color: @by_text;
+                }
+                &.error + .character_count{
+                    color: @by_error;
                 }
             }
             .character_count{
-                margin-bottom: 4px;
+                color: @by_input_border;
+                line-height: 54px;
+                padding: 0px 16px;
+                position: absolute;
+                right: 0px;
                 text-align: right;
+                top: 0px;
+                transition: color 0.2s;
                 &::before{
                     content: attr(data-length);
                     display: inline-block;
@@ -310,8 +327,7 @@
             font-size: 16px;
             height: 54px;
             line-height: 52px;
-            margin-bottom: 4px;
-            padding: 0px 16px;
+            padding: 0px 56px 0px 16px;
 
             &:focus{
                 box-shadow: 0px 2px 0px @by_primary;
@@ -322,6 +338,7 @@
         }
 
         h3.tab_title{
+            display: none;
             font: 20px/18px @readex_regular;
             margin: 0px 0px 16px;
             padding: 0px;
@@ -330,28 +347,43 @@
             flex-grow: 1;
             @media (max-width: 632px) {
                 font: 12px/16px @readex_regular;
+                p{
+                    *{
+                        font: inherit !important;
+                    }
+                }
+
+                ol, ul{
+                    li{
+                        font: 12px/16px @readex_light !important;
+
+                        *{
+                            font: inherit !important;
+                        }
+                    }
+                }
             }
             h1, h2, h3, h4, h5, ol, ul, p{
                 color: @by_black;
-                margin: 0px 0px 24px;
+                margin: 0px 0px 24px;;
             }
             h1{
-                font: 48px/46px @readex_medium;
+                font: 48px/46px @readex_medium !important;
             }
             h2{
-                font: 40px/38px @readex_medium;
+                font: 40px/38px @readex_medium !important;
             }
             h3{
-                font: 32px/30px @readex_medium;
+                font: 32px/30px @readex_medium !important;
             }
             h4{
-                font: 24px/24px @readex_medium;
+                font: 24px/24px @readex_medium !important;
             }
             h5{
-                font: 16px/24px @readex_medium;
+                font: 16px/24px @readex_medium !important;
             }
             ol, ul{
-                font: 16px/24px @readex_light;
+                font: 16px/24px @readex_light !important;
                 padding-left: 18px;
             }
         }

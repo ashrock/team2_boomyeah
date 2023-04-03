@@ -48,28 +48,32 @@
         # Requires: $params { workspace_id, is_archived, user_level_id }, $_SESSION["user_id"]
         # Optionals: $params { documentation_ids_order }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: documentations record (Array), error: null }
-        # Last updated at: Mar. 7, 2023
+        # Last updated at: Mar. 30, 2023
         # Owner: Jovic
         public function getDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 // ! Binding an array value encloses it in a parenthesis which causes an error
-                $where_conditions = "is_archived = ? ";
+                $where_conditions = "documentations.is_archived = ? ";
                 $bind_params      = array($params["workspace_id"], $params["is_archived"]);
 
                 # Set conditions and param values when user is not an admin
                 if($params["user_level_id"] == USER_LEVEL["USER"]){
-                    $where_conditions .= "AND (is_private = ?  OR id IN (SELECT documentation_id FROM collaborators WHERE user_id = ?)) ";
+                    $where_conditions .= "AND (documentations.is_private = ?  OR documentations.id IN (SELECT collaborators.documentation_id FROM collaborators WHERE collaborators.user_id = ?)) ";
                     array_push($bind_params, FALSE_VALUE, $_SESSION["user_id"]);
                 }
                 
                 # Only add ORDER BY clause to query if viewing active documentations
-                $documentation_order = ($params["is_archived"] || $params["documentation_ids_order"] == null) ? "" : "ORDER BY FIELD (id, {$params["documentation_ids_order"]})";
+                $documentation_order = ($params["is_archived"] || $params["documentation_ids_order"] == null) ? "" : "ORDER BY FIELD (documentations.id, {$params["documentation_ids_order"]})";
 
-                $get_documentations = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count
+                $get_documentations = $this->db->query("
+                    SELECT
+                        documentations.id, documentations.title, documentations.is_archived, documentations.is_private, documentations.cache_collaborators_count,
+                        CONCAT(users.first_name, ' ', users.last_name) AS documentation_owner
                     FROM documentations
-                    WHERE workspace_id = ? AND {$where_conditions}
+                    INNER JOIN users ON users.id = documentations.user_id
+                    WHERE documentations.workspace_id = ? AND {$where_conditions}
                     $documentation_order", $bind_params
                 );
 
@@ -91,7 +95,7 @@
         # Requires: $params { user_id, workspace_id, title }
         # Optionals: $params { is_duplicate, documentation_id }
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 7, 2023
+        # Last updated at: March 30, 2023
         # Owner: Erick, Updated by: Jovic
         public function addDocumentations($params){
             $response_data = array("status" => false, "result" => [], "error" => null);
@@ -135,7 +139,19 @@
 
                     if($update_workspace_docs_order){
                         $response_data["status"] = true;
-                        $response_data["result"] = array("documentation_id" => $new_documentation_id);
+                        $response_data["result"]["documentation_id"] = $new_documentation_id;
+                        $response_data["result"]["html"] = $this->load->view(
+                            "partials/document_block_partial.php",
+                            array( "all_documentations" => [array(
+                                "id"                        => $new_documentation_id,
+                                "title"                     => $params["title"],
+                                "is_private"                => $is_private,
+                                "is_archived"               => NO,
+                                "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
+                                "cache_collaborators_count" => ZERO_VALUE
+                            )]), 
+                            true
+                        );
                     }
                 }
             }
@@ -150,7 +166,7 @@
         # Triggered by: (POST) docs/update
         # Requires: $params { update_type, update_value, documentation_id }
         # Returns: { status: true/false, result: { documentation_id, update_type, updated_document, message, documentations_count }, error: null }
-        # Last updated at: March 24, 2023
+        # Last updated at: March 31, 2023
         # Owner: Erick, Updated by: Jovic
         public function updateDocumentations($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -174,7 +190,14 @@
                         $update_document = $this->db->query("UPDATE documentations SET {$params["update_type"]} = ?, updated_by_user_id = ?, updated_at = NOW() WHERE id = ?", array($update_value, $_SESSION["user_id"], $params["documentation_id"]) );
                         
                         if($update_document){
-                            $updated_document = $this->db->query("SELECT id, title, is_archived, is_private, cache_collaborators_count FROM documentations WHERE id = ?", $params["documentation_id"])->result_array();
+                            $updated_document = $this->db->query("
+                                SELECT
+                                    documentations.id, documentations.title, documentations.is_archived, documentations.is_private, documentations.cache_collaborators_count,
+                                    CONCAT(users.first_name, ' ', users.last_name) AS documentation_owner
+                                FROM documentations
+                                INNER JOIN users ON users.id = documentations.user_id
+                                WHERE documentations.id = ?
+                            ", $params["documentation_id"])->result_array();
 
                             $response_data["status"] = true;
                             $response_data["result"]["documentation_id"] = $updated_document[FIRST_INDEX]['id'];
@@ -234,7 +257,7 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]
         # Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-        # Last updated at: March 20, 2023
+        # Last updated at: March 31, 2023
         # Owner: Jovic
         public function duplicateDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -295,6 +318,7 @@
                                     "title"                     => $duplicate_title,
                                     "is_private"                => $get_documentation["result"]["is_private"],
                                     "is_archived"               => FALSE_VALUE,
+                                    "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
                                     "cache_collaborators_count" => ZERO_VALUE
                                 )]), 
                                 true
@@ -453,21 +477,23 @@
         # Triggered by: (GET) collaborators/get
         # Requires: $documentation_id
         # Returns: { status: true/false, result: user record, error: null }
-        # Last updated at: March 8, 2023
+        # Last updated at: April 3, 2023
         # Owner: Jovic
         public function getDocumentationOwner($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $documentation = $this->getDocumentation($documentation_id);
+                $get_documentation_owner = $this->db->query("
+                    SELECT
+                        users.*
+                    FROM documentations
+                    INNER JOIN users ON users.id = documentations.user_id
+                    WHERE documentations.id = ?;
+                ", $documentation_id);
 
-                if($documentation["result"]){
-                    $this->load->model("User");
-                    $get_owner = $this->User->getUser($documentation["result"]["user_id"]);
-
-                    if($get_owner["result"]){
-                        $response_data["result"] = $get_owner["result"];
-                    }
+                if($get_documentation_owner->num_rows()){
+                    $response_data["status"] = true;
+                    $response_data["result"] = $get_documentation_owner->result_array()[FIRST_INDEX];
                 }
             }
             catch (Exception $e) {

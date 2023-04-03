@@ -21,10 +21,7 @@
     <script src="<?= add_file("assets/js/constants.js") ?>"></script>
 </head>
 <body>
-    <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php", array("all_sections" => array(
-            array("id" => (time() + rand()), "title" => "Section ". (time() + rand())),
-            array("id" => (time() + rand()), "title" => "Section ". (time() + rand())),
-        ))); ?></div>
+    <div id="main_navigation"><?php $this->load->view("partials/main_navigation.php", array("view_page" => "Sections")); ?></div>
     <div id="wrapper" class="container">
         <div id="view_section_content">
             <div id="section_summary">
@@ -79,10 +76,22 @@
             <ul id="user_comments_list" class="comments_list"></ul>
         </div>
         <div class="mobile_tab_comments tab_comments comment_container">
-            <form action="/" method="POST" class="mobile_add_comment_form add_comment_form">
-            <div class="comment_field">
+            <form action="/modules/add_post" method="POST" class="mobile_add_comment_form add_comment_form show">
+                <div class="comment_field">
                     <input type="hidden" name="action" value="add_tab_post" class="action">
                     <input type="hidden" name="tab_id" class="tab_id" value="">
+                    <div class="comment_message_content input-field col s12">
+                        <label for="mobile_comment_message">Write a comment</label>
+                        <textarea name="post_comment" id="mobile_comment_message" class="materialize-textarea comment_message"></textarea>
+                    </div>
+                </div>
+                <div class="comment_btn">
+                    <button type="submit" class="mobile_comment_btn"></button>
+                </div>
+            </form>
+            <form action="/modules/add_comment" method="POST" class="mobile_add_reply_form add_comment_form">
+                <div class="comment_field">
+                    <input type="hidden" name="action" value="add_post_comment" class="action">
                     <input type="hidden" name="post_id" class="post_id" value="">
                     <div class="comment_message_content input-field col s12">
                         <label for="mobile_comment_message">Write a comment</label>

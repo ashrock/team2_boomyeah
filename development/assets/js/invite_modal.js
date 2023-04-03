@@ -49,9 +49,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     initSelect();
 });
 
-function checkAddedCollaboratorEmails(){
+function checkAddedCollaboratorEmails(element = null, email = null){
     let add_invite_btn = ux("#add_invite_btn");
     let collaborator_count = ux(".collaborator_chips").findAll(".chip").length;
+
+    /* Delete email from collaborator_emails */
+    if(email){
+        let email_to_delete = email.innerText.split("close")[0];
+        let delete_index    = invited_emails.indexOf(email_to_delete);
+        
+        if(delete_index != null){
+            invited_emails.splice(delete_index, 1);
+        }
+    }
+
     add_invite_btn.conditionalClass("disabled", !collaborator_count);
 }
 
@@ -76,8 +87,8 @@ function initializeCollaboratorChipsInstance(){
                 });
             }
         },
-        onChipDelete: () => {
-            checkAddedCollaboratorEmails();
+        onChipDelete: (element, email) => {
+            checkAddedCollaboratorEmails(element, email);
         }
     });
 
@@ -103,9 +114,6 @@ function addPeopleWithAccess(event){
         let add_collaborators_form = ux("#add_collaborators_form");
         add_collaborators_form.find(".collaborator_emails").val(invited_emails.join(","));
         add_collaborators_form.trigger("submit");
-
-        invited_emails = [];
-        initializeCollaboratorChipsInstance();
     }
 
     return false;
@@ -161,13 +169,20 @@ function onSubmitAddCollaboratorsForm(event){
         checkAddedCollaboratorEmails();
         
         if(response_data.status){
-            await ux("#invited_users_wrapper").append(response_data.result.html);
+            invited_emails = [];
+            initializeCollaboratorChipsInstance();
 
+            await ux("#invited_users_wrapper").append(response_data.result.html);
+            
             let invite_collaborator_btn = document.getElementById("invite_collaborator_btn");
             let collaborator_count      = parseInt(response_data.result.cache_collaborators_count) + 1;
-
+            
             if(invite_collaborator_btn){
                 invite_collaborator_btn.innerHTML = (`${collaborator_count} Collaborators`);
+            }
+            else{
+                invite_collaborator_btn = (ux(`#document_${response_data.result.get_collab[0].documentation_id}`).find(".invite_collaborators_btn").html());
+                invite_collaborator_btn.innerHTML = response_data.result.cache_collaborators_count + 1;
             }
             
             ux("#invited_users_wrapper").findAll(".added_collaborator").forEach(dropdown_element => {
@@ -177,7 +192,7 @@ function onSubmitAddCollaboratorsForm(event){
         } else {
             alert(response_data.error);
         }
-    }, "json");
+    }, "json");         
 
     return false;
 }
@@ -260,6 +275,10 @@ function onSubmitRemoveInvitedUser(event){
 
                 if(invite_collaborator_btn){
                     invite_collaborator_btn.innerHTML = (`${collaborator_count} Collaborators`);
+                }
+                else{
+                    invite_collaborator_btn = (ux(`#document_${response_data.result.documentation_id}`).find(".invite_collaborators_btn").html());
+                    invite_collaborator_btn.innerHTML = collaborator_count;
                 }
             }, false);
         } else {

@@ -1,5 +1,6 @@
 // out: "../css/user_documentation.css", compress: false
 @import url(./global.less);
+@import url(./variables.less);
 @import url(./user_navigation.less);
 
 ::-webkit-scrollbar {
@@ -10,13 +11,11 @@
 }
 .header_mobile{
     background: url("https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/v88_logo.svg") no-repeat center left;
-    .user_profile{
-        position: absolute;
-        right: 10px;
-        top: 6px;
-    }
-    a{
+    .sidenav-trigger{
         display: none !important;
+    }
+    .user_profile{
+        margin-right: 6px 10px 0px 10px;
     }
 }
 
@@ -112,15 +111,6 @@
             color: @by_black;
             font: 20px/24px @readex_regular;
             margin-bottom: 26px;
-            // &::after{
-            //     background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat 0 -15px;
-            //     content: '';
-            //     display: inline-block;
-            //     height: 7px;
-            //     margin-left: 13px;
-            //     vertical-align: middle;
-            //     width: 10px;
-            // }
         }
         #docs_view_list{
             border-radius: 4px;
@@ -156,27 +146,41 @@
                     display: none !important;
                 }
                 .document_details{
+                    pointer-events: none;
                     h2 {
                         color: @by_black;
                         font: 12px/16px @readex_regular;
                         margin: 0;
+                        pointer-events: none;
                     }
-                    .invite_collaborators_btn {
-                        background-color: transparent;
-                        // border-radius: 20px;
-                        border: none;
-                        color: @by_icon;
-                        // cursor: pointer;
-                        font: 12px/16px @readex_regular;
-                        // height: 24px;
-                        // width: 49px;
-                        &::before {
-                            background: url(https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg) no-repeat -207px -9px;
-                            content: '';
-                            display: inline-block;
-                            height: 12.67px;
-                            width: 16px;
-                        }
+                    .documentation_owner{
+                        color: @by_light_steel_blue;
+                        font: 12px/14px @readex_light;
+                        font-style: italic;
+                        margin-top: 8px;
+                    }
+                }
+                .invite_collaborators_btn {
+                    align-items: center;
+                    background-color: transparent;
+                    border: none;
+                    color: @by_icon;
+                    display: flex;
+                    flex-grow: 1;
+                    flex-wrap: nowrap;
+                    font: 12px/10px @readex_regular;
+                    height: 16px;
+                    justify-content: flex-end;
+                    margin: 0px 8px;
+                    opacity: 0.4;
+                    pointer-events: all;
+                    &::before {
+                        background: url(https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg) no-repeat -207px -9px;
+                        content: '';
+                        display: inline-block;
+                        height: 12.67px;
+                        margin-right: 4px;
+                        width: 16px;
                     }
                 }
                 .document_controls{
@@ -190,7 +194,6 @@
                         cursor: pointer;
                         display: inline-block;
                         height: 20px;
-                        // margin-right: 18px;
                         width: 17px;
                     }
                     .more_action_btn{

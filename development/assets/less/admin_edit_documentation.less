@@ -232,8 +232,9 @@ body{
                             border: 1px solid @by_primary;
                             box-shadow: none;
                             color: @by_primary;
-                            font: 16px/35px @readex_regular;
+                            font: 16px/28px @readex_regular;
                             text-transform: capitalize;
+                            height: 32px;
                             .waves-ripple{
                                 background-color: @by_hovered_btn;
                             }
@@ -287,6 +288,8 @@ body{
                         margin: 0;
                         position: relative;
                         width: 522px;
+                        border-bottom: 2px solid @by_primary;
+                        box-shadow: 0 1px 0 0 @by_primary;
     
                         #submit_add_section_btn {
                             background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat -12px -4px;
@@ -303,16 +306,6 @@ body{
                            &:hover{
                                 opacity: 0.8;
                            }
-                        }
-    
-                        &::after {
-                            background-color: @by_bg;
-                            content: '';
-                            display: inline-block;
-                            height: 2px;
-                            position: absolute;
-                            top: 52px;
-                            width: 100%;
                         }
     
                         label {
@@ -336,25 +329,19 @@ body{
                             background-color: @by_bg;
                         }
     
-                        input.valid,
-                        input.validate {
-                            border-bottom: 2px solid @by_primary;
-                            box-shadow: 0 1px 0 0 @by_primary;
-                        }
-    
                         label.active {
                             color: @by_primary;
                             line-height: 16px;
                             transform: translateY(6px) scale(0.8);
                         }
                         &.input_error {
+                            border-bottom: 2px solid @by_error;
+                            box-shadow: 0 1px 0 0 @by_error;
                             label {
                                 color: @by_gray !important;
                             }
     
                             input {
-                                border-bottom: 2px solid @by_error;
-                                box-shadow: 0 1px 0 0 @by_error;
                             }
     
                             #submit_add_section_btn {
@@ -366,7 +353,11 @@ body{
                     #input_add_section {
                         margin-bottom: 0;
                         max-width: 511px;
+                        max-width: 472px;
                         width: 98%;
+                        border: none;
+                        border-radius: 0px;
+                        box-shadow: none;
                     }
     
                     #save_status {

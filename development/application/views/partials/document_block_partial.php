@@ -10,12 +10,13 @@
                     <input type="hidden" name="update_type" value="title">
                     <input type="hidden" name="documentation_id" value="<?= $documentation["id"] ?>">
                     <input type="hidden" name="original_value" value="<?= $documentation["title"] ?>">
+                    <p class="documentation_owner">by <?= $documentation["documentation_owner"] ?></p>
                     <?php if($documentation["is_private"]){ ?>
-                        <button type="button" class="invite_collaborators_btn <?= ($documentation["is_archived"]) ? 'archived_disabled' : '' ?>" data-document_id="<?= $documentation["id"] ?>" tabindex="-1">&nbsp;<?= $documentation["cache_collaborators_count"] + 1 ?></button>
                     <?php } ?>
                 </form>
                 <div class="document_controls">
                     <?php if($documentation["is_private"]){ ?>
+                        <button type="button" class="invite_collaborators_btn <?= ($documentation["is_archived"]) ? 'archived_disabled' : '' ?>" data-document_id="<?= $documentation["id"] ?>" tabindex="-1">&nbsp;<?= $documentation["cache_collaborators_count"] + 1 ?></button>
                         <button class="access_btn modal-trigger <?= ($documentation["is_archived"]) ? 'archived_disabled' : '' ?> set_privacy_btn" href="#confirm_to_public" data-document_id="<?= $documentation["id"] ?>" data-document_privacy="private"></button>
                     <?php } ?>
                     <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_<?= $documentation["id"] ?>">⁝</button>
@@ -52,11 +53,10 @@
             <div id="document_<?= $documentation["id"] ?>" class="document_block mobile_block">
                 <div class="document_details">
                     <h2><?= $documentation['title'] ?></h2>
-                    <?php if($documentation['is_private']){ ?>
-                        <button class="invite_collaborators_btn"><?= $documentation['cache_collaborators_count'] + 1 ?></button> 
-                    <?php  } ?>
-                </div>
+                    <p class="documentation_owner">by <?= $documentation["documentation_owner"] ?></p>
+                    </div>
                 <?php if($documentation['is_private']){ ?>
+                    <button class="invite_collaborators_btn"><?= $documentation['cache_collaborators_count'] + 1 ?></button> 
                     <div class="document_controls"><button class="access_btn"></button></div>
                 <?php  } ?>
             </div>

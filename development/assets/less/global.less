@@ -186,24 +186,70 @@ textarea{
                 width: 416px;
             }
         }
+        .sidenav_logo{
+            align-items: center;
+            display: flex;
+            padding: 0px 0px 0px 14px;
+            &:before{
+                content:"";
+                background: url("../images/nav_sprite.svg") no-repeat;
+                background-position: -44px 0px;
+                display: block;
+                height: 28px;
+                margin-right: 16px;
+                width: 28px;
+                z-index: 999;
+            }
+            &:after{
+                content: "";
+                height: 24px;
+                flex-grow: 1;
+            }
+
+        }
+        ul{
+            max-height: calc(100% - 54px);
+            overflow: auto;
+            padding-right: 40px;
+        }
         li{
+            align-items: center;
+            display: flex;
             font: 16px/20px @readex_regular;
+            padding: 0px 0px 0px 24px;
+            position: relative;
             z-index: 9999;
             &:hover{
                 background: @by_hover;
                 border-radius: 0px 20px 20px 0px;
-                max-width: 280px;
             }
             a{
                 color: @by_nav_text;
-                transform: translateX(26px);
+                flex-grow: 1;
+                overflow: hidden;
+                padding: 0px 40px 0px 0px;
+                text-overflow: ellipsis;
+                vertical-align: middle;
+                white-space: nowrap;
                 z-index: 9999;
                 &:hover{
-                    background: url('../images/nav_sprite.svg') no-repeat;
-                    background-position: -95px 11px;
+                    background: transparent !important;
                     color: @by_primary;
-                    display: block;
                 }
+                &.private + span{
+                    background: url("../images/mobile_nav_sprite.svg") no-repeat;
+                    background-position: -88px 2px;
+                    content: '';
+                    display: inline-block;
+                    height: 28px;
+                    position: absolute;
+                    right: 0px;
+                    vertical-align: middle;
+                    width: 28px;
+                }
+            }
+            span{
+                display: inline-block;
             }
         }
     }
@@ -216,36 +262,53 @@ textarea{
 #mobile_container{
     #mobile_nav{
         background: @by_mobilebg !important;
+        #mobile_nav_title{
+            &:empty{
+                display: none;
+            }
+            color: @by_white;
+            font: 14px/40px @readex_medium;
+            padding: 0px 16px;
+        }
         ul{
+            padding-right: 24px;
             li{
-                margin: 0 16px;
+                align-items: center;
+                display: flex;
+                position: relative;
+                &:hover{
+                    background: @by_hover;
+                    border-radius: 0px 40px 40px 0px;
+                }
                 a{
                     color: @by_nav_text;
-                    padding: 0 0;
-                    &:hover{   
-                        background: @by_hover;
-                        border-radius: 0px 40px 40px 0px;
+                    display: inline-block;
+                    flex-grow: 1;
+                    overflow: hidden;
+                    padding: 0px 40px 0px 16px;
+                    text-overflow: ellipsis;
+                    vertical-align: middle;
+                    white-space: nowrap;
+                    z-index: 9999;
+                    &:hover{
+                        background: transparent !important;
                         color: @by_primary;
-                        margin-left: -31px;
-                        padding-left: 30px;
-                        position: relative;
-                        width: 113%;
-                        &.private::after{
-                            background: url("../images/mobile_nav_sprite.svg") no-repeat;
-                            background-position: -88px 2px;
-                            content: '';
-                            display: block;
-                            height: 28px;
-                            position: absolute;
-                            right: 10px;
-                            top: 10px;
-                            width: 28px;
-                            
-                        }
+                    }
+                    &.private + span{
+                        background: url("../images/mobile_nav_sprite.svg") no-repeat;
+                        background-position: -88px 2px;
+                        content: '';
+                        display: inline-block;
+                        height: 28px;
+                        position: absolute;
+                        right: 10px;
+                        vertical-align: middle;
+                        width: 28px;
                     }
                 }
+                
                 span{
-                    color: @by_white;
+                    display: inline-block;
                 }
             }
         }
@@ -255,10 +318,47 @@ textarea{
         display: flex;
         height: 56px;
         justify-content: space-between;
-        .user_profile{
-            border-radius: 20px;
-            height: 40px;
-            width: 40px;
+        .user_settings{
+            display: flex;
+            align-items: center;
+            #mobile_logout{
+                background: url("../images/header_sprite.svg") no-repeat;
+                background-position: -40px 0px;
+                border: none;
+                color: transparent;
+                cursor: pointer;
+                height: 24px;
+                width: 28px;
+                margin-left: 4px;
+            }
+            
+            .user_profile{
+                border-radius: 20px;
+                height: 40px;
+                width: 40px;
+            }
+            #mobile_user_dropdown{
+                background: transparent;
+                border-radius: 8px;
+                height: 40px;
+                overflow: hidden;
+                top: 56px !important;
+                li{
+                    background: @by_archived_bg;
+                    border-radius: 8px;
+                    .log_out_btn{
+                        color: @by_gray;
+                        font: 12px/16px @readex_regular;
+                        padding: 12px 0;
+                        position: relative;
+                        text-align: center;
+                        z-index: 9999;
+                    }
+                    &:hover{
+                        background: @by_hover;
+                    }
+                }
+            }
         }
         .mobile{
             background: url("../images/mobile_nav_sprite.svg") no-repeat;

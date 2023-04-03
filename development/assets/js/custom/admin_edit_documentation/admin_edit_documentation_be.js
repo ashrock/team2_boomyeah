@@ -132,17 +132,16 @@ function onSubmitAddSectionForm(event){
                 addAnimation(`#section_${response_data.result.section_id}`, "animate__fadeIn animate__slower");
                 appearEmptySection();
 
-                window.scrollTo(0, document.body.scrollHeight);
+                post_form.self().reset();
+                ux("#input_add_section").self().blur();
+                await ux(`#section_${response_data.result.section_id}`).self().scrollIntoView();
+                
+                setTimeout(() => {
+                    addAnimation(`#section_${response_data.result.section_id}`, "animated_blinkBorder animate__slower");
+                }, 180);
             } else {
                 post_form.find(".group_add_section").addClass("input_error");
             }
-
-            post_form.self().reset();
-            ux("#input_add_section").self().blur();
-
-            setTimeout(() => {
-                ux("#input_add_section").self().focus();    
-            });
         }, "json");
     }
     else{
