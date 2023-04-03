@@ -95,10 +95,10 @@ $route['docs/(:any)']['GET']        = 'documentations/userDocumentation/$1';
 $route['docs/(:any)/(:any)']['GET'] = 'documentations/userSection/$1/$2';
 
 /* POST | User View Section Post Feature Routes */
-$route['modules/get_posts']['POST']   = 'modules/getPosts';
-$route['modules/add_post']['POST']    = 'modules/addPost';
+$route['posts/get']['POST']    = 'posts/getPosts';
+$route['posts/add']['POST']    = 'posts/addPost';
+$route['posts/remove']['POST'] = 'posts/removePost';
 $route['modules/edit_post_comment']['POST']   = 'modules/editPostComment';
-$route['modules/remove_post']['POST'] = 'modules/removePost';
 
 /* POST | User View Section Comment Feature Routes */
 $route['modules/get_comments']['POST']    = 'modules/getComments';
