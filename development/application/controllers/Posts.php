@@ -46,6 +46,25 @@
 			echo json_encode($response_data);
 		}
 
+        # DOCU: This function will call editPost() / editComment() from Module Model to process updating of post/comment
+		# Triggered by: (POST) modules/update_post
+		# Requires: $_POST["post_id", "comment_id", "post_comment"]
+		# Returns: { status: true/false, result: { post_id, post_comment_id, html }, error: null }
+		# Last updated at: Mar. 21, 2023
+		# Owner: Jovic, Updated by: Erick
+		public function editPostComment(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				$response_data =  $this->Post->editPostComment($_POST);
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+
         # DOCU: This function will call removePost() from Module Model to process removing of Post or Comment record
 		# Triggered by: (POST) posts/remove
 		# Requires: $_POST["parent_id"]
@@ -53,11 +72,11 @@
 		# Returns: { status: true/false, result: { post_id, post_comment_id, html }, error: null }
 		# Last updated at: April 3, 2023
 		# Owner: Jovic
-		public function removePost(){
+		public function removePostComment(){
 			$response_data = array("status" => false, "result" => array(), "error" => null);
 
 			try {
-				$response_data = $this->Post->removePost($_POST);
+				$response_data = $this->Post->removePostComment($_POST);
 			}
 			catch (Exception $e) {
 				$response_data["error"] = $e->getMessage();

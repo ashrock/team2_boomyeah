@@ -133,26 +133,6 @@
 			echo json_encode($response_data);
 		}
 
-		# DOCU: This function will call editPost() / editComment() from Module Model to process updating of post/comment
-		# Triggered by: (POST) modules/update_post
-		# Requires: $_POST["post_id", "comment_id", "post_comment"]
-		# Returns: { status: true/false, result: { post_id, post_comment_id, html }, error: null }
-		# Last updated at: Mar. 21, 2023
-		# Owner: Jovic, Updated by: Erick
-		public function editPostComment(){
-			$response_data = array("status" => false, "result" => array(), "error" => null);
-
-			try {
-				$this->load->model("Post");
-				$response_data = (empty($_POST["comment_id"])) ? $this->Post->editPost($_POST) : $this->Post->editComment($_POST);
-			}
-			catch (Exception $e) {
-				$response_data["error"] = $e->getMessage();
-			}
-
-			echo json_encode($response_data);
-		}
-
 		# DOCU: This function will call getComments() from Module Model to process fetching of Post Comments
 		# Triggered by: (POST) modules/get_posts
 		# Requires: $_POST["post_id"]

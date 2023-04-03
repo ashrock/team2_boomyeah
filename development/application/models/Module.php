@@ -668,34 +668,8 @@
             return $response_data;
         }
 
-        # DOCU: This function will update Comment record and generate html
-        # Triggered by: (POST) modules/`edit_post_comment`
-        # Requires: $params { post_id, comment_id, post_comment }
-        # Returns: { status: true/false, result: { comment_id, post_comment_id, html }, error: null }
-        # Last updated at: March 21, 2023
-        # Owner: Erick
-        public function editComment($params){
-            $response_data = array("status" => false, "result" => array(), "error" => null);
-
-            try {
-                $this->db->trans_start();
-                $update_post = $this->db->query("UPDATE comments SET message = ?, updated_at = NOW() WHERE id = ?;", array($params["post_comment"], $params["comment_id"]));
-
-                if($update_post){
-                    $response_data = $this->getComments($params["comment_id"]);
-                    $this->db->trans_complete();
-                }
-            }
-            catch (Exception $e) {
-                $this->db->trans_rollback();
-                $response_data["error"] = $e->getMessage();
-            }
-
-            return $response_data;
-        }
-
         # DOCU: This function will link file into a tabs to determine files are being used in a tab
-        # Triggered by: (POST) modules/link_file_tab
+        # Triggered by: (POST) modules/link_file_tab`
         # Requires: $params { file_id, tab_id  }
         # Returns: { status: true/false, result: { file_id }, error: null }
         # Last updated at: March 24, 2023
