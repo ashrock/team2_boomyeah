@@ -50,7 +50,7 @@
         <?php } ?>
         </div>
         <ul class="replies_list comments_list"></ul>
-        <form action="/modules/add_comment" method="POST" class="add_reply_form add_comment_form">
+        <form action="/posts/add_comment" method="POST" class="add_reply_form add_comment_form">
             <input type="hidden" name="action" value="add_post_comment">
             <input type="hidden" name="post_id" class="post_id" value="<?= $comment_item["post_id"] ?>">
             <div class="comment_details">

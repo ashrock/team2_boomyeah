@@ -89,7 +89,7 @@
                     <button type="submit" class="mobile_comment_btn"></button>
                 </div>
             </form>
-            <form action="/modules/add_comment" method="POST" class="mobile_add_reply_form add_comment_form">
+            <form action="/posts/add_comment" method="POST" class="mobile_add_reply_form add_comment_form">
                 <div class="comment_field">
                     <input type="hidden" name="action" value="add_post_comment" class="action">
                     <input type="hidden" name="post_id" class="post_id" value="">
@@ -116,7 +116,7 @@
         <input type="hidden" name="tab_id" class="tab_id">
     </form>
 
-    <form id="fetch_post_comments_form" action="/modules/get_comments" method="POST" class="hidden">
+    <form id="fetch_post_comments_form" action="/posts/get_comments" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_post_comments">
         <input type="hidden" name="post_id" class="post_id">
     </form>
