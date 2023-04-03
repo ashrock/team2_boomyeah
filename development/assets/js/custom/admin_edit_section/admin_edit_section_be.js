@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ux("body")
             .findAll("#section_pages .tab_content").forEach((tab_content) => {
                 initializeRedactor(tab_content);
-            })
+            });
     }
 
     ux("body")

@@ -34,7 +34,7 @@
         </form>
     </li>
 </ul>
-<form action="/modules/edit_post_comment" method="POST" class="edit_comment_form">
+<form action="/posts/edit" method="POST" class="edit_comment_form">
     <input type="hidden" name="action" value="edit_comment" class="action">
     <input type="hidden" name="post_id" class="post_id">
     <input type="hidden" name="comment_id" class="comment_id">

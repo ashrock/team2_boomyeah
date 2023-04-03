@@ -123,13 +123,6 @@
                     padding: 12px 24px 24px !important;
                 }
             }
-
-            pre,
-            table{
-                max-width: 100%;
-                word-break: break-all;
-                white-space: pre-line;
-            }
         }
         .mobile_module_header{
             background: @by_white;
@@ -261,7 +254,6 @@
             .tab_title{
                 color: @by_mobile_link;
                 cursor: pointer;
-                display: block !important;
                 font: 14px/16px @readex_regular !important;
                 margin: 0px 0px 0px !important;
                 vertical-align: top;
@@ -338,7 +330,6 @@
         }
 
         h3.tab_title{
-            display: none;
             font: 20px/18px @readex_regular;
             margin: 0px 0px 16px;
             padding: 0px;
@@ -385,6 +376,29 @@
             ol, ul{
                 font: 16px/24px @readex_light !important;
                 padding-left: 18px;
+            }
+
+            pre,
+            table{
+                max-width: 100%;
+                word-break: break-all;
+                white-space: pre-line;
+                width: auto;
+            }
+
+            table{
+                tr{
+                    border: none;
+                }
+                td{
+                    border: 1px solid @by_light;
+                }
+            }
+
+            pre{
+                background: @by_neutral_gray;
+                border-radius: 8px;
+                padding: 16px;
             }
         }
             
@@ -439,6 +453,29 @@
                     ol, ul{
                         font: 16px/24px @readex_light;
                         padding-left: 18px;
+                    }
+
+                    pre,
+                    table{
+                        max-width: 100%;
+                        word-break: break-all;
+                        white-space: pre-line;
+                        width: auto;
+                    }
+                    
+                    table{
+                        tr{
+                            border: none;
+                        }
+                        td{
+                            border: 1px solid @by_light;
+                        }
+                    }
+
+                    pre{
+                        background: @by_neutral_gray;
+                        border-radius: 8px;
+                        padding: 16px;
                     }
                 }
             }

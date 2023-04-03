@@ -107,8 +107,6 @@ function onSubmitAddDocumentationForm(event){
 
                 /* Redirect in admin edit document page. */
                 ux("#add_documentation_form").self().reset();
-                
-                // location.href = `/docs/${response_data.result.documentation_id}/edit`;
             }
             else{
                 let add_documentation_input = ux(".group_add_documentation");
@@ -237,7 +235,7 @@ function submitArchiveDocumentation(event){
 
             // appearEmptyDocumentation();
             if(response_data.result.hasOwnProperty("no_documentations_html")){
-                let documentations_div = (response_data.result.is_archived === "1") ? "#documentations" : "#archived_documents";
+                let documentations_div = (parseInt(response_data.result.is_archived)) ? "#documentations" : "#archived_documents";
     
                 $(documentations_div).html(response_data.result.no_documentations_html);
             }
@@ -272,7 +270,7 @@ function submitRemoveDocumentation(event){
 
                 /* Check if we need to display no documentations message */
                 if(response_data.result.hasOwnProperty("no_documentations_html")){
-                    let documentations_div = (response_data.result.is_archived == "0") ? "documentations" : "archived_documents";
+                    let documentations_div = (!parseInt(response_data.result.is_archived)) ? "documentations" : "archived_documents";
                     document.getElementById(documentations_div).innerHTML = response_data.result.no_documentations_html;
                 }
             });

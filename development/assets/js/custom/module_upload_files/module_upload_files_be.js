@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         ;
 });
 
-
 function onConfirmRemoveFile(event){
     event.stopImmediatePropagation();
     event.preventDefault();

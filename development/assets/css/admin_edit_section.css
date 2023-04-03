@@ -1386,12 +1386,6 @@ body::-webkit-scrollbar-thumb {
   .section_page_content .section_page_tab:last-child.show {
     padding: 12px 24px 24px !important;
   }
-  .section_page_content .section_page_tab pre,
-  .section_page_content .section_page_tab table {
-    max-width: 100%;
-    word-break: break-all;
-    white-space: pre-line;
-  }
   .section_page_content .mobile_module_header {
     background: #FFFFFF;
     border-top-left-radius: 10px;
@@ -1516,7 +1510,6 @@ body::-webkit-scrollbar-thumb {
   .section_page_content .section_page_tab .tab_title {
     color: #A8C8FF;
     cursor: pointer;
-    display: block;
     font: 14px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
     margin: 0px 0px 0px !important;
     vertical-align: top;
@@ -1593,7 +1586,6 @@ body::-webkit-scrollbar-thumb {
   min-height: 360px;
 }
 .section_page_content .section_page_tab h3.tab_title {
-  display: none;
   font: 20px/18px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0px 0px 16px;
   padding: 0px;
@@ -1647,6 +1639,24 @@ body::-webkit-scrollbar-thumb {
 .section_page_content .section_page_tab .tab_content ul {
   font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif !important;
   padding-left: 18px;
+}
+.section_page_content .section_page_tab .tab_content pre,
+.section_page_content .section_page_tab .tab_content table {
+  max-width: 100%;
+  word-break: break-all;
+  white-space: pre-line;
+  width: auto;
+}
+.section_page_content .section_page_tab .tab_content table tr {
+  border: none;
+}
+.section_page_content .section_page_tab .tab_content table td {
+  border: 1px solid #A1A1AA;
+}
+.section_page_content .section_page_tab .tab_content pre {
+  background: #E2E2EC;
+  border-radius: 8px;
+  padding: 16px;
 }
 .section_page_content .section_page_tab figure,
 .section_page_content .section_page_tab iframe {
@@ -1706,6 +1716,24 @@ body::-webkit-scrollbar-thumb {
 .section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor ul {
   font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   padding-left: 18px;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor pre,
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor table {
+  max-width: 100%;
+  word-break: break-all;
+  white-space: pre-line;
+  width: auto;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor table tr {
+  border: none;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor table td {
+  border: 1px solid #A1A1AA;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor pre {
+  background: #E2E2EC;
+  border-radius: 8px;
+  padding: 16px;
 }
 .section_page_content .section_page_tab .tab_footer {
   align-items: center;
