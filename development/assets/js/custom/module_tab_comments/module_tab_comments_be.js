@@ -1,8 +1,6 @@
 let active_comment_item = null;
 
 document.addEventListener("DOMContentLoaded", async (event) => {
-    let document_element = event.target;
-
     ux("body")
         .on("click", ".fetch_tab_posts_btn", (event) => {
             event.preventDefault();
