@@ -477,21 +477,23 @@
         # Triggered by: (GET) collaborators/get
         # Requires: $documentation_id
         # Returns: { status: true/false, result: user record, error: null }
-        # Last updated at: March 8, 2023
+        # Last updated at: April 3, 2023
         # Owner: Jovic
         public function getDocumentationOwner($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $documentation = $this->getDocumentation($documentation_id);
+                $get_documentation_owner = $this->db->query("
+                    SELECT
+                        users.*
+                    FROM documentations
+                    INNER JOIN users ON users.id = documentations.user_id
+                    WHERE documentations.id = ?;
+                ", $documentation_id);
 
-                if($documentation["result"]){
-                    $this->load->model("User");
-                    $get_owner = $this->User->getUser($documentation["result"]["user_id"]);
-
-                    if($get_owner["result"]){
-                        $response_data["result"] = $get_owner["result"];
-                    }
+                if($get_documentation_owner->num_rows()){
+                    $response_data["status"] = true;
+                    $response_data["result"] = $get_documentation_owner->result_array()[FIRST_INDEX];
                 }
             }
             catch (Exception $e) {
