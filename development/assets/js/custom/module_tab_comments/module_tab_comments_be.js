@@ -38,7 +38,7 @@ function onSubmitMobilePostForm(event){
     event.preventDefault();
     let post_form = ux(event.target);
 
-    if(post_form.attr("action") == "/modules/add_post"){
+    if(post_form.attr("action") == "/posts/add"){
         let active_tab = ux(".section_page_content").find(".show");
         post_form.find(".tab_id").val(active_tab.attr("id").split("tab_")[1]);
     }

@@ -5,7 +5,7 @@
             <p>Are you sure you want to remove this comment?</p>
         </div>
         <div class="modal-footer">
-            <form action="/modules/remove_post" method="POST" id="remove_comment_form">
+            <form action="/posts/remove" method="POST" id="remove_comment_form">
                 <input type="hidden" name="action" value="remove_comment" class="action">
                 <input type="hidden" name="parent_id" value="" class="parent_id">
                 <input type="hidden" name="comment_id" value="" class="comment_id">
