@@ -55,7 +55,7 @@
             <form id="add_module_form" action="/modules/add" method="POST">
                 <input type="hidden" name="action" value="add_module">
                 <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
-                <button id="add_page_tabs_btn" type="submit">+ Add New</button>
+                <button id="add_page_tabs_btn" type="submit" tabindex="1">+ Add New</button>
             </form>
             <div id="upload_file_section">
                 <?php
