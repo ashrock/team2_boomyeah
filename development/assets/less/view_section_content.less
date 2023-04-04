@@ -354,6 +354,10 @@
                     }
                 }
             }
+            h1, h2, h3, h4, h5{
+                white-space: pre-line;
+                word-wrap: break-word;
+            }
             h1, h2, h3, h4, h5, ol, ul, p{
                 color: @by_black;
                 margin: 0px 0px 24px;;
@@ -376,6 +380,11 @@
             ol, ul{
                 font: 16px/24px @readex_light !important;
                 padding-left: 18px;
+            }
+            ul{
+                li{
+                    list-style: initial !important;
+                }
             }
 
             pre,
@@ -453,6 +462,11 @@
                     ol, ul{
                         font: 16px/24px @readex_light;
                         padding-left: 18px;
+                    }
+                    ul{
+                        li{
+                            list-style: initial !important;
+                        }
                     }
 
                     pre,

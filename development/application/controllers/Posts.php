@@ -84,5 +84,43 @@
 
 			echo json_encode($response_data);
 		}
+
+		# DOCU: This function will call getComments() from Post Model to process fetching of Post Comments
+		# Triggered by: (POST) posts/get_posts
+		# Requires: $_POST["post_id"]
+		# Returns: { status: true/false, result: { post_comment_id, html }, error: null }
+		# Last updated at: Mar 20, 2023
+		# Owner: Erick
+		public function getComments(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				$response_data = $this->Post->getComments(NULL, $_POST["post_id"]);
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
+
+		# DOCU: This function will call addComment() from Post Model to process adding of comments
+		# Triggered by: (POST) posts/add_comment
+		# Requires: $_POST["post_id", "post_comment"]
+		# Returns: { status: true/false, result: { post_comment_id, html }, error: null }
+		# Last updated at: Mar. 20, 2023
+		# Owner: Erick
+		public function addComment(){
+			$response_data = array("status" => false, "result" => array(), "error" => null);
+
+			try {
+				$response_data = $this->Post->addComment($_POST);
+			}
+			catch (Exception $e) {
+				$response_data["error"] = $e->getMessage();
+			}
+
+			echo json_encode($response_data);
+		}
 	}
 ?>

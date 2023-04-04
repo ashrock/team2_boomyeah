@@ -94,15 +94,13 @@ $route['docs']['GET']               = 'documentations/userDocumentations';
 $route['docs/(:any)']['GET']        = 'documentations/userDocumentation/$1';
 $route['docs/(:any)/(:any)']['GET'] = 'documentations/userSection/$1/$2';
 
-/* POST | User View Section Post Feature Routes */
+/* POST | User View Section Post/Comment Feature Routes */
 $route['posts/get']['POST']    = 'posts/getPosts';
 $route['posts/add']['POST']    = 'posts/addPost';
 $route['posts/edit']['POST']   = 'posts/editPostComment';
 $route['posts/remove']['POST'] = 'posts/removePostComment';
-
-/* POST | User View Section Comment Feature Routes */
-$route['modules/get_comments']['POST']    = 'modules/getComments';
-$route['modules/add_comment']['POST']    = 'modules/addComment';
+$route['posts/get_comments']['POST'] = 'posts/getComments';
+$route['posts/add_comment']['POST']  = 'posts/addComment';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
