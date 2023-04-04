@@ -469,6 +469,14 @@ body{
             }
 
             /* v0.2 */
+            &:focus{
+                box-shadow: 0px 0px 4px @by_primary;
+                border: 1px solid @by_primary;
+                outline: none;
+                .more_action_list{
+                    display: flex;
+                }
+            }
             &:hover{
                 border: 1px solid @by_primary;
                 .more_action_list{
