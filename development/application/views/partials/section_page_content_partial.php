@@ -21,7 +21,7 @@
                 }
             ?>
             <li class="add_page_tab">
-                <button class="add_page_btn" type="button" data-module_id="<?= $module['module_id'] ?>">+</button>
+                <button class="add_page_btn" type="button" data-module_id="<?= $module['module_id'] ?>" tabindex="1">+</button>
             </li>
         </ul>
         <?php

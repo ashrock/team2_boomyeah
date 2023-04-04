@@ -15,7 +15,7 @@
                 <input type="hidden" name="is_comments_allowed" value="<?= ($tab->is_comments_allowed == YES) ? YES : NO ?>">
                 <label for="allow_comments_tab_<?= $tab->id ?>" class="checkbox_label">
                     <input type="checkbox" class="is_comments_allowed" id="allow_comments_tab_<?= $tab->id ?>" <?= ($tab->is_comments_allowed == 1) ? "checked='checked'" : "" ?>>
-                    <div class="checkbox_marker"></div>
+                    <div class="checkbox_marker" tabindex="1"></div>
                     <span class="checkbox_text">Allow Comments</span>
                 </label>
                 <div class="row_placeholder"></div>

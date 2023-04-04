@@ -4,7 +4,10 @@
         const INTERACTIVE_IDS = {};
         const INTERACTIVE_CLASSES = {
             "document_block": "click",
-            "section_block": "click"
+            "document_block": "click",
+            "page_tab_item_title": "click",
+            "remove_tab_btn": "click",
+            "checkbox_marker": "click",
         }
     
         let current_focused_element = null;
@@ -40,6 +43,7 @@
     
             if(event.key == KEYS.TAB_KEY){
                 current_focused_element = event.target;
+                console.log("current_focused_element", current_focused_element)
                 return;
             }
 
