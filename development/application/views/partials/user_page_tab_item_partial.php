@@ -2,6 +2,6 @@
     $tab = $module_tabs_json->$tab_id;
 ?>
     <li class="page_tab_item <?= ($tab_ids_index === ZERO_VALUE) ? 'active' : '' ?> module_tab_<?= $tab->id ?>" data-tab_id="tab_<?= $tab->id ?>" data-module_id="<?= $tab->module_id ?>">
-        <a href="#tab_<?= $tab->id ?>"><?= $tab->title ?></a>
+        <a href="#tab_<?= $tab->id ?>" tabindex="1"><?= $tab->title ?></a>
     </li>
 <?php } ?>

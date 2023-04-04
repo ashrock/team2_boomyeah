@@ -1,6 +1,8 @@
 const KEYS = {
     ENTER: 13,
     ESCAPE: 27,
+    ENTER_KEY: "Enter",
+    TAB_KEY: "Tab",
 }
 
 const MOBILE_WIDTH = 632;

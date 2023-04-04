@@ -36,6 +36,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             get_collaborators_form.find(".document_id").val(document_id);
             add_collaborators_form.find(".document_id").val(document_id);
             get_collaborators_form.trigger("submit");
+
+            setTimeout(() => {
+                ux("#email_address.collaborator_email_address").trigger("click");
+            }, 380);
         })
         .on("change", ".invited_user_role", setRoleChangeAction)
         .on("submit", "#add_collaborators_form", onSubmitAddCollaboratorsForm)

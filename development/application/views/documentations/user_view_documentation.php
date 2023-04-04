@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="<?= add_file("assets/js/vendor/jquery-3.6.3.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/vendor/ux.lib.js") ?>"></script>
+    <script src="<?= add_file("assets/js/constants.js") ?>"></script>
 </head>
 <body>
     <!--- Add #main_navigation --->
@@ -55,6 +56,7 @@
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/global/global_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/user_view_documentation/user_view_documentation.js") ?>"></script>
 </body>
 </html> 
