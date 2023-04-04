@@ -4,7 +4,7 @@
         const INTERACTIVE_IDS = {};
         const INTERACTIVE_CLASSES = {
             "document_block": "click",
-            "document_block": "click",
+            "section_block": "click",
             "page_tab_item_title": "click",
             "remove_tab_btn": "click",
             "checkbox_marker": "click",
@@ -14,12 +14,6 @@
         document.addEventListener("keyup", (event) => {
             if(event.key == KEYS.ENTER_KEY){
                 let open_modal = ux("body").findAll(".modal.open");
-                
-                if(open_modal.length){
-                    let yes_btn = ux(open_modal[0]).find(".yes_btn");
-                    yes_btn.self().click();
-                    return;
-                }
 
                 if(current_focused_element){
                     let current_id = current_focused_element.id;
@@ -39,11 +33,16 @@
                         }
                     });
                 }
+                
+                if(open_modal.length){
+                    let yes_btn = ux(open_modal[0]).find(".yes_btn");
+                    yes_btn.self().click();
+                    return;
+                }
             }
     
             if(event.key == KEYS.TAB_KEY){
                 current_focused_element = event.target;
-                console.log("current_focused_element", current_focused_element)
                 return;
             }
 
