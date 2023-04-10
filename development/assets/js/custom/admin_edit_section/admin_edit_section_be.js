@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ux("body")
             .findAll("#section_pages .tab_content").forEach((tab_content) => {
                 initializeRedactor(tab_content);
-            })
+            });
     }
 
     ux("body")
@@ -161,11 +161,15 @@ function onReorderTabs(event){
     event.preventDefault();
     let post_form = ux(event.target);
     
-    ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
-        if(!response_data.status){
-            alert("Error saving tab order")
-        }
-    }, "json");
+    try{
+        ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
+            if(!response_data.status){
+                alert("Error saving tab order");
+            }
+        }, "json");
+    } catch (error){
+
+    }
     
     return false;
 }

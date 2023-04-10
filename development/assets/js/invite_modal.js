@@ -36,16 +36,28 @@ document.addEventListener("DOMContentLoaded", async () => {
             get_collaborators_form.find(".document_id").val(document_id);
             add_collaborators_form.find(".document_id").val(document_id);
             get_collaborators_form.trigger("submit");
+
+            setTimeout(() => {
+                ux("#email_address.collaborator_email_address").trigger("click");
+            }, 380);
         })
         .on("change", ".invited_user_role", setRoleChangeAction)
         .on("submit", "#add_collaborators_form", onSubmitAddCollaboratorsForm)
         .on("submit", "#get_collaborators_form", onSubmitGetCollaboratorsForm)
         .on("submit", "#remove_invited_user_form", onSubmitRemoveInvitedUser)
         .on("submit", "#update_invited_user_form", onSubmitUpdateInvitedUser)
+        .on("focus", ".collaborator_email_address", function(event){
+            event.stopImmediatePropagation();
+            ux(".collaborator_chips").addClass("focused");
+        })
+        .on("blur", ".collaborator_email_address", function(event){
+            event.stopImmediatePropagation();
+            ux(".collaborator_chips").removeClass("focused");
+        })
+        ;
 
     /* run functions from invite_modal.js */
     initializeCollaboratorChipsInstance();
-    // initRoleDropdown();
     initSelect();
 });
 
@@ -108,7 +120,6 @@ function addEmail(email){
 function addPeopleWithAccess(event){
     event.preventDefault();
     event.stopImmediatePropagation();
-    // ux("#email_address").self().blur();
 
     if(invited_emails.length > 0){
         let add_collaborators_form = ux("#add_collaborators_form");
@@ -123,6 +134,7 @@ function onSubmitGetCollaboratorsForm(event){
     event.preventDefault();
     let post_form = ux(event.target);
 
+    /** Get people with access content */
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
             await ux("#invited_users_wrapper").html(response_data.result.owner);
@@ -133,32 +145,14 @@ function onSubmitGetCollaboratorsForm(event){
                 ux(dropdown_element).removeClass("added_collaborator");
             });
 
-            /** TODO: Get people with access content */
             let invite_modal = document.querySelector("#invite_collaborator_modal");
             M.Modal.getInstance(invite_modal).open();
-            
-            setTimeout(() => {
-                initializeInviteEmailField();   
-            }, 480);
         } else {
 
         }
     }, "json");
 
     return false;
-}
-
-function initializeInviteEmailField(){
-    ux("body")
-        .on("focus", ".collaborator_email_address", function(event){
-            event.stopImmediatePropagation();
-            ux(".collaborator_chips").addClass("focused");
-        })
-        .on("blur", ".collaborator_email_address", function(event){
-            event.stopImmediatePropagation();
-            ux(".collaborator_chips").removeClass("focused");
-        });
-
 }
 
 function onSubmitAddCollaboratorsForm(event){
@@ -200,9 +194,9 @@ function onSubmitAddCollaboratorsForm(event){
 function setRoleChangeAction(event){
     let invited_user = ux(event.target.closest(".invited_user"));
     let collaborator_email = invited_user.find(".invited_user_info").self().innerText;
-    const selected_action = event.target.value;
-    const invited_user_id = event.target.dataset.invited_user_id;
-    const collaborator_id = event.target.dataset.collaborator_id;
+    let selected_action = event.target.value;
+    let invited_user_id = event.target.dataset.invited_user_id;
+    let collaborator_id = event.target.dataset.collaborator_id;
     let role_options = event.target.children;
     for(let option_index in role_options){
         if(typeof role_options[option_index] === "object"){
@@ -226,7 +220,7 @@ function setRoleChangeAction(event){
         ux("#remove_invited_user_form").find(".documentation_id").val(invited_user.data("documentation_id"));
     }
     else{
-        // for changing role to viewer/editor in the backend
+        /* For changing role to viewer/editor in the backend */
         let update_invited_user_form = ux("#update_invited_user_form");
         update_invited_user_form.find(".invited_user_id").val(invited_user_id);
         update_invited_user_form.find(".collaborator_id").val(collaborator_id);
@@ -258,6 +252,7 @@ function onSubmitUpdateInvitedUser(event){
 
     return false;
 }
+
 function onSubmitRemoveInvitedUser(event){
     event.preventDefault();
     let post_form = ux(event.target);
@@ -292,7 +287,6 @@ function onSubmitRemoveInvitedUser(event){
 function confirmRemoveInvitedUser(event){
     ux("#remove_invited_user_form").trigger("submit");
 }
-
 
 function onCancelRemoveCollaborator(event = null){
     let invite_user_id = ux("#remove_invited_user_form .invited_user_id").val();

@@ -1,9 +1,3 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  animation-duration: 0.3s !important;
-}
 @font-face {
   font-family: 'ReadexPro-Bold';
   src: url('../fonts/ReadexPro-Bold.ttf');
@@ -15,6 +9,12 @@
 @font-face {
   font-family: 'ReadexPro-Regular';
   src: url('../fonts/ReadexPro-Regular.ttf');
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  animation-duration: 0.3s !important;
 }
 body {
   background-color: #EFF6FF;
@@ -979,6 +979,10 @@ body::-webkit-scrollbar-thumb {
 #edit_section_content #add_page_tabs_btn:hover {
   background: #BDDAFF;
 }
+#edit_section_content #add_page_tabs_btn:focus {
+  box-shadow: 0px 0px 4px #2563EB !important;
+  outline: none;
+}
 #edit_section_content #upload_file_section {
   background: #FFFFFF;
   border-radius: 10px;
@@ -1420,16 +1424,25 @@ body::-webkit-scrollbar-thumb {
   line-height: 48px;
   padding: 0px 24px 0px;
 }
+.section_page_content .section_page_tabs .page_tab_item a:focus {
+  box-shadow: 0px 0px 4px #2563EB;
+  outline: none;
+}
 .section_page_content .section_page_tabs .page_tab_item .remove_tab_btn {
   background: transparent;
   border: none;
+  border-radius: 10px;
   color: #8CA8FF;
   cursor: pointer;
   font-size: 23px;
   height: 47px;
-  padding-right: 16px;
+  padding: 0px 16px;
   position: absolute;
   right: 0px;
+}
+.section_page_content .section_page_tabs .page_tab_item .remove_tab_btn:focus {
+  box-shadow: 0px 0px 4px #2563EB;
+  outline: none;
 }
 .section_page_content .section_page_tabs .page_tab_item.active a,
 .section_page_content .section_page_tabs .page_tab_item:hover a {
@@ -1449,6 +1462,10 @@ body::-webkit-scrollbar-thumb {
   line-height: 48px;
   margin-top: 5px;
   padding: 0px 24px;
+}
+.section_page_content .section_page_tabs .add_page_tab .add_page_btn:focus {
+  box-shadow: 0px 0px 4px #2563EB !important;
+  outline: none;
 }
 .section_page_content .mobile_module_header {
   display: none;
@@ -1484,6 +1501,7 @@ body::-webkit-scrollbar-thumb {
   }
   .section_page_content .section_page_tab.show .tab_title {
     color: #001D32;
+    display: inline-block !important;
     margin: 0px 0px 8px !important;
   }
   .section_page_content .section_page_tab.show .tab_title ~ * {
@@ -1510,6 +1528,7 @@ body::-webkit-scrollbar-thumb {
   .section_page_content .section_page_tab .tab_title {
     color: #A8C8FF;
     cursor: pointer;
+    display: inline-block !important;
     font: 14px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
     margin: 0px 0px 0px !important;
     vertical-align: top;
@@ -1586,6 +1605,7 @@ body::-webkit-scrollbar-thumb {
   min-height: 360px;
 }
 .section_page_content .section_page_tab h3.tab_title {
+  display: none;
   font: 20px/18px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0px 0px 16px;
   padding: 0px;
@@ -1597,6 +1617,25 @@ body::-webkit-scrollbar-thumb {
   .section_page_content .section_page_tab .tab_content {
     font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   }
+  .section_page_content .section_page_tab .tab_content p * {
+    font: inherit !important;
+  }
+  .section_page_content .section_page_tab .tab_content ol li,
+  .section_page_content .section_page_tab .tab_content ul li {
+    font: 12px/16px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif !important;
+  }
+  .section_page_content .section_page_tab .tab_content ol li *,
+  .section_page_content .section_page_tab .tab_content ul li * {
+    font: inherit !important;
+  }
+}
+.section_page_content .section_page_tab .tab_content h1,
+.section_page_content .section_page_tab .tab_content h2,
+.section_page_content .section_page_tab .tab_content h3,
+.section_page_content .section_page_tab .tab_content h4,
+.section_page_content .section_page_tab .tab_content h5 {
+  white-space: pre-line;
+  word-wrap: break-word;
 }
 .section_page_content .section_page_tab .tab_content h1,
 .section_page_content .section_page_tab .tab_content h2,
@@ -1610,24 +1649,45 @@ body::-webkit-scrollbar-thumb {
   margin: 0px 0px 24px;
 }
 .section_page_content .section_page_tab .tab_content h1 {
-  font: 48px/46px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 48px/46px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
 }
 .section_page_content .section_page_tab .tab_content h2 {
-  font: 40px/38px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 40px/38px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
 }
 .section_page_content .section_page_tab .tab_content h3 {
-  font: 32px/30px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 32px/30px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
 }
 .section_page_content .section_page_tab .tab_content h4 {
-  font: 24px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 24px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
 }
 .section_page_content .section_page_tab .tab_content h5 {
-  font: 16px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 16px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif !important;
 }
 .section_page_content .section_page_tab .tab_content ol,
 .section_page_content .section_page_tab .tab_content ul {
-  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif !important;
   padding-left: 18px;
+}
+.section_page_content .section_page_tab .tab_content ul li {
+  list-style: initial !important;
+}
+.section_page_content .section_page_tab .tab_content pre,
+.section_page_content .section_page_tab .tab_content table {
+  max-width: 100%;
+  word-break: break-all;
+  white-space: pre-line;
+  width: auto;
+}
+.section_page_content .section_page_tab .tab_content table tr {
+  border: none;
+}
+.section_page_content .section_page_tab .tab_content table td {
+  border: 1px solid #A1A1AA;
+}
+.section_page_content .section_page_tab .tab_content pre {
+  background: #E2E2EC;
+  border-radius: 8px;
+  padding: 16px;
 }
 .section_page_content .section_page_tab figure,
 .section_page_content .section_page_tab iframe {
@@ -1687,6 +1747,27 @@ body::-webkit-scrollbar-thumb {
 .section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor ul {
   font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   padding-left: 18px;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor ul li {
+  list-style: initial !important;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor pre,
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor table {
+  max-width: 100%;
+  word-break: break-all;
+  white-space: pre-line;
+  width: auto;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor table tr {
+  border: none;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor table td {
+  border: 1px solid #A1A1AA;
+}
+.section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor pre {
+  background: #E2E2EC;
+  border-radius: 8px;
+  padding: 16px;
 }
 .section_page_content .section_page_tab .tab_footer {
   align-items: center;

@@ -76,7 +76,7 @@
             <ul id="user_comments_list" class="comments_list"></ul>
         </div>
         <div class="mobile_tab_comments tab_comments comment_container">
-            <form action="/modules/add_post" method="POST" class="mobile_add_comment_form add_comment_form show">
+            <form action="/posts/add" method="POST" class="mobile_add_comment_form add_comment_form show">
                 <div class="comment_field">
                     <input type="hidden" name="action" value="add_tab_post" class="action">
                     <input type="hidden" name="tab_id" class="tab_id" value="">
@@ -89,7 +89,7 @@
                     <button type="submit" class="mobile_comment_btn"></button>
                 </div>
             </form>
-            <form action="/modules/add_comment" method="POST" class="mobile_add_reply_form add_comment_form">
+            <form action="/posts/add_comment" method="POST" class="mobile_add_reply_form add_comment_form">
                 <div class="comment_field">
                     <input type="hidden" name="action" value="add_post_comment" class="action">
                     <input type="hidden" name="post_id" class="post_id" value="">
@@ -107,21 +107,22 @@
     <div id="modals_container">
         <?php $this->load->view("partials/confirm_action_modals.php"); ?>
     </div>
-    <form id="fetch_tab_posts_form" action="/modules/get_posts" method="POST" class="hidden">
+    <form id="fetch_tab_posts_form" action="/posts/get" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_tab_posts">
         <input type="hidden" name="tab_id" class="tab_id">
     </form>
-    <form id="fetch_mobile_posts_form" action="/modules/get_posts" method="POST" class="hidden">
+    <form id="fetch_mobile_posts_form" action="/posts/get" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_tab_posts">
         <input type="hidden" name="tab_id" class="tab_id">
     </form>
 
-    <form id="fetch_post_comments_form" action="/modules/get_comments" method="POST" class="hidden">
+    <form id="fetch_post_comments_form" action="/posts/get_comments" method="POST" class="hidden">
         <input type="hidden" name="action" value="fetch_post_comments">
         <input type="hidden" name="post_id" class="post_id">
     </form>
     <script src="<?= add_file("assets/js/vendor/redactorx.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/global/global_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_be.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/module_tab_comments/module_tab_comments_fe.js") ?>"></script>
