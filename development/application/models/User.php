@@ -6,7 +6,7 @@
         # Triggered by: (GET) docs
         # Requires: object returned by Google Login API
         # Returns: { status: true/false, result: user_info, error: null }
-        # Last updated at: Mar. 24, 2023
+        # Last updated at: April 10, 2023
         # Owner: Jovic, Updated by: Erick
         public function loginUser($userinfo){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -17,19 +17,25 @@
 
                 # Create User record
                 if(!$get_user->num_rows()){
-                    $create_user = $this->db->query("INSERT INTO users (workspace_id, user_level_id, first_name, last_name, profile_picture, email, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW());", 
-                    array(VILLAGE88, USER_LEVEL["USER"], $userinfo["givenName"], $userinfo["familyName"], $userinfo["picture"], $userinfo["email"]));
-
-                    if($create_user){
-                        $user_info = array(
-                            "type"            => "SIGNUP",
-                            "id"              => $this->db->insert_id(),
-                            "user_level_id"   => USER_LEVEL["USER"],
-                            "first_name"      => $userinfo["givenName"],
-                            "last_name"       => $userinfo["familyName"],
-                            "profile_picture" => $userinfo["picture"],
-                            "email"           => $userinfo["email"]
-                        );
+                    # Check if needed data are not null
+                    if($userinfo["givenName"] && $userinfo["familyName"] && $userinfo["email"]){
+                        $create_user = $this->db->query("INSERT INTO users (workspace_id, user_level_id, first_name, last_name, profile_picture, email, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW());", 
+                        array(VILLAGE88, USER_LEVEL["USER"], $userinfo["givenName"], $userinfo["familyName"], $userinfo["picture"], $userinfo["email"]));
+    
+                        if($create_user){
+                            $user_info = array(
+                                "type"            => "SIGNUP",
+                                "id"              => $this->db->insert_id(),
+                                "user_level_id"   => USER_LEVEL["USER"],
+                                "first_name"      => $userinfo["givenName"],
+                                "last_name"       => $userinfo["familyName"],
+                                "profile_picture" => $userinfo["picture"],
+                                "email"           => $userinfo["email"]
+                            );
+                        }
+                    }
+                    else{
+                        throw new Exception("Failed to create User Record.");
                     }
                 }
                 else {

@@ -95,63 +95,65 @@
         # Requires: $params { user_id, workspace_id, title }
         # Optionals: $params { is_duplicate, documentation_id }
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 30, 2023
+        # Last updated at: April 10, 2023
         # Owner: Erick, Updated by: Jovic
         public function addDocumentations($params){
             $response_data = array("status" => false, "result" => [], "error" => null);
 
             try {
-                # Finalize bind params
-                $description = isset($params["description"]) ? $params["description"] : NULL;
-                $is_private  = isset($params["is_private"]) ? $params["is_private"] : YES;
-
-                $insert_document_record = $this->db->query("
-                    INSERT INTO documentations (user_id, workspace_id, title, description, is_archived, is_private, cache_collaborators_count, updated_by_user_id, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-                    array($params["user_id"], $params["workspace_id"], $params["title"], $description, NO, $is_private, ZERO_VALUE, $_SESSION["user_id"])
-                );
-
-                $new_documentation_id = $this->db->insert_id($insert_document_record);
-
-                if($new_documentation_id > ZERO_VALUE){
-                    $this->load->model("Workspace");
-                    $workspace = $this->Workspace->getDocumentationsOrder($params["workspace_id"]);
-                    
-                    # Check if action is duplicating
-                    if(!isset($params["is_duplicate"])){
-                        $new_documents_order = (strlen($workspace["result"]["documentation_ids_order"])) ? $workspace["result"]["documentation_ids_order"].','. $new_documentation_id : $new_documentation_id;
-                    }
-                    else{
-                        # Add documentation_id of duplicated record to Workspace's documentation_ids_order
-                        $new_documents_order = explode(",", $workspace["result"]["documentation_ids_order"]);
+                if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
+                    # Finalize bind params
+                    $description = isset($params["description"]) ? $params["description"] : NULL;
+                    $is_private  = isset($params["is_private"]) ? $params["is_private"] : YES;
     
-                        for($document_index=0; $document_index < count($new_documents_order); $document_index++){
-                            if($params["documentation_id"] == (int)$new_documents_order[$document_index]){
-                                array_splice($new_documents_order, $document_index + 1, 0, "{$new_documentation_id}");
-                            }
+                    $insert_document_record = $this->db->query("
+                        INSERT INTO documentations (user_id, workspace_id, title, description, is_archived, is_private, cache_collaborators_count, updated_by_user_id, created_at, updated_at) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+                        array($params["user_id"], $params["workspace_id"], $params["title"], $description, NO, $is_private, ZERO_VALUE, $_SESSION["user_id"])
+                    );
+    
+                    $new_documentation_id = $this->db->insert_id($insert_document_record);
+    
+                    if($new_documentation_id > ZERO_VALUE){
+                        $this->load->model("Workspace");
+                        $workspace = $this->Workspace->getDocumentationsOrder($params["workspace_id"]);
+                        
+                        # Check if action is duplicating
+                        if(!isset($params["is_duplicate"])){
+                            $new_documents_order = (strlen($workspace["result"]["documentation_ids_order"])) ? $workspace["result"]["documentation_ids_order"].','. $new_documentation_id : $new_documentation_id;
                         }
+                        else{
+                            # Add documentation_id of duplicated record to Workspace's documentation_ids_order
+                            $new_documents_order = explode(",", $workspace["result"]["documentation_ids_order"]);
         
-                        # Convert array to comma-separated string and update new_documents_order of new_documents_order
-                        $new_documents_order = implode(",", $new_documents_order);
-                    }
-
-                    $update_workspace_docs_order = $this->db->query("UPDATE workspaces SET documentation_ids_order = ? WHERE id = ?", array( $new_documents_order, $params["workspace_id"]));
-
-                    if($update_workspace_docs_order){
-                        $response_data["status"] = true;
-                        $response_data["result"]["documentation_id"] = $new_documentation_id;
-                        $response_data["result"]["html"] = $this->load->view(
-                            "partials/document_block_partial.php",
-                            array( "all_documentations" => [array(
-                                "id"                        => $new_documentation_id,
-                                "title"                     => $params["title"],
-                                "is_private"                => $is_private,
-                                "is_archived"               => NO,
-                                "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
-                                "cache_collaborators_count" => ZERO_VALUE
-                            )]), 
-                            true
-                        );
+                            for($document_index=0; $document_index < count($new_documents_order); $document_index++){
+                                if($params["documentation_id"] == (int)$new_documents_order[$document_index]){
+                                    array_splice($new_documents_order, $document_index + 1, 0, "{$new_documentation_id}");
+                                }
+                            }
+            
+                            # Convert array to comma-separated string and update new_documents_order of new_documents_order
+                            $new_documents_order = implode(",", $new_documents_order);
+                        }
+    
+                        $update_workspace_docs_order = $this->db->query("UPDATE workspaces SET documentation_ids_order = ? WHERE id = ?", array( $new_documents_order, $params["workspace_id"]));
+    
+                        if($update_workspace_docs_order){
+                            $response_data["status"] = true;
+                            $response_data["result"]["documentation_id"] = $new_documentation_id;
+                            $response_data["result"]["html"] = $this->load->view(
+                                "partials/document_block_partial.php",
+                                array( "all_documentations" => [array(
+                                    "id"                        => $new_documentation_id,
+                                    "title"                     => $params["title"],
+                                    "is_private"                => $is_private,
+                                    "is_archived"               => NO,
+                                    "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
+                                    "cache_collaborators_count" => ZERO_VALUE
+                                )]), 
+                                true
+                            );
+                        }
                     }
                 }
             }
