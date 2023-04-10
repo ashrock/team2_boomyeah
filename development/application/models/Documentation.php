@@ -259,80 +259,84 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]
         # Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-        # Last updated at: March 31, 2023
-        # Owner: Jovic
+        # Last updated at: April 10, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function duplicateDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 # Start DB transaction
                 $this->db->trans_start();
-                $get_documentation = $this->getDocumentation($documentation_id);
 
-                if($get_documentation["status"]){
-                    $duplicate_title  = "Copy of {$get_documentation['result']['title']}";
-
-                    # Create new documentation
-                    $duplicate_documentation = $this->addDocumentations(array(
-                        "is_duplicate"      => true,
-                        "documentation_id"  => $documentation_id,
-                        "user_id"           => $_SESSION["user_id"],
-                        "workspace_id"      => $_SESSION["workspace_id"],
-                        "title"		        => $duplicate_title,
-                        "description"       => $get_documentation["result"]["description"],
-                        "is_private"        => $get_documentation["result"]["is_private"]
-                    ));
-
-                    if($duplicate_documentation["status"]){                        
-                        # Create sections
-                        $this->load->model("Section");
-                        $duplicate_sections = $this->Section->duplicateSections(array(
-                            "documentation_id"  => $documentation_id,
-                            "duplicate_id"      => $duplicate_documentation["result"]["documentation_id"],
-                            "section_ids_order" => $get_documentation["result"]["section_ids_order"]
-                        ));
-
-                        if($duplicate_sections["status"]){
-                            # Create module only if section_ids exist
-                            if($duplicate_sections["result"]["section_ids"]){
-                                $this->load->model("Module");
-                                $duplicate_modules = $this->Module->duplicateModules(array(
-                                    "documentation_id"      => $documentation_id,
-                                    "duplicate_section_ids" => $duplicate_sections["result"]["section_ids"]
-                                ));
+                # Check if user is an admin
+                if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
+                    $get_documentation = $this->getDocumentation($documentation_id);
     
-                                if($duplicate_modules["status"] && $duplicate_modules["result"]["module_ids"] ){
-                                    # Create tabs
-                                    $duplicate_tabs = $this->Module->duplicateTabs(array(
-                                        "documentation_id" => $documentation_id, 
-                                        "module_ids"       => $duplicate_modules["result"]["module_ids"]
+                    if($get_documentation["status"]){
+                        $duplicate_title  = "Copy of {$get_documentation['result']['title']}";
+    
+                        # Create new documentation
+                        $duplicate_documentation = $this->addDocumentations(array(
+                            "is_duplicate"      => true,
+                            "documentation_id"  => $documentation_id,
+                            "user_id"           => $_SESSION["user_id"],
+                            "workspace_id"      => $_SESSION["workspace_id"],
+                            "title"		        => $duplicate_title,
+                            "description"       => $get_documentation["result"]["description"],
+                            "is_private"        => $get_documentation["result"]["is_private"]
+                        ));
+    
+                        if($duplicate_documentation["status"]){                        
+                            # Create sections
+                            $this->load->model("Section");
+                            $duplicate_sections = $this->Section->duplicateSections(array(
+                                "documentation_id"  => $documentation_id,
+                                "duplicate_id"      => $duplicate_documentation["result"]["documentation_id"],
+                                "section_ids_order" => $get_documentation["result"]["section_ids_order"]
+                            ));
+    
+                            if($duplicate_sections["status"]){
+                                # Create module only if section_ids exist
+                                if($duplicate_sections["result"]["section_ids"]){
+                                    $this->load->model("Module");
+                                    $duplicate_modules = $this->Module->duplicateModules(array(
+                                        "documentation_id"      => $documentation_id,
+                                        "duplicate_section_ids" => $duplicate_sections["result"]["section_ids"]
                                     ));
+        
+                                    if($duplicate_modules["status"] && $duplicate_modules["result"]["module_ids"] ){
+                                        # Create tabs
+                                        $duplicate_tabs = $this->Module->duplicateTabs(array(
+                                            "documentation_id" => $documentation_id, 
+                                            "module_ids"       => $duplicate_modules["result"]["module_ids"]
+                                        ));
+                                    }
                                 }
+    
+                                $response_data["status"]                     = true;
+                                $response_data["result"]["documentation_id"] = $documentation_id;
+                                $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
+                                $response_data["result"]["html"]             = $this->load->view(
+                                    "partials/document_block_partial.php",
+                                    array( "all_documentations" => [array(
+                                        "id"                        => $duplicate_documentation["result"]["documentation_id"],
+                                        "title"                     => $duplicate_title,
+                                        "is_private"                => $get_documentation["result"]["is_private"],
+                                        "is_archived"               => FALSE_VALUE,
+                                        "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
+                                        "cache_collaborators_count" => ZERO_VALUE
+                                    )]), 
+                                    true
+                                );
                             }
-
-                            $response_data["status"]                     = true;
-                            $response_data["result"]["documentation_id"] = $documentation_id;
-                            $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
-                            $response_data["result"]["html"]             = $this->load->view(
-                                "partials/document_block_partial.php",
-                                array( "all_documentations" => [array(
-                                    "id"                        => $duplicate_documentation["result"]["documentation_id"],
-                                    "title"                     => $duplicate_title,
-                                    "is_private"                => $get_documentation["result"]["is_private"],
-                                    "is_archived"               => FALSE_VALUE,
-                                    "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
-                                    "cache_collaborators_count" => ZERO_VALUE
-                                )]), 
-                                true
-                            );
                         }
+                        else{
+                            throw new Exception($duplicate_documentation["error"]);
+                        }
+    
+                        # Commit changes to DB
+                        $this->db->trans_complete();
                     }
-                    else{
-                        throw new Exception($duplicate_documentation["error"]);
-                    }
-
-                    # Commit changes to DB
-                    $this->db->trans_complete();
                 }
             }
             catch (Exception $e) {
