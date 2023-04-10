@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="<?= add_file("assets/js/vendor/Sortable.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/vendor/ux.lib.js") ?>"></script>
+    <script src="<?= add_file("assets/js/constants.js") ?>"></script>
 </head>
 <body>
     <!--- Add #main_navigation --->
@@ -42,20 +43,20 @@
                                     <h1 id="doc_title"><?= $document_data["title"] ?></h1>
                                     <!-- Switch -->     
                                     <div class="switch switch_btn">
-                                        <label for="set_privacy_switch">
+                                        <label for="set_privacy_switch" tabindex="3">
                                             <span class="toggle_text"><?= $document_data["is_private"] ? "Private" : "Public" ?></span>
                                             <input class="toggle_switch" type="checkbox" id="set_privacy_switch" <?= $document_data["is_private"] ? "checked" : "" ?>>
                                             <span class="lever"></span>
                                         </label>
                                     </div>
-                                    <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>"><?= $document_data["cache_collaborators_count"] + 1 ?> Collaborators</a>
+                                    <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>" tabindex="3"><?= $document_data["cache_collaborators_count"] + 1 ?> Collaborators</a>
                                 </div>
-                                <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description"><?= $document_data["description"] ?></p>
+                                <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description" tabindex="3"><?= $document_data["description"] ?></p>
                                 <form action="/sections/add" id="section_form" method="post">
                                     <input type="hidden" name="documentation_id" value="<?= $document_data["id"] ?>">
                                     <input type="hidden" name="action" value="create_section">
                                     <div class="group_add_section input-field">
-                                        <input name="section_title" id="input_add_section" type="text" class="section_title validate" autofocus>
+                                        <input name="section_title" id="input_add_section" type="text" class="section_title validate" autofocus tabindex="1">
                                         <label for="input_add_section">Add Section</label>
                                         <button id="submit_add_section_btn" type="submit"></button>
                                     </div>
@@ -124,6 +125,7 @@
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/global/global_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_documentation/admin_edit_documentation_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_documentation/admin_edit_documentation_be.js") ?>"></script>
     <script src="<?= add_file("assets/js/invite_modal.js") ?>"></script>

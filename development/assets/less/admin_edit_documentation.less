@@ -341,10 +341,6 @@ body{
                             label {
                                 color: @by_gray !important;
                             }
-    
-                            input {
-                            }
-    
                             #submit_add_section_btn {
                                 background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/disabled_add.svg') no-repeat;
                             }
@@ -469,6 +465,14 @@ body{
             }
 
             /* v0.2 */
+            &:focus{
+                box-shadow: 0px 0px 4px @by_primary;
+                border: 1px solid @by_primary;
+                outline: none;
+                .more_action_list{
+                    display: flex;
+                }
+            }
             &:hover{
                 border: 1px solid @by_primary;
                 .more_action_list{

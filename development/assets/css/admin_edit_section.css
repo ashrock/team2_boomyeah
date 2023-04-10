@@ -1,9 +1,3 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  animation-duration: 0.3s !important;
-}
 @font-face {
   font-family: 'ReadexPro-Bold';
   src: url('../fonts/ReadexPro-Bold.ttf');
@@ -15,6 +9,12 @@
 @font-face {
   font-family: 'ReadexPro-Regular';
   src: url('../fonts/ReadexPro-Regular.ttf');
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  animation-duration: 0.3s !important;
 }
 body {
   background-color: #EFF6FF;
@@ -979,6 +979,10 @@ body::-webkit-scrollbar-thumb {
 #edit_section_content #add_page_tabs_btn:hover {
   background: #BDDAFF;
 }
+#edit_section_content #add_page_tabs_btn:focus {
+  box-shadow: 0px 0px 4px #2563EB !important;
+  outline: none;
+}
 #edit_section_content #upload_file_section {
   background: #FFFFFF;
   border-radius: 10px;
@@ -1420,16 +1424,25 @@ body::-webkit-scrollbar-thumb {
   line-height: 48px;
   padding: 0px 24px 0px;
 }
+.section_page_content .section_page_tabs .page_tab_item a:focus {
+  box-shadow: 0px 0px 4px #2563EB;
+  outline: none;
+}
 .section_page_content .section_page_tabs .page_tab_item .remove_tab_btn {
   background: transparent;
   border: none;
+  border-radius: 10px;
   color: #8CA8FF;
   cursor: pointer;
   font-size: 23px;
   height: 47px;
-  padding-right: 16px;
+  padding: 0px 16px;
   position: absolute;
   right: 0px;
+}
+.section_page_content .section_page_tabs .page_tab_item .remove_tab_btn:focus {
+  box-shadow: 0px 0px 4px #2563EB;
+  outline: none;
 }
 .section_page_content .section_page_tabs .page_tab_item.active a,
 .section_page_content .section_page_tabs .page_tab_item:hover a {
@@ -1449,6 +1462,10 @@ body::-webkit-scrollbar-thumb {
   line-height: 48px;
   margin-top: 5px;
   padding: 0px 24px;
+}
+.section_page_content .section_page_tabs .add_page_tab .add_page_btn:focus {
+  box-shadow: 0px 0px 4px #2563EB !important;
+  outline: none;
 }
 .section_page_content .mobile_module_header {
   display: none;
@@ -1484,6 +1501,7 @@ body::-webkit-scrollbar-thumb {
   }
   .section_page_content .section_page_tab.show .tab_title {
     color: #001D32;
+    display: inline-block !important;
     margin: 0px 0px 8px !important;
   }
   .section_page_content .section_page_tab.show .tab_title ~ * {
@@ -1510,6 +1528,7 @@ body::-webkit-scrollbar-thumb {
   .section_page_content .section_page_tab .tab_title {
     color: #A8C8FF;
     cursor: pointer;
+    display: inline-block !important;
     font: 14px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
     margin: 0px 0px 0px !important;
     vertical-align: top;
@@ -1586,6 +1605,7 @@ body::-webkit-scrollbar-thumb {
   min-height: 360px;
 }
 .section_page_content .section_page_tab h3.tab_title {
+  display: none;
   font: 20px/18px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0px 0px 16px;
   padding: 0px;

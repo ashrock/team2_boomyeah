@@ -55,7 +55,7 @@
             <form id="add_module_form" action="/modules/add" method="POST">
                 <input type="hidden" name="action" value="add_module">
                 <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
-                <button id="add_page_tabs_btn" type="submit">+ Add New</button>
+                <button id="add_page_tabs_btn" type="submit" tabindex="1">+ Add New</button>
             </form>
             <div id="upload_file_section">
                 <?php
@@ -86,6 +86,7 @@
     </div>
     <script src="<?= add_file("assets/js/vendor/redactorx.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/global/global_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_edit_section/admin_edit_section_be.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/module_upload_files/module_upload_files_fe.js")?>"></script>

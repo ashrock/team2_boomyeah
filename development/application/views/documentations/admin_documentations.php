@@ -24,6 +24,7 @@
     <script src="<?= add_file("assets/js/vendor/jquery-3.6.3.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/vendor/Sortable.min.js") ?>"></script>
     <script src="<?= add_file("assets/js/vendor/ux.lib.js") ?>"></script>
+    <script src="<?= add_file("assets/js/constants.js") ?>"></script>
 </head>
 
 <body>
@@ -35,7 +36,7 @@
         <div class="container">
             <form action="/docs/add" id="add_documentation_form" method="POST" autocomplete="off">
                 <div class="group_add_documentation input-field">
-                    <input id="input_add_documentation" type="text" class="validate" name="document_title" autofocus autocomplete="nope">
+                    <input id="input_add_documentation" type="text" class="validate" name="document_title" autofocus autocomplete="nope" tabindex="1">
                     <input type="hidden" name="action" value="create_documentation">
                     <label for="input_add_documentation">Add Documentation</label>
                     <button id="add_documentation_btn" type="submit"></button>
@@ -43,7 +44,7 @@
                 <span id="save_status" hidden>Saving...</span>
             </form>
             <div class="section_header">
-                <button id="docs_view_btn" class="dropdown-trigger" data-target="docs_view_list">Documentations</button>
+                <button id="docs_view_btn" class="dropdown-trigger" data-target="docs_view_list" tabindex="2">Documentations</button>
                 <ul id='docs_view_list' class='dropdown-content'>
                     <li><a href="#!" class="switch_view_btn" data-is_archived="0">Documentations</a></li>
                     <li class="divider" tabindex="-1"></li>
@@ -80,6 +81,7 @@
     <?php $this->load->view("partials/confirm_invite_modals.php"); ?>
     <!--JavaScript at end of body for optimized loading-->
     <script src="<?= add_file("assets/js/main_navigation.js") ?>"></script>
+    <script src="<?= add_file("assets/js/custom/global/global_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/invite_modal.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_documentation/admin_documentation_fe.js") ?>"></script>
     <script src="<?= add_file("assets/js/custom/admin_documentation/admin_documentation_be.js") ?>"></script>
