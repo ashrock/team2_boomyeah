@@ -396,7 +396,7 @@ function showConfirmaDeleteComment(event){
         let remove_comment_modal = ux("#confirm_remove_comment_modal");
         let modal_instance = M.Modal.getInstance(remove_comment_modal);
         let active_tab = ux(".section_page_content").find(".show");
-        let parent_id = ux(event_target).data("parent_id") ? ux(event_target).data("parent_id") : active_tab.attr("id").split("tab_")[1];
+        let parent_id = ux(event_target).data("parent_id");
         modal_instance.open();
 
 
