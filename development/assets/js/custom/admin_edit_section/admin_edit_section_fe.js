@@ -69,23 +69,26 @@
     
                 window.addEventListener("scroll", async (event) => {
                     let scroll_top_offset = document.body.getBoundingClientRect().top;
-                    await ux("#prev_page_btn").addClass("hidden");
-                    await ux(".section_page_content.active").removeClass("active");
-                    let section_pages = ux("#section_pages").findAll(".section_page_content");
-    
-                    for(scroll_index in module_scroll_checkpoints){
-                        let scroll_value = (module_scroll_checkpoints[scroll_index] - 64) * -1;
-    
-                        if(scroll_value > scroll_top_offset){
-                            active_scroll_offset = scroll_index;
+                    
+                    if(ux(".section_page_content.active").self()){
+                        await ux("#prev_page_btn").addClass("hidden");
+                        await ux(".section_page_content.active").removeClass("active");
+                        let section_pages = ux("#section_pages").findAll(".section_page_content");
+        
+                        for(scroll_index in module_scroll_checkpoints){
+                            let scroll_value = (module_scroll_checkpoints[scroll_index] - 64) * -1;
+        
+                            if(scroll_value > scroll_top_offset){
+                                active_scroll_offset = scroll_index;
+                            }
+        
+                            if(active_scroll_offset > 0){
+                                ux("#prev_page_btn").removeClass("hidden");
+                            }
                         }
-    
-                        if(active_scroll_offset > 0){
-                            ux("#prev_page_btn").removeClass("hidden");
-                        }
+        
+                        ux(section_pages[active_scroll_offset]).addClass("active");
                     }
-    
-                    ux(section_pages[active_scroll_offset]).addClass("active");
                 });
             }
     
