@@ -28,7 +28,7 @@ function onEditSectionData(event){
     let new_value = ux("#section_short_description").val();
 
     if(new_value != old_value){
-        post_form.find(".update_value").val(new_value);
+        document.querySelector("#edit_section_form .update_value").value = new_value;
 
         ux().post(post_form.attr("action"), post_form.serialize(), (response_data) => {
             if(response_data.status){
