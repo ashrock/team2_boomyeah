@@ -42,7 +42,7 @@
                         <h1 id="section_title"><?= $section["title"] ?></h1>
                     </div>
                     <div class="add_description">
-                        <p name="section_short_description" id="section_short_description"><?= $section["description"] ?></p>
+                        <p class="section_short_description" id="section_short_description"><?= $section["description"] ?></p>
                     </div>
                 </div>
             </div>
