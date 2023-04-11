@@ -71,7 +71,7 @@
         padding: 24px 24px 28px;
         #section_title{
             font: 24px/24px @readex_regular;
-            margin: 0px 0px 16px;
+            margin: 0px;
 
             @media (max-width: 632px) {
                 font: 14px/18px @readex_regular;
@@ -83,11 +83,16 @@
             border: none;
             color: @by_content_color;
             font: 16px/20px @readex_regular;
+            margin: 16px 0px 0px;
             min-height: 60px;
             outline: none;
 
             @media (max-width: 632px) {
                 font: 12px/16px @readex_regular;
+            }
+
+            &.section_short_description:empty{
+                display: none;
             }
         }
     }
@@ -424,6 +429,7 @@
             pre{
                 background: @by_neutral_gray;
                 border-radius: 8px;
+                margin-top: 16px;
                 padding: 16px;
             }
         }
