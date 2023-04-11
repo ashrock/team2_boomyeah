@@ -95,63 +95,65 @@
         # Requires: $params { user_id, workspace_id, title }
         # Optionals: $params { is_duplicate, documentation_id }
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 30, 2023
+        # Last updated at: April 10, 2023
         # Owner: Erick, Updated by: Jovic
         public function addDocumentations($params){
             $response_data = array("status" => false, "result" => [], "error" => null);
 
             try {
-                # Finalize bind params
-                $description = isset($params["description"]) ? $params["description"] : NULL;
-                $is_private  = isset($params["is_private"]) ? $params["is_private"] : YES;
-
-                $insert_document_record = $this->db->query("
-                    INSERT INTO documentations (user_id, workspace_id, title, description, is_archived, is_private, cache_collaborators_count, updated_by_user_id, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-                    array($params["user_id"], $params["workspace_id"], $params["title"], $description, NO, $is_private, ZERO_VALUE, $_SESSION["user_id"])
-                );
-
-                $new_documentation_id = $this->db->insert_id($insert_document_record);
-
-                if($new_documentation_id > ZERO_VALUE){
-                    $this->load->model("Workspace");
-                    $workspace = $this->Workspace->getDocumentationsOrder($params["workspace_id"]);
-                    
-                    # Check if action is duplicating
-                    if(!isset($params["is_duplicate"])){
-                        $new_documents_order = (strlen($workspace["result"]["documentation_ids_order"])) ? $workspace["result"]["documentation_ids_order"].','. $new_documentation_id : $new_documentation_id;
-                    }
-                    else{
-                        # Add documentation_id of duplicated record to Workspace's documentation_ids_order
-                        $new_documents_order = explode(",", $workspace["result"]["documentation_ids_order"]);
+                if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
+                    # Finalize bind params
+                    $description = isset($params["description"]) ? $params["description"] : NULL;
+                    $is_private  = isset($params["is_private"]) ? $params["is_private"] : YES;
     
-                        for($document_index=0; $document_index < count($new_documents_order); $document_index++){
-                            if($params["documentation_id"] == (int)$new_documents_order[$document_index]){
-                                array_splice($new_documents_order, $document_index + 1, 0, "{$new_documentation_id}");
-                            }
+                    $insert_document_record = $this->db->query("
+                        INSERT INTO documentations (user_id, workspace_id, title, description, is_archived, is_private, cache_collaborators_count, updated_by_user_id, created_at, updated_at) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+                        array($params["user_id"], $params["workspace_id"], $params["title"], $description, NO, $is_private, ZERO_VALUE, $_SESSION["user_id"])
+                    );
+    
+                    $new_documentation_id = $this->db->insert_id($insert_document_record);
+    
+                    if($new_documentation_id > ZERO_VALUE){
+                        $this->load->model("Workspace");
+                        $workspace = $this->Workspace->getDocumentationsOrder($params["workspace_id"]);
+                        
+                        # Check if action is duplicating
+                        if(!isset($params["is_duplicate"])){
+                            $new_documents_order = (strlen($workspace["result"]["documentation_ids_order"])) ? $workspace["result"]["documentation_ids_order"].','. $new_documentation_id : $new_documentation_id;
                         }
+                        else{
+                            # Add documentation_id of duplicated record to Workspace's documentation_ids_order
+                            $new_documents_order = explode(",", $workspace["result"]["documentation_ids_order"]);
         
-                        # Convert array to comma-separated string and update new_documents_order of new_documents_order
-                        $new_documents_order = implode(",", $new_documents_order);
-                    }
-
-                    $update_workspace_docs_order = $this->db->query("UPDATE workspaces SET documentation_ids_order = ? WHERE id = ?", array( $new_documents_order, $params["workspace_id"]));
-
-                    if($update_workspace_docs_order){
-                        $response_data["status"] = true;
-                        $response_data["result"]["documentation_id"] = $new_documentation_id;
-                        $response_data["result"]["html"] = $this->load->view(
-                            "partials/document_block_partial.php",
-                            array( "all_documentations" => [array(
-                                "id"                        => $new_documentation_id,
-                                "title"                     => $params["title"],
-                                "is_private"                => $is_private,
-                                "is_archived"               => NO,
-                                "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
-                                "cache_collaborators_count" => ZERO_VALUE
-                            )]), 
-                            true
-                        );
+                            for($document_index=0; $document_index < count($new_documents_order); $document_index++){
+                                if($params["documentation_id"] == (int)$new_documents_order[$document_index]){
+                                    array_splice($new_documents_order, $document_index + 1, 0, "{$new_documentation_id}");
+                                }
+                            }
+            
+                            # Convert array to comma-separated string and update new_documents_order of new_documents_order
+                            $new_documents_order = implode(",", $new_documents_order);
+                        }
+    
+                        $update_workspace_docs_order = $this->db->query("UPDATE workspaces SET documentation_ids_order = ? WHERE id = ?", array( $new_documents_order, $params["workspace_id"]));
+    
+                        if($update_workspace_docs_order){
+                            $response_data["status"] = true;
+                            $response_data["result"]["documentation_id"] = $new_documentation_id;
+                            $response_data["result"]["html"] = $this->load->view(
+                                "partials/document_block_partial.php",
+                                array( "all_documentations" => [array(
+                                    "id"                        => $new_documentation_id,
+                                    "title"                     => $params["title"],
+                                    "is_private"                => $is_private,
+                                    "is_archived"               => NO,
+                                    "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
+                                    "cache_collaborators_count" => ZERO_VALUE
+                                )]), 
+                                true
+                            );
+                        }
                     }
                 }
             }
@@ -257,80 +259,84 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $documentation_id, $_SESSION["user_id", "workspace_id"]
         # Returns: { status: true/false, result: { documentation_id, duplicate_id, html }, error: null }
-        # Last updated at: March 31, 2023
-        # Owner: Jovic
+        # Last updated at: April 10, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function duplicateDocumentation($documentation_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 # Start DB transaction
                 $this->db->trans_start();
-                $get_documentation = $this->getDocumentation($documentation_id);
 
-                if($get_documentation["status"]){
-                    $duplicate_title  = "Copy of {$get_documentation['result']['title']}";
-
-                    # Create new documentation
-                    $duplicate_documentation = $this->addDocumentations(array(
-                        "is_duplicate"      => true,
-                        "documentation_id"  => $documentation_id,
-                        "user_id"           => $_SESSION["user_id"],
-                        "workspace_id"      => $_SESSION["workspace_id"],
-                        "title"		        => $duplicate_title,
-                        "description"       => $get_documentation["result"]["description"],
-                        "is_private"        => $get_documentation["result"]["is_private"]
-                    ));
-
-                    if($duplicate_documentation["status"]){                        
-                        # Create sections
-                        $this->load->model("Section");
-                        $duplicate_sections = $this->Section->duplicateSections(array(
-                            "documentation_id"  => $documentation_id,
-                            "duplicate_id"      => $duplicate_documentation["result"]["documentation_id"],
-                            "section_ids_order" => $get_documentation["result"]["section_ids_order"]
-                        ));
-
-                        if($duplicate_sections["status"]){
-                            # Create module only if section_ids exist
-                            if($duplicate_sections["result"]["section_ids"]){
-                                $this->load->model("Module");
-                                $duplicate_modules = $this->Module->duplicateModules(array(
-                                    "documentation_id"      => $documentation_id,
-                                    "duplicate_section_ids" => $duplicate_sections["result"]["section_ids"]
-                                ));
+                # Check if user is an admin
+                if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
+                    $get_documentation = $this->getDocumentation($documentation_id);
     
-                                if($duplicate_modules["status"] && $duplicate_modules["result"]["module_ids"] ){
-                                    # Create tabs
-                                    $duplicate_tabs = $this->Module->duplicateTabs(array(
-                                        "documentation_id" => $documentation_id, 
-                                        "module_ids"       => $duplicate_modules["result"]["module_ids"]
+                    if($get_documentation["status"]){
+                        $duplicate_title  = "Copy of {$get_documentation['result']['title']}";
+    
+                        # Create new documentation
+                        $duplicate_documentation = $this->addDocumentations(array(
+                            "is_duplicate"      => true,
+                            "documentation_id"  => $documentation_id,
+                            "user_id"           => $_SESSION["user_id"],
+                            "workspace_id"      => $_SESSION["workspace_id"],
+                            "title"		        => $duplicate_title,
+                            "description"       => $get_documentation["result"]["description"],
+                            "is_private"        => $get_documentation["result"]["is_private"]
+                        ));
+    
+                        if($duplicate_documentation["status"]){                        
+                            # Create sections
+                            $this->load->model("Section");
+                            $duplicate_sections = $this->Section->duplicateSections(array(
+                                "documentation_id"  => $documentation_id,
+                                "duplicate_id"      => $duplicate_documentation["result"]["documentation_id"],
+                                "section_ids_order" => $get_documentation["result"]["section_ids_order"]
+                            ));
+    
+                            if($duplicate_sections["status"]){
+                                # Create module only if section_ids exist
+                                if($duplicate_sections["result"]["section_ids"]){
+                                    $this->load->model("Module");
+                                    $duplicate_modules = $this->Module->duplicateModules(array(
+                                        "documentation_id"      => $documentation_id,
+                                        "duplicate_section_ids" => $duplicate_sections["result"]["section_ids"]
                                     ));
+        
+                                    if($duplicate_modules["status"] && $duplicate_modules["result"]["module_ids"] ){
+                                        # Create tabs
+                                        $duplicate_tabs = $this->Module->duplicateTabs(array(
+                                            "documentation_id" => $documentation_id, 
+                                            "module_ids"       => $duplicate_modules["result"]["module_ids"]
+                                        ));
+                                    }
                                 }
+    
+                                $response_data["status"]                     = true;
+                                $response_data["result"]["documentation_id"] = $documentation_id;
+                                $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
+                                $response_data["result"]["html"]             = $this->load->view(
+                                    "partials/document_block_partial.php",
+                                    array( "all_documentations" => [array(
+                                        "id"                        => $duplicate_documentation["result"]["documentation_id"],
+                                        "title"                     => $duplicate_title,
+                                        "is_private"                => $get_documentation["result"]["is_private"],
+                                        "is_archived"               => FALSE_VALUE,
+                                        "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
+                                        "cache_collaborators_count" => ZERO_VALUE
+                                    )]), 
+                                    true
+                                );
                             }
-
-                            $response_data["status"]                     = true;
-                            $response_data["result"]["documentation_id"] = $documentation_id;
-                            $response_data["result"]["duplicate_id"]     = $duplicate_documentation["result"]["documentation_id"];
-                            $response_data["result"]["html"]             = $this->load->view(
-                                "partials/document_block_partial.php",
-                                array( "all_documentations" => [array(
-                                    "id"                        => $duplicate_documentation["result"]["documentation_id"],
-                                    "title"                     => $duplicate_title,
-                                    "is_private"                => $get_documentation["result"]["is_private"],
-                                    "is_archived"               => FALSE_VALUE,
-                                    "documentation_owner"       => "{$_SESSION["first_name"]} {$_SESSION["last_name"]}",
-                                    "cache_collaborators_count" => ZERO_VALUE
-                                )]), 
-                                true
-                            );
                         }
+                        else{
+                            throw new Exception($duplicate_documentation["error"]);
+                        }
+    
+                        # Commit changes to DB
+                        $this->db->trans_complete();
                     }
-                    else{
-                        throw new Exception($duplicate_documentation["error"]);
-                    }
-
-                    # Commit changes to DB
-                    $this->db->trans_complete();
                 }
             }
             catch (Exception $e) {
@@ -346,8 +352,8 @@
         # Triggered by: (POST) docs/remove
         # Requires: $params { remove_documentation_id, remove_is_archive }, $_SESSION["workspace_id"]
         # Returns: { status: true/false, result: { documentation_id }, error: null }
-        # Last updated at: March 24, 2023
-        # Owner: Jovic
+        # Last updated at: April 10, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function removeDocumentation($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -355,112 +361,115 @@
                 # Start DB transaction
                 $this->db->trans_start();
 
-                # Fetch details related to documentation_id to be used in deleting
-                $get_documentation = $this->db->query("
-                    SELECT
-                        documentations.id AS documentation_id,
-                        JSON_ARRAYAGG(sections.id) AS section_ids,
-                        JSON_ARRAYAGG(files.id) AS file_ids,
-                        JSON_ARRAYAGG(files.file_url) AS file_urls,
-                        JSON_ARRAYAGG(modules.id) AS module_ids,
-                        JSON_ARRAYAGG(tabs.id) AS tab_ids,
-                        JSON_ARRAYAGG(posts.id) AS post_ids,
-                        JSON_ARRAYAGG(comments.id) AS comment_ids
-                    FROM documentations
-                    LEFT JOIN sections ON sections.documentation_id = documentations.id
-                    LEFT JOIN files ON files.section_id = sections.id
-                    LEFT JOIN modules ON modules.section_id = sections.id
-                    LEFT JOIN tabs ON tabs.module_id = modules.id
-                    LEFT JOIN posts ON posts.tab_id = tabs.id
-                    LEFT JOIN comments ON comments.post_id = posts.id
-                    WHERE documentations.id = ?;
-                ", $params["remove_documentation_id"]);
-
-                if($get_documentation->num_rows()){
-                    $get_documentation = $get_documentation->result_array()[FIRST_INDEX];
-
-                    $this->load->model("Collaborator");
-                    $this->load->model("Module");
-                    $this->load->model("Section");
-
-                    # Delete collaborators
-                    $remove_collaborators = $this->Collaborator->removeCollaborators($params["remove_documentation_id"]);
-
-                    $related_tables = array(
-                        "comments" => "comment_ids",
-                        "posts"    => "post_ids",
-                        "tabs"     => "tab_ids",
-                        "modules"  => "module_ids"
-                    );
-
-                    # Delete comments, posts, tabs, and modules
-                    foreach($related_tables as $key => $value){
-                        # Check if record ids is not null
-                        $record_ids = array_filter(json_decode($get_documentation[$value]));
-
-                        if($record_ids){
-                            $remove_records = $this->Module->removeRecords(array("table" => $key, "ids" => $record_ids));
-                        
-                            if(!$remove_records["status"]){
-                                throw new Exception($remove_records["error"]);
+                # Check if user is an admin
+                if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){
+                    # Fetch details related to documentation_id to be used in deleting
+                    $get_documentation = $this->db->query("
+                        SELECT
+                            documentations.id AS documentation_id,
+                            JSON_ARRAYAGG(sections.id) AS section_ids,
+                            JSON_ARRAYAGG(files.id) AS file_ids,
+                            JSON_ARRAYAGG(files.file_url) AS file_urls,
+                            JSON_ARRAYAGG(modules.id) AS module_ids,
+                            JSON_ARRAYAGG(tabs.id) AS tab_ids,
+                            JSON_ARRAYAGG(posts.id) AS post_ids,
+                            JSON_ARRAYAGG(comments.id) AS comment_ids
+                        FROM documentations
+                        LEFT JOIN sections ON sections.documentation_id = documentations.id
+                        LEFT JOIN files ON files.section_id = sections.id
+                        LEFT JOIN modules ON modules.section_id = sections.id
+                        LEFT JOIN tabs ON tabs.module_id = modules.id
+                        LEFT JOIN posts ON posts.tab_id = tabs.id
+                        LEFT JOIN comments ON comments.post_id = posts.id
+                        WHERE documentations.id = ?;
+                    ", $params["remove_documentation_id"]);
+    
+                    if($get_documentation->num_rows()){
+                        $get_documentation = $get_documentation->result_array()[FIRST_INDEX];
+    
+                        $this->load->model("Collaborator");
+                        $this->load->model("Module");
+                        $this->load->model("Section");
+    
+                        # Delete collaborators
+                        $remove_collaborators = $this->Collaborator->removeCollaborators($params["remove_documentation_id"]);
+    
+                        $related_tables = array(
+                            "comments" => "comment_ids",
+                            "posts"    => "post_ids",
+                            "tabs"     => "tab_ids",
+                            "modules"  => "module_ids"
+                        );
+    
+                        # Delete comments, posts, tabs, and modules
+                        foreach($related_tables as $key => $value){
+                            # Check if record ids is not null
+                            $record_ids = array_filter(json_decode($get_documentation[$value]));
+    
+                            if($record_ids){
+                                $remove_records = $this->Module->removeRecords(array("table" => $key, "ids" => $record_ids));
+                            
+                                if(!$remove_records["status"]){
+                                    throw new Exception($remove_records["error"]);
+                                }
                             }
                         }
-                    }
-
-                    # Delete files in S3 and DB
-                    $this->load->model("File");
-                    $remove_files = $this->File->removeFiles(array("file_ids" => array_filter(json_decode($get_documentation["file_ids"])), "file_urls" => array_filter(json_decode($get_documentation["file_urls"]))));
-
-                    # Delete sections
-                    $remove_sections = $this->Section->removeSections($params["remove_documentation_id"]);
     
-                    if(($remove_collaborators["status"] && $remove_sections["status"] && $remove_files["status"]) || ($remove_records["status"])){
-                        $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $params["remove_documentation_id"]);
+                        # Delete files in S3 and DB
+                        $this->load->model("File");
+                        $remove_files = $this->File->removeFiles(array("file_ids" => array_filter(json_decode($get_documentation["file_ids"])), "file_urls" => array_filter(json_decode($get_documentation["file_urls"]))));
+    
+                        # Delete sections
+                        $remove_sections = $this->Section->removeSections($params["remove_documentation_id"]);
         
-                        if($this->db->affected_rows()){
-                            # Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table
-                            $this->load->model("Workspace");
-                            $documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
-        
-                            if($documentations_order["status"]){
-                                # Remove remove_documentation_id from documentation_ids_order and update workspace record
-                                $documentations_order = explode(",", $documentations_order["result"]["documentation_ids_order"]);
-                                $documentations_count = count($documentations_order);
-                                $documentation_index  = array_search($params["remove_documentation_id"], $documentations_order);
-                                
-                                if($documentation_index !== FALSE){
-                                    unset($documentations_order[$documentation_index]);
+                        if(($remove_collaborators["status"] && $remove_sections["status"] && $remove_files["status"]) || ($remove_records["status"])){
+                            $delete = $this->db->query("DELETE FROM documentations WHERE id = ?;", $params["remove_documentation_id"]);
+            
+                            if($this->db->affected_rows()){
+                                # Remove remove_documentation_id in documentations_order and update documentations_order in workpsaces table
+                                $this->load->model("Workspace");
+                                $documentations_order = $this->Workspace->getDocumentationsOrder($_SESSION["workspace_id"]);
+            
+                                if($documentations_order["status"]){
+                                    # Remove remove_documentation_id from documentation_ids_order and update workspace record
+                                    $documentations_order = explode(",", $documentations_order["result"]["documentation_ids_order"]);
                                     $documentations_count = count($documentations_order);
+                                    $documentation_index  = array_search($params["remove_documentation_id"], $documentations_order);
+                                    
+                                    if($documentation_index !== FALSE){
+                                        unset($documentations_order[$documentation_index]);
+                                        $documentations_count = count($documentations_order);
+                
+                                        $documentations_order = ($documentations_count) ? implode(",", $documentations_order) : "";
+                                        $update_workpsace = $this->Workspace->updateDocumentationsIdsOrder(array("documentations_order" => $documentations_order, "workspace_id" => $_SESSION["workspace_id"]));
             
-                                    $documentations_order = ($documentations_count) ? implode(",", $documentations_order) : "";
-                                    $update_workpsace = $this->Workspace->updateDocumentationsIdsOrder(array("documentations_order" => $documentations_order, "workspace_id" => $_SESSION["workspace_id"]));
-        
-                                    if(!$update_workpsace["status"]){
-                                        throw new Exception($update_workpsace["error"]);
+                                        if(!$update_workpsace["status"]){
+                                            throw new Exception($update_workpsace["error"]);
+                                        }
                                     }
-                                }
-        
-                                # Generate HTML for no documentations message
-                                if(($params["remove_is_archived"] == FALSE_VALUE && !$documentations_count) || ($params["remove_is_archived"] == TRUE_VALUE && $params["archived_documentations"] == "0")){
-                                    $message = ($params["remove_is_archived"] == FALSE_VALUE) ? "You have no documentations yet." : "You have no archived documentations yet.";
             
-                                    $response_data["result"]["is_archived"]            = $params["remove_is_archived"];
-                                    $response_data["result"]["no_documentations_html"] = $this->load->view('partials/no_documentations_partial.php', array('message' => $message), true);
+                                    # Generate HTML for no documentations message
+                                    if(($params["remove_is_archived"] == FALSE_VALUE && !$documentations_count) || ($params["remove_is_archived"] == TRUE_VALUE && $params["archived_documentations"] == "0")){
+                                        $message = ($params["remove_is_archived"] == FALSE_VALUE) ? "You have no documentations yet." : "You have no archived documentations yet.";
+                
+                                        $response_data["result"]["is_archived"]            = $params["remove_is_archived"];
+                                        $response_data["result"]["no_documentations_html"] = $this->load->view('partials/no_documentations_partial.php', array('message' => $message), true);
+                                    }
+                                    
+                                    $response_data["status"] = true;
+                                    $response_data["result"]["documentation_id"] = $params["remove_documentation_id"];
+        
+                                    # Commit changes to DB
+                                    $this->db->trans_complete();
                                 }
-                                
-                                $response_data["status"] = true;
-                                $response_data["result"]["documentation_id"] = $params["remove_documentation_id"];
-    
-                                # Commit changes to DB
-                                $this->db->trans_complete();
-                            }
-                            else{
-                                throw new Exception($documentations_order["error"]);
+                                else{
+                                    throw new Exception($documentations_order["error"]);
+                                }
                             }
                         }
-                    }
-                    else{
-                        throw new Exception($delete_collaborators["error"]);
+                        else{
+                            throw new Exception($delete_collaborators["error"]);
+                        }
                     }
                 }
             }
