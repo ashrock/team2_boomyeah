@@ -164,6 +164,8 @@ let is_comments_displayed = false;
                     ux(".active_comment_item").removeClass("active_comment_item");
                 }
 
+                /* parent_id from child element */
+                let child_element = ux(event_target).html().nextElementSibling.children[0];
                 let comment_id = ux(event_target).data("target_comment");
                 let is_post = ux(event_target).data("is_post");
 
@@ -177,6 +179,7 @@ let is_comments_displayed = false;
                 comment_actions.addClass("active");
                 remove_btn.attr("data-target_comment", comment_id);
                 remove_btn.attr("data-is_post", is_post);
+                remove_btn.attr("data-parent_id", ux(child_element).data("parent_id"));
                 
                 ux(event_target.closest(".comment_item")).addClass("active_comment_item");
             }
