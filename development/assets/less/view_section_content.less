@@ -79,20 +79,26 @@
             }
         }
 
-        #section_short_description{
-            border: none;
-            color: @by_content_color;
-            font: 16px/20px @readex_regular;
-            margin: 16px 0px 0px;
-            min-height: 60px;
-            outline: none;
+        .add_description{
 
-            @media (max-width: 632px) {
-                font: 12px/16px @readex_regular;
+            #section_short_description{
+                border: none;
+                color: @by_content_color;
+                font: 16px/20px @readex_regular;
+                min-height: 60px;
+                outline: none;
+                
+                @media (max-width: 632px) {
+                    font: 12px/16px @readex_regular;
+                }
             }
 
-            &.section_short_description:empty{
-                display: none;
+            p.section_short_description{
+                margin: 16px 0px 0px;
+
+                &:empty{
+                    display: none;
+                }
             }
         }
     }
