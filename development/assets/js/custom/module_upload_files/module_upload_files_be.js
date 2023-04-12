@@ -21,11 +21,9 @@ function onConfirmRemoveFile(event){
 
             addAnimation(uploaded_file, "animate__fadeOut");
             file_counter.attr("data-files_count", counter);
+            file_counter.text(`(${counter})`);
 
-            if(counter){
-               file_counter.text(`(${counter})`);
-            } else {
-                file_counter.self().hidden = true;
+            if(!counter){
                 ux("#files_list").html(response_data.result.html);
             }
          
