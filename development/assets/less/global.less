@@ -66,15 +66,15 @@ textarea{
                 #user_dropdown{
                     background: transparent;
                     border-radius: 4px;
-                    height: 40px;
+                    height: 48px;
                     overflow: hidden;
                     li{
                         background: @by_white;
                         border-radius: 4px;
                         .log_out_btn{
                             color: @by_gray;
-                            font: 12px/16px @readex_regular;
-                            padding: 12px 0;
+                            font: 14px/16px @readex_regular;
+                            padding: 16px 0;
                             position: relative;
                             text-align: center;
                             z-index: 9999;
@@ -910,5 +910,29 @@ body::-webkit-scrollbar-thumb {
     100%{
         border-color: transparent;
         box-shadow: none;
+    }
+}
+.material-tooltip {
+    background-color: @by_tooltip_bg !important;
+    border-radius: 28px !important;
+    color: @by_white !important;
+    min-height: 28px !important;
+    overflow: unset !important;
+    padding: 8px 7px !important;
+
+    .tooltip-content {
+        font-weight: 200 !important;
+        font: 12px/16px @readex_regular !important;
+
+        &::after {
+            background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/tooltip_arrow.svg') no-repeat;
+            bottom: -5px;
+            content: '';
+            display: inline-block;
+            height: 7px;
+            left: 41%;
+            position: absolute;
+            width: 17px;
+        }
     }
 }

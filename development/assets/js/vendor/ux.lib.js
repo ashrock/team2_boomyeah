@@ -273,7 +273,11 @@ function validateEmail(email) {
 function initializeMaterializeTooltip(){
     const elems = document.querySelectorAll('.tooltipped');
     M.Tooltip.init(elems, {
-        position: "top"
+        position: "top",
+        enterDelay: 0,
+        inDuration: 0,
+        outDuration: 0,
+        transitionMovement: 0,
     });
 }
 

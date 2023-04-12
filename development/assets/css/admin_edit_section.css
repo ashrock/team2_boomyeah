@@ -83,7 +83,7 @@ textarea {
 #header_container .header .user_profile .user_settings #user_dropdown {
   background: transparent;
   border-radius: 4px;
-  height: 40px;
+  height: 48px;
   overflow: hidden;
 }
 #header_container .header .user_profile .user_settings #user_dropdown li {
@@ -92,8 +92,8 @@ textarea {
 }
 #header_container .header .user_profile .user_settings #user_dropdown li .log_out_btn {
   color: #78716C;
-  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  padding: 12px 0;
+  font: 14px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  padding: 16px 0;
   position: relative;
   text-align: center;
   z-index: 9999;
@@ -936,6 +936,28 @@ body::-webkit-scrollbar-thumb {
     border-color: transparent;
     box-shadow: none;
   }
+}
+.material-tooltip {
+  background-color: #1E293B !important;
+  border-radius: 28px !important;
+  color: #FFFFFF !important;
+  min-height: 28px !important;
+  overflow: unset !important;
+  padding: 8px 7px !important;
+}
+.material-tooltip .tooltip-content {
+  font-weight: 200 !important;
+  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
+}
+.material-tooltip .tooltip-content::after {
+  background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/tooltip_arrow.svg') no-repeat;
+  bottom: -5px;
+  content: '';
+  display: inline-block;
+  height: 7px;
+  left: 41%;
+  position: absolute;
+  width: 17px;
 }
 #wrapper {
   padding-left: 80px;
