@@ -92,7 +92,7 @@
         # Triggered by: (POST) collaborators/add
         # Requires: $params { new_users_email, collaborator_emails }
         # Returns: { status: true/false, result: { ids }, error: null }
-        # Last updated at: Mar. 24, 2023
+        # Last updated at: April 12, 2023
         # Owner: Jovic
         public function createUsers($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -101,15 +101,17 @@
                 $this->db->trans_start();
                 # Generate values
                 $values_clause = array();
+                $bind_params   = array();
                 $user_level_id = USER_LEVEL["USER"];
 
                 foreach($params["new_users_email"] as $email){
-                    array_push($values_clause, "({$_SESSION['workspace_id']}, {$user_level_id}, '{$email}', NOW(), NOW())");
+                    array_push($values_clause, "(?, ?, ?, NOW(), NOW())");
+                    array_push($bind_params, $_SESSION['workspace_id'], $user_level_id, $email);
                 }
 
                 $values_clause = implode(", ", $values_clause);
 
-                $create_users = $this->db->query("INSERT INTO users (workspace_id, user_level_id, email, created_at, updated_at) VALUES {$values_clause};");
+                $create_users = $this->db->query("INSERT INTO users (workspace_id, user_level_id, email, created_at, updated_at) VALUES {$values_clause};", $bind_params);
 
                 if($create_users){
                     $get_users = $this->getUsers(array(

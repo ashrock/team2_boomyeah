@@ -4,20 +4,9 @@
   padding: 0;
   animation-duration: 0.3s !important;
 }
-@font-face {
-  font-family: 'ReadexPro-Bold';
-  src: url('../fonts/ReadexPro-Bold.ttf');
-}
-@font-face {
-  font-family: 'ReadexPro-Medium';
-  src: url('../fonts/ReadexPro-Medium.ttf');
-}
-@font-face {
-  font-family: 'ReadexPro-Regular';
-  src: url('../fonts/ReadexPro-Regular.ttf');
-}
 body {
   background-color: #EFF6FF;
+  min-height: 100vh;
 }
 ::-webkit-scrollbar {
   opacity: 0.5;
@@ -72,17 +61,19 @@ textarea {
   width: 28px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown {
-  height: 40px;
+  background: transparent;
+  border-radius: 4px;
+  height: 48px;
   overflow: hidden;
 }
 #header_container .header .user_profile .user_settings #user_dropdown li {
-  background: #F4F7FA;
-  border-radius: 8px;
+  background: #FFFFFF;
+  border-radius: 4px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown li .log_out_btn {
   color: #78716C;
-  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  padding: 12px 0;
+  font: 14px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  padding: 16px 0;
   position: relative;
   text-align: center;
   z-index: 9999;
@@ -744,6 +735,7 @@ textarea {
 }
 #wrapper {
   z-index: 1000;
+  min-height: calc(100vh - 88px);
 }
 .row_placeholder {
   flex-grow: 1;
@@ -925,6 +917,28 @@ body::-webkit-scrollbar-thumb {
     box-shadow: none;
   }
 }
+.material-tooltip {
+  background-color: #1E293B !important;
+  border-radius: 28px !important;
+  color: #FFFFFF !important;
+  min-height: 28px !important;
+  overflow: unset !important;
+  padding: 8px 7px !important;
+}
+.material-tooltip .tooltip-content {
+  font-weight: 200 !important;
+  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
+}
+.material-tooltip .tooltip-content::after {
+  background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/tooltip_arrow.svg') no-repeat;
+  bottom: -5px;
+  content: '';
+  display: inline-block;
+  height: 7px;
+  left: 41%;
+  position: absolute;
+  width: 17px;
+}
 @font-face {
   font-family: 'ReadexPro-Bold';
   src: url('../fonts/ReadexPro-Bold.ttf');
@@ -940,6 +954,10 @@ body::-webkit-scrollbar-thumb {
 @font-face {
   font-family: 'ReadexPro-Light';
   src: url('../fonts/ReadexPro-Light.ttf');
+}
+@font-face {
+  font-family: 'ReadexPro-ExtraLight';
+  src: url('../fonts/ReadexPro-ExtraLight.ttf');
 }
 #mobile_container {
   background: #FCFCFF;
@@ -1113,25 +1131,28 @@ body::-webkit-scrollbar-thumb {
 }
 .user .container #documentations .document_block .document_details h2 {
   color: #0F172A;
-  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0;
   pointer-events: none;
 }
 .user .container #documentations .document_block .document_details .documentation_owner {
   color: #C6D0DD;
-  font: 12px/14px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  color: #A1A1AA;
+  cursor: text;
+  font: 14px/14px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   font-style: italic;
   margin-top: 8px;
+  pointer-events: none;
 }
 .user .container #documentations .document_block .invite_collaborators_btn {
   align-items: center;
   background-color: transparent;
   border: none;
-  color: #94A3B8;
+  color: #A1A1AA;
   display: flex;
   flex-grow: 1;
   flex-wrap: nowrap;
-  font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 14px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   height: 16px;
   justify-content: flex-end;
   margin: 0px 8px;
