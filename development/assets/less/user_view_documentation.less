@@ -207,7 +207,7 @@ body {
             justify-content: space-between;
             padding: 20px 23px 20px 16px;
             position: relative;
-            transition: all 0.21s ease-in-out;
+            transition: all 0.2s ease-in-out;
             width: 522px;
 
             &.hidden,
@@ -217,6 +217,11 @@ body {
 
             &:hover{
                 border: 1px solid @by_primary;
+                .section_details{
+                    .section_title{
+                        color: @by_primary;
+                    }
+                }
             }
 
             .section_details {
@@ -230,7 +235,7 @@ body {
                 .section_title {
                     border-bottom: 1px solid transparent;
                     box-shadow: none;
-                    color: @by_primary;
+                    color: @by_black;
                     font: 14px/20px @readex_regular;
                     letter-spacing: 0.25px;
                     margin: 0;

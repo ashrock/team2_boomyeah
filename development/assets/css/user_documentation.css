@@ -18,6 +18,7 @@
 }
 body {
   background-color: #EFF6FF;
+  min-height: 100vh;
 }
 ::-webkit-scrollbar {
   opacity: 0.5;
@@ -72,12 +73,14 @@ textarea {
   width: 28px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown {
+  background: transparent;
+  border-radius: 4px;
   height: 40px;
   overflow: hidden;
 }
 #header_container .header .user_profile .user_settings #user_dropdown li {
-  background: #F4F7FA;
-  border-radius: 8px;
+  background: #FFFFFF;
+  border-radius: 4px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown li .log_out_btn {
   color: #78716C;
@@ -744,6 +747,7 @@ textarea {
 }
 #wrapper {
   z-index: 1000;
+  min-height: calc(100vh - 88px);
 }
 .row_placeholder {
   flex-grow: 1;
@@ -1113,14 +1117,15 @@ body::-webkit-scrollbar-thumb {
 }
 .user .container #documentations .document_block .document_details h2 {
   color: #0F172A;
-  font: 14px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0;
   pointer-events: none;
 }
 .user .container #documentations .document_block .document_details .documentation_owner {
   color: #C6D0DD;
+  color: #A1A1AA;
   cursor: text;
-  font: 12px/10px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  font: 14px/14px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   font-style: italic;
   margin-top: 8px;
   pointer-events: none;
@@ -1129,11 +1134,11 @@ body::-webkit-scrollbar-thumb {
   align-items: center;
   background-color: transparent;
   border: none;
-  color: #94A3B8;
+  color: #A1A1AA;
   display: flex;
   flex-grow: 1;
   flex-wrap: nowrap;
-  font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 14px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   height: 16px;
   justify-content: flex-end;
   margin: 0px 8px;

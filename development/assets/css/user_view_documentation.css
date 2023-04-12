@@ -73,12 +73,14 @@ textarea {
   width: 28px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown {
+  background: transparent;
+  border-radius: 4px;
   height: 40px;
   overflow: hidden;
 }
 #header_container .header .user_profile .user_settings #user_dropdown li {
-  background: #F4F7FA;
-  border-radius: 8px;
+  background: #FFFFFF;
+  border-radius: 4px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown li .log_out_btn {
   color: #78716C;
@@ -1167,7 +1169,7 @@ body {
   justify-content: space-between;
   padding: 20px 23px 20px 16px;
   position: relative;
-  transition: all 0.21s ease-in-out;
+  transition: all 0.2s ease-in-out;
   width: 522px;
 }
 .container .section_container .section_block.hidden,
@@ -1176,6 +1178,9 @@ body {
 }
 .container .section_container .section_block:hover {
   border: 1px solid #2563EB;
+}
+.container .section_container .section_block:hover .section_details .section_title {
+  color: #2563EB;
 }
 .container .section_container .section_block .section_details {
   align-items: flex-start;
@@ -1188,7 +1193,7 @@ body {
 .container .section_container .section_block .section_details .section_title {
   border-bottom: 1px solid transparent;
   box-shadow: none;
-  color: #2563EB;
+  color: #0F172A;
   font: 14px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   letter-spacing: 0.25px;
   margin: 0;
