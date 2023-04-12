@@ -81,7 +81,7 @@ body {
         align-items: center;
         display: flex;
         justify-content: flex-start;
-        margin: 48px 0 24px;
+        margin: 48px 0 12px;
         min-height: 36px;
 
         #doc_title {
@@ -103,8 +103,8 @@ body {
     }
     .doc_text_content {
         color: @by_text;
-        font: 16px/24px @readex_regular;
-        margin: 0 0 40px;
+        font: 16px/24px @readex_light;
+        margin: 0 0 28px;
         max-width: 893px;
         width: 100%;
 
@@ -210,18 +210,6 @@ body {
             transition: all 0.21s ease-in-out;
             width: 522px;
 
-            &::after {
-                border-bottom: 2px solid @by_lightgray;
-                border-radius: 8px;
-                bottom: 0;
-                content: "";
-                display: inline-block;
-                height: 10px;
-                left: 0;
-                position: absolute;
-                width: 100%;
-            }
-
             &.hidden,
             &.hidden_private {
                 display: none !important;
@@ -242,8 +230,8 @@ body {
                 .section_title {
                     border-bottom: 1px solid transparent;
                     box-shadow: none;
-                    color: @by_black;
-                    font: 400 16px/24px @readex_regular;
+                    color: @by_primary;
+                    font: 14px/20px @readex_regular;
                     letter-spacing: 0.25px;
                     margin: 0;
                     overflow: hidden;

@@ -18,6 +18,7 @@
 }
 body {
   background-color: #EFF6FF;
+  min-height: 100vh;
 }
 ::-webkit-scrollbar {
   opacity: 0.5;
@@ -744,6 +745,7 @@ textarea {
 }
 #wrapper {
   z-index: 1000;
+  min-height: calc(100vh - 88px);
 }
 .row_placeholder {
   flex-grow: 1;
@@ -1041,7 +1043,7 @@ body {
   align-items: center;
   display: flex;
   justify-content: flex-start;
-  margin: 48px 0 24px;
+  margin: 48px 0 12px;
   min-height: 36px;
 }
 .container #doc_title_access #doc_title {
@@ -1063,8 +1065,8 @@ body {
 }
 .container .doc_text_content {
   color: #6C7177;
-  font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  margin: 0 0 40px;
+  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  margin: 0 0 28px;
   max-width: 893px;
   width: 100%;
 }
@@ -1168,17 +1170,6 @@ body {
   transition: all 0.21s ease-in-out;
   width: 522px;
 }
-.container .section_container .section_block::after {
-  border-bottom: 2px solid #DBEAFE;
-  border-radius: 8px;
-  bottom: 0;
-  content: "";
-  display: inline-block;
-  height: 10px;
-  left: 0;
-  position: absolute;
-  width: 100%;
-}
 .container .section_container .section_block.hidden,
 .container .section_container .section_block.hidden_private {
   display: none !important;
@@ -1197,8 +1188,8 @@ body {
 .container .section_container .section_block .section_details .section_title {
   border-bottom: 1px solid transparent;
   box-shadow: none;
-  color: #0F172A;
-  font: 400 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  color: #2563EB;
+  font: 14px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   letter-spacing: 0.25px;
   margin: 0;
   overflow: hidden;

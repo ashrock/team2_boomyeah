@@ -255,7 +255,7 @@ body{
                     border-radius: 8px;
                     border: 1px solid @by_bg;
                     color: @by_text;
-                    font: 16px/24px @readex_regular;
+                    font: 16px/24px @readex_light;
                     margin: 0 0 32px;
                     padding: 10px;
                     position: relative;
@@ -310,7 +310,7 @@ body{
     
                         label {
                             color: @by_gray;
-                            font: 16px/35px @readex_regular;
+                            font: 16px/32px @readex_regular;
                             padding-left: 12px;
                             pointer-events: none;
                         }
@@ -445,17 +445,6 @@ body{
             position: relative;
             transition: all 0.21s ease-in-out;
             width: 522px;
-            &::after {
-                border-bottom: 2px solid @by_lightgray;
-                border-radius: 8px;
-                bottom: 0;
-                content: "";
-                display: inline-block;
-                height: 10px;
-                left: 0;
-                position: absolute;
-                width: 100%;
-            }
             &.error{
                 border: 1px solid @by_error !important;
             }
@@ -491,8 +480,8 @@ body{
                 box-shadow: none;
                 color: @by_black;
                 flex-shrink: 1;
-                font: 12px/20px @readex_regular;
-                height: 21px;
+                font: 14px/24px @readex_regular;
+                height: 24px;
                 margin: 0;
                 outline: none;
                 overflow: hidden;
