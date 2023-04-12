@@ -35,23 +35,23 @@
                         <div class="documentation_header_container">
                             <div class="documentation_header">
                                 <ul id="breadcrumb_list">
-                                    <li class="breadcrumb_item"><a href="/docs/edit">Documentation</a></li>
+                                    <li class="breadcrumb_item tooltipped" data-tooltip="Go to Documentations Dashboard"><a href="/docs/edit">Documentation</a></li>
                                     <li class="breadcrumb_item active"><?= $document_data["title"] ?></li>
                                 </ul>
                                 <div class="divider"></div>
                                 <div id="doc_title_access">
                                     <h1 id="doc_title"><?= $document_data["title"] ?></h1>
                                     <!-- Switch -->     
-                                    <div class="switch switch_btn">
+                                    <div class="switch switch_btn tooltipped" data-tooltip="Change Documentation Privacy">
                                         <label for="set_privacy_switch" tabindex="3">
                                             <span class="toggle_text"><?= $document_data["is_private"] ? "Private" : "Public" ?></span>
                                             <input class="toggle_switch" type="checkbox" id="set_privacy_switch" <?= $document_data["is_private"] ? "checked" : "" ?>>
                                             <span class="lever"></span>
                                         </label>
                                     </div>
-                                    <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?>" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>" tabindex="3"><?= $document_data["cache_collaborators_count"] + 1 ?> Collaborators</a>
+                                    <a id="invite_collaborator_btn" class="invite_collaborators_btn waves-effect waves-light btn<?= $document_data["is_private"] ? "" : " hidden" ?> tooltipped" data-tooltip="Manage who can access this documentation" href="#invite_collaborator_modal" data-document_id="<?= $document_data["id"] ?>" tabindex="3"><?= $document_data["cache_collaborators_count"] + 1 ?> <?= (($document_data["cache_collaborators_count"] + 1) == 1) ? "Collaborator" : "Collaborators" ?></a>
                                 </div>
-                                <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add Description" tabindex="3"><?= $document_data["description"] ?></p>
+                                <p class="doc_text_content" id="document_description" contenteditable="true" data-placeholder="Add documentation description" tabindex="3"><?= $document_data["description"] ?></p>
                                 <form action="/sections/add" id="section_form" method="post">
                                     <input type="hidden" name="documentation_id" value="<?= $document_data["id"] ?>">
                                     <input type="hidden" name="action" value="create_section">

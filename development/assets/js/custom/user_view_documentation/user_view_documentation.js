@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     initializeMaterializeDropdown();
+    initializeMaterializeTooltip();
 }); 
 
 function initializeMaterializeDropdown(){

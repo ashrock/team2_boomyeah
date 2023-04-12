@@ -27,8 +27,8 @@
             <div id="section_summary">
                 <div class="breadcrumbs">
                     <ul id="breadcrumbs_list">
-                        <li class="breadcrumb_item"><a href="/docs">Documentations</a></li class="breadcrumb_item">
-                        <li class="breadcrumb_item"><a href="/docs/<?= $documentation['id'] ?>"><?= $documentation["title"] ?></a></li class="breadcrumb_item">
+                        <li class="breadcrumb_item tooltipped" data-tooltip="Go to Documentations Dashboard"><a href="/docs">Documentations</a></li class="breadcrumb_item">
+                        <li class="breadcrumb_item tooltipped" data-tooltip="View <?= $documentation["title"] ?> Documentation"><a href="/docs/<?= $documentation['id'] ?>"><?= $documentation["title"] ?></a></li class="breadcrumb_item">
                         <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
                     </ul>
                     <div class="row_placeholder"></div>
