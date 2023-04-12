@@ -563,7 +563,7 @@
                     $this->load->model("Documentation");
                     $documentation = $this->Documentation->getDocumentation($params["documentation_id"]);
 
-                    if($documentation["status"]){
+                    if($documentation["status"] && $documentation["result"]){
                         # Update documentations section_ids_order
                         $update_docs_section_order = $this->db->query("UPDATE documentations SET section_ids_order = ? WHERE id = ?", array($params["sections_order"], $params["documentation_id"]));
                         
