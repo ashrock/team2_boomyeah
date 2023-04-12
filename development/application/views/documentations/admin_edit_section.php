@@ -32,8 +32,8 @@
                 <div id="section_summary">
                     <div class="breadcrumbs">
                         <ul id="breadcrumbs_list">
-                            <li class="breadcrumb_item"><a href="/docs/edit">Documentations</a></li>
-                            <li class="breadcrumb_item"><a href="/docs/<?= $documentation['id'] ?>/edit"><?= $documentation["title"] ?></a></li>
+                            <li class="breadcrumb_item tooltipped" data-tooltip="Go to Documentations Dashboard"><a href="/docs/edit">Documentations</a></li>
+                            <li class="breadcrumb_item tooltipped" data-tooltip="View <?= $documentation["title"] ?> Documentation"><a href="/docs/<?= $documentation['id'] ?>/edit"><?= $documentation["title"] ?></a></li>
                             <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
                         </ul>
                         <div class="row_placeholder"></div>
@@ -42,7 +42,7 @@
                     <div class="section_details">
                         <h1 id="section_title"><?= $section["title"] ?></h1>
                         <div class="add_description">
-                            <textarea name="section_short_description" id="section_short_description" placeholder="Add Description"><?= $section["description"] ?></textarea>
+                            <textarea name="section_short_description" id="section_short_description" placeholder="Add section description"><?= $section["description"] ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
             <form id="add_module_form" action="/modules/add" method="POST">
                 <input type="hidden" name="action" value="add_module">
                 <input type="hidden" name="section_id" value="<?= $section["id"] ?>">
-                <button id="add_page_tabs_btn" type="submit" tabindex="1">+ Add New</button>
+                <button id="add_page_tabs_btn" type="submit" tabindex="1" class="tooltipped" data-tooltip="Add a new module">+ Add New</button>
             </form>
             <div id="upload_file_section">
                 <?php

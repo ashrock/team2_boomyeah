@@ -1,56 +1,5 @@
 // out: "../css/global.css", compress: true, sourceMap: false
-@font-face {
-    font-family: 'ReadexPro-Bold';
-    src: url('../fonts/ReadexPro-Bold.ttf');
-}
-
-@font-face {
-    font-family: 'ReadexPro-Medium';
-    src: url('../fonts/ReadexPro-Medium.ttf');
-}
-
-@font-face {
-    font-family: 'ReadexPro-Regular';
-    src: url('../fonts/ReadexPro-Regular.ttf');
-}
-
-@by_bg: #EFF6FF;
-@by_black: #0F172A;
-@by_gray: #78716C;
-@by_hovered_btn: #BDDAFF;
-@by_icon: #94A3B8;
-@by_lightgray: #DBEAFE;
-@by_primary: #2563EB;
-@by_tooltip_bg: #1E293B;
-@by_white: #FFFFFF;
-@by_border: #BBCCF3;
-@by_border_alt: #E2E8F0;
-@by_hover: #E8F2FF;
-@by_nav_text: #B4C5FF;
-@by_mobile_nav: #FCFCFF;
-@by_mobilebg: #001D32;
-@by_dropdown: #E2E2EC;
-@by_neutral_gray: #E2E2EC;
-@by_option: #757680;
-@by_checkbox_border: #757680;
-@by_content_color: #757680;
-@by_login: #8FBAFF;
-@by_text: #6C7177;
-@by_off_gray: #B5C4E4;
-@by_light: #A1A1AA;
-@by_error: #DA4D4D;
-@by_invite: #7D949D;
-@by_select: #38BDF8;
-@by_input_border: #D5E3FF;
-@by_toolbar: #ECF1FF;
-@by_archived_bg: #F4F7FA;
-@by_dropdown_text: #334155;
-@by_dropdown_bg: #F8FAFC;
-@by_light_steel_blue: #C6D0DD;
-
-@readex_regular: 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-@readex_medium: 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
-@readex_bold: 'ReadexPro-Bold', tahoma, verdana, arial, sans-serif;
+@import url(./variables.less);
 
 * {
     box-sizing: border-box;
@@ -61,6 +10,7 @@
 
 body{
     background-color: @by_bg;
+    min-height: 100vh;
 }
 ::-webkit-scrollbar {
     opacity: .5;
@@ -114,15 +64,17 @@ textarea{
                     width: 28px;
                 }
                 #user_dropdown{
-                    height: 40px;
+                    background: transparent;
+                    border-radius: 4px;
+                    height: 48px;
                     overflow: hidden;
                     li{
-                        background: @by_archived_bg;
-                        border-radius: 8px;
+                        background: @by_white;
+                        border-radius: 4px;
                         .log_out_btn{
                             color: @by_gray;
-                            font: 12px/16px @readex_regular;
-                            padding: 12px 0;
+                            font: 14px/16px @readex_regular;
+                            padding: 16px 0;
                             position: relative;
                             text-align: center;
                             z-index: 9999;
@@ -805,6 +757,7 @@ textarea{
 }
 #wrapper{
     z-index: 1000;
+    min-height: calc(100vh - 88px);
 }
 
 .row_placeholder{
@@ -957,5 +910,29 @@ body::-webkit-scrollbar-thumb {
     100%{
         border-color: transparent;
         box-shadow: none;
+    }
+}
+.material-tooltip {
+    background-color: @by_tooltip_bg !important;
+    border-radius: 28px !important;
+    color: @by_white !important;
+    min-height: 28px !important;
+    overflow: unset !important;
+    padding: 8px 7px !important;
+
+    .tooltip-content {
+        font-weight: 200 !important;
+        font: 12px/16px @readex_regular !important;
+
+        &::after {
+            background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/tooltip_arrow.svg') no-repeat;
+            bottom: -5px;
+            content: '';
+            display: inline-block;
+            height: 7px;
+            left: 41%;
+            position: absolute;
+            width: 17px;
+        }
     }
 }

@@ -8,6 +8,7 @@ const COLLABORATOR_LEVEL = {
     "viewer" : 1,
     "editor" : 2,
 }
+
 document.addEventListener("DOMContentLoaded", async () => {
     let modal = document.querySelectorAll('.invite_modal');
     M.Modal.init(modal);
