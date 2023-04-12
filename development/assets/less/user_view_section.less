@@ -313,6 +313,7 @@
             label{
                 left: 8px;
                 transform: translateY(14px);
+                pointer-events: none;
 
                 &.active{
                     transform: translateY(8px) scale(0.8);
@@ -325,10 +326,11 @@
             
             textarea{
                 border-bottom: 2px solid @by_primary;
+                box-shadow: none;
                 box-sizing: border-box;
                 font: 14px/24px @readex_light;
                 height: 36px;
-                margin: 12px 0px 0px;
+                margin: 12px 0px -4px;
                 min-height: 36px !important;
                 padding: 0px 8px 12px;
                 transition: margin 0.2s;
@@ -539,12 +541,11 @@
                                 color: @by_icon;
                                 cursor: pointer;
                                 display: block;
-                                height: 52px;
-                                line-height: 52px;
+                                height: 48px;
+                                line-height: 28px;
                                 padding: 0px 16px;
                                 pointer-events: all;
                                 text-align: left;
-                                width: 100%;
                                 width: 132px;
                                 &:hover{
                                     background: @by_lightgray;
@@ -555,7 +556,7 @@
 
                                     &::before{
                                         .edit_section_icon(18px, 20px, -61px);
-                                        margin-right: 16px;
+                                        margin: -4px 16px 0px 0px;
                                     }
                                 }
                                 &.remove_btn{
@@ -566,7 +567,7 @@
                                     &::before{
                                         .edit_section_icon(14px, 20px, -79px);
                                         color: @by_remove_red;
-                                        margin-right: 16px;
+                                        margin: -4px 16px 0px 0px;
                                     }
                                 }
                             }

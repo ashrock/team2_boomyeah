@@ -93,6 +93,7 @@
             }
     
             window.scrollTo(0, 0);
+            initializeMaterializeTooltip();
         });
     
         window.onbeforeunload = function () {

@@ -10,6 +10,14 @@
   font-family: 'ReadexPro-Regular';
   src: url('../fonts/ReadexPro-Regular.ttf');
 }
+@font-face {
+  font-family: 'ReadexPro-Light';
+  src: url('../fonts/ReadexPro-Light.ttf');
+}
+@font-face {
+  font-family: 'ReadexPro-ExtraLight';
+  src: url('../fonts/ReadexPro-ExtraLight.ttf');
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -18,6 +26,7 @@
 }
 body {
   background-color: #EFF6FF;
+  min-height: 100vh;
 }
 ::-webkit-scrollbar {
   opacity: 0.5;
@@ -72,17 +81,19 @@ textarea {
   width: 28px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown {
-  height: 40px;
+  background: transparent;
+  border-radius: 4px;
+  height: 48px;
   overflow: hidden;
 }
 #header_container .header .user_profile .user_settings #user_dropdown li {
-  background: #F4F7FA;
-  border-radius: 8px;
+  background: #FFFFFF;
+  border-radius: 4px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown li .log_out_btn {
   color: #78716C;
-  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  padding: 12px 0;
+  font: 14px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  padding: 16px 0;
   position: relative;
   text-align: center;
   z-index: 9999;
@@ -744,6 +755,7 @@ textarea {
 }
 #wrapper {
   z-index: 1000;
+  min-height: calc(100vh - 88px);
 }
 .row_placeholder {
   flex-grow: 1;
@@ -925,21 +937,27 @@ body::-webkit-scrollbar-thumb {
     box-shadow: none;
   }
 }
-@font-face {
-  font-family: 'ReadexPro-Bold';
-  src: url('../fonts/ReadexPro-Bold.ttf');
+.material-tooltip {
+  background-color: #1E293B !important;
+  border-radius: 28px !important;
+  color: #FFFFFF !important;
+  min-height: 28px !important;
+  overflow: unset !important;
+  padding: 8px 7px !important;
 }
-@font-face {
-  font-family: 'ReadexPro-Medium';
-  src: url('../fonts/ReadexPro-Medium.ttf');
+.material-tooltip .tooltip-content {
+  font-weight: 200 !important;
+  font: 12px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
 }
-@font-face {
-  font-family: 'ReadexPro-Regular';
-  src: url('../fonts/ReadexPro-Regular.ttf');
-}
-@font-face {
-  font-family: 'ReadexPro-Light';
-  src: url('../fonts/ReadexPro-Light.ttf');
+.material-tooltip .tooltip-content::after {
+  background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/tooltip_arrow.svg') no-repeat;
+  bottom: -5px;
+  content: '';
+  display: inline-block;
+  height: 7px;
+  left: 41%;
+  position: absolute;
+  width: 17px;
 }
 #mobile_container {
   background: #FCFCFF;
@@ -1041,7 +1059,7 @@ body {
   align-items: center;
   display: flex;
   justify-content: flex-start;
-  margin: 48px 0 24px;
+  margin: 48px 0 12px;
   min-height: 36px;
 }
 .container #doc_title_access #doc_title {
@@ -1063,8 +1081,8 @@ body {
 }
 .container .doc_text_content {
   color: #6C7177;
-  font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  margin: 0 0 40px;
+  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  margin: 0 0 28px;
   max-width: 893px;
   width: 100%;
 }
@@ -1165,19 +1183,8 @@ body {
   justify-content: space-between;
   padding: 20px 23px 20px 16px;
   position: relative;
-  transition: all 0.21s ease-in-out;
+  transition: all 0.2s ease-in-out;
   width: 522px;
-}
-.container .section_container .section_block::after {
-  border-bottom: 2px solid #DBEAFE;
-  border-radius: 8px;
-  bottom: 0;
-  content: "";
-  display: inline-block;
-  height: 10px;
-  left: 0;
-  position: absolute;
-  width: 100%;
 }
 .container .section_container .section_block.hidden,
 .container .section_container .section_block.hidden_private {
@@ -1185,6 +1192,9 @@ body {
 }
 .container .section_container .section_block:hover {
   border: 1px solid #2563EB;
+}
+.container .section_container .section_block:hover .section_details .section_title {
+  color: #2563EB;
 }
 .container .section_container .section_block .section_details {
   align-items: flex-start;
@@ -1198,7 +1208,7 @@ body {
   border-bottom: 1px solid transparent;
   box-shadow: none;
   color: #0F172A;
-  font: 400 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 14px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   letter-spacing: 0.25px;
   margin: 0;
   overflow: hidden;

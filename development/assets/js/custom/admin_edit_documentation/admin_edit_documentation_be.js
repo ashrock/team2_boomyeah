@@ -131,12 +131,13 @@ function onSubmitAddSectionForm(event){
                 appearEmptySection();
 
                 post_form.self().reset();
-                ux("#input_add_section").self().blur();
                 await ux(`#section_${response_data.result.section_id}`).self().scrollIntoView();
+                await ux("#input_add_section").self().blur();
+                await ux("#input_add_section").self().focus();
                 
                 setTimeout(() => {
                     addAnimation(`#section_${response_data.result.section_id}`, "animated_blinkBorder animate__slower");
-                }, 180);
+                }, 180)
             } else {
                 post_form.find(".group_add_section").addClass("input_error");
             }
