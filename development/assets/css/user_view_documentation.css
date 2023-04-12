@@ -10,6 +10,10 @@
   font-family: 'ReadexPro-Regular';
   src: url('../fonts/ReadexPro-Regular.ttf');
 }
+@font-face {
+  font-family: 'ReadexPro-Light';
+  src: url('../fonts/ReadexPro-Light.ttf');
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -928,22 +932,6 @@ body::-webkit-scrollbar-thumb {
     border-color: transparent;
     box-shadow: none;
   }
-}
-@font-face {
-  font-family: 'ReadexPro-Bold';
-  src: url('../fonts/ReadexPro-Bold.ttf');
-}
-@font-face {
-  font-family: 'ReadexPro-Medium';
-  src: url('../fonts/ReadexPro-Medium.ttf');
-}
-@font-face {
-  font-family: 'ReadexPro-Regular';
-  src: url('../fonts/ReadexPro-Regular.ttf');
-}
-@font-face {
-  font-family: 'ReadexPro-Light';
-  src: url('../fonts/ReadexPro-Light.ttf');
 }
 #mobile_container {
   background: #FCFCFF;

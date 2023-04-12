@@ -5,7 +5,7 @@
         <input type="file" id="file_upload_contents" name="upload_file[]" hidden multiple>
         <button id="file_upload_btn" class="" type="button">Upload Files</button>
         <input type="hidden" name="section_id" value="<?= $section_id ?>">
-        <label for="">Maximum size: 25MB</label>
+        <label for="file_upload_contents">Max size for each file: 25mb</label>
     </form>
     <ul id="files_list">
         <?php

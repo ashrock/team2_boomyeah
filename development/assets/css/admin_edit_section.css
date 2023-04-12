@@ -10,6 +10,14 @@
   font-family: 'ReadexPro-Regular';
   src: url('../fonts/ReadexPro-Regular.ttf');
 }
+@font-face {
+  font-family: 'ReadexPro-Light';
+  src: url('../fonts/ReadexPro-Light.ttf');
+}
+@font-face {
+  font-family: 'ReadexPro-ExtraLight';
+  src: url('../fonts/ReadexPro-ExtraLight.ttf');
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -1062,7 +1070,7 @@ body::-webkit-scrollbar-thumb {
   cursor: not-allowed;
 }
 #edit_section_content #upload_file_section .files_upload_content #upload_files_form label {
-  font: italic 14px/20px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  font: 16px/20px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   color: #C6D0DD;
   letter-spacing: 0.25px;
   margin-left: 16px;
@@ -1104,7 +1112,7 @@ body::-webkit-scrollbar-thumb {
 }
 #edit_section_content #upload_file_section .files_upload_content #files_list li .file_type {
   color: #2563EB;
-  font: 14px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   letter-spacing: 0.25px;
   max-width: 820px;
   overflow: hidden;
@@ -1249,22 +1257,6 @@ body::-webkit-scrollbar-thumb {
 }
 #modals_container #error_uploaded_file .modal .no_btn {
   color: #2563EB !important;
-}
-@font-face {
-  font-family: 'ReadexPro-Bold';
-  src: url('../fonts/ReadexPro-Bold.ttf');
-}
-@font-face {
-  font-family: 'ReadexPro-Medium';
-  src: url('../fonts/ReadexPro-Medium.ttf');
-}
-@font-face {
-  font-family: 'ReadexPro-Regular';
-  src: url('../fonts/ReadexPro-Regular.ttf');
-}
-@font-face {
-  font-family: 'ReadexPro-Light';
-  src: url('../fonts/ReadexPro-Light.ttf');
 }
 #section_summary {
   background: #FFFFFF;
