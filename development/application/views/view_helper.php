@@ -13,3 +13,26 @@
         extract($variables);
         include($file_url);
     }
+
+    function get_navigation_link($side_nav_link){
+        if((preg_match("/^\/docs\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+            $navigation_link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["id"]}";
+        }
+        else if((preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+            $navigation_link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}";
+        }
+
+        return $navigation_link;
+    }
+
+    function get_navigation_header(){
+        if((preg_match("/^\/docs\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+            $navigation_header = "Documentations";
+        }
+        else if((preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+            $navigation_header = "Sections";
+        }
+
+        return $navigation_header;
+
+    }
