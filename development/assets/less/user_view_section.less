@@ -4,7 +4,6 @@
 
 #main_navigation{
     position: absolute;
-    z-index: 100000;
     width: 100%;
 
     .mobile_search_form{
@@ -250,13 +249,19 @@
         display: block !important;
     }
 }
+
 .fetch_tab_posts_btn{
     color: @by_primary;
-    font-family: @readex_medium;
+    font: 14px/20px @readex_medium !important;
     margin-top: 20px;
+    
     &:focus{
         box-shadow: 0px 0px 4px @by_primary;
         outline: none;
+    }
+
+    &:hover{
+        opacity: 0.7;
     }
 
     &:before{
@@ -306,9 +311,14 @@
         overflow: hidden;
         padding: 0px 4px;
         position: relative;
-
+        
         .comment_message_content{
             margin: 0px;
+            @media (max-width: 632px) {
+                .comment_message{
+                    margin: 12px 0px 0px !important;
+                }
+            }
 
             label{
                 left: 8px;
@@ -324,7 +334,7 @@
                 }
             }
             
-            textarea{
+            .comment_message{
                 border-bottom: 2px solid @by_primary;
                 box-shadow: none;
                 box-sizing: border-box;
