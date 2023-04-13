@@ -242,23 +242,26 @@ textarea{
                 align-items: center;
                 display: flex;
                 position: relative;
-                &:hover{
+                &.active{
                     background: @by_hover;
                     border-radius: 0px 40px 40px 0px;
+                    a{
+                        color: @by_primary;
+                    }
                 }
                 a{
-                    color: @by_nav_text;
+                    color: @by_white;
                     display: inline-block;
                     flex-grow: 1;
                     overflow: hidden;
-                    padding: 0px 40px 0px 16px;
+                    padding: 0px 40px 0px 32px;
                     text-overflow: ellipsis;
                     vertical-align: middle;
                     white-space: nowrap;
                     z-index: 9999;
                     &:hover{
                         background: transparent !important;
-                        color: @by_primary;
+                        color: @by_nav_text;
                     }
                     &.private + span{
                         background: url("../images/mobile_nav_sprite.svg") no-repeat;

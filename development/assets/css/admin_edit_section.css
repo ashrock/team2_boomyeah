@@ -256,16 +256,19 @@ textarea {
   display: flex;
   position: relative;
 }
-#mobile_container #mobile_nav ul li:hover {
+#mobile_container #mobile_nav ul li.active {
   background: #E8F2FF;
   border-radius: 0px 40px 40px 0px;
 }
+#mobile_container #mobile_nav ul li.active a {
+  color: #2563EB;
+}
 #mobile_container #mobile_nav ul li a {
-  color: #B4C5FF;
+  color: #FFFFFF;
   display: inline-block;
   flex-grow: 1;
   overflow: hidden;
-  padding: 0px 40px 0px 16px;
+  padding: 0px 40px 0px 42px;
   text-overflow: ellipsis;
   vertical-align: middle;
   white-space: nowrap;
@@ -273,7 +276,7 @@ textarea {
 }
 #mobile_container #mobile_nav ul li a:hover {
   background: transparent !important;
-  color: #2563EB;
+  color: #B4C5FF;
 }
 #mobile_container #mobile_nav ul li a.private + span {
   background: url("../images/mobile_nav_sprite.svg") no-repeat;
