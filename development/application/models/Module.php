@@ -238,7 +238,7 @@
                         # Check if module_content has files or images
                         preg_match_all('~(?<=href=").*?(?=")|(?<=src=").*?(?=")~', $params["module_content"], $included_links);
                         
-                        if($included_links){
+                        if(count($included_links[FIRST_INDEX])){
                             $included_links = array_unique($included_links[FIRST_INDEX]);
                             
                             # Fetch Files whose tab_ids contains $params["tab_id"] 
