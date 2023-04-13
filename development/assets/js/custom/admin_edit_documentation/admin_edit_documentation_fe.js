@@ -20,7 +20,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         .on("click", ".sort_by", sortSections)
         .on("click", ".toggle_switch", onChangeDocumentationPrivacy)
         .on("click", ".change_privacy_yes_btn", submitDocumentationPrivacy)
-        .on("keydown", ".section_block .section_title", (event) => editSectionTitle(event, true))
+        .on("keydown", ".section_block .section_title.editable", (event) => {
+            let section_title = ux(event.target);
+            
+            if (event.keyCode === 13){
+                section_title.self().setAttribute("contenteditable", "false");
+                selectElementText(section_title.self());
+            }
+        })
         .on("input", "#input_add_section", removeInputError)
         ;
 
@@ -130,17 +137,7 @@ function editSectionTitle(event, is_key_down_event = false){
     section_title.addClass("editable");
     section_title.self().setAttribute("contenteditable", "true");
     selectElementText(section_title.self());
-
-    if (is_key_down_event && event.keyCode === 13){
-        section_title.self().setAttribute("contenteditable", "false");
-        selectElementText(section_title.self());
-    }
-
-    setTimeout(() => {
-        section_title.self().focus();
-    });
 }
-
 
 function disableEditSectionTitle(event){
     let section_title = event.target;
