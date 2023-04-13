@@ -162,6 +162,12 @@ textarea{
             }
 
         }
+        h3{
+            color: @by_white;
+            font: 16px/40px @readex_medium;
+            margin: 0px;
+            padding: 0px 20px;
+        }
         ul{
             max-height: calc(100% - 54px);
             overflow: auto;
@@ -171,15 +177,19 @@ textarea{
             align-items: center;
             display: flex;
             font: 16px/20px @readex_regular;
-            padding: 0px 0px 0px 24px;
+            padding: 0px 0px 0px 42px;
             position: relative;
             z-index: 9999;
-            &:hover{
+            &.active{
                 background: @by_hover;
                 border-radius: 0px 20px 20px 0px;
+                a{
+                    color: @by_primary;
+                }
             }
             a{
-                color: @by_nav_text;
+                background: transparent !important;
+                color: @by_white;
                 flex-grow: 1;
                 overflow: hidden;
                 padding: 0px 40px 0px 0px;
@@ -188,8 +198,8 @@ textarea{
                 white-space: nowrap;
                 z-index: 9999;
                 &:hover{
-                    background: transparent !important;
-                    color: @by_primary;
+                    color: @by_nav_text;
+                    
                 }
                 &.private + span{
                     background: url("../images/mobile_nav_sprite.svg") no-repeat;
@@ -218,12 +228,13 @@ textarea{
     #mobile_nav{
         background: @by_mobilebg !important;
         #mobile_nav_title{
-            &:empty{
-                display: none;
-            }
             color: @by_white;
             font: 14px/40px @readex_medium;
             padding: 0px 16px;
+
+            &:empty{
+                display: none;
+            }
         }
         ul{
             padding-right: 24px;

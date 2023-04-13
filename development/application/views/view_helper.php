@@ -24,3 +24,15 @@
 
         return $navigation_link;
     }
+
+    function get_navigation_header(){
+        if((preg_match("/^\/docs\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+            $navigation_header = "Documentations";
+        }
+        else if((preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
+            $navigation_header = "Sections";
+        }
+
+        return $navigation_header;
+
+    }

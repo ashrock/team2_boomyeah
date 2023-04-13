@@ -178,6 +178,12 @@ textarea {
   height: 24px;
   flex-grow: 1;
 }
+#nav_documentation #slide-out h3 {
+  color: #FFFFFF;
+  font: 16px/40px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  margin: 0px;
+  padding: 0px 20px;
+}
 #nav_documentation #slide-out ul {
   max-height: calc(100% - 54px);
   overflow: auto;
@@ -187,16 +193,20 @@ textarea {
   align-items: center;
   display: flex;
   font: 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  padding: 0px 0px 0px 24px;
+  padding: 0px 0px 0px 42px;
   position: relative;
   z-index: 9999;
 }
-#nav_documentation #slide-out li:hover {
+#nav_documentation #slide-out li.active {
   background: #E8F2FF;
   border-radius: 0px 20px 20px 0px;
 }
+#nav_documentation #slide-out li.active a {
+  color: #2563EB;
+}
 #nav_documentation #slide-out li a {
-  color: #B4C5FF;
+  background: transparent !important;
+  color: #FFFFFF;
   flex-grow: 1;
   overflow: hidden;
   padding: 0px 40px 0px 0px;
@@ -206,8 +216,7 @@ textarea {
   z-index: 9999;
 }
 #nav_documentation #slide-out li a:hover {
-  background: transparent !important;
-  color: #2563EB;
+  color: #B4C5FF;
 }
 #nav_documentation #slide-out li a.private + span {
   background: url("../images/mobile_nav_sprite.svg") no-repeat;

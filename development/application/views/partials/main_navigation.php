@@ -1,3 +1,11 @@
+<?php
+    $page_navigation_data = null;
+
+    if(isset($document_data) || isset($section)) {
+        $documentation_id = isset($document_data) ? $document_data["id"] : $section["documentation_id"];
+        $page_navigation_data = isset($document_data) ? $document_data : $section;
+    }
+?>
 <div id="nav_documentation">
     <div class="nav_holder">
         <?php if(!in_array($_SERVER["REQUEST_URI"], ["/docs/edit", "/docs"])){ ?>
@@ -9,12 +17,12 @@
         <a class="sidenav_logo" href="<?= $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? "/docs/edit" : "/docs" ?>">
             <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/global_logo.svg" class="global_logo" alt="global_logo">
         </a>
-        <h3><?= (isset($view_page)) ? $view_page : '' ?></h3>
+        <h3><?= get_navigation_header() ?></h3>
         <ul>
     <?php foreach($side_nav_links as $side_nav_link){
         $link = get_navigation_link($side_nav_link);
     ?>
-        <li><a href="<?= $link ?>" class="<?= (isset($side_nav_link["is_private"]) && $side_nav_link["is_private"]) ? 'private' : '' ?>"><?= $side_nav_link["title"] ?></a><span></span></li>
+        <li class="<?= ($side_nav_link["id"] == $page_navigation_data["id"]) ? 'active' : '' ?>"><a href="<?= $link ?>" class="<?= (isset($side_nav_link["is_private"]) && $side_nav_link["is_private"]) ? 'private' : '' ?>"><?= $side_nav_link["title"] ?></a><span></span></li>
     <?php } ?>
         </ul>
     </div>
@@ -58,7 +66,7 @@
         <?php foreach($side_nav_links as $side_nav_link){ 
             $link = get_navigation_link($side_nav_link);
         ?>
-            <li><a href="<?= $link ?>" class="<?= (isset($side_nav_link["is_private"]) && $side_nav_link["is_private"]) ? 'private' : '' ?>"><?= $side_nav_link["title"] ?></a><span></span></li>
+            <li class="<?= ($side_nav_link["id"] == $page_navigation_data["id"]) ? 'active' : '' ?>"><a href="<?= $link ?>" class="<?= (isset($side_nav_link["is_private"]) && $side_nav_link["is_private"]) ? 'private' : '' ?>"><?= $side_nav_link["title"] ?></a><span></span></li>
         <?php } ?>  
         </ul>
     </div>
