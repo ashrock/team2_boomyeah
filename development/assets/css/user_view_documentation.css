@@ -1150,22 +1150,22 @@ body {
   animation-duration: 0.3s !important;
   background-color: #EFF6FF;
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 0px solid transparent;
+  border-left-width: 4px;
   cursor: pointer;
   display: flex;
-  height: 52px;
   justify-content: space-between;
-  padding: 20px 23px 20px 16px;
+  padding: 16px 20px 16px 16px;
   position: relative;
   transition: all 0.2s ease-in-out;
-  width: 522px;
+  width: 520px;
 }
 .container .section_container .section_block.hidden,
 .container .section_container .section_block.hidden_private {
   display: none !important;
 }
 .container .section_container .section_block:hover {
-  border: 1px solid #2563EB;
+  border-left: 4px solid #2563EB;
 }
 .container .section_container .section_block:hover .section_details .section_title {
   color: #2563EB;
@@ -1181,7 +1181,7 @@ body {
 .container .section_container .section_block .section_details .section_title {
   border-bottom: 1px solid transparent;
   box-shadow: none;
-  color: #0F172A;
+  color: #2563EB;
   font: 14px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   letter-spacing: 0.25px;
   margin: 0;
@@ -1190,6 +1190,11 @@ body {
 }
 .container .section_container .section_block .section_details .section_title:hover {
   cursor: pointer;
+}
+.container .section_container .section_block .section_details .last_updated_at {
+  color: #C6D0DD;
+  font: 12px/10px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  margin-top: 2px;
 }
 .container .section_container .section_block .section_details .invite_collaborators_btn {
   background-color: #EFF6FF;

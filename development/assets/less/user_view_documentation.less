@@ -156,15 +156,15 @@ body {
             animation-duration: 0.3s !important;
             background-color: @by_bg;
             border-radius: 8px;
-            border: 1px solid transparent;
+            border: 0px solid transparent;
+            border-left-width: 4px;
             cursor: pointer;
             display: flex;
-            height: 52px;
             justify-content: space-between;
-            padding: 20px 23px 20px 16px;
+            padding: 16px 20px 16px 16px;
             position: relative;
             transition: all 0.2s ease-in-out;
-            width: 522px;
+            width: 520px;
 
             &.hidden,
             &.hidden_private {
@@ -172,7 +172,7 @@ body {
             }
 
             &:hover{
-                border: 1px solid @by_primary;
+                border-left: 4px solid @by_primary;
                 .section_details{
                     .section_title{
                         color: @by_primary;
@@ -191,7 +191,7 @@ body {
                 .section_title {
                     border-bottom: 1px solid transparent;
                     box-shadow: none;
-                    color: @by_black;
+                    color: @by_primary;
                     font: 14px/20px @readex_regular;
                     letter-spacing: 0.25px;
                     margin: 0;
@@ -201,7 +201,11 @@ body {
                         cursor: pointer;
                     }
                 }
-
+                .last_updated_at{
+                    color: @by_light_steel_blue;
+                    font: 12px/10px @readex_light;
+                    margin-top: 2px;
+                }
                 .invite_collaborators_btn {
                     background-color: @by_bg;
                     border-radius: 20px;
