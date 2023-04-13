@@ -112,8 +112,8 @@
         # Triggered by: (POST) posts/edit
         # Requires: $params { post_id, post_comment }
         # Returns: { status: true/false, result: { post_id, post_comment_id, html }, error: null }
-        # Last updated at: April 3, 2023
-        # Owner: Jovic, Updated by: Erick
+        # Last updated at: April 12, 2023
+        # Owner: Jovic, Updated by: Erick, Jovic
         public function editPostComment($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -122,33 +122,28 @@
 
                 if(empty($params["comment_id"])){
                     $current_process = $this->db->query("UPDATE posts SET message = ?, updated_at = NOW() WHERE id = ?;", array($params["post_comment"], $params["post_id"]));
-    
-                    if($current_process){
-                        $current_process = $this->getPost($params["post_id"]);
-    
-                        if($current_process["status"]){
-                            $response_data = $current_process;
-                            $response_data["result"]["post_id"] = $params["post_id"];
-    
-                        }
-                    }
-                    else{
-                        throw new Exception("Error updating post.");
-                    }
+                    $record = "post";
                 }
                 else{
                     $current_process = $this->db->query("UPDATE comments SET message = ?, updated_at = NOW() WHERE id = ?;", array($params["post_comment"], $params["comment_id"]));
-
-                    if($current_process){
-                        $current_process = $this->getComments($params["comment_id"]);
-                    }
-                    else{
-                        throw new Exception("Error updating comment.");
-                    }
+                    $record = "comment";
                 }
 
-                if($current_process["status"]){
-                    $this->db->trans_complete();
+                if($this->db->affected_rows()){
+                    $current_process = ($record == "post") ? $this->getPost($params["post_id"]) : $this->getComments($params["comment_id"]);
+
+                    if($current_process["status"]){
+                        $response_data = $current_process;
+                        
+                        if($record == "post"){
+                            $response_data["result"]["post_id"] = $params["post_id"];
+                        }
+    
+                        $this->db->trans_complete();
+                    }
+                }
+                else{
+                    throw new Exception("Error updating {$record}.");
                 }
             }
             catch (Exception $e) {
