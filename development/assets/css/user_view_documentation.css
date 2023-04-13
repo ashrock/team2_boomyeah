@@ -52,7 +52,7 @@ textarea {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 3px 32px;
+  padding: 0px 32px;
   position: absolute;
   width: 100%;
 }
@@ -64,9 +64,15 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
+#header_container .header .user_profile .user_settings {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
 #header_container .header .user_profile .user_settings #user_profile_pic {
   border-radius: 20px;
   height: 40px;
+  margin-right: 10px;
   width: 40px;
 }
 #header_container .header .user_profile .user_settings #logout {
@@ -76,8 +82,7 @@ textarea {
   color: transparent;
   cursor: pointer;
   display: inline-block;
-  height: 29px;
-  transform: translate(8px, -10px);
+  height: 24px;
   width: 28px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown {
@@ -1111,56 +1116,13 @@ body {
   margin: 0px;
 }
 .container .section_header {
-  display: none;
   justify-content: space-between;
-  margin-bottom: 23px;
+  margin-bottom: 20px;
   font: 16px/20px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
 }
 .container .section_header h2 {
   font: 16px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
   margin: 0;
-}
-.container .section_header .sort_btn {
-  background-color: transparent;
-  border: none;
-  font: 16px/20px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
-  display: flex;
-  align-items: center;
-  gap: 11px;
-}
-.container .section_header .sort_btn::before {
-  content: '';
-  background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/sort_icon.svg') no-repeat;
-  display: inline-block;
-  width: 18px;
-  height: 12px;
-}
-.container .section_header .sort_dropdown {
-  border-radius: 4px;
-  width: 114px !important;
-  background-color: #F8FAFC;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-}
-.container .section_header .sort_dropdown .divider {
-  background-color: #F8FAFC;
-}
-.container .section_header .sort_dropdown .divider.hidden {
-  display: none;
-}
-.container .section_header .sort_dropdown li:hover {
-  background-color: #BDDAFF;
-}
-.container .section_header .sort_dropdown a {
-  color: #334155;
-  font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-}
-@media screen and (max-width: 632px) {
-  .container .section_header {
-    display: flex;
-  }
-  .container .section_header .sort_btn {
-    font-size: 0;
-  }
 }
 .container .section_container {
   display: flex;

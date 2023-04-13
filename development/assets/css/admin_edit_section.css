@@ -52,7 +52,7 @@ textarea {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 3px 32px;
+  padding: 0px 32px;
   position: absolute;
   width: 100%;
 }
@@ -64,9 +64,15 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
+#header_container .header .user_profile .user_settings {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
 #header_container .header .user_profile .user_settings #user_profile_pic {
   border-radius: 20px;
   height: 40px;
+  margin-right: 10px;
   width: 40px;
 }
 #header_container .header .user_profile .user_settings #logout {
@@ -76,8 +82,7 @@ textarea {
   color: transparent;
   cursor: pointer;
   display: inline-block;
-  height: 29px;
-  transform: translate(8px, -10px);
+  height: 24px;
   width: 28px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown {

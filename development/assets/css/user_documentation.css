@@ -32,7 +32,7 @@ textarea {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 3px 32px;
+  padding: 0px 32px;
   position: absolute;
   width: 100%;
 }
@@ -44,9 +44,15 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
+#header_container .header .user_profile .user_settings {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
 #header_container .header .user_profile .user_settings #user_profile_pic {
   border-radius: 20px;
   height: 40px;
+  margin-right: 10px;
   width: 40px;
 }
 #header_container .header .user_profile .user_settings #logout {
@@ -56,8 +62,7 @@ textarea {
   color: transparent;
   cursor: pointer;
   display: inline-block;
-  height: 29px;
-  transform: translate(8px, -10px);
+  height: 24px;
   width: 28px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown {
@@ -1131,7 +1136,7 @@ body::-webkit-scrollbar-thumb {
 }
 .user .container #documentations .document_block .document_details h2 {
   color: #0F172A;
-  font: 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 14px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0;
   pointer-events: none;
 }
@@ -1139,7 +1144,7 @@ body::-webkit-scrollbar-thumb {
   color: #C6D0DD;
   color: #A1A1AA;
   cursor: text;
-  font: 14px/14px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  font: 12px/10px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   font-style: italic;
   margin-top: 8px;
   pointer-events: none;

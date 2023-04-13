@@ -36,7 +36,7 @@ textarea{
         align-items: center;
         display: flex;
         justify-content: space-between;
-        padding: 3px 32px;
+        padding: 0px 32px;
         position: absolute;
         width: 100%;
         .global_logo{
@@ -47,11 +47,17 @@ textarea{
             display: flex;
             justify-content: space-between;
             .user_settings{
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+
                 #user_profile_pic{
                     border-radius: 20px;
                     height: 40px;
+                    margin-right: 10px;
                     width: 40px;
                 }
+                
                 #logout{
                     background: url("../images/header_sprite.svg") no-repeat;
                     background-position: -40px 0px;
@@ -59,8 +65,7 @@ textarea{
                     color: transparent;
                     cursor: pointer;
                     display: inline-block;
-                    height: 29px;
-                    transform: translate(8px, -10px);
+                    height: 24px;
                     width: 28px;
                 }
                 #user_dropdown{

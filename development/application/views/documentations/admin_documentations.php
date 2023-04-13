@@ -1,7 +1,5 @@
 <?php
     include_once("application/views/view_helper.php");
-    #include_once("../../config/connection.php");
-    #include_once("../../config/constants.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">

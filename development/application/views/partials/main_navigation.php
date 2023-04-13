@@ -9,14 +9,10 @@
         <a class="sidenav_logo" href="<?= $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? "/docs/edit" : "/docs" ?>">
             <img src="https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/global_logo.svg" class="global_logo" alt="global_logo">
         </a>
+        <h3><?= (isset($view_page)) ? $view_page : '' ?></h3>
         <ul>
-    <?php foreach($side_nav_links as $side_nav_link){ 
-        if((preg_match("/^\/docs\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
-            $link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["id"]}";
-        }
-        else if((preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
-            $link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}";
-        }
+    <?php foreach($side_nav_links as $side_nav_link){
+        $link = get_navigation_link($side_nav_link);
     ?>
         <li><a href="<?= $link ?>" class="<?= (isset($side_nav_link["is_private"]) && $side_nav_link["is_private"]) ? 'private' : '' ?>"><?= $side_nav_link["title"] ?></a><span></span></li>
     <?php } ?>
@@ -60,12 +56,7 @@
         <div id="mobile_nav_title"><?= (isset($view_page)) ? $view_page : '' ?></div>
         <ul>
         <?php foreach($side_nav_links as $side_nav_link){ 
-            if((preg_match("/^\/docs\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
-                $link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["id"]}";
-            }
-            else if((preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}\/edit$/i", $_SERVER["REQUEST_URI"]) || (preg_match("/^\/docs\/[0-9]{0,6}\/[0-9]{0,6}$/i", $_SERVER["REQUEST_URI"])))){
-                $link = $_SESSION["user_level_id"] == USER_LEVEL["ADMIN"] ? base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}/edit" : base_url() . "docs/{$side_nav_link["documentation_id"]}/{$side_nav_link["id"]}";
-            }
+            $link = get_navigation_link($side_nav_link);
         ?>
             <li><a href="<?= $link ?>" class="<?= (isset($side_nav_link["is_private"]) && $side_nav_link["is_private"]) ? 'private' : '' ?>"><?= $side_nav_link["title"] ?></a><span></span></li>
         <?php } ?>  
