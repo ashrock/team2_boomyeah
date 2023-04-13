@@ -237,8 +237,6 @@
                     if($this->db->affected_rows()){
                         # Check if module_content has files or images
                         preg_match_all('~(?<=href=").*?(?=")|(?<=src=").*?(?=")~', $params["module_content"], $included_links);
-
-                        $response_data["result"]["included_links"] = $included_links;
                         
                         if($included_links){
                             $included_links = array_unique($included_links[FIRST_INDEX]);
@@ -250,9 +248,10 @@
                                 $get_files = $get_files->result_array()[FIRST_INDEX];
     
                                 # Prepare needed arrays
-                                $file_ids     = json_decode($get_files["file_ids"]);
-                                $file_urls    = json_decode($get_files["file_urls"]);
-                                $file_tab_ids = json_decode($get_files["file_tab_ids"]);
+                                $file_ids      = json_decode($get_files["file_ids"]);
+                                $file_urls     = json_decode($get_files["file_urls"]);
+                                $file_tab_ids  = json_decode($get_files["file_tab_ids"]);
+                                $values_clause = $bind_params = array();
     
                                 # Check files to remove
                                 if($file_urls){
@@ -260,8 +259,6 @@
                                     $files_to_remove = array_diff($file_urls, $included_links);
         
                                     if($files_to_remove){
-                                        $values_clause = $bind_params = array();
-        
                                         # Prepare query values
                                         foreach($files_to_remove as $key => $file){
                                             # Get index of file
@@ -280,13 +277,32 @@
                                                 array_push($bind_params, $file_ids[$file_index], $tab_ids);
                                             }
                                         }
-                    
-                                        $values_clause = implode(",", $values_clause);
-                                        $update_files = $this->db->query("INSERT INTO files (id, tab_ids) VALUES {$values_clause} ON DUPLICATE KEY UPDATE tab_ids = VALUES(tab_ids)", $bind_params);
-                    
-                                        if(!$update_files){
-                                            throw new Exception("Error updating File records");
+                                    }
+                                }
+                                else{
+                                    # Fetch File records based on links in $included_links
+                                    $get_files_ids = $this->db->query("SELECT id, tab_ids FROM files WHERE file_url IN ?;", array($included_links));
+
+                                    if($get_files_ids->num_rows()){
+                                        $get_files_ids = $get_files_ids->result_array();
+
+                                        # Prepare query values
+                                        foreach($get_files_ids as $file){
+                                            $tabs_ids = $file["tab_ids"] ? "{$file["tab_ids"]},{$params["tab_id"]}" : $params["tab_id"];
+
+                                            array_push($values_clause, "(?, ?)");
+                                            array_push($bind_params, $file["id"], $tabs_ids);
                                         }
+                                    }
+                                }
+
+                                # Update File record/s
+                                if($values_clause && $bind_params){
+                                    $values_clause = implode(",", $values_clause);
+                                    $update_files = $this->db->query("INSERT INTO files (id, tab_ids) VALUES {$values_clause} ON DUPLICATE KEY UPDATE tab_ids = VALUES(tab_ids)", $bind_params);
+                
+                                    if(!$update_files){
+                                        throw new Exception("Error updating File records");
                                     }
                                 }
                             }
