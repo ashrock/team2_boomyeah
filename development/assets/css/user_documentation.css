@@ -32,7 +32,7 @@ textarea {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 3px 32px;
+  padding: 0px 32px;
   position: absolute;
   width: 100%;
 }
@@ -44,9 +44,15 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
+#header_container .header .user_profile .user_settings {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
 #header_container .header .user_profile .user_settings #user_profile_pic {
   border-radius: 20px;
   height: 40px;
+  margin-right: 10px;
   width: 40px;
 }
 #header_container .header .user_profile .user_settings #logout {
@@ -56,8 +62,7 @@ textarea {
   color: transparent;
   cursor: pointer;
   display: inline-block;
-  height: 29px;
-  transform: translate(8px, -10px);
+  height: 24px;
   width: 28px;
 }
 #header_container .header .user_profile .user_settings #user_dropdown {
@@ -153,6 +158,12 @@ textarea {
   height: 24px;
   flex-grow: 1;
 }
+#nav_documentation #slide-out h3 {
+  color: #FFFFFF;
+  font: 16px/40px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  margin: 0px;
+  padding: 0px 20px;
+}
 #nav_documentation #slide-out ul {
   max-height: calc(100% - 54px);
   overflow: auto;
@@ -162,16 +173,20 @@ textarea {
   align-items: center;
   display: flex;
   font: 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  padding: 0px 0px 0px 24px;
+  padding: 0px 0px 0px 42px;
   position: relative;
   z-index: 9999;
 }
-#nav_documentation #slide-out li:hover {
+#nav_documentation #slide-out li.active {
   background: #E8F2FF;
   border-radius: 0px 20px 20px 0px;
 }
+#nav_documentation #slide-out li.active a {
+  color: #2563EB;
+}
 #nav_documentation #slide-out li a {
-  color: #B4C5FF;
+  background: transparent !important;
+  color: #FFFFFF;
   flex-grow: 1;
   overflow: hidden;
   padding: 0px 40px 0px 0px;
@@ -181,8 +196,7 @@ textarea {
   z-index: 9999;
 }
 #nav_documentation #slide-out li a:hover {
-  background: transparent !important;
-  color: #2563EB;
+  color: #B4C5FF;
 }
 #nav_documentation #slide-out li a.private + span {
   background: url("../images/mobile_nav_sprite.svg") no-repeat;
@@ -222,16 +236,19 @@ textarea {
   display: flex;
   position: relative;
 }
-#mobile_container #mobile_nav ul li:hover {
+#mobile_container #mobile_nav ul li.active {
   background: #E8F2FF;
   border-radius: 0px 40px 40px 0px;
 }
+#mobile_container #mobile_nav ul li.active a {
+  color: #2563EB;
+}
 #mobile_container #mobile_nav ul li a {
-  color: #B4C5FF;
+  color: #FFFFFF;
   display: inline-block;
   flex-grow: 1;
   overflow: hidden;
-  padding: 0px 40px 0px 16px;
+  padding: 0px 40px 0px 32px;
   text-overflow: ellipsis;
   vertical-align: middle;
   white-space: nowrap;
@@ -239,7 +256,7 @@ textarea {
 }
 #mobile_container #mobile_nav ul li a:hover {
   background: transparent !important;
-  color: #2563EB;
+  color: #B4C5FF;
 }
 #mobile_container #mobile_nav ul li a.private + span {
   background: url("../images/mobile_nav_sprite.svg") no-repeat;
@@ -1131,7 +1148,7 @@ body::-webkit-scrollbar-thumb {
 }
 .user .container #documentations .document_block .document_details h2 {
   color: #0F172A;
-  font: 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 14px/16px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   margin: 0;
   pointer-events: none;
 }
@@ -1139,7 +1156,7 @@ body::-webkit-scrollbar-thumb {
   color: #C6D0DD;
   color: #A1A1AA;
   cursor: text;
-  font: 14px/14px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+  font: 12px/10px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   font-style: italic;
   margin-top: 8px;
   pointer-events: none;
