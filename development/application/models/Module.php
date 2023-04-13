@@ -221,7 +221,7 @@
         # Triggered by: (POST) module/update
         # Requires: $params {action, module_title, module_content, is_comments_allowed, tab_id }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: April 12, 2023
+        # Last updated at: April 13, 2023
         # Owner: Jovic, Updated by: Jovic
         public function updateModule($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -235,11 +235,13 @@
                     array($params["module_title"], $params["module_content"], $params["is_comments_allowed"], $_SESSION["user_id"], $params["tab_id"]));
     
                     if($this->db->affected_rows()){
-                        # Check if module_content has links
-                        preg_match_all('~(?<=href=").*?(?=")~', $params["module_content"], $included_files);
+                        # Check if module_content has files or images
+                        preg_match_all('~(?<=href=").*?(?=")|(?<=src=").*?(?=")~', $params["module_content"], $included_links);
+
+                        $response_data["result"]["included_links"] = $included_links;
                         
-                        if($included_files){
-                            $included_files = array_unique($included_files[FIRST_INDEX]);
+                        if($included_links){
+                            $included_links = array_unique($included_links[FIRST_INDEX]);
                             
                             # Fetch Files whose tab_ids contains $params["tab_id"] 
                             $get_files = $this->db->query("SELECT JSON_ARRAYAGG(id) AS file_ids, JSON_ARRAYAGG(file_url) AS file_urls, JSON_ARRAYAGG(tab_ids) AS file_tab_ids FROM files WHERE tab_ids REGEXP ?;", "[[:<:]]{$params["tab_id"]}[[:>:]]");
@@ -255,7 +257,7 @@
                                 # Check files to remove
                                 if($file_urls){
                                     # Check for removed file_urls
-                                    $files_to_remove = array_diff($file_urls, $included_files);
+                                    $files_to_remove = array_diff($file_urls, $included_links);
         
                                     if($files_to_remove){
                                         $values_clause = $bind_params = array();
@@ -611,7 +613,7 @@
         # Triggered by: (POST) modules/link_file_tab`
         # Requires: $params { file_id, tab_id  }
         # Returns: { status: true/false, result: { file_id }, error: null }
-        # Last updated at: April 12, 2023
+        # Last updated at: April 13, 2023
         # Owner: Erick, Updated by: Jovic
         public function linkFileTab($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -631,12 +633,11 @@
                             $new_tab_ids = ($tab_ids) ? $tab_ids.','.$params["tab_id"] : $params["tab_id"];
                             $update_file_tab_ids = $this->db->query("UPDATE files SET tab_ids = ? WHERE id = ?;", array($new_tab_ids, $params["file_id"]));
         
-                            if($update_file_tab_ids){
-                                $response_data["result"]["file_id"] = $file["result"]["file_id"];
+                            if($this->db->affected_rows()){
+                                $response_data["status"]            = true;
+                                $response_data["result"]["file_id"] = $params["file_id"];
                             }
                         }
-    
-                        $response_data["status"] = true;
                     }
                 }
             }
