@@ -260,7 +260,19 @@ function initializeRedactor(selector){
 function triggerLinkFileTab(link_params){
     let { type, selector, event } = link_params;
     let link_file_form = ux("#link_file_to_tab_form");
-    let pasted_link    = type == "PASTE" ? ux(event.params.$nodes.nodes[0]).text() : event.params.url;
+    let pasted_link;
+
+    if(type == "PASTE"){
+        if(ux(event.params.$nodes.nodes[0]).text()){
+            pasted_link = ux(event.params.$nodes.nodes[0]).text()
+        }
+        else if(ux(event.params.$nodes.nodes[0]).find("img").attr("src")){
+            pasted_link = ux(event.params.$nodes.nodes[0]).find("img").attr("src");
+        }
+    }
+    else{
+        pasted_link = event.params.url;
+    }
 
     link_file_form.find(".tab_id").val( ux(selector).closest(".update_module_tab_form").find(".tab_id").val() );
 
