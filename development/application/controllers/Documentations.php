@@ -60,9 +60,6 @@
 
 				if($all_documentations["status"]){
 					if(count($all_documentations["result"])){
-
-						# TODO: Refactor document_block_partial to accept an array and perform loop inside it instead of calling document_block_partial multiple times.
-						# Rendering the partial can also be moved to getDocumentations() in Documentation Model.
 						$response_data["result"]["html"] = $this->load->view("partials/document_block_partial.php", array("all_documentations" => $all_documentations["result"]), true);
 					}
 					else{
