@@ -1,6 +1,7 @@
 <div id="confirm_remove_comment" class="confirm_action_modal">
     <div id="confirm_remove_comment_modal" class="modal">
         <div class="modal-content">
+            <div class="confirmation_modal_icon"></div>
             <h4>Confirmation</h4>
             <p>Are you sure you want to remove this comment?</p>
         </div>
@@ -19,6 +20,7 @@
 <div id="confirm_remove_tab" class="confirm_action_modal">
     <div id="confirm_remove_tab_modal" class="modal">
         <div class="modal-content">
+            <div class="confirmation_modal_icon"></div>
             <h4>Confirmation</h4>
             <p>Are you sure you want to remove `<span class="tab_title"></span>` tab?</p>
         </div>
@@ -37,6 +39,7 @@
 <div id="confirm_remove_uploaded_file" class="confirm_action_modal">
     <div id="confirm_remove_uploaded_file_modal" class="modal">
         <div class="modal-content">
+            <div class="confirmation_modal_icon"></div>
             <h4>Confirmation</h4>
             <p class="remove_file_question_text"></p>
         </div>

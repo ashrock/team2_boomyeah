@@ -2,6 +2,7 @@
 <div id="confirmation_modal">
     <div id="confirm_to_public" class="modal">
         <div class="modal-content">
+            <div class="confirmation_modal_icon"></div>
             <h4>Confirmation</h4>
             <p>Are you sure you want to change `<span class="documentation_title"></span>` documentation to Public?</p>
         </div>
@@ -14,6 +15,7 @@
 <div id="confirmation_modal_private">
     <div id="confirm_to_private" class="modal">
         <div class="modal-content">
+            <div class="confirmation_modal_icon"></div>
             <h4>Confirmation</h4>
             <p>Are you sure you want to change `<span class="documentation_title"></span>` documentation to Private?</p>
         </div>
@@ -26,6 +28,7 @@
 <div id="confirmation_modal_archive">
     <div id="confirm_to_archive" class="modal">
         <div class="modal-content">
+            <div class="confirmation_modal_icon"></div>
             <h4>Confirmation</h4>
             <p>Are you sure you want to move `<span class="documentation_title"></span>` documentation to Archive?</p>
         </div>
@@ -38,6 +41,7 @@
 <div id="confirmation_modal_remove">
     <div id="confirm_to_remove" class="modal">
         <div class="modal-content">
+            <div class="confirmation_modal_icon"></div>
             <h4>Confirmation</h4>
             <p>Are you sure you want to remove "<span class="documentation_title"></span>"? This will also remove all of its content.</p>
         </div>
@@ -50,12 +54,26 @@
 <div id="confirmation_modal_remove_invited_user">
     <div id="confirm_to_remove_invited_user" class="modal">
         <div class="modal-content">
+            <div class="confirmation_modal_icon"></div>
             <h4>Confirmation</h4>
             <p>Are you sure you want to remove access for this user?</p>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
             <a href="#!" id="remove_invited_user_confirm" class="modal-close waves-effect btn-flat yes_btn">Yes</a>
+        </div>
+    </div>
+</div>
+<div id="confirmation_modal_remove">
+    <div id="confirm_to_remove" class="modal">
+        <div class="modal-content">
+            <div class="confirmation_modal_icon"></div>
+            <h4>Confirmation</h4>
+            <p>Are you sure you want to remove `<span id="section_title_to_remove"></span>`? This will also remove all the modules and tabs in the section.</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect btn-flat no_btn">No</a>
+            <a href="#!" id="remove_confirm" class="modal-close waves-effect btn-flat yes_btn">Yes</a>
         </div>
     </div>
 </div>

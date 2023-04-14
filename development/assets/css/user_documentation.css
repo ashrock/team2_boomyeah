@@ -803,6 +803,18 @@ textarea {
   font: 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   color: #1E293B;
 }
+.modal .modal-content {
+  text-align: center;
+}
+.modal .modal-content .confirmation_modal_icon {
+  background-image: url("../images/confirmation_modal_icons.svg");
+  display: inline-block;
+  height: 39.68px;
+  width: 44.48px;
+}
+.modal .modal-footer {
+  text-align: center !important;
+}
 .confirm_action_modal {
   padding: 10px 0px;
 }
