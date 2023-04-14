@@ -152,7 +152,7 @@ function onChangeDocumentationTitle(event){
             /** Use AJAX to generate new documentation */
             ux().post(edit_title_form.attr("action"), edit_title_form.serialize(), (response_data) => {
                 if(response_data.status){
-                    /* TODO: Improve UX after success updating of title. Add animation. */
+                    /* TODO: Improve UX aftr success updating of title. Add animation. */
                     parent_document_block.addClass("animate__animated animated_blinkBorder").removeClass("error");
                     
                     setTimeout(() => {
@@ -206,7 +206,6 @@ function onSubmitChangePrivacy(event){
     /** Use AJAX to change documentation privacy */
     privacy_form.post(privacy_form.attr("action"), privacy_form.serialize(), (response_data) => {
         if(response_data.status){
-            /* TODO: Improve UX after success updating. Add animation to indication the replace with the updated . */
             $(`#document_${response_data.result.documentation_id}`).replaceWith(response_data.result.html);
             $(`#document_${response_data.result.documentation_id}`).addClass("animate__animated animated_blinkBorder").removeClass("error");
                 
