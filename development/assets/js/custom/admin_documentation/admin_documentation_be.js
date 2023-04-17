@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function(){
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
         .on("submit", "#duplicate_documentation_form", onSubmitDuplicateForm)
         .on("click", ".duplicate_icon", duplicateDocumentation)
-        .on("click", "#confirm_to_duplicate .yes_btn", (event) => {
+        .on("click", "#confirm_to_duplicate_doc .yes_btn", (event) => {
             event.stopImmediatePropagation();
             event.preventDefault();
             ux("#duplicate_documentation_form").trigger("submit");
