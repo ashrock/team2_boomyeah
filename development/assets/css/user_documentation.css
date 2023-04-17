@@ -803,6 +803,83 @@ textarea {
   font: 16px/20px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
   color: #1E293B;
 }
+.modal.confirmation_modal {
+  border-radius: 8px;
+  max-width: 404px;
+  overflow: hidden;
+  width: 100%;
+}
+.modal.confirmation_modal .modal-content {
+  padding: 32px 24px 24px;
+  text-align: center;
+}
+.modal.confirmation_modal .modal-content .confirmation_modal_icon {
+  background-image: url("../images/confirmation_modal_icons.svg");
+  display: inline-block;
+  height: 39.68px;
+  margin: 0px auto 16px;
+  width: 44.48px;
+}
+.modal.confirmation_modal .modal-content .confirmation_modal_icon.public_modal_icon {
+  background-position-x: -119.48px;
+  width: 31px;
+}
+.modal.confirmation_modal .modal-content .confirmation_modal_icon.private_modal_icon {
+  background-position-x: -150.48px;
+  width: 30px;
+}
+.modal.confirmation_modal .modal-content .confirmation_modal_icon.duplicate_modal_icon {
+  background-position-x: -84.48px;
+  width: 35px;
+}
+.modal.confirmation_modal .modal-content .confirmation_modal_icon.archive_modal_icon {
+  background-position-x: -44.48px;
+  width: 40px;
+}
+.modal.confirmation_modal .modal-content h4 {
+  color: #0F172A;
+  font: 20px/32px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+}
+.modal.confirmation_modal .modal-content p {
+  color: #6C7177;
+  font: 16px/24px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
+}
+.modal.confirmation_modal .modal-footer {
+  display: flex;
+  gap: 6px;
+  height: auto;
+  justify-content: space-between;
+  padding: 0px 24px 32px;
+  text-align: center !important;
+}
+.modal.confirmation_modal .modal-footer a,
+.modal.confirmation_modal .modal-footer button {
+  border: 1px solid #2563EB;
+  border-radius: 10px;
+  flex-grow: 1;
+  font: 16px/38px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  height: 38px;
+  margin: 0;
+  padding: 0px 16px;
+  text-transform: none !important;
+}
+.modal.confirmation_modal .modal-footer a:hover,
+.modal.confirmation_modal .modal-footer button:hover {
+  opacity: 0.7;
+}
+.modal.confirmation_modal .modal-footer .no_btn {
+  border: 1px solid #2563EB;
+  color: #2563EB !important;
+}
+.modal.confirmation_modal .modal-footer .yes_btn {
+  background: #FF8888;
+  border-color: #FF8888;
+  color: #FFFFFF;
+}
+.modal.confirmation_modal .modal-footer .yes_btn.proceed_btn {
+  border-color: #2563EB;
+  background: #2563EB;
+}
 .confirm_action_modal {
   padding: 10px 0px;
 }
@@ -812,7 +889,6 @@ textarea {
 #error_uploaded_file .modal {
   border-radius: 8px;
   flex-direction: column;
-  max-width: 343px;
   min-height: 194px;
   overflow: hidden;
   width: 100%;
@@ -840,57 +916,7 @@ textarea {
 .confirm_action_modal .modal .modal-content,
 #error_uploaded_file .modal .modal-content {
   flex-grow: 1;
-  padding: 14px 24px;
-}
-#confirmation_modal .modal .modal-content h4,
-#confirmation_modal_private .modal .modal-content h4,
-.confirm_action_modal .modal .modal-content h4,
-#error_uploaded_file .modal .modal-content h4 {
-  color: #0F172A;
-  font: 20px/32px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-}
-#confirmation_modal .modal .modal-content p,
-#confirmation_modal_private .modal .modal-content p,
-.confirm_action_modal .modal .modal-content p,
-#error_uploaded_file .modal .modal-content p {
-  color: #6C7177;
-  font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-}
-#confirmation_modal .modal .modal-footer,
-#confirmation_modal_private .modal .modal-footer,
-.confirm_action_modal .modal .modal-footer,
-#error_uploaded_file .modal .modal-footer {
-  height: auto;
-  padding: 0px 24px 24px;
-}
-#confirmation_modal .modal .modal-footer a,
-#confirmation_modal_private .modal .modal-footer a,
-.confirm_action_modal .modal .modal-footer a,
-#error_uploaded_file .modal .modal-footer a,
-#confirmation_modal .modal .modal-footer button,
-#confirmation_modal_private .modal .modal-footer button,
-.confirm_action_modal .modal .modal-footer button,
-#error_uploaded_file .modal .modal-footer button {
-  margin: 0;
-}
-#confirmation_modal .modal .modal-footer .no_btn,
-#confirmation_modal_private .modal .modal-footer .no_btn,
-.confirm_action_modal .modal .modal-footer .no_btn,
-#error_uploaded_file .modal .modal-footer .no_btn {
-  color: #DA4D4D;
-  font: 16px/36px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  text-transform: none !important;
-}
-#confirmation_modal .modal .modal-footer .yes_btn,
-#confirmation_modal_private .modal .modal-footer .yes_btn,
-.confirm_action_modal .modal .modal-footer .yes_btn,
-#error_uploaded_file .modal .modal-footer .yes_btn {
-  border: 1px solid #2563EB;
-  border-radius: 20px;
-  color: #2563EB;
-  font: 16px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  padding: 5px 16px;
-  text-transform: none !important;
+  padding: 32px 24px;
 }
 body::-webkit-scrollbar {
   background-color: #EFF6FF;

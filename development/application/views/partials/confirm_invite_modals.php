@@ -1,6 +1,7 @@
 <div id="confirmation_modal_remove_invited_user">
     <div id="confirm_to_remove_invited_user" class="modal">
         <div class="modal-content">
+            <div class="confirmation_modal_icon"></div>
             <h4>Confirmation</h4>
             <p>Are you sure you want to remove access for this user?</p>
         </div>
