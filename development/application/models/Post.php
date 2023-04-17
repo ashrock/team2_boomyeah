@@ -6,15 +6,19 @@
         # Triggered by: (POST) posts/add
         # Requires: $tab_id
         # Returns: { status: true/false, result: { tab_id, html }, error: null }
-        # Last updated at: April 3, 2023
-        # Owner: Jovic
+        # Last updated at: April 17, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function getPost($post_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 $get_post = $this->db->query("
                     SELECT
-                        posts.id AS post_id, posts.tab_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, posts.updated_at AS date_posted,
+                        posts.id AS post_id, posts.tab_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, 
+                        (CASE
+                            WHEN @@session.time_zone != 'UTC' THEN CONVERT_TZ(posts.updated_at, @@session.time_zone, '+00:00')
+                            ELSE posts.updated_at
+                        END) AS date_posted,
                         posts.message, posts.cache_comments_count, users.profile_picture AS user_profile_pic,
                         (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM posts
@@ -43,15 +47,19 @@
         # Triggered by: (POST) posts/get
         # Requires: $tab_id
         # Returns: { status: true/false, result: { tab_id, html }, error: null }
-        # Last updated at: April 3, 2023
-        # Owner: Jovic
+        # Last updated at: April 17, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function getPosts($tab_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 $get_posts = $this->db->query("
                     SELECT
-                        posts.tab_id AS tab_id, posts.id AS post_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, posts.updated_at AS date_posted,
+                        posts.tab_id AS tab_id, posts.id AS post_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, 
+                        (CASE
+                            WHEN @@session.time_zone != 'UTC' THEN CONVERT_TZ(posts.updated_at, @@session.time_zone, '+00:00')
+                            ELSE posts.updated_at
+                        END) AS date_posted,
                         posts.message, posts.cache_comments_count, users.profile_picture AS user_profile_pic,
                         (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM posts
@@ -211,8 +219,8 @@
         # Triggered by: (POST) modules/get_commments
         # Requires: $comment_id
         # Returns: { status: true/false, result: { post_comment_id, html }, error: null }
-        # Last updated at: March 20, 2023
-        # Owner: Erick
+        # Last updated at: April 17, 2023
+        # Owner: Erick, Updated by: Jovic
         public function getComments($comment_id, $post_id=NULL){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -222,7 +230,11 @@
 
                 $comments = $this->db->query("
                     SELECT
-                        comments.id AS comment_id, comments.post_id AS post_comment_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS commenter_first_name, comments.updated_at AS date_commented,
+                        comments.id AS comment_id, comments.post_id AS post_comment_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS commenter_first_name,
+                        (CASE
+                            WHEN @@session.time_zone != 'UTC' THEN CONVERT_TZ(comments.updated_at, @@session.time_zone, '+00:00')
+                            ELSE comments.updated_at
+                        END) AS date_commented,
                         comments.message AS commenter_message, posts.cache_comments_count, users.profile_picture AS commenter_profile_pic,
                         (CASE WHEN comments.created_at != comments.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM comments
