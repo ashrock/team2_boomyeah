@@ -833,19 +833,86 @@ textarea{
         color: @by_tooltip_bg;
     }
 }
-.modal{
+.modal.confirmation_modal{
+    border-radius: 8px;
+    max-width: 404px;
+    overflow: hidden;
+    width: 100%;
     .modal-content{
+        padding: 32px 24px 24px;
         text-align: center;
         .confirmation_modal_icon{
             background-image: url("../images/confirmation_modal_icons.svg");
             display: inline-block;
             height: 39.68px;
+            margin: 0px auto 16px;
             width: 44.48px;
-        
+
+            &.public_modal_icon{
+                background-position-x: -119.48px;
+                width: 31px;
+            }
+            
+            &.private_modal_icon{
+                background-position-x: -150.48px;
+                width: 30px;
+            }
+            
+            &.duplicate_modal_icon{
+                background-position-x: -84.48px;
+                width: 35px;
+            }
+            
+            &.archive_modal_icon{
+                background-position-x: -44.48px;
+                width: 40px;
+            }
+        }
+        h4{
+            color: @by_black;
+            font: 20px/32px @readex_regular;
+        }
+        p{
+            color: @by_text;
+            font: 16px/24px @readex_light;
         }
     }
     .modal-footer{
+        display: flex;
+        gap: 6px;
+        height: auto;
+        justify-content: space-between;
+        padding: 0px 24px 32px;
         text-align: center !important;
+
+        a, button{
+            border: 1px solid @by_primary;
+            border-radius: 10px;
+            flex-grow: 1;
+            font: 16px/38px @readex_regular;
+            height: 38px;
+            margin: 0;
+            padding: 0px 16px;
+            text-transform: none !important;
+
+            &:hover{
+                opacity: 0.7;
+            }
+        }
+        .no_btn{
+            border: 1px solid @by_primary;
+            color: @by_primary !important;
+        }
+        .yes_btn{
+            background: @by_remove_red;
+            border-color: @by_remove_red;
+            color: @by_white;
+            
+            &.proceed_btn{
+                border-color: @by_primary;
+                background: @by_primary;
+            }
+        }
     }
 }
 .confirm_action_modal{
@@ -855,7 +922,6 @@ textarea{
     .modal{
         border-radius: 8px;
         flex-direction: column;
-        max-width: 343px;
         min-height: 194px;
         overflow: hidden;
         width: 100%;
@@ -871,35 +937,7 @@ textarea{
         }
         .modal-content{
             flex-grow: 1;
-            padding: 14px 24px;
-            h4{
-                color: @by_black;
-                font: 20px/32px @readex_regular;
-            }
-            p{
-                color: @by_text;
-                font: 16px/24px @readex_regular;
-            }
-        }
-        .modal-footer{
-            height: auto;
-            padding: 0px 24px 24px;
-            a, button{
-                margin: 0;
-            }
-            .no_btn{
-                color: @by_error;
-                font: 16px/36px @readex_regular;
-                text-transform: none !important;
-            }
-            .yes_btn{
-                border: 1px solid @by_primary;
-                border-radius: 20px;
-                color: @by_primary;
-                font: 16px/24px @readex_regular;
-                padding: 5px 16px;
-                text-transform: none !important;
-            }
+            padding: 32px 24px;
         }
     }
 }
