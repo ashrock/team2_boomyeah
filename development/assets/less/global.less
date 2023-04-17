@@ -392,13 +392,14 @@ textarea{
 
             }
             .modal-content{
-                position: relative;
                 border: 1px solid @by_lightgray;
+                padding: 24px;
+                position: relative;
                 
                 h2{
                     color: @by_black;
                     font: 20px/28px @readex_regular;
-                    margin-bottom: 10px;
+                    margin-bottom: 6px;
                 }
                 p{
                     color: @by_light;
@@ -421,11 +422,15 @@ textarea{
                     top: 4px !important;
                 }
                 .dropdown-content{
+                    border-radius: 8px;
                     left: -30px !important;
                     li{
+                        height: 38px;
+                        min-height: initial;
                         span{
+                            font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
                             span{
-                                font: 12px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
+                                font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
                                 color: #A1A1AA !important;
                             }
                         }
@@ -529,6 +534,7 @@ textarea{
                                 height: 27px;
                                 line-height: 25px;
                                 pointer-events: none;
+                                padding: 0px 7px;
                                 .material-icons{
                                     pointer-events: all;
                                 }
@@ -664,7 +670,7 @@ textarea{
                             }
                             select, p{
                                 color: #A1A1AA;
-                                font: 12px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+                                font: 12px/10px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
                                 margin-left: auto;
                             }
                             .invited_user_info{
@@ -674,8 +680,8 @@ textarea{
                                     font: 16px/11px @readex_medium;
                                 }
                                 p{
-                                    color: @by_black !important;
-                                    font: 12px/10px @readex_regular;
+                                    color: @by_light !important;
+                                    font: 12px/10px @readex_light;
                                     padding: 10px 0;
                                 }
                             }
@@ -701,13 +707,13 @@ textarea{
                             }
                             span{
                                 color: @by_invite;
-                                font: 12px/24px @readex_regular;
+                                font: 12px/10px @readex_regular;
                             }
                             #choose_role{
                                 li{
                                     a{
                                         color: @by_invite;
-                                        font: 12px/24px @readex_regular;
+                                        font: 12px/10px @readex_regular;
                                     }
                                 }
                             }

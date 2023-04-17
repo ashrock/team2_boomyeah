@@ -683,8 +683,8 @@ textarea {
   font: 16px/11px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user .invited_user_info p {
-  color: #0F172A !important;
-  font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  color: #A1A1AA !important;
+  font: 12px/10px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   padding: 10px 0;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user .select-wrapper {
