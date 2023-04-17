@@ -29,8 +29,34 @@
     <div id="confirm_to_archive" class="modal confirmation_modal">
         <div class="modal-content">
             <div class="confirmation_modal_icon archive_modal_icon"></div>
-            <h4>Confirmation</h4>
+            <h4>Are you sure?</h4>
             <p>Archiving `<span class="documentation_title"></span>` will hide this to all users. You can unarchive this later</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect btn-flat no_btn cancel_btn">Cancel</a>
+            <a href="#!" id="archive_confirm" class="modal-close waves-effect btn-flat yes_btn proceed_btn">Proceed</a>
+        </div>
+    </div>
+</div>
+<div id="confirmation_modal_archive">
+    <div id="confirm_to_duplicate_doc" class="modal confirmation_modal">
+        <div class="modal-content">
+            <div class="confirmation_modal_icon duplicate_modal_icon"></div>
+            <h4>Are you sure?</h4>
+            <p>Doing this will duplicate `<span class="documentation_title"></span>` and all of its sections and modules.</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect btn-flat no_btn cancel_btn">Cancel</a>
+            <a href="#!" id="archive_confirm" class="modal-close waves-effect btn-flat yes_btn proceed_btn">Proceed</a>
+        </div>
+    </div>
+</div>
+<div id="confirmation_modal_archive">
+    <div id="confirm_to_duplicate_section" class="modal confirmation_modal">
+        <div class="modal-content">
+            <div class="confirmation_modal_icon duplicate_modal_icon"></div>
+            <h4>Are you sure?</h4>
+            <p>Doing this will duplicate `<span id="duplicate_section_title"></span>` and all of its modules and tabs.</p>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-close waves-effect btn-flat no_btn cancel_btn">Cancel</a>

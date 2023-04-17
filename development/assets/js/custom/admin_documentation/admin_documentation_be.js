@@ -9,6 +9,11 @@ document.addEventListener("DOMContentLoaded", function(){
         .on("submit", ".edit_title_form", onChangeDocumentationTitle)
         .on("submit", "#duplicate_documentation_form", onSubmitDuplicateForm)
         .on("click", ".duplicate_icon", duplicateDocumentation)
+        .on("click", "#confirm_to_duplicate .yes_btn", (event) => {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            ux("#duplicate_documentation_form").trigger("submit");
+        })
         .on("click", "#add_documentation_btn", (event) => {
             ux("#add_documentation_form").trigger("submit");
         })
@@ -74,7 +79,12 @@ function duplicateDocumentation(event){
     let document_id    = documentation.dataset.document_id;
     let duplicate_form = ux("#duplicate_documentation_form");
     duplicate_form.find(".documentation_id").val(document_id);
-    duplicate_form.trigger("submit");
+
+
+    let duplicate_modal = document.querySelector("#confirm_to_duplicate_doc");
+    var instance = M.Modal.getInstance(duplicate_modal);
+    displayModalDocumentationTitle(duplicate_modal, event.target.closest(".document_block") );
+    instance.open();
 }
 
 async function showConfirmPrivacyModal(document_id, update_value = 0, modal_type = "#confirm_to_private"){

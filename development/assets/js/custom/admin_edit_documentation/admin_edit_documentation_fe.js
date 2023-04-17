@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             updateDocumentationData("description", update_value);
         })
         .on("click", ".duplicate_icon", duplicateSection)
+        .on("click", "#confirm_to_duplicate_section .yes_btn", (event) => {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            ux("#duplicate_section_form").trigger("submit");        
+        })
         .on("click", ".remove_icon", setRemoveSectionBlock)
         .on("click", "#remove_confirm", confirmRemoveSectionBlock)
         .on("click", ".section_block", redirectToEditSection)
@@ -168,12 +174,17 @@ function updateSectionFormSubmit(section_id, update_type, update_value, submit_f
 function duplicateSection(event){
     event.stopImmediatePropagation();
 
-    let duplicate_btn = event.target;
-    let section_block = ux(duplicate_btn.closest(".section_block"));
+    let duplicate_section_btn = event.target;
+    let section_block = ux(duplicate_section_btn.closest(".section_block"));
     let section_id = section_block.find(".section_id").val();
     let duplicate_section_form = ux("#duplicate_section_form");
+    let section_title = ux(duplicate_section_btn).data("section_title");
     duplicate_section_form.find(".section_id").val(section_id);
-    duplicate_section_form.trigger("submit");
+
+    ux("#duplicate_section_title").text(section_title);
+    let duplicate_modal = document.querySelector("#confirm_to_duplicate_section");
+    var instance = M.Modal.getInstance(duplicate_modal);
+    instance.open();
     return;
 }
 
