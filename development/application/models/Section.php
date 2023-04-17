@@ -21,7 +21,7 @@
                     $order_by_clause = $get_documentation['result']['section_ids_order'] ? "ORDER BY FIELD (id, {$get_documentation['result']['section_ids_order']})" : "";
 
                     # Fetch sections
-                    $get_sections = $this->db->query("SELECT id, documentation_id, title, description, CONVERT_TZ(updated_at, @@session.time_zone, '+00:00') AS updated_at FROM sections WHERE documentation_id = ? {$order_by_clause};", $documentation_id);
+                    $get_sections = $this->db->query("SELECT id, documentation_id, title, description, (CASE WHEN @@session.time_zone != 'UTC' THEN CONVERT_TZ(updated_at, @@session.time_zone, '+00:00') ELSE updated_at END) AS updated_at FROM sections WHERE documentation_id = ? {$order_by_clause};", $documentation_id);
 
                     if($get_sections->num_rows()){
                         $response_data["result"] = $get_sections->result_array();
