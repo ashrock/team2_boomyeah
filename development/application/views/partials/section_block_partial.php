@@ -11,7 +11,7 @@
                 <div class="section_title autoheight"><?= $section['title'] ?></div>
                 <ul id="section_more_actions_<?= $section['id'] ?>" class="more_action_list">
                     <li class="edit_title_btn"><a href="#" tabindex="2" data-section_id="<?= $section['id'] ?>" class="section_block_icon edit_title_icon tooltipped" data-tooltip="Edit Section Title"></a></li>
-                    <li><a href="#" tabindex="2" data-section_id="<?= $section['id'] ?>" class="section_block_icon duplicate_icon tooltipped" data-tooltip="Duplicate Section"></a></li>
+                    <li><a href="#" tabindex="2" data-section_id="<?= $section['id'] ?>" class="section_block_icon duplicate_icon tooltipped" data-tooltip="Duplicate Section" data-section_title="<?= $section['title'] ?>"></a></li>
                     <li><a href="#confirm_to_remove" tabindex="2" class="section_block_icon remove_icon modal-trigger remove_btn tooltipped" data-tooltip="Remove Section" data-section_id="<?= $section['id'] ?>" data-section_title="<?= $section['title'] ?>"  data-documentation_action="remove"></a></li>
                 </ul>
             <?php } else { ?> 

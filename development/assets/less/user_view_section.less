@@ -633,7 +633,7 @@
         .toggle_reply_form_btn{
             font: 12px/24px @readex_medium !important;
         } 
-        .toggle_replies_btn{
+        .toggle_replies_btn, .toggle_replies_btn *{
             font: 12px/24px @readex_regular !important;
         }
     }
@@ -658,7 +658,10 @@
         color: @by_text;
         font: 12px/24px @readex_light;
         font-style: normal;
-
+        
+        & * {
+            font: inherit !important;
+        }
         &::before{
             content: "•";
             margin-right: 4px;
