@@ -1,15 +1,15 @@
 <?php
     function time_ago($datetime) {
-        $timezone     = new DateTimeZone("Asia/Taipei");
+        $timezone     = new DateTimeZone("UTC");
         $current_time = new DateTime("now", $timezone);
         $timestamp    = new DateTime($datetime, $timezone);
         $interval     = $current_time->diff($timestamp);
         $suffix       = ($interval->invert == 1) ? " ago" : "";
 
-        if ($interval->m >= 2) {
+        if ($interval->y >= 1 || $interval->m >= 2) {
             return date_format($timestamp, "M j, Y");
         }
-        else if ($interval->m > 0) {
+        else if ($interval->m > 0 && $interval->m < 2) {
             $time = $interval->m > 1 ? "%m months" : "%m month";
         }
         else if ($interval->d > 0) {
