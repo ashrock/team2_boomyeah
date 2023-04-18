@@ -6,15 +6,19 @@
         # Triggered by: (POST) posts/add
         # Requires: $tab_id
         # Returns: { status: true/false, result: { tab_id, html }, error: null }
-        # Last updated at: April 3, 2023
-        # Owner: Jovic
+        # Last updated at: April 17, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function getPost($post_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 $get_post = $this->db->query("
                     SELECT
-                        posts.id AS post_id, posts.tab_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, posts.updated_at AS date_posted,
+                        posts.id AS post_id, posts.tab_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, 
+                        (CASE
+                            WHEN @@session.time_zone != 'UTC' THEN CONVERT_TZ(posts.updated_at, @@session.time_zone, '+00:00')
+                            ELSE posts.updated_at
+                        END) AS date_posted,
                         posts.message, posts.cache_comments_count, users.profile_picture AS user_profile_pic,
                         (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM posts
@@ -43,15 +47,19 @@
         # Triggered by: (POST) posts/get
         # Requires: $tab_id
         # Returns: { status: true/false, result: { tab_id, html }, error: null }
-        # Last updated at: April 3, 2023
-        # Owner: Jovic
+        # Last updated at: April 17, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function getPosts($tab_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
                 $get_posts = $this->db->query("
                     SELECT
-                        posts.tab_id AS tab_id, posts.id AS post_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, posts.updated_at AS date_posted,
+                        posts.tab_id AS tab_id, posts.id AS post_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS first_name, 
+                        (CASE
+                            WHEN @@session.time_zone != 'UTC' THEN CONVERT_TZ(posts.updated_at, @@session.time_zone, '+00:00')
+                            ELSE posts.updated_at
+                        END) AS date_posted,
                         posts.message, posts.cache_comments_count, users.profile_picture AS user_profile_pic,
                         (CASE WHEN posts.created_at != posts.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM posts
@@ -59,10 +67,8 @@
                     WHERE posts.tab_id = ?;", $tab_id
                 );
 
-                if($get_posts->num_rows()){
-                    $response_data["result"]["tab_id"] = $tab_id;
-                    $response_data["result"]["html"]   = $this->load->view("partials/comment_container_partial.php", array("comment_items" => $get_posts->result_array()), true);
-                }
+                $response_data["result"]["tab_id"] = $tab_id;
+                $response_data["result"]["html"]   = $this->load->view("partials/comment_container_partial.php", array("comment_items" => $get_posts->result_array()), true);
 
                 $response_data["status"] = true;
             }
@@ -77,27 +83,32 @@
         # Triggered by: (POST) posts/add
         # Requires: $params { tab_id, post_comment }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: { tab_id, html }, error: null }
-        # Last updated at: April 3, 2023
-        # Owner: Jovic
+        # Last updated at: April 18, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function addPost($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $this->db->trans_start();
-                $create_post = $this->db->query("INSERT INTO posts (user_id, tab_id, message, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW());", array($_SESSION["user_id"], $params["tab_id"], $params["post_comment"]));
-
-                if($create_post){
-                    $post_id = $this->db->insert_id();
-                    $update_cache_posts_count = $this->db->query("UPDATE tabs SET cache_posts_count = cache_posts_count + 1 WHERE id = ?;", $params["tab_id"]);
-
-                    if($update_cache_posts_count){
-                        $get_post = $this->getPost($post_id);
-
-                        if($get_post["status"]){
-                            $response_data = $get_post;
-                            $this->db->trans_complete();
+                if($params["post_comment"]){
+                    $this->db->trans_start();
+                    $create_post = $this->db->query("INSERT INTO posts (user_id, tab_id, message, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW());", array($_SESSION["user_id"], $params["tab_id"], $params["post_comment"]));
+    
+                    if($create_post){
+                        $post_id = $this->db->insert_id();
+                        $update_cache_posts_count = $this->db->query("UPDATE tabs SET cache_posts_count = cache_posts_count + 1 WHERE id = ?;", $params["tab_id"]);
+    
+                        if($update_cache_posts_count){
+                            $get_post = $this->getPost($post_id);
+    
+                            if($get_post["status"]){
+                                $response_data = $get_post;
+                                $this->db->trans_complete();
+                            }
                         }
                     }
+                }
+                else{
+                    throw new Exception("Post can't be empty");
                 }
             }
             catch (Exception $e) {
@@ -112,43 +123,45 @@
         # Triggered by: (POST) posts/edit
         # Requires: $params { post_id, post_comment }
         # Returns: { status: true/false, result: { post_id, post_comment_id, html }, error: null }
-        # Last updated at: April 3, 2023
-        # Owner: Jovic, Updated by: Erick
+        # Last updated at: April 18, 2023
+        # Owner: Jovic, Updated by: Erick, Jovic
         public function editPostComment($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $this->db->trans_start();
-
-                if(empty($params["comment_id"])){
-                    $current_process = $this->db->query("UPDATE posts SET message = ?, updated_at = NOW() WHERE id = ?;", array($params["post_comment"], $params["post_id"]));
+                if($params["post_comment"]){
+                    $this->db->trans_start();
     
-                    if($current_process){
-                        $current_process = $this->getPost($params["post_id"]);
+                    if(empty($params["comment_id"])){
+                        $current_process = $this->db->query("UPDATE posts SET message = ?, updated_at = NOW() WHERE id = ?;", array($params["post_comment"], $params["post_id"]));
+                        $record = "post";
+                    }
+                    else{
+                        $current_process = $this->db->query("UPDATE comments SET message = ?, updated_at = NOW() WHERE id = ?;", array($params["post_comment"], $params["comment_id"]));
+                        $record = "comment";
+                    }
+    
+                    if($this->db->affected_rows()){
+                        $current_process = ($record == "post") ? $this->getPost($params["post_id"]) : $this->getComments($params["comment_id"]);
     
                         if($current_process["status"]){
                             $response_data = $current_process;
-                            $response_data["result"]["post_id"] = $params["post_id"];
-    
+                            
+                            if($record == "post"){
+                                $response_data["result"]["post_id"] = $params["post_id"];
+                            }
+        
+                            $this->db->trans_complete();
                         }
                     }
                     else{
-                        throw new Exception("Error updating post.");
+                        throw new Exception("Error updating {$record}.");
                     }
                 }
                 else{
-                    $current_process = $this->db->query("UPDATE comments SET message = ?, updated_at = NOW() WHERE id = ?;", array($params["post_comment"], $params["comment_id"]));
+                    $data_type = empty($params["comment_id"]) ? "Post" : "Comment";
 
-                    if($current_process){
-                        $current_process = $this->getComments($params["comment_id"]);
-                    }
-                    else{
-                        throw new Exception("Error updating comment.");
-                    }
-                }
-
-                if($current_process["status"]){
-                    $this->db->trans_complete();
+                    throw new Exception("{$data_type} can't be empty.");
                 }
             }
             catch (Exception $e) {
@@ -216,8 +229,8 @@
         # Triggered by: (POST) modules/get_commments
         # Requires: $comment_id
         # Returns: { status: true/false, result: { post_comment_id, html }, error: null }
-        # Last updated at: March 20, 2023
-        # Owner: Erick
+        # Last updated at: April 17, 2023
+        # Owner: Erick, Updated by: Jovic
         public function getComments($comment_id, $post_id=NULL){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -227,7 +240,11 @@
 
                 $comments = $this->db->query("
                     SELECT
-                        comments.id AS comment_id, comments.post_id AS post_comment_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS commenter_first_name, comments.updated_at AS date_commented,
+                        comments.id AS comment_id, comments.post_id AS post_comment_id, users.id AS user_id, CONCAT(users.first_name, ' ', users.last_name) AS commenter_first_name,
+                        (CASE
+                            WHEN @@session.time_zone != 'UTC' THEN CONVERT_TZ(comments.updated_at, @@session.time_zone, '+00:00')
+                            ELSE comments.updated_at
+                        END) AS date_commented,
                         comments.message AS commenter_message, posts.cache_comments_count, users.profile_picture AS commenter_profile_pic,
                         (CASE WHEN comments.created_at != comments.updated_at THEN 1 ELSE 0 END) AS is_edited
                     FROM comments
@@ -259,24 +276,29 @@
         # Triggered by: (POST) modules/add_comment
         # Requires: $params { post_id, post_comment }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: { post_comment_id, html }, error: null }
-        # Last updated at: March 20, 2023
-        # Owner: Erick
+        # Last updated at: April 18, 2023
+        # Owner: Erick, Updated by: Jovic
         public function addComment($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try {
-                $this->db->trans_start();
-                $create_comment = $this->db->query("INSERT INTO comments (user_id, post_id, message, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW());", array($_SESSION["user_id"], $params["post_id"], $params["post_comment"]));
-               
-                if($create_comment){
-                    $comment_id = $this->db->insert_id();
-                    $update_cache_comments_count = $this->db->query("UPDATE posts SET cache_comments_count = cache_comments_count + 1 WHERE id = ?;", $params["post_id"]);
-
-                    if($update_cache_comments_count){
-                        $this->db->trans_complete();
-                        
-                        $response_data = $this->getComments($comment_id);
+                if($params["post_comment"]){
+                    $this->db->trans_start();
+                    $create_comment = $this->db->query("INSERT INTO comments (user_id, post_id, message, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW());", array($_SESSION["user_id"], $params["post_id"], $params["post_comment"]));
+                   
+                    if($create_comment){
+                        $comment_id = $this->db->insert_id();
+                        $update_cache_comments_count = $this->db->query("UPDATE posts SET cache_comments_count = cache_comments_count + 1 WHERE id = ?;", $params["post_id"]);
+    
+                        if($update_cache_comments_count){
+                            $this->db->trans_complete();
+                            
+                            $response_data = $this->getComments($comment_id);
+                        }
                     }
+                }
+                else{
+                    throw new Exception("Comment can't be empty.");
                 }
             }
             catch (Exception $e) {

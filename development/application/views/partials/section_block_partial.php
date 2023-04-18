@@ -1,8 +1,7 @@
 <?php
-    foreach($all_sections as $section){
-        /* TODO: Make BE provide last_updated_at field */
-        $section["last_updated_at"] = date("F jS, Y", time());
-        ?>
+    $this->load->helper("datetime");
+
+    foreach($all_sections as $section){ ?>
 
         <div id="section_<?= $section['id'] ?>" class="section_block" tabindex="2">
             <?php if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]) { ?>    
@@ -18,7 +17,7 @@
             <?php } else { ?> 
                 <div class="section_details">
                     <div class="section_title" tabindex="2" data-tooltip="<?= $section["title"] ?>"><?= $section["title"] ?></div>
-                    <div class="last_updated_at">Updated <?= $section['last_updated_at'] ?></div>
+                    <div class="last_updated_at">Updated <?= time_ago($section['updated_at']) ?></div>
                 </div>
             <?php }?>
         </div>

@@ -240,7 +240,6 @@ function showMaterializeDropdown(event){
     instance.open();
 }
 
-/** TODO: Rework this function */
 function onChangeDocumentationPrivacy(event){
     let toggle_switch  = event.target;
     let document_title = toggle_switch.closest("#doc_title_access").querySelector("#doc_title").innerText;
