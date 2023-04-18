@@ -379,13 +379,14 @@ textarea {
   flex-direction: column;
 }
 #invite_modal_container .invite_wrapper .modal .modal-content {
-  position: relative;
   border: 1px solid #DBEAFE;
+  padding: 24px;
+  position: relative;
 }
 #invite_modal_container .invite_wrapper .modal .modal-content h2 {
   color: #0F172A;
   font: 20px/28px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 #invite_modal_container .invite_wrapper .modal .modal-content p {
   color: #A1A1AA;
@@ -407,10 +408,18 @@ textarea {
   top: 4px !important;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab .dropdown-content {
+  border-radius: 8px;
   left: -30px !important;
 }
+#invite_modal_container .invite_wrapper .modal .invite_collab .dropdown-content li {
+  height: 38px;
+  min-height: initial;
+}
+#invite_modal_container .invite_wrapper .modal .invite_collab .dropdown-content li span {
+  font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
+}
 #invite_modal_container .invite_wrapper .modal .invite_collab .dropdown-content li span span {
-  font: 12px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
+  font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif !important;
   color: #A1A1AA !important;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab h2 {
@@ -509,6 +518,7 @@ textarea {
   height: 27px;
   line-height: 25px;
   pointer-events: none;
+  padding: 0px 7px;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips .chip .material-icons {
   pointer-events: all;
@@ -652,7 +662,7 @@ textarea {
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user select,
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user p {
   color: #A1A1AA;
-  font: 12px/24px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  font: 12px/10px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
   margin-left: auto;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user .invited_user_info {
@@ -663,8 +673,8 @@ textarea {
   font: 16px/11px 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user .invited_user_info p {
-  color: #0F172A !important;
-  font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  color: #A1A1AA !important;
+  font: 12px/10px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   padding: 10px 0;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user .select-wrapper {
@@ -689,11 +699,11 @@ textarea {
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user span {
   color: #7D949D;
-  font: 12px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user #choose_role li a {
   color: #7D949D;
-  font: 12px/24px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 12px/10px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab .empty_search_wrapper .no_result {
   position: relative;
@@ -814,7 +824,7 @@ textarea {
   text-align: center;
 }
 .modal.confirmation_modal .modal-content .confirmation_modal_icon {
-  background-image: url("../images/confirmation_modal_icons.svg");
+  background-image: url("https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/confirmation_modal_icons.svg");
   display: inline-block;
   height: 39.68px;
   margin: 0px auto 16px;
@@ -963,10 +973,12 @@ body::-webkit-scrollbar-thumb {
 .material-tooltip {
   background-color: #1E293B !important;
   border-radius: 28px !important;
+  box-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
   color: #FFFFFF !important;
   min-height: 28px !important;
   overflow: unset !important;
   padding: 8px 7px !important;
+  z-index: 100000 !important;
 }
 .material-tooltip .tooltip-content {
   font-weight: 200 !important;

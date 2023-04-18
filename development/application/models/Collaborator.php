@@ -88,8 +88,8 @@
         # Triggered by: (POST) collaborators/add
         # Requires: $params { document_id, collaborator_emails }
         # Returns: { status: true/false, result: { html }, error: null }
-        # Last updated at: April 10, 2023
-        # Owner: Jovic
+        # Last updated at: April 18, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function addCollaborators($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -110,6 +110,15 @@
                         "get_type"   => "check_collaborators", 
                         "get_values" => array("documentation_id" => $params["document_id"], "collaborator_emails" => $collaborator_emails)
                     ));
+
+                    # Validate email addresses
+                    foreach($collaborator_emails as $collaborator_email){
+                        if(!filter_var($collaborator_email, FILTER_VALIDATE_EMAIL)){
+                            $response_data["result"]["email"] = $collaborator_email;
+
+                            throw new Exception("Invalid email address");
+                        }
+                    }
     
                     if($get_collaborators["status"]){
                         if($get_collaborators["result"]){

@@ -22,7 +22,7 @@
     <?php foreach($side_nav_links as $side_nav_link){
         $link = get_navigation_link($side_nav_link);
     ?>
-        <li class="<?= ($side_nav_link["id"] == $page_navigation_data["id"]) ? 'active' : '' ?>"><a href="<?= $link ?>" class="<?= (isset($side_nav_link["is_private"]) && $side_nav_link["is_private"]) ? 'private' : '' ?>"><?= $side_nav_link["title"] ?></a><span></span></li>
+        <li class="<?= ($side_nav_link["id"] == $page_navigation_data["id"]) ? 'active' : '' ?> <?= (strlen($side_nav_link["title"]) >= 30) ? 'tooltipped' : '' ?>" data-tooltip="<?= $side_nav_link["title"] ?>"><a href="<?= $link ?>" class="<?= (isset($side_nav_link["is_private"]) && $side_nav_link["is_private"]) ? 'private' : '' ?>"><?= $side_nav_link["title"] ?></a><span></span></li>
     <?php } ?>
         </ul>
     </div>
