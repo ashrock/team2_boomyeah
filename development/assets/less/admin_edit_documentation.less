@@ -556,3 +556,26 @@ input:-webkit-autofill:focus {
     -webkit-text-fill-color: @by_black !important;
     transition: background-color 5000s ease-in-out 0s;
 }
+
+#toast-container{
+    bottom: 40px !important;
+    left: initial !important;
+    pointer-events: none;
+    right: 40px !important;
+    top: initial !important;
+    width: initial !important;
+
+    .toast{
+        background: @by_white;
+        border-radius: 12px;
+        box-sizing: border-box;
+        color: @by_primary;
+        font-family: @readex_medium;
+        line-height: 16px;
+        padding: 26px 24px;
+        &::before{
+            .edit_section_icon(24px, 16px, -21px);
+            margin-right: 8px;
+        }
+    }
+}

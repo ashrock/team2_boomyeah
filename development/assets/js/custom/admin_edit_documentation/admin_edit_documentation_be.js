@@ -1,3 +1,4 @@
+let toast_timeout = null;
 document.addEventListener("DOMContentLoaded", () => {
     ux("body")
         .on("submit", "#section_form", onSubmitAddSectionForm)
@@ -9,6 +10,18 @@ document.addEventListener("DOMContentLoaded", () => {
         .on("submit", "#udpate_documentation_form", submitUpdateDocumentationData)
         ;
 });
+
+function saveDocumentChanges(){
+    clearTimeout(toast_timeout);
+    M.Toast.dismissAll();
+    toast_timeout = setTimeout(() => {
+        M.toast({
+            html: "Changes Saved",
+            displayLength: 2800,
+        });
+        
+    }, 200);
+}
 
 function submitUpdateDocumentationData(event){
     event.preventDefault();
@@ -28,6 +41,7 @@ function submitUpdateDocumentationData(event){
             } else {
                 addAnimation(`#document_description`, "animated_blinkBorder");
             }
+            saveDocumentChanges();
         }
     }, "json");
 

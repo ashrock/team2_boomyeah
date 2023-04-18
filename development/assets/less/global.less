@@ -507,36 +507,42 @@ textarea{
                                 display: none;
                                 pointer-events: none;
                             }
-                            i{
-                                color: transparent;
-                                height: 27px;
-                                margin-left: 4px;
-                                position: relative;
-                                width: 12px;
-
-                                &::after{
-                                    background: url("../../assets/images/modal_sprite.svg") no-repeat;
-                                    background-position: -70px 0px;
-                                    content: '';
-                                    display: block;
-                                    height: inherit;
-                                    position: absolute;
-                                    right: 0px;
-                                    top: 4px;
-                                    width: inherit;
-                                }
-                            }
                             .chip{
                                 background: transparent;
                                 border: 1px solid @by_icon;
                                 border-radius: 8px;
                                 color: @by_black;
+                                cursor: default;
                                 height: 27px;
                                 line-height: 25px;
                                 pointer-events: none;
-                                padding: 0px 7px;
+                                padding: 0px 0px 0px 7px;
+
                                 .material-icons{
                                     pointer-events: all;
+                                }
+
+                                i{
+                                    color: transparent;
+                                    height: 25px;
+                                    margin-left: 2px;
+                                    position: relative;
+                                    width: 12px;
+                                    box-sizing: content-box;
+                                    padding: 0px 7px 0px 3px;
+                                    cursor: pointer;
+
+                                    &::after{
+                                        background: url("../../assets/images/modal_sprite.svg") no-repeat;
+                                        background-position: -70px 0px;
+                                        content: '';
+                                        display: block;
+                                        height: inherit;
+                                        position: absolute;
+                                        right: 7px;
+                                        top: 4px;
+                                        width: inherit;
+                                    }
                                 }
                             }
 
