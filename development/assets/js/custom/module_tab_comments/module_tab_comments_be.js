@@ -1,4 +1,4 @@
-let active_comment_item = null;
+let active_tab_id, active_comment_item = null;
 
 document.addEventListener("DOMContentLoaded", async (event) => {
     ux("body")
@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
             event.preventDefault();
             let toggle_btn = ux(event.target);
             let tab_id = toggle_btn.data("tab_id");
+            active_tab_id = tab_id;
             
             if(tab_id){
                 let fetch_tab_posts_form = ux("#fetch_tab_posts_form");
@@ -36,13 +37,12 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 function onSubmitMobilePostForm(event){
     event.stopImmediatePropagation();
     event.preventDefault();
-    let post_form = ux(event.target);
 
-    if(post_form.attr("action") == "/posts/add"){
-        let active_tab = ux(".section_page_content").find(".show");
-        post_form.find(".tab_id").val(active_tab.attr("id").split("tab_")[1]);
+    let post_form = ux(event.target);
+    if(post_form.find(".tab_id").html()){
+        post_form.find(".tab_id").val(active_tab_id);
     }
-    
+
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
             let {tab_id, post_id, post_comment_id, html} = response_data.result;
@@ -158,6 +158,7 @@ async function showTabComments(event){
     if(!mobile_comments_slideout.self().classList.contains("active")){
         let show_comments_btn = ux(event.target);
         let tab_id = show_comments_btn.data("tab_id");
+        active_tab_id = tab_id;
         mobile_comments_slideout.find("#user_comments_list").self().innerHtml = "";
         
         mobile_comments_slideout.addClass("active");
@@ -177,8 +178,7 @@ function onFetchMobilePosts(event){
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
         if(response_data.status){
-            let mobile_comments_slideout = ux("#mobile_comments_slideout");
-            mobile_comments_slideout.find("#user_comments_list").html(response_data.result.html);
+            document.getElementById("user_comments_list").innerHTML = response_data.result.html;
             ux(".mobile_add_comment_form").find(".tab_id").val(response_data.result.tab_id);
         }
     }, "json");
@@ -270,7 +270,6 @@ function onFetchPostComments(event){
     let post_form = ux(event.target);
     
     ux().post(post_form.attr("action"), post_form.serialize(), async (response_data) => {
-        console.log('response_data', response_data)
         if(response_data.status){
             let comment_id = `.post_comment_${response_data.result.post_comment_id}`;
             
@@ -324,7 +323,7 @@ function showEditComment(event){
 function onEditMessageKeypress(event){
     event.stopImmediatePropagation();
     let edit_comment_form = event.target.closest(".edit_comment_form");
-    console.log(edit_comment_form);
+
     if(event.which === KEYS.ENTER){
         event.preventDefault();
         ux(edit_comment_form).find(".update_btn").trigger("click");
@@ -419,9 +418,7 @@ function onConfirmDeleteComment(event){
         if(response_data.status){
             if(response_data.result.delete_type == "posts"){
                 /* Update cache_posts_count */
-                let active_tab        = ux(".section_page_content").find(".show");
-                let tab_id            = active_tab.attr("id").split("tab_")[1];
-                let tab_element       = `#tab_${tab_id}`;
+                let tab_element       = `#tab_${active_tab_id}`;
                 let toggle_btn        = ux(tab_element).find(".fetch_tab_posts_btn");
                 let show_comments_btn = ux(tab_element).find(".show_comments_btn");
                 let posts_count       = parseInt(toggle_btn.data("cache_posts_count"));
