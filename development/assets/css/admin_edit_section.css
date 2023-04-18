@@ -1519,10 +1519,12 @@ body::-webkit-scrollbar-thumb {
   box-shadow: 0px 0px 4px #2563EB;
   outline: none;
 }
-.section_page_content .section_page_tabs .page_tab_item.active a,
-.section_page_content .section_page_tabs .page_tab_item:hover a {
+.section_page_content .section_page_tabs .page_tab_item.active a {
   background: #FFFFFF;
   font-family: 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+}
+.section_page_content .section_page_tabs .page_tab_item:hover a {
+  background: #FFFFFF;
 }
 .section_page_content .section_page_tabs .add_page_tab .add_page_btn {
   background: #D5E3FF;

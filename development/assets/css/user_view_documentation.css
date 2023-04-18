@@ -1014,6 +1014,33 @@ body::-webkit-scrollbar-thumb {
   position: absolute;
   width: 17px;
 }
+#toast-container {
+  bottom: 40px !important;
+  left: initial !important;
+  pointer-events: none;
+  right: 40px !important;
+  top: initial !important;
+  width: initial !important;
+}
+#toast-container .toast {
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-sizing: border-box;
+  color: #2563EB;
+  font-family: 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
+  line-height: 16px;
+  padding: 26px 24px;
+}
+#toast-container .toast::before {
+  background: url("../images/admin_edit_section.svg") no-repeat;
+  background-position: -21px;
+  content: "";
+  display: inline-block;
+  height: 16px;
+  vertical-align: middle;
+  width: 24px;
+  margin-right: 8px;
+}
 #mobile_container {
   background: #FCFCFF;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.168);
