@@ -168,6 +168,17 @@ async function showTabComments(event){
         fetch_mobile_posts_form.find(".tab_id").val(tab_id);
         fetch_mobile_posts_form.trigger("submit");
     }
+
+
+    setTimeout(() => {
+        ux("body").findAll(".sidenav-overlay").forEach((sidenav_overlay) => {
+            let overlay_styles = getComputedStyle(sidenav_overlay);
+            console.log("opacity", typeof overlay_styles.getPropertyValue("opacity"), parseFloat(overlay_styles.getPropertyValue("opacity")))
+            if(parseFloat(overlay_styles.getPropertyValue("opacity"))){
+                sidenav_overlay.classList.add("comments_sidenav_overlay");
+            }
+        })
+    }, 200);
 }
 
 function onFetchMobilePosts(event){
@@ -343,6 +354,7 @@ function onCommentMessageKeypress(event){
     let post_form = comment_message.closest(".add_comment_form");
     let edit_comment_form = comment_message.closest(".edit_comment_form");
     let mobile_add_comment_form = comment_message.closest(".mobile_add_comment_form");
+    let mobile_add_reply_form = comment_message.closest(".mobile_add_reply_form");
     
     if(event.which === KEYS.ENTER){
         event.preventDefault();
@@ -351,7 +363,7 @@ function onCommentMessageKeypress(event){
         ux(submit_form).trigger("submit");
     }
     
-    if(!mobile_add_comment_form && event.which === KEYS.ESCAPE){
+    if(!mobile_add_comment_form && !mobile_add_reply_form && event.which === KEYS.ESCAPE){
         /** Close edit form */
         if(edit_comment_form){
             closeEditCommentForm(event);

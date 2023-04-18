@@ -108,8 +108,10 @@ function onSubmitAddDocumentationForm(event){
 
     if(input_document_title){
         /** Use AJAX to generate new documentation */
-        ux().post(add_document_form.attr("action"), add_document_form.serialize(), (response_data) => {
+        ux().post(add_document_form.attr("action"), add_document_form.serialize(), async (response_data) => {
             if(response_data.status){
+                let add_documentation_field = ux("#input_add_documentation").self();
+
                 if(response_data.result.html){
                     ux("#documentations").append(response_data.result.html);
                     initializeMaterializeDropdown();
@@ -117,6 +119,8 @@ function onSubmitAddDocumentationForm(event){
 
                 /* Redirect in admin edit document page. */
                 ux("#add_documentation_form").self().reset();
+                await add_documentation_field.blur();
+                add_documentation_field.focus();
             }
             else{
                 let add_documentation_input = ux(".group_add_documentation");

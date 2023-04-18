@@ -18,7 +18,7 @@
         pointer-events: initial;
         position: fixed !important;
         width: 100%;
-        z-index: 100000;
+        z-index: 100000 !important;
 
         .header_mobile{
             #select_section_form{
@@ -100,9 +100,15 @@
         padding: 0px;
         width: calc(100%);
     
+        & ~ .sidenav-overlay{
+            transition: opacity 0.1s;
+        }
         &.active{
-            & ~ .sidenav-overlay{
+            & ~ .comments_sidenav_overlay{
                 display: none !important;
+            }
+            & ~ .sidenav-overlay{
+                z-index: 10000 !important;
             }
         }
         #comments_list_container{
@@ -316,20 +322,20 @@
             margin: 0px;
             @media (max-width: 632px) {
                 .comment_message{
-                    margin: 12px 0px 0px !important;
+                    margin: 16px 0px 0px !important;
                 }
             }
 
             label{
                 left: 8px;
-                transform: translateY(14px);
+                transform: translateY(16px);
                 pointer-events: none;
 
                 &.active{
-                    transform: translateY(8px) scale(0.8);
+                    transform: translateY(4px) scale(0.8);
 
                     & + textarea{
-                        margin-top: 28px;
+                        margin-top: 32px;
                     }
                 }
             }
@@ -340,9 +346,9 @@
                 box-sizing: border-box;
                 font: 14px/24px @readex_light;
                 height: 36px;
-                margin: 12px 0px -4px;
+                margin: 16px 0px -4px;
                 min-height: 36px !important;
-                padding: 0px 8px 12px;
+                padding: 0px 8px 8px;
                 transition: margin 0.2s;
                 width: calc(100%);
             }
