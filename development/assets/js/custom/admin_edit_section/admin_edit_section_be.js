@@ -41,7 +41,7 @@ function onEditSectionData(event){
     
     return false;
 }
-    
+
 function saveTabChanges(section_page_tab){
     clearTimeout(saving_timeout);
     M.Toast.dismissAll();
