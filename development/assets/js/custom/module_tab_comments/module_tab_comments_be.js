@@ -180,7 +180,7 @@ async function showTabComments(event){
     setTimeout(() => {
         ux("body").findAll(".sidenav-overlay").forEach((sidenav_overlay) => {
             let overlay_styles = getComputedStyle(sidenav_overlay);
-            console.log("opacity", typeof overlay_styles.getPropertyValue("opacity"), parseFloat(overlay_styles.getPropertyValue("opacity")))
+            
             if(parseFloat(overlay_styles.getPropertyValue("opacity"))){
                 sidenav_overlay.classList.add("comments_sidenav_overlay");
             }
