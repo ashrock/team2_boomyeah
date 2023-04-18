@@ -393,7 +393,9 @@ body{
                     right: 17px;
                     text-align: center;
                     width: 8px;
+                    
                     &:focus{
+                        border-radius: 8px;
                         box-shadow: 0px 0px 4px @by_primary;
                         outline: none;
                     }
@@ -402,10 +404,11 @@ body{
                 .more_action_list_public,
                 .more_action_list_private {
                     border-radius: 4px;
-                    width: 192px !important;
+                    width: 158px !important;
 
                     .divider {
                         background-color: @by_bg;
+                        min-height: 1px;
 
                         &.hidden {
                             display: none;
@@ -421,58 +424,56 @@ body{
                     li:hover {
                         background-color: @by_hovered_btn;
                     }
-
+                    li{
+                        min-height: 38px;
+                    }
                     a {
                         color: @by_icon;
-                        font: 14px/20px @readex_regular;
+                        font: 12px/38px @readex_regular;
+                        padding: 0px 16px;
 
                         &::before {
                             background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat;
                             content: "";
                             display: inline-block;
-                            height: 18px;
+                            height: 14px;
                             margin-right: 16px;
                             position: relative;
                             vertical-align: text-bottom;
-                            width: 18px;
+                            width: 12px;
+                            background-size: cover;
                         }
 
                         &.edit_title_icon::before {
-                            background-position: -70px -4px;
+                            background-position: -42px -2px;
                         }
 
                         &.duplicate_icon::before {
-                            background-position: -90px 0;
-                            height: 22px;
-                            width: 19px;
+                            background-position: -55px 0px;
                         }
 
                         &.archive_icon::before {
-                            background-position: -111px -4px;
+                            background-position: -67px -2px;
                         }
 
                         &.invite_icon::before {
-                            background-position: -131px -7px;
-                            height: 15px;
-                            width: 18px;
+                            background-position: -79px -2px;
+                            width: 12px;
                         }
 
                         &.set_to_private_icon::before {
-                            background-position: -151px -3px;
-                            height: 19px;
-                            width: 16px;
+                            background-position: -91px -2px;
+                            width: 12px;
                         }
 
                         &.set_to_public_icon::before {
-                            background-position: -185px -2px;
-                            height: 20px;
-                            width: 20px;
+                            background-position: -112px 0px;
+                            width: 13px;
                         }
 
                         &.remove_icon::before {
-                            background-position: -169px -4px;
-                            height: 18px;
-                            width: 14px;
+                            background-position: -102px -2px;
+                            width: 10px;
                         }
 
                         &.remove_btn {
