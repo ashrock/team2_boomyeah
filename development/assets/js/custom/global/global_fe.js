@@ -11,10 +11,10 @@
         }
     
         let current_focused_element = null;
-        document.addEventListener("keyup", (event) => {
-            if(event.key == KEYS.ENTER_KEY){
-                let open_modal = ux("body").findAll(".modal.open");
+        document.addEventListener("keydown", (event) => {
+            let open_modal = ux("body").findAll(".modal.open");
 
+            if(event.key == KEYS.ENTER_KEY){
                 if(current_focused_element){
                     let current_id = current_focused_element.id;
                     let current_classes = current_focused_element.classList;
@@ -39,6 +39,14 @@
                     yes_btn.self().click();
                     return;
                 }
+            }
+            
+            if(event.key == KEYS.ESCAPE_KEY){
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                let no_btn = ux(open_modal[0]).find(".no_btn");
+                no_btn.self().click();
+                return;
             }
     
             if(event.key == KEYS.TAB_KEY){

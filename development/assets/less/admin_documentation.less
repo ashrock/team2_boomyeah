@@ -433,7 +433,8 @@ body{
                         padding: 0px 16px;
 
                         &::before {
-                            background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat;
+                            // background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/docs_page_sprite.svg') no-repeat;
+                            background: url('https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/updated_action_menu_small.svg') no-repeat;
                             content: "";
                             display: inline-block;
                             height: 14px;
@@ -441,43 +442,44 @@ body{
                             position: relative;
                             vertical-align: text-bottom;
                             width: 12px;
-                            background-size: cover;
                         }
 
                         &.edit_title_icon::before {
-                            background-position: -42px -2px;
+                            background-position: 0px -2px;
                         }
 
                         &.duplicate_icon::before {
-                            background-position: -55px 0px;
+                            background-position: -15px 0px;
                         }
 
                         &.archive_icon::before {
-                            background-position: -67px -2px;
+                            background-position: -28px 0px;
+                            width: 14px;
                         }
 
                         &.invite_icon::before {
-                            background-position: -79px -2px;
-                            width: 12px;
+                            background-position: -43px 0px;
+                            margin-right: 12px;
+                            width: 18px;
                         }
 
                         &.set_to_private_icon::before {
-                            background-position: -91px -2px;
-                            width: 12px;
+                            background-position: -60px 0px;
+                            width: 13px;
                         }
 
                         &.set_to_public_icon::before {
-                            background-position: -112px 0px;
+                            background-position: -60px 0px;
                             width: 13px;
                         }
 
                         &.remove_icon::before {
-                            background-position: -102px -2px;
-                            width: 10px;
+                            background-position: -73px -2px;
+                            width: 11px;
                         }
 
                         &.remove_btn {
-                            color: #DA4D4D;
+                            color: @by_remove_red;
                         }
                     }
                 }

@@ -579,14 +579,24 @@
                                 &:hover{
                                     background: @by_lightgray;
                                 }
+                                &.edit_btn, &.remove_btn{
+                                    &::before{
+                                        background: url("https://village88.s3.us-east-1.amazonaws.com/boomyeah_v2/updated_action_menu_small.svg") no-repeat;
+                                        content: "";
+                                        display: inline-block;
+                                        height: 14px;
+                                        vertical-align: middle;
+                                        width: 12px;
+                                    }
+                                }
                                 &.edit_btn{
                                     border-top-left-radius: 4px;
                                     border-top-right-radius: 4px;
 
                                     &::before{
-                                        .edit_section_icon(12px, 14px, -43px);
-                                        background-size: cover;
+                                        background-position: 0px 0px;
                                         margin: -4px 16px 0px 0px;
+                                        width: 12px;
                                     }
                                 }
                                 &.remove_btn{
@@ -595,8 +605,7 @@
                                     color: @by_remove_red;
                                     
                                     &::before{
-                                        .edit_section_icon(9px, 14px, -56px);
-                                        background-size: cover;
+                                        background-position: -73px 0px;
                                         color: @by_remove_red;
                                         margin: -4px 16px 0px 0px;
                                     }
@@ -635,10 +644,6 @@
 
             .comment_field{
                 flex-grow: 1;
-
-                textarea{
-                   // height: 2.4rem;
-                }
             }
         }
     }
