@@ -4,7 +4,7 @@
     if(count($fetch_uploaded_files_data)) { 
         foreach($fetch_uploaded_files_data as $uploaded_file){ ?>
             <li class="file_<?= $uploaded_file["file_id"] ?>">
-                <a href="<?= $uploaded_file["file_url"]?>" download class="file_type <?= getFileType($uploaded_file["mime_type"]) ?>"><?= $uploaded_file["file_name"]?></a>
+                <a href="<?= $uploaded_file["file_url"]?>" download class="file_type <?= getFileType($uploaded_file["mime_type"]) ?>"><?= htmlspecialchars($uploaded_file["file_name"])?></a>
                 <ul class="actions_list">
                     <li>
                         <input type="text" readonly class="file_link" value="<?= $uploaded_file["file_url"] ?>">
@@ -12,7 +12,7 @@
                         <span class="tooltip_hover">Copy Link</span>
                     </li>
                     <li>
-                        <a href="#" class="delete_icon delete_file_<?= $uploaded_file["file_id"]?>" data-section_id="<?= $uploaded_file["section_id"] ?>" data-file_id="<?= $uploaded_file["file_id"]?>" data-file_name="<?= $uploaded_file["file_name"]?>" data-file_url="<?= $uploaded_file["file_url"]?>" data-file_is_used="<?= $uploaded_file["is_used"] ?>"></a>
+                        <a href="#" class="delete_icon delete_file_<?= $uploaded_file["file_id"]?>" data-section_id="<?= $uploaded_file["section_id"] ?>" data-file_id="<?= $uploaded_file["file_id"]?>" data-file_name="<?= htmlspecialchars($uploaded_file["file_name"])?>" data-file_url="<?= $uploaded_file["file_url"]?>" data-file_is_used="<?= $uploaded_file["is_used"] ?>"></a>
                         <span class="tooltip_hover">Delete</span>
                     </li>
                 </ul>

@@ -2,7 +2,7 @@
     $tab = $module_tabs_json->$tab_id;
 ?>
     <div class="section_page_tab" id="tab_<?= $tab->id ?>">
-        <h3 class="tab_title"><?= $tab->title ?></h3>
+        <h3 class="tab_title"><?= htmlspecialchars($tab->title) ?></h3>
         <div id="tab_content_<?= $tab->id ?>" class="tab_content"><?= $tab->content ?></div>
         
 <?php if((int) $tab->is_comments_allowed) { ?>
