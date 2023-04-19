@@ -366,11 +366,10 @@
                     if($tab["status"]){
                         # Fetch Posts of Tab
                         $get_posts = $this->db->query("SELECT JSON_ARRAYAGG(id) AS posts_ids FROM posts WHERE tab_id = ?;", $params["tab_id"]);
+                        $posts_ids = json_decode($get_posts->result_array()[FIRST_INDEX]["posts_ids"]);
 
                         # Proceed to delete Comments & Posts of Tab
-                        if($get_posts->num_rows()){
-                            $posts_ids = json_decode($get_posts->result_array()[FIRST_INDEX]["posts_ids"]);
-
+                        if($posts_ids){
                             # Delete Comments of Posts
                             $delete_comments = $this->db->query("DELETE FROM comments WHERE post_id IN ?;", array($posts_ids));
 
@@ -771,17 +770,13 @@
         # Triggered by: addModule(), addTab(), updateModule(), removeTab(), reoderTab()
         # Requires: $section_id
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: April 17, 2023
+        # Last updated at: April 18, 2023
         # Owner: Jovic
         private function updateSection($section_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try{
-                $this->db->query("UPDATE sections SET updated_by_user_id = ?, updated_at = NOW() WHERE id = ?;", array($_SESSION["user_id"], $section_id));
-
-                if($this->db->affected_rows()){
-                    $response_data["status"] = true;
-                }
+                $response_data["status"] = $this->db->query("UPDATE sections SET updated_by_user_id = ?, updated_at = NOW() WHERE id = ?;", array($_SESSION["user_id"], $section_id));
             }
             catch (Exception $e) {
                 $response_data["error"] = $e->getMessage();
