@@ -351,7 +351,7 @@
         # Triggered by: (POST) module/remove_tab
         # Requires: $params { tab_id }
         # Returns: { status: true/false, result: { tab_id }, error: null }
-        # Last updated at: April 17, 2023
+        # Last updated at: April 19, 2023
         # Owner: Erick, Updated by: Jovic
         public function removeTab($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -364,6 +364,29 @@
                     $tab = $this->getTab($params["tab_id"]);
     
                     if($tab["status"]){
+                        # Fetch Posts of Tab
+                        $get_posts = $this->db->query("SELECT JSON_ARRAYAGG(id) AS posts_ids FROM posts WHERE tab_id = ?;", $params["tab_id"]);
+
+                        # Proceed to delete Comments & Posts of Tab
+                        if($get_posts->num_rows()){
+                            $posts_ids = json_decode($get_posts->result_array()[FIRST_INDEX]["posts_ids"]);
+
+                            # Delete Comments of Posts
+                            $delete_comments = $this->db->query("DELETE FROM comments WHERE post_id IN ?;", array($posts_ids));
+
+                            # Delete Posts
+                            if($delete_comments){
+                                $delete_posts = $this->db->query("DELETE FROM posts WHERE id IN ?;", array($posts_ids));
+
+                                if(!$delete_posts){
+                                    throw new Exception("Error deleting Posts");
+                                }
+                            }
+                            else{
+                                throw new Exception("Error deleting Comments");
+                            }
+                        }
+
                         # Delete Tab
                         $delete_section = $this->db->query("DELETE FROM tabs WHERE id = ?;", $params["tab_id"]);
     
