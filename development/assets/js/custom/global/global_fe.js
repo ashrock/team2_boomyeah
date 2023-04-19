@@ -12,7 +12,7 @@
     
         let current_focused_element = null;
         document.addEventListener("keydown", (event) => {
-            let open_modal = ux("body").findAll(".modal.open");
+            let open_modal = ux("body").findAll(".confirmation_modal.open");
 
             if(event.key == KEYS.ENTER_KEY){
                 if(current_focused_element){
