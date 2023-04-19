@@ -263,10 +263,10 @@ function showPrivacyModal(modal_type, document_title, toggle_switch, initial_val
     var instance = M.Modal.getInstance(modal_type);
     
     ux(modal_type)
-    .on("click", ".no_btn", () => {
-        toggle_switch.checked = initial_value;
-    })
-    .find(".documentation_title").text(document_title) ;
+        .on("click", ".no_btn", () => {
+            toggle_switch.checked = initial_value;
+        })
+        .find(".documentation_title").text(document_title) ;
     instance.open();
    
     ux("#udpate_documentation_form .update_type").val("is_private");
