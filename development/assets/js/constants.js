@@ -2,6 +2,7 @@ const KEYS = {
     ENTER: 13,
     ESCAPE: 27,
     ENTER_KEY: "Enter",
+    ESCAPE_KEY: "Escape",
     TAB_KEY: "Tab",
 }
 
