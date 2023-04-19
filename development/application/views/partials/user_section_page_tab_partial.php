@@ -2,8 +2,8 @@
     $tab = $module_tabs_json->$tab_id;
 ?>
     <div class="section_page_tab" id="tab_<?= $tab->id ?>">
-        <h3 class="tab_title"><?= $tab->title ?></h3>
-        <div id="tab_content_<?= $tab->id ?>" class="tab_content"><?= $tab->content ?></div>
+        <h3 class="tab_title"><?= htmlspecialchars($tab->title) ?></h3>
+        <div id="tab_content_<?= $tab->id ?>" class="tab_content"><?= htmlspecialchars($tab->content) ?></div>
         
 <?php if((int) $tab->is_comments_allowed) { ?>
         <a href="#" data-target="mobile_comments_slideout" class="show_comments_btn sidenav-trigger" data-tab_id="<?= $tab->id ?>" data-cache_posts_count="<?= $tab->cache_posts_count ?>" tabindex="1">Comments (<?= (int) $tab->cache_posts_count ?>)</a>

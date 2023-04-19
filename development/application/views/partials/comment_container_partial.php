@@ -37,7 +37,7 @@
                 </div>
 <?php }?>
             </h4>
-            <p class="comment_message"><?= isset($comment_item["post_id"]) ? $comment_item["message"] : $comment_item["commenter_message"] ?></p>
+            <p class="comment_message"><?= isset($comment_item["post_id"]) ? htmlspecialchars($comment_item["message"]) : htmlspecialchars($comment_item["commenter_message"]) ?></p>
         </div>
     </div>
     <?php if(isset($comment_item["post_id"])) { ?>
