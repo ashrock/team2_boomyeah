@@ -565,11 +565,11 @@
                 # Fetch all modules and tabs of Documentation or Section
                 if(isset($params["documentation_id"])){
                     $where_statement = "sections.documentation_id = ?";
-                    $bind_params     = $params["documentation_id"];
+                    $bind_param      = $params["documentation_id"];
                 }
                 else{
                     $where_statement = "sections.id = ?";
-                    $bind_params     = $params["section_id"];
+                    $bind_param      = $params["section_id"];
                 }
                 
                 $get_tabs = $this->db->query("
@@ -604,7 +604,7 @@
                     ) AS module_tabs ON module_tabs.module_id = modules.id
                     WHERE {$where_statement}
                     GROUP BY modules.id
-                    ORDER BY sections.id;", $bind_params
+                    ORDER BY sections.id;", $bind_param
                 );
 
                 if($get_tabs->num_rows()){
