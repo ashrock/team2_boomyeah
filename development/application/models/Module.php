@@ -556,8 +556,8 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $params { documentation_id, module_ids }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 24, 2023
-        # Owner: Jovic
+        # Last updated at: April 19, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function duplicateTabs($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -603,7 +603,8 @@
                         GROUP BY tabs.module_id
                     ) AS module_tabs ON module_tabs.module_id = modules.id
                     WHERE {$where_statement}
-                    GROUP BY modules.id;", $bind_param
+                    GROUP BY modules.id
+                    ORDER BY sections.id;", $bind_param
                 );
 
                 if($get_tabs->num_rows()){
