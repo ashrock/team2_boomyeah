@@ -28,21 +28,21 @@
                 <input type="hidden" name="section_id" class="section_id" value="<?= $section["id"] ?>">
                 <input type="hidden" name="action" value="update_section">
                 <input type="hidden" name="update_type" class="update_type" value="description">
-                <input type="hidden" name="update_value" class="update_value" value="<?= $section["description"] ?>">
+                <input type="hidden" name="update_value" class="update_value" value="<?= htmlspecialchars($section["description"]) ?>">
                 <div id="section_summary">
                     <div class="breadcrumbs">
                         <ul id="breadcrumbs_list">
                             <li class="breadcrumb_item tooltipped" data-tooltip="Go to Documentations Dashboard"><a href="/docs/edit">Documentations</a></li>
-                            <li class="breadcrumb_item tooltipped" data-tooltip="View <?= $documentation["title"] ?> Documentation"><a href="/docs/<?= $documentation['id'] ?>/edit"><?= $documentation["title"] ?></a></li>
-                            <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
+                            <li class="breadcrumb_item tooltipped" data-tooltip="View <?= htmlspecialchars($documentation["title"]) ?> Documentation"><a href="/docs/<?= $documentation['id'] ?>/edit"><?= htmlspecialchars($documentation["title"]) ?></a></li>
+                            <li class="breadcrumb_item active"><span><?= htmlspecialchars($section["title"]) ?></span></li>
                         </ul>
                         <div class="row_placeholder"></div>
                         <a href="/docs/<?= "{$documentation['id']}/{$section["id"]}" ?>" target="_blank" id="preview_section_btn">Preview</a>
                     </div>
                     <div class="section_details">
-                        <h1 id="section_title"><?= $section["title"] ?></h1>
+                        <h1 id="section_title"><?= htmlspecialchars($section["title"]) ?></h1>
                         <div class="add_description">
-                            <textarea name="section_short_description" id="section_short_description" placeholder="Add section description"><?= $section["description"] ?></textarea>
+                            <textarea name="section_short_description" id="section_short_description" placeholder="Add section description"><?= htmlspecialchars($section["description"]) ?></textarea>
                         </div>
                     </div>
                 </div>

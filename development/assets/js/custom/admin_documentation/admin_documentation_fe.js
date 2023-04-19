@@ -142,7 +142,7 @@ function setArchiveDocumentationValue(event){
     let document_title  = ux(`#document_${document_id}`).find(".document_title").val();
 
     let is_archived     = (ux(archive_button).attr("data-documentation_action") == "archive");
-    let confirmation_text = (is_archived) ? "Archiving `"+ document_title +"` will hide this to all users. You can unarchive this later." : "Unarchiving `"+ document_title +"` will let users view it.";
+    let confirmation_text = (is_archived) ? "Archiving `"+ document_title +"` will hide this from all users. You can unarchive this later." : "Unarchiving `"+ document_title +"` will let users view it.";
     $("#confirm_to_archive").find("p").text( confirmation_text );
     
     /* Set form values */

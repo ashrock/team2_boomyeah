@@ -28,8 +28,8 @@
                 <div class="breadcrumbs">
                     <ul id="breadcrumbs_list">
                         <li class="breadcrumb_item tooltipped" data-tooltip="Go to Documentations Dashboard"><a href="/docs">Documentations</a></li class="breadcrumb_item">
-                        <li class="breadcrumb_item tooltipped" data-tooltip="View <?= $documentation["title"] ?> Documentation"><a href="/docs/<?= $documentation['id'] ?>"><?= $documentation["title"] ?></a></li class="breadcrumb_item">
-                        <li class="breadcrumb_item active"><span><?= $section["title"] ?></span></li>
+                        <li class="breadcrumb_item tooltipped" data-tooltip="View <?= htmlspecialchars($documentation["title"]) ?> Documentation"><a href="/docs/<?= $documentation['id'] ?>"><?= htmlspecialchars($documentation["title"]) ?></a></li class="breadcrumb_item">
+                        <li class="breadcrumb_item active"><span><?= htmlspecialchars($section["title"]) ?></span></li>
                     </ul>
                     <div class="row_placeholder"></div>
 <?php if($_SESSION["user_level_id"] == USER_LEVEL["ADMIN"]){ ?> 
@@ -39,10 +39,10 @@
                 <div class="section_details">
                     <div id="section_title_content">
                         <a class="mobile_document_link" href="/docs/<?= $documentation['id'] ?>"></a>
-                        <h1 id="section_title"><?= $section["title"] ?></h1>
+                        <h1 id="section_title"><?= htmlspecialchars($section["title"]) ?></h1>
                     </div>
                     <div class="add_description">
-                        <p class="section_short_description" id="section_short_description"><?= $section["description"] ?></p>
+                        <p class="section_short_description" id="section_short_description"><?= htmlspecialchars($section["description"]) ?></p>
                     </div>
                 </div>
             </div>
