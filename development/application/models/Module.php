@@ -556,8 +556,8 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $params { documentation_id, module_ids }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 24, 2023
-        # Owner: Jovic
+        # Last updated at: April 19, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function duplicateTabs($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -565,11 +565,11 @@
                 # Fetch all modules and tabs of Documentation or Section
                 if(isset($params["documentation_id"])){
                     $where_statement = "sections.documentation_id = ?";
-                    $bind_param      = $params["documentation_id"];
+                    $bind_params     = $params["documentation_id"];
                 }
                 else{
                     $where_statement = "sections.id = ?";
-                    $bind_param      = $params["section_id"];
+                    $bind_params     = $params["section_id"];
                 }
                 
                 $get_tabs = $this->db->query("
@@ -603,7 +603,8 @@
                         GROUP BY tabs.module_id
                     ) AS module_tabs ON module_tabs.module_id = modules.id
                     WHERE {$where_statement}
-                    GROUP BY modules.id;", $bind_param
+                    GROUP BY modules.id
+                    ORDER BY sections.id;", $bind_params
                 );
 
                 if($get_tabs->num_rows()){
