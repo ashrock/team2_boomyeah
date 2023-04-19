@@ -17,7 +17,7 @@
                 <div class="document_controls">
                     <?php if($documentation["is_private"]){ ?>
                         <button type="button" class="invite_collaborators_btn <?= ($documentation["is_archived"]) ? 'archived_disabled' : '' ?> tooltipped" data-tooltip="<?= $documentation["cache_collaborators_count"] + 1 ?> Collaborators" data-document_id="<?= $documentation["id"] ?>" tabindex="3"><?= $documentation["cache_collaborators_count"] + 1 ?></button>
-                        <button class="access_btn modal-trigger <?= ($documentation["is_archived"]) ? 'archived_disabled' : '' ?> set_privacy_btn" href="#confirm_to_public" data-document_id="<?= $documentation["id"] ?>" data-document_privacy="private" tabindex="3"></button>
+                        <button class="access_btn modal-trigger <?= ($documentation["is_archived"]) ? 'archived_disabled' : '' ?> set_privacy_btn tooltipped" data-tooltip="Set to Public" href="#confirm_to_public" data-document_id="<?= $documentation["id"] ?>" data-document_privacy="private" tabindex="3"></button>
                     <?php } ?>
                     <button class="more_action_btn dropdown-trigger" data-target="document_more_actions_<?= $documentation["id"] ?>" tabindex="3">⁝</button>
                     <!-- Dropdown Structure -->
