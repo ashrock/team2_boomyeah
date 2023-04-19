@@ -9,7 +9,7 @@
                     <input type="hidden" name="action" value="update_documentation">
                     <input type="hidden" name="update_type" value="title">
                     <input type="hidden" name="documentation_id" value="<?= $documentation["id"] ?>">
-                    <input type="hidden" name="original_value" value="<?= $documentation["title"] ?>">
+                    <input type="hidden" name="original_value" value="<?= htmlspecialchars($documentation["title"]) ?>">
                     <p class="documentation_owner">by <?= $documentation["documentation_owner"] ?></p>
                     <?php if($documentation["is_private"]){ ?>
                     <?php } ?>
@@ -52,7 +52,7 @@
         else { ?>
             <div id="document_<?= $documentation["id"] ?>" class="document_block mobile_block">
                 <div class="document_details">
-                    <h2><?= $documentation['title'] ?></h2>
+                    <h2><?= htmlspecialchars($documentation['title']) ?></h2>
                     <p class="documentation_owner">by <?= $documentation["documentation_owner"] ?></p>
                     </div>
                 <?php if($documentation['is_private']){ ?>

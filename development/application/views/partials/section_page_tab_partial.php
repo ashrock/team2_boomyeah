@@ -7,10 +7,10 @@
             <input type="hidden" name="module_id" value="<?= $tab->module_id ?>" class="module_id">
             <input type="hidden" name="tab_id" value="<?= $tab->id ?>" class="tab_id">
             <div class="module_title">
-                <input type="text" class="tab_title" name="module_title" value="<?= $tab->title ?>"  maxlength="45">
+                <input type="text" class="tab_title" name="module_title" value="<?= htmlspecialchars($tab->title) ?>"  maxlength="45">
                 <div class="character_count" data-length="<?= strlen($tab->title) ?>">/45</div>
             </div>
-            <textarea id="tab_content_<?= $tab->id ?>" name="module_content" class="tab_content"><?= $tab->content ?></textarea>
+            <textarea id="tab_content_<?= $tab->id ?>" name="module_content" class="tab_content"><?= htmlspecialchars($tab->content) ?></textarea>
             <div class="tab_footer">
                 <input type="hidden" name="is_comments_allowed" value="<?= ($tab->is_comments_allowed == YES) ? YES : NO ?>">
                 <label for="allow_comments_tab_<?= $tab->id ?>" class="checkbox_label">
