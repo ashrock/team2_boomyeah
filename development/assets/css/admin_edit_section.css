@@ -391,7 +391,7 @@ textarea {
 }
 #invite_modal_container .invite_wrapper .modal {
   border-radius: 12px;
-  height: 650px;
+  height: 680px;
   max-width: 465px;
   overflow: hidden;
 }
@@ -519,6 +519,7 @@ textarea {
   border-radius: 8px;
   color: #0F172A;
   cursor: default;
+  font: 14px/25px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   height: 27px;
   line-height: 25px;
   pointer-events: none;
@@ -553,7 +554,7 @@ textarea {
   border: none;
   box-shadow: none;
   color: #18181B;
-  font: 16px/27px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 14px/27px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   height: 27px;
   margin: 0px;
   padding-bottom: 5px !important;
@@ -774,6 +775,7 @@ textarea {
   border-top: 1px solid #DBEAFE;
   height: auto !important;
   padding: 24px;
+  z-index: 100;
 }
 #invite_modal_container .invite_wrapper .modal .modal-footer a,
 #invite_modal_container .invite_wrapper .modal .cta_done a {
@@ -1793,7 +1795,12 @@ body::-webkit-scrollbar-thumb {
   border-radius: 8px;
   border: none;
   display: flex;
-  flex-direction: row-reverse;
+}
+.section_page_content .section_page_tab .rx-container .rx-toolbar-container .rx-topbar {
+  margin-left: 0px !important;
+}
+.section_page_content .section_page_tab .rx-container .rx-toolbar-container .rx-toolbar {
+  display: none !important;
 }
 .section_page_content .section_page_tab .rx-container .rx-editor-container .rx-editor {
   padding: 16px 0px !important;

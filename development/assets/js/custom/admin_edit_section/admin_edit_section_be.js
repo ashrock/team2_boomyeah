@@ -216,19 +216,35 @@ function removeModuleTab(tab_item){
         });
     }, 248);
 }
-    
-function initializeRedactor(selector){
-    RedactorX(selector, {
+const TOOLBAR_TOOLTIPS = {
+    "format": "Change Text Format", 
+    "image": "Insert Image", 
+    "embed": "Embed Iframe", 
+    "table": "Insert Table", 
+    "quote": "Insert Quote",
+    "line": "Insert Line", 
+    "undo": "Undo", 
+    "redo": "Redo",
+    "bold": "Boldface",
+    "italic": "Italicize",
+    "deleted": "Deleted",
+    "code": "Code",
+    "link": "Hyperlink",
+}
+async function initializeRedactor(selector){
+    let active_editor = await RedactorX(selector, {
         placeholder: 'Add description',
         editor: {
             minHeight: "360px"
         },
         styles: false,
         addbar: false,
+        source: false,
         format: ['h1', 'h2', 'h3', 'h4', 'ul', 'ol'],
+        context: false,
         buttons: {
-            addbar: ["undo", "redo"],
-            topbar: ["image", "embed", "table", "quote", "pre", "line"],
+            topbar: ["format", "bold", "italic", "deleted", "code", "link", "image", "embed", "table", "quote", "line", "undo", "redo"],
+            icons: true,
         },
         toolbarFixed: false,
         subscribe: {
@@ -243,6 +259,19 @@ function initializeRedactor(selector){
             }
         }
     });
+
+    let topbar_btns = active_editor.topbar.$topbar.nodes[0].children;
+    for(let toolbar_btn of topbar_btns) {
+        tooltip_content = TOOLBAR_TOOLTIPS[toolbar_btn.getAttribute("data-name")];
+        
+        M.Tooltip.init(toolbar_btn, {
+            html: tooltip_content,
+            position: "top",
+            margin: 0,
+            inDuration: 0,
+            outDuration: 0,
+        });
+    }
 
     if(typeof Sortable !== "undefined"){
         document.querySelectorAll(".section_page_tabs").forEach((section_tabs_list) => {
