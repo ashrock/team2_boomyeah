@@ -371,7 +371,7 @@ textarea {
 }
 #invite_modal_container .invite_wrapper .modal {
   border-radius: 12px;
-  height: 650px;
+  height: 680px;
   max-width: 465px;
   overflow: hidden;
 }
@@ -654,7 +654,6 @@ textarea {
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 0px 0px 12px;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user {
   align-items: center;
@@ -756,6 +755,7 @@ textarea {
   border-top: 1px solid #DBEAFE;
   height: auto !important;
   padding: 24px;
+  z-index: 100;
 }
 #invite_modal_container .invite_wrapper .modal .modal-footer a,
 #invite_modal_container .invite_wrapper .modal .cta_done a {
@@ -1358,7 +1358,14 @@ body::-webkit-scrollbar-thumb {
   .user {
     padding: 0 10px;
   }
-  .user .container #documentations .mobile_block {
+  .user #user_doc {
+    padding: 16px 16px 16px;
+  }
+  .user #user_doc #docs_view_btn {
+    font: 14px/10px 'ReadexPro-Bold', tahoma, verdana, arial, sans-serif;
+    margin-bottom: 20px;
+  }
+  .user #user_doc #documentations .mobile_block {
     height: 76px;
   }
 }
