@@ -102,6 +102,7 @@ function initializeCollaboratorChipsInstance(){
         },
         onChipDelete: (element, email) => {
             checkAddedCollaboratorEmails(element, email);
+            return;
         }
     });
 

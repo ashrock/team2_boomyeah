@@ -135,6 +135,7 @@ textarea {
 }
 #nav_documentation #slide-out {
   background: #1E293B;
+  overflow: hidden;
   z-index: 99999;
 }
 #nav_documentation #slide-out .nav {
@@ -417,7 +418,7 @@ textarea {
   flex-direction: column;
   flex-grow: 1;
   max-height: calc(100% - (99px + 85px));
-  padding: 24px 0px;
+  padding: 24px 0px 0px;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab .dropdown-trigger {
   border-bottom: none !important;
@@ -512,43 +513,48 @@ textarea {
   display: none;
   pointer-events: none;
 }
-#invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips i {
-  color: transparent;
+#invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips .chip {
+  background: transparent;
+  border: 1px solid #94A3B8;
+  border-radius: 8px;
+  color: #0F172A;
+  cursor: default;
+  font: 14px/25px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   height: 27px;
-  margin-left: 4px;
+  line-height: 25px;
+  pointer-events: none;
+  padding: 0px 0px 0px 7px;
+}
+#invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips .chip .material-icons {
+  pointer-events: all;
+}
+#invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips .chip i {
+  color: transparent;
+  height: 25px;
+  margin-left: 2px;
   position: relative;
   width: 12px;
+  box-sizing: content-box;
+  padding: 0px 7px 0px 3px;
+  cursor: pointer;
 }
-#invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips i::after {
+#invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips .chip i::after {
   background: url("../../assets/images/modal_sprite.svg") no-repeat;
   background-position: -70px 0px;
   content: '';
   display: block;
   height: inherit;
   position: absolute;
-  right: 0px;
+  right: 7px;
   top: 4px;
   width: inherit;
-}
-#invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips .chip {
-  background: transparent;
-  border: 1px solid #94A3B8;
-  border-radius: 8px;
-  color: #0F172A;
-  height: 27px;
-  line-height: 25px;
-  pointer-events: none;
-  padding: 0px 7px;
-}
-#invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips .chip .material-icons {
-  pointer-events: all;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips .email_address,
 #invite_modal_container .invite_wrapper .modal .invite_collab .row .collaborator_row .collaborator_chips .collaborator_email_address {
   border: none;
   box-shadow: none;
   color: #18181B;
-  font: 16px/27px 'ReadexPro-Regular', tahoma, verdana, arial, sans-serif;
+  font: 14px/27px 'ReadexPro-Light', tahoma, verdana, arial, sans-serif;
   height: 27px;
   margin: 0px;
   padding-bottom: 5px !important;
@@ -668,6 +674,7 @@ textarea {
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper {
   flex-grow: 1;
   overflow-y: auto;
+  padding: 0px 0px 12px;
 }
 #invite_modal_container .invite_wrapper .modal .invite_collab #with_access_div .invited_users_wrapper .invited_user {
   align-items: center;
@@ -1013,33 +1020,6 @@ body::-webkit-scrollbar-thumb {
   left: 41%;
   position: absolute;
   width: 17px;
-}
-#toast-container {
-  bottom: 40px !important;
-  left: initial !important;
-  pointer-events: none;
-  right: 40px !important;
-  top: initial !important;
-  width: initial !important;
-}
-#toast-container .toast {
-  background: #FFFFFF;
-  border-radius: 12px;
-  box-sizing: border-box;
-  color: #2563EB;
-  font-family: 'ReadexPro-Medium', tahoma, verdana, arial, sans-serif;
-  line-height: 16px;
-  padding: 26px 24px;
-}
-#toast-container .toast::before {
-  background: url("../images/admin_edit_section.svg") no-repeat;
-  background-position: -21px;
-  content: "";
-  display: inline-block;
-  height: 16px;
-  vertical-align: middle;
-  width: 24px;
-  margin-right: 8px;
 }
 #mobile_container {
   background: #FCFCFF;
