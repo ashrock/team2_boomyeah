@@ -56,6 +56,9 @@ function onUploadFiles(event){
             files_counter_text.text(`(${files_counter})`);
             files_counter_text.self().hidden = false;
         }
+        else{
+            alert(response_data.error);
+        }
     }, "json");
     return false;
 }
