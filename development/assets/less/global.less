@@ -119,6 +119,7 @@ textarea{
     }
     #slide-out{
         background: @by_tooltip_bg;
+        overflow: hidden;
         z-index: 99999;
         .nav{
             background: url("../images/nav_sprite.svg") no-repeat;
@@ -383,7 +384,7 @@ textarea{
     .invite_wrapper{
         .modal{
             border-radius: 12px;
-            height: 650px;
+            height: 680px;
             max-width: 465px;
             overflow: hidden;
             &.open{
@@ -411,7 +412,7 @@ textarea{
                 flex-direction: column;
                 flex-grow: 1;
                 max-height: calc(100% - (99px + 85px));
-                padding: 24px 0px;
+                padding: 24px 0px 0px;
 
                 .dropdown-trigger{
                     border-bottom: none !important;
@@ -513,6 +514,7 @@ textarea{
                                 border-radius: 8px;
                                 color: @by_black;
                                 cursor: default;
+                                font: 14px/25px @readex_light;
                                 height: 27px;
                                 line-height: 25px;
                                 pointer-events: none;
@@ -550,7 +552,7 @@ textarea{
                                 border: none;
                                 box-shadow: none;
                                 color: #18181B;
-                                font: 16px/27px @readex_regular;
+                                font: 14px/27px @readex_light;
                                 height: 27px;
                                 margin: 0px;
                                 padding-bottom: 5px !important;
@@ -773,6 +775,7 @@ textarea{
                 border-top: 1px solid @by_lightgray;
                 height: auto !important;
                 padding: 24px;
+                z-index: 100;
                 a{
                     border-radius: 20px;
                     border: 1px solid @by_primary;
