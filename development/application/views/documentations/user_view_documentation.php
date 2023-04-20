@@ -29,13 +29,13 @@
             <ul id="breadcrumb_list">
                 <li class="breadcrumb_item tooltipped" data-tooltip="Go to Documentations Dashboard"><a href="/docs">Documentation</a></li>
                 <li class="breadcrumb_item mobile_breadcrumb"><a href="/docs"></a></li>
-                <li class="breadcrumb_item active"><?= $document_data["title"] ?></li>
+                <li class="breadcrumb_item active"><?= htmlspecialchars($document_data["title"]) ?></li>
             </ul>
             <div class="divider"></div>
             <div id="doc_title_access">
-                <h1 id="doc_title"><?= $document_data["title"] ?></h1>
+                <h1 id="doc_title"><?= htmlspecialchars($document_data["title"]) ?></h1>
             </div>
-            <p class="doc_text_content"><?= $document_data["description"] ?></p>
+            <p class="doc_text_content"><?= htmlspecialchars($document_data["description"]) ?></p>
             <div class="section_header">
                 <h2>Sections</h2>
             </div>

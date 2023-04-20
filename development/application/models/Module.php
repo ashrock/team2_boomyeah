@@ -351,7 +351,7 @@
         # Triggered by: (POST) module/remove_tab
         # Requires: $params { tab_id }
         # Returns: { status: true/false, result: { tab_id }, error: null }
-        # Last updated at: April 17, 2023
+        # Last updated at: April 19, 2023
         # Owner: Erick, Updated by: Jovic
         public function removeTab($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
@@ -364,6 +364,28 @@
                     $tab = $this->getTab($params["tab_id"]);
     
                     if($tab["status"]){
+                        # Fetch Posts of Tab
+                        $get_posts = $this->db->query("SELECT JSON_ARRAYAGG(id) AS posts_ids FROM posts WHERE tab_id = ?;", $params["tab_id"]);
+                        $posts_ids = json_decode($get_posts->result_array()[FIRST_INDEX]["posts_ids"]);
+
+                        # Proceed to delete Comments & Posts of Tab
+                        if($posts_ids){
+                            # Delete Comments of Posts
+                            $delete_comments = $this->db->query("DELETE FROM comments WHERE post_id IN ?;", array($posts_ids));
+
+                            # Delete Posts
+                            if($delete_comments){
+                                $delete_posts = $this->db->query("DELETE FROM posts WHERE id IN ?;", array($posts_ids));
+
+                                if(!$delete_posts){
+                                    throw new Exception("Error deleting Posts");
+                                }
+                            }
+                            else{
+                                throw new Exception("Error deleting Comments");
+                            }
+                        }
+
                         # Delete Tab
                         $delete_section = $this->db->query("DELETE FROM tabs WHERE id = ?;", $params["tab_id"]);
     
@@ -534,8 +556,8 @@
         # Triggered by: (POST) docs/duplicate
         # Requires: $params { documentation_id, module_ids }, $_SESSION["user_id"]
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: March 24, 2023
-        # Owner: Jovic
+        # Last updated at: April 19, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function duplicateTabs($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -581,7 +603,8 @@
                         GROUP BY tabs.module_id
                     ) AS module_tabs ON module_tabs.module_id = modules.id
                     WHERE {$where_statement}
-                    GROUP BY modules.id;", $bind_param
+                    GROUP BY modules.id
+                    ORDER BY sections.id;", $bind_param
                 );
 
                 if($get_tabs->num_rows()){
@@ -748,17 +771,13 @@
         # Triggered by: addModule(), addTab(), updateModule(), removeTab(), reoderTab()
         # Requires: $section_id
         # Returns: { status: true/false, result: {}, error: null }
-        # Last updated at: April 17, 2023
+        # Last updated at: April 18, 2023
         # Owner: Jovic
         private function updateSection($section_id){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
             try{
-                $this->db->query("UPDATE sections SET updated_by_user_id = ?, updated_at = NOW() WHERE id = ?;", array($_SESSION["user_id"], $section_id));
-
-                if($this->db->affected_rows()){
-                    $response_data["status"] = true;
-                }
+                $response_data["status"] = $this->db->query("UPDATE sections SET updated_by_user_id = ?, updated_at = NOW() WHERE id = ?;", array($_SESSION["user_id"], $section_id));
             }
             catch (Exception $e) {
                 $response_data["error"] = $e->getMessage();

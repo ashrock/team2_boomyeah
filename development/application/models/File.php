@@ -8,8 +8,8 @@
         # Triggered by: (POST) files/upload
         # Requires: $params {"files", "section_id"}
         # Returns: { status: true/false, result: { html, files_uploaded }, error: null }
-        # Last updated at: March 28, 2023
-        # Owner: Jovic
+        # Last updated at: April 20, 2023
+        # Owner: Jovic, Updated by: Jovic
         public function uploadFile($params){
             $response_data = array("status" => false, "result" => array(), "error" => null);
 
@@ -43,7 +43,7 @@
                         $response_data["result"]["file"] = $params["files"]["name"][$index];
                         $response_data["result"]["size"] = $params["files"]["size"][$index];
 
-                        $response_data["error"] = "File size is too large." ;
+                        throw new Exception("File size is too large.");
                     }
                 }
 

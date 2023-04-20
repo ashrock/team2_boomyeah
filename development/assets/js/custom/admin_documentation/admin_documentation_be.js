@@ -343,7 +343,6 @@ function submitReorderDocumentations(event){
     let form = ux("#reorder_documentations_form");
 
     form.post(form.attr("action"), form.serialize(), (response_data) => {
-        console.log(response_data);
         if(!response_data.status){
             alert("An error occured while reordering documentations!");
         }
